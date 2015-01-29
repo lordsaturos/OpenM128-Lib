@@ -1,0 +1,369 @@
+
+AT45DBXXX.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000166  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  000001ba  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 00000064  00000000  00000000  000001da  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   00000328  00000000  00000000  0000023e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 000001a3  00000000  00000000  00000566  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   00000339  00000000  00000000  00000709  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000060  00000000  00000000  00000a44  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    00000126  00000000  00000000  00000aa4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    000000cb  00000000  00000000  00000bca  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000090  00000000  00000000  00000c95  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 38 00 	jmp	0x70	; 0x70 <__ctors_end>
+   4:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+   8:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+   c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  10:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  14:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  18:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  1c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  20:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  24:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  28:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  2c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  30:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  34:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  38:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  3c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  40:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  44:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  48:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  4c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  50:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  54:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  58:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  5c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  60:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  64:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  68:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+  6c:	0c 94 42 00 	jmp	0x84	; 0x84 <__bad_interrupt>
+
+00000070 <__ctors_end>:
+  70:	11 24       	eor	r1, r1
+  72:	1f be       	out	0x3f, r1	; 63
+  74:	cf ef       	ldi	r28, 0xFF	; 255
+  76:	d4 e0       	ldi	r29, 0x04	; 4
+  78:	de bf       	out	0x3e, r29	; 62
+  7a:	cd bf       	out	0x3d, r28	; 61
+  7c:	0e 94 80 00 	call	0x100	; 0x100 <main>
+  80:	0c 94 b1 00 	jmp	0x162	; 0x162 <_exit>
+
+00000084 <__bad_interrupt>:
+  84:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000088 <spiInitAt45db>:
+#elif defined(_DVK501_M162_EX_)
+#define CLR_SS_AT45DB() cbi(PORTB,4)
+#define SET_SS_AT45DB() sbi(PORTB,4)
+void spiInitAt45db(void)
+{
+	DDRB|=0xF0;
+  88:	87 b3       	in	r24, 0x17	; 23
+  8a:	80 6f       	ori	r24, 0xF0	; 240
+  8c:	87 bb       	out	0x17, r24	; 23
+	SPCR=0x50;
+  8e:	80 e5       	ldi	r24, 0x50	; 80
+  90:	8d b9       	out	0x0d, r24	; 13
+	SPSR=0x01;
+  92:	81 e0       	ldi	r24, 0x01	; 1
+  94:	8e b9       	out	0x0e, r24	; 14
+}
+  96:	08 95       	ret
+
+00000098 <spi_transmit_byte>:
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  98:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  9a:	77 9b       	sbis	0x0e, 7	; 14
+  9c:	fe cf       	rjmp	.-4      	; 0x9a <spi_transmit_byte+0x2>
+}
+  9e:	08 95       	ret
+
+000000a0 <write_buffer>:
+//============================================================
+void write_buffer(uint16_t BufferOffset,uint8_t data)
+{			
+  a0:	28 2f       	mov	r18, r24
+	CLR_SS_AT45DB();		
+  a2:	c4 98       	cbi	0x18, 4	; 24
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  a4:	84 e8       	ldi	r24, 0x84	; 132
+  a6:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  a8:	77 9b       	sbis	0x0e, 7	; 14
+  aa:	fe cf       	rjmp	.-4      	; 0xa8 <write_buffer+0x8>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  ac:	8f ef       	ldi	r24, 0xFF	; 255
+  ae:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  b0:	77 9b       	sbis	0x0e, 7	; 14
+  b2:	fe cf       	rjmp	.-4      	; 0xb0 <write_buffer+0x10>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  b4:	9f b9       	out	0x0f, r25	; 15
+    while(!(SPSR&0x80));
+  b6:	77 9b       	sbis	0x0e, 7	; 14
+  b8:	fe cf       	rjmp	.-4      	; 0xb6 <write_buffer+0x16>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  ba:	2f b9       	out	0x0f, r18	; 15
+    while(!(SPSR&0x80));
+  bc:	77 9b       	sbis	0x0e, 7	; 14
+  be:	fe cf       	rjmp	.-4      	; 0xbc <write_buffer+0x1c>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  c0:	6f b9       	out	0x0f, r22	; 15
+    while(!(SPSR&0x80));
+  c2:	77 9b       	sbis	0x0e, 7	; 14
+  c4:	fe cf       	rjmp	.-4      	; 0xc2 <write_buffer+0x22>
+	spi_transmit_byte(0x84);//84			  						
+	spi_transmit_byte(0xff);						
+	spi_transmit_byte((uint8_t)(BufferOffset>>8));	
+	spi_transmit_byte((uint8_t)BufferOffset);		
+	spi_transmit_byte(data);		
+	SET_SS_AT45DB();	
+  c6:	c4 9a       	sbi	0x18, 4	; 24
+}
+  c8:	08 95       	ret
+
+000000ca <read_buffer>:
+//================================================================
+uint8_t read_buffer(uint16_t BufferOffset)
+{		
+  ca:	28 2f       	mov	r18, r24
+    uint8_t temp;
+	CLR_SS_AT45DB();
+  cc:	c4 98       	cbi	0x18, 4	; 24
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  ce:	81 ed       	ldi	r24, 0xD1	; 209
+  d0:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  d2:	77 9b       	sbis	0x0e, 7	; 14
+  d4:	fe cf       	rjmp	.-4      	; 0xd2 <read_buffer+0x8>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  d6:	8f ef       	ldi	r24, 0xFF	; 255
+  d8:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  da:	77 9b       	sbis	0x0e, 7	; 14
+  dc:	fe cf       	rjmp	.-4      	; 0xda <read_buffer+0x10>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  de:	9f b9       	out	0x0f, r25	; 15
+    while(!(SPSR&0x80));
+  e0:	77 9b       	sbis	0x0e, 7	; 14
+  e2:	fe cf       	rjmp	.-4      	; 0xe0 <read_buffer+0x16>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  e4:	2f b9       	out	0x0f, r18	; 15
+    while(!(SPSR&0x80));
+  e6:	77 9b       	sbis	0x0e, 7	; 14
+  e8:	fe cf       	rjmp	.-4      	; 0xe6 <read_buffer+0x1c>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  ea:	8f ef       	ldi	r24, 0xFF	; 255
+  ec:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  ee:	77 9b       	sbis	0x0e, 7	; 14
+  f0:	fe cf       	rjmp	.-4      	; 0xee <read_buffer+0x24>
+#include <avr/io.h>
+
+//==================================
+void spi_transmit_byte(uint8_t Data)
+{	
+	SPDR=Data;								
+  f2:	8f ef       	ldi	r24, 0xFF	; 255
+  f4:	8f b9       	out	0x0f, r24	; 15
+    while(!(SPSR&0x80));
+  f6:	77 9b       	sbis	0x0e, 7	; 14
+  f8:	fe cf       	rjmp	.-4      	; 0xf6 <read_buffer+0x2c>
+	spi_transmit_byte(0xff);
+	spi_transmit_byte((uint8_t)(BufferOffset>>8));
+	spi_transmit_byte((uint8_t)BufferOffset);
+	spi_transmit_byte(0xff);
+	spi_transmit_byte(0xff);
+	temp=SPDR;	  
+  fa:	8f b1       	in	r24, 0x0f	; 15
+	SET_SS_AT45DB();
+  fc:	c4 9a       	sbi	0x18, 4	; 24
+    return temp;								
+}
+  fe:	08 95       	ret
+
+00000100 <main>:
+
+#define DISP_DDR DDRA
+#define DISP_PORT PORTA
+
+int main(void)
+{
+ 100:	0f 93       	push	r16
+ 102:	1f 93       	push	r17
+ 104:	cf 93       	push	r28
+ 106:	df 93       	push	r29
+#elif defined(_DVK501_M162_EX_)
+#define CLR_SS_AT45DB() cbi(PORTB,4)
+#define SET_SS_AT45DB() sbi(PORTB,4)
+void spiInitAt45db(void)
+{
+	DDRB|=0xF0;
+ 108:	87 b3       	in	r24, 0x17	; 23
+ 10a:	80 6f       	ori	r24, 0xF0	; 240
+ 10c:	87 bb       	out	0x17, r24	; 23
+	SPCR=0x50;
+ 10e:	80 e5       	ldi	r24, 0x50	; 80
+ 110:	8d b9       	out	0x0d, r24	; 13
+	SPSR=0x01;
+ 112:	81 e0       	ldi	r24, 0x01	; 1
+ 114:	8e b9       	out	0x0e, r24	; 14
+	uint8_t num;
+	spiInitAt45db();
+	DISP_DDR=0xFF;
+ 116:	8f ef       	ldi	r24, 0xFF	; 255
+ 118:	8a bb       	out	0x1a, r24	; 26
+	DISP_PORT=0x00;
+ 11a:	1b ba       	out	0x1b, r1	; 27
+ 11c:	c0 e0       	ldi	r28, 0x00	; 0
+ 11e:	d0 e0       	ldi	r29, 0x00	; 0
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 120:	03 e3       	ldi	r16, 0x33	; 51
+ 122:	17 e0       	ldi	r17, 0x07	; 7
+	for(num=0;num<255;num++)
+	{
+		write_buffer((uint16_t)num,num);
+ 124:	ce 01       	movw	r24, r28
+ 126:	6c 2f       	mov	r22, r28
+ 128:	0e 94 50 00 	call	0xa0	; 0xa0 <write_buffer>
+ 12c:	c8 01       	movw	r24, r16
+ 12e:	01 97       	sbiw	r24, 0x01	; 1
+ 130:	f1 f7       	brne	.-4      	; 0x12e <main+0x2e>
+ 132:	21 96       	adiw	r28, 0x01	; 1
+{
+	uint8_t num;
+	spiInitAt45db();
+	DISP_DDR=0xFF;
+	DISP_PORT=0x00;
+	for(num=0;num<255;num++)
+ 134:	cf 3f       	cpi	r28, 0xFF	; 255
+ 136:	d1 05       	cpc	r29, r1
+ 138:	a9 f7       	brne	.-22     	; 0x124 <main+0x24>
+ 13a:	c0 e0       	ldi	r28, 0x00	; 0
+ 13c:	d0 e0       	ldi	r29, 0x00	; 0
+ 13e:	08 eb       	ldi	r16, 0xB8	; 184
+ 140:	10 e0       	ldi	r17, 0x00	; 0
+		write_buffer((uint16_t)num,num);
+		_delay_ms(1);
+	}
+	for(num=0;num<255;num++)
+	{
+		DISP_PORT=read_buffer((uint16_t)num);
+ 142:	ce 01       	movw	r24, r28
+ 144:	0e 94 65 00 	call	0xca	; 0xca <read_buffer>
+ 148:	8b bb       	out	0x1b, r24	; 27
+ 14a:	88 e8       	ldi	r24, 0x88	; 136
+ 14c:	93 e1       	ldi	r25, 0x13	; 19
+ 14e:	f8 01       	movw	r30, r16
+ 150:	31 97       	sbiw	r30, 0x01	; 1
+ 152:	f1 f7       	brne	.-4      	; 0x150 <main+0x50>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 154:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 156:	d9 f7       	brne	.-10     	; 0x14e <main+0x4e>
+ 158:	21 96       	adiw	r28, 0x01	; 1
+	for(num=0;num<255;num++)
+	{
+		write_buffer((uint16_t)num,num);
+		_delay_ms(1);
+	}
+	for(num=0;num<255;num++)
+ 15a:	cf 3f       	cpi	r28, 0xFF	; 255
+ 15c:	d1 05       	cpc	r29, r1
+ 15e:	89 f7       	brne	.-30     	; 0x142 <main+0x42>
+ 160:	ff cf       	rjmp	.-2      	; 0x160 <main+0x60>
+
+00000162 <_exit>:
+ 162:	f8 94       	cli
+
+00000164 <__stop_program>:
+ 164:	ff cf       	rjmp	.-2      	; 0x164 <__stop_program>

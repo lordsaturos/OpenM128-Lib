@@ -1,0 +1,1163 @@
+
+RS232.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000061a  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000020  00802000  0000061a  000006ae  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000006  00802020  00802020  000006ce  2**0
+                  ALLOC
+  3 .debug_aranges 00000060  00000000  00000000  000006ce  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 00000281  00000000  00000000  0000072e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00001128  00000000  00000000  000009af  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000061a  00000000  00000000  00001ad7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000007aa  00000000  00000000  000020f1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000190  00000000  00000000  0000289c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000b42  00000000  00000000  00002a2c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000031c  00000000  00000000  0000356e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000048  00000000  00000000  0000388a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 fa 00 	jmp	0x1f4	; 0x1f4 <__ctors_end>
+   4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+   8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+   c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  10:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  14:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  18:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  1c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  20:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  24:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  28:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  2c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  30:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  34:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  38:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  3c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  40:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  44:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  48:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  4c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  50:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  54:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  58:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  5c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  60:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  64:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  68:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  6c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  70:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  74:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  78:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  7c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  80:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  84:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  88:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  8c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  90:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  94:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  98:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  9c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  ac:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  bc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  cc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  dc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  ec:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  fc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 100:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 104:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 108:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 10c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 110:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 114:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 118:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 11c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 120:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 124:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 128:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 12c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 130:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 134:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 138:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 13c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 140:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 144:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 148:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 14c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 150:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 154:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 158:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 15c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 160:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 164:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 168:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 16c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 170:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 174:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 178:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 17c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 180:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 184:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 188:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 18c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 190:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 194:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 198:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 19c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1ac:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1bc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1cc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1dc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1ec:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1f0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+
+000001f4 <__ctors_end>:
+ 1f4:	11 24       	eor	r1, r1
+ 1f6:	1f be       	out	0x3f, r1	; 63
+ 1f8:	cf ef       	ldi	r28, 0xFF	; 255
+ 1fa:	df e3       	ldi	r29, 0x3F	; 63
+ 1fc:	de bf       	out	0x3e, r29	; 62
+ 1fe:	cd bf       	out	0x3d, r28	; 61
+ 200:	00 e0       	ldi	r16, 0x00	; 0
+ 202:	0c bf       	out	0x3c, r16	; 60
+ 204:	18 be       	out	0x38, r1	; 56
+ 206:	19 be       	out	0x39, r1	; 57
+ 208:	1a be       	out	0x3a, r1	; 58
+ 20a:	1b be       	out	0x3b, r1	; 59
+
+0000020c <__do_copy_data>:
+ 20c:	10 e2       	ldi	r17, 0x20	; 32
+ 20e:	a0 e0       	ldi	r26, 0x00	; 0
+ 210:	b0 e2       	ldi	r27, 0x20	; 32
+ 212:	ea e1       	ldi	r30, 0x1A	; 26
+ 214:	f6 e0       	ldi	r31, 0x06	; 6
+ 216:	00 e0       	ldi	r16, 0x00	; 0
+ 218:	0b bf       	out	0x3b, r16	; 59
+ 21a:	02 c0       	rjmp	.+4      	; 0x220 <__do_copy_data+0x14>
+ 21c:	07 90       	elpm	r0, Z+
+ 21e:	0d 92       	st	X+, r0
+ 220:	a0 32       	cpi	r26, 0x20	; 32
+ 222:	b1 07       	cpc	r27, r17
+ 224:	d9 f7       	brne	.-10     	; 0x21c <__do_copy_data+0x10>
+ 226:	1b be       	out	0x3b, r1	; 59
+
+00000228 <__do_clear_bss>:
+ 228:	10 e2       	ldi	r17, 0x20	; 32
+ 22a:	a0 e2       	ldi	r26, 0x20	; 32
+ 22c:	b0 e2       	ldi	r27, 0x20	; 32
+ 22e:	01 c0       	rjmp	.+2      	; 0x232 <.do_clear_bss_start>
+
+00000230 <.do_clear_bss_loop>:
+ 230:	1d 92       	st	X+, r1
+
+00000232 <.do_clear_bss_start>:
+ 232:	a6 32       	cpi	r26, 0x26	; 38
+ 234:	b1 07       	cpc	r27, r17
+ 236:	e1 f7       	brne	.-8      	; 0x230 <.do_clear_bss_loop>
+ 238:	0e 94 33 01 	call	0x266	; 0x266 <main>
+ 23c:	0c 94 0b 03 	jmp	0x616	; 0x616 <_exit>
+
+00000240 <__bad_interrupt>:
+ 240:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000244 <uart_putchar>:
+	}
+}
+ 
+ 
+static int uart_putchar (char c, FILE *stream)
+{
+ 244:	1f 93       	push	r17
+ 246:	18 2f       	mov	r17, r24
+    if (c == '\n')
+ 248:	8a 30       	cpi	r24, 0x0A	; 10
+ 24a:	19 f4       	brne	.+6      	; 0x252 <uart_putchar+0xe>
+        uart_putchar('\r', stream);
+ 24c:	8d e0       	ldi	r24, 0x0D	; 13
+ 24e:	0e 94 22 01 	call	0x244	; 0x244 <uart_putchar>
+ 
+    // Wait for the transmit buffer to be empty
+    while ( !( USARTF0.STATUS & USART_DREIF_bm) );
+ 252:	80 91 a1 0b 	lds	r24, 0x0BA1
+ 256:	85 ff       	sbrs	r24, 5
+ 258:	fc cf       	rjmp	.-8      	; 0x252 <uart_putchar+0xe>
+ 
+    // Put our character into the transmit buffer
+    USART_PutChar(&USART, c);
+ 25a:	10 93 a0 0b 	sts	0x0BA0, r17
+ 
+    return 0;
+}
+ 25e:	80 e0       	ldi	r24, 0x00	; 0
+ 260:	90 e0       	ldi	r25, 0x00	; 0
+ 262:	1f 91       	pop	r17
+ 264:	08 95       	ret
+
+00000266 <main>:
+ 
+static FILE mystdout = FDEV_SETUP_STREAM (uart_putchar, NULL, _FDEV_SETUP_WRITE);
+ 
+ 
+int main (void)
+{
+ 266:	cf 93       	push	r28
+ 268:	df 93       	push	r29
+    stdout = &mystdout;
+ 26a:	82 e1       	ldi	r24, 0x12	; 18
+ 26c:	90 e2       	ldi	r25, 0x20	; 32
+ 26e:	80 93 22 20 	sts	0x2022, r24
+ 272:	90 93 23 20 	sts	0x2023, r25
+	CLKSYS_Enable( OSC_RC32MEN_bm );
+ 276:	80 91 50 00 	lds	r24, 0x0050
+ 27a:	82 60       	ori	r24, 0x02	; 2
+ 27c:	80 93 50 00 	sts	0x0050, r24
+	do {} while ( CLKSYS_IsReady( OSC_RC32MRDY_bm ) == 0 );
+ 280:	80 91 51 00 	lds	r24, 0x0051
+ 284:	81 ff       	sbrs	r24, 1
+ 286:	fc cf       	rjmp	.-8      	; 0x280 <main+0x1a>
+	CLKSYS_Main_ClockSource_Select( CLK_SCLKSEL_RC32M_gc );
+ 288:	81 e0       	ldi	r24, 0x01	; 1
+ 28a:	0e 94 b7 01 	call	0x36e	; 0x36e <CLKSYS_Main_ClockSource_Select>
+	CLKSYS_Disable( OSC_RC2MEN_bm );
+ 28e:	81 e0       	ldi	r24, 0x01	; 1
+ 290:	0e 94 95 01 	call	0x32a	; 0x32a <CLKSYS_Disable>
+static void uart_init (void)
+{
+	/* This PORT setting is only valid to USARTF0 if other USARTs is used a
+	 * different PORT and/or pins is used. */
+	/* PIN3 (TXD0) as output. */
+	PORTF.DIRSET = PIN3_bm;
+ 294:	e0 ea       	ldi	r30, 0xA0	; 160
+ 296:	f6 e0       	ldi	r31, 0x06	; 6
+ 298:	88 e0       	ldi	r24, 0x08	; 8
+ 29a:	81 83       	std	Z+1, r24	; 0x01
+	PORTF.OUTSET = PIN3_bm;
+ 29c:	85 83       	std	Z+5, r24	; 0x05
+	/* PC2 (RXD0) as input. */
+	PORTF.DIRCLR = PIN2_bm;
+ 29e:	84 e0       	ldi	r24, 0x04	; 4
+ 2a0:	82 83       	std	Z+2, r24	; 0x02
+	PORTF.OUTSET = PIN2_bm;
+ 2a2:	85 83       	std	Z+5, r24	; 0x05
+
+	/* USARTF0, 8 Data bits, No Parity, 1 Stop bit. */
+	USART_Format_Set(&USART, USART_CHSIZE_8BIT_gc, USART_PMODE_DISABLED_gc, false);
+ 2a4:	e0 ea       	ldi	r30, 0xA0	; 160
+ 2a6:	fb e0       	ldi	r31, 0x0B	; 11
+ 2a8:	83 e0       	ldi	r24, 0x03	; 3
+ 2aa:	85 83       	std	Z+5, r24	; 0x05
+// Init USART.
+// We use USARTF0.
+// Want 57600 baud. Have a 32 MHz clock. BSCALE = 0
+// BSEL = ( 32000000 / (2^0 * 16*57600)) -1 = 34
+// Fbaud = 32000000 / (2^0 * 16 * (34+1))  = 57143 bits/sec (57600 -0.8%)
+	USART_Baudrate_Set(&USART, 34 , 0);
+ 2ac:	82 e2       	ldi	r24, 0x22	; 34
+ 2ae:	86 83       	std	Z+6, r24	; 0x06
+ 2b0:	17 82       	std	Z+7, r1	; 0x07
+
+	/* Enable both RX and TX. */
+	USART_Rx_Enable(&USART);
+ 2b2:	80 91 a4 0b 	lds	r24, 0x0BA4
+ 2b6:	80 61       	ori	r24, 0x10	; 16
+ 2b8:	84 83       	std	Z+4, r24	; 0x04
+	USART_Tx_Enable(&USART);
+ 2ba:	80 91 a4 0b 	lds	r24, 0x0BA4
+ 2be:	88 60       	ori	r24, 0x08	; 8
+ 2c0:	84 83       	std	Z+4, r24	; 0x04
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 2c2:	c0 e2       	ldi	r28, 0x20	; 32
+ 2c4:	d3 e0       	ldi	r29, 0x03	; 3
+	CLKSYS_Disable( OSC_RC2MEN_bm );
+
+    uart_init();
+    while (1)
+	{
+        printf("www.waveshare.net\n");
+ 2c6:	80 e0       	ldi	r24, 0x00	; 0
+ 2c8:	90 e2       	ldi	r25, 0x20	; 32
+ 2ca:	0e 94 d6 02 	call	0x5ac	; 0x5ac <puts>
+ 2ce:	88 e8       	ldi	r24, 0x88	; 136
+ 2d0:	93 e1       	ldi	r25, 0x13	; 19
+ 2d2:	fe 01       	movw	r30, r28
+ 2d4:	31 97       	sbiw	r30, 0x01	; 1
+ 2d6:	f1 f7       	brne	.-4      	; 0x2d4 <main+0x6e>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 2d8:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 2da:	d9 f7       	brne	.-10     	; 0x2d2 <main+0x6c>
+ 2dc:	f4 cf       	rjmp	.-24     	; 0x2c6 <main+0x60>
+
+000002de <CCPWrite>:
+ *
+ *  \param address A pointer to the address to write to.
+ *  \param value   The value to put in to the register.
+ */
+void CCPWrite( volatile uint8_t * address, uint8_t value )
+{
+ 2de:	0f 93       	push	r16
+ 2e0:	df 93       	push	r29
+ 2e2:	cf 93       	push	r28
+ 2e4:	0f 92       	push	r0
+ 2e6:	cd b7       	in	r28, 0x3d	; 61
+ 2e8:	de b7       	in	r29, 0x3e	; 62
+
+	// Restore global interrupt setting from scratch register.
+        asm("out  0x3F, R1");
+
+#elif defined __GNUC__
+	AVR_ENTER_CRITICAL_REGION( );
+ 2ea:	2f b7       	in	r18, 0x3f	; 63
+ 2ec:	29 83       	std	Y+1, r18	; 0x01
+ 2ee:	f8 94       	cli
+	volatile uint8_t * tmpAddr = address;
+#ifdef RAMPZ
+	RAMPZ = 0;
+ 2f0:	1b be       	out	0x3b, r1	; 59
+#endif
+	asm volatile(
+ 2f2:	fc 01       	movw	r30, r24
+ 2f4:	08 ed       	ldi	r16, 0xD8	; 216
+ 2f6:	04 bf       	out	0x34, r16	; 52
+ 2f8:	60 83       	st	Z, r22
+		:
+		: "r" (tmpAddr), "r" (value), "M" (CCP_IOREG_gc), "i" (&CCP)
+		: "r16", "r30", "r31"
+		);
+
+	AVR_LEAVE_CRITICAL_REGION( );
+ 2fa:	89 81       	ldd	r24, Y+1	; 0x01
+ 2fc:	8f bf       	out	0x3f, r24	; 63
+#endif
+}
+ 2fe:	0f 90       	pop	r0
+ 300:	cf 91       	pop	r28
+ 302:	df 91       	pop	r29
+ 304:	0f 91       	pop	r16
+ 306:	08 95       	ret
+
+00000308 <CLKSYS_XOSC_Config>:
+ */
+void CLKSYS_XOSC_Config( OSC_FRQRANGE_t freqRange,
+                         bool lowPower32kHz,
+                         OSC_XOSCSEL_t xoscModeSelection )
+{
+	OSC.XOSCCTRL = (uint8_t) freqRange |
+ 308:	66 23       	and	r22, r22
+ 30a:	11 f4       	brne	.+4      	; 0x310 <CLKSYS_XOSC_Config+0x8>
+ 30c:	90 e0       	ldi	r25, 0x00	; 0
+ 30e:	01 c0       	rjmp	.+2      	; 0x312 <CLKSYS_XOSC_Config+0xa>
+ 310:	90 e2       	ldi	r25, 0x20	; 32
+ 312:	48 2b       	or	r20, r24
+ 314:	94 2b       	or	r25, r20
+ 316:	e0 e5       	ldi	r30, 0x50	; 80
+ 318:	f0 e0       	ldi	r31, 0x00	; 0
+ 31a:	92 83       	std	Z+2, r25	; 0x02
+	               ( lowPower32kHz ? OSC_X32KLPM_bm : 0 ) |
+	               xoscModeSelection;
+}
+ 31c:	08 95       	ret
+
+0000031e <CLKSYS_PLL_Config>:
+ *                      from 1 to 31, inclusive.
+ */
+void CLKSYS_PLL_Config( OSC_PLLSRC_t clockSource, uint8_t factor )
+{
+	factor &= OSC_PLLFAC_gm;
+	OSC.PLLCTRL = (uint8_t) clockSource | ( factor << OSC_PLLFAC_gp );
+ 31e:	6f 71       	andi	r22, 0x1F	; 31
+ 320:	68 2b       	or	r22, r24
+ 322:	e0 e5       	ldi	r30, 0x50	; 80
+ 324:	f0 e0       	ldi	r31, 0x00	; 0
+ 326:	65 83       	std	Z+5, r22	; 0x05
+}
+ 328:	08 95       	ret
+
+0000032a <CLKSYS_Disable>:
+ *
+ *  \return  Non-zero if oscillator was disabled successfully.
+ */
+uint8_t CLKSYS_Disable( uint8_t oscSel )
+{
+	OSC.CTRL &= ~oscSel;
+ 32a:	e0 e5       	ldi	r30, 0x50	; 80
+ 32c:	f0 e0       	ldi	r31, 0x00	; 0
+ 32e:	20 81       	ld	r18, Z
+ 330:	98 2f       	mov	r25, r24
+ 332:	90 95       	com	r25
+ 334:	92 23       	and	r25, r18
+ 336:	90 83       	st	Z, r25
+	uint8_t clkEnabled = OSC.CTRL & oscSel;
+ 338:	90 81       	ld	r25, Z
+	return clkEnabled;
+}
+ 33a:	89 23       	and	r24, r25
+ 33c:	08 95       	ret
+
+0000033e <CLKSYS_Prescalers_Config>:
+ *  \param  PSBCfactor  Prescaler B and C division factor, in the combination
+ *                      of (1,1), (1,2), (4,1) or (2,2).
+ */
+void CLKSYS_Prescalers_Config( CLK_PSADIV_t PSAfactor,
+                               CLK_PSBCDIV_t PSBCfactor )
+{
+ 33e:	0f 93       	push	r16
+ 340:	df 93       	push	r29
+ 342:	cf 93       	push	r28
+ 344:	0f 92       	push	r0
+ 346:	cd b7       	in	r28, 0x3d	; 61
+ 348:	de b7       	in	r29, 0x3e	; 62
+
+	// Restore global interrupt setting from scratch register.
+        asm("out  0x3F, R1");
+
+#elif defined __GNUC__
+	AVR_ENTER_CRITICAL_REGION( );
+ 34a:	9f b7       	in	r25, 0x3f	; 63
+ 34c:	99 83       	std	Y+1, r25	; 0x01
+ 34e:	f8 94       	cli
+	volatile uint8_t * tmpAddr = address;
+#ifdef RAMPZ
+	RAMPZ = 0;
+ 350:	1b be       	out	0x3b, r1	; 59
+#endif
+	asm volatile(
+ 352:	68 2b       	or	r22, r24
+ 354:	81 e4       	ldi	r24, 0x41	; 65
+ 356:	90 e0       	ldi	r25, 0x00	; 0
+ 358:	fc 01       	movw	r30, r24
+ 35a:	08 ed       	ldi	r16, 0xD8	; 216
+ 35c:	04 bf       	out	0x34, r16	; 52
+ 35e:	60 83       	st	Z, r22
+		:
+		: "r" (tmpAddr), "r" (value), "M" (CCP_IOREG_gc), "i" (&CCP)
+		: "r16", "r30", "r31"
+		);
+
+	AVR_LEAVE_CRITICAL_REGION( );
+ 360:	89 81       	ldd	r24, Y+1	; 0x01
+ 362:	8f bf       	out	0x3f, r24	; 63
+void CLKSYS_Prescalers_Config( CLK_PSADIV_t PSAfactor,
+                               CLK_PSBCDIV_t PSBCfactor )
+{
+	uint8_t PSconfig = (uint8_t) PSAfactor | PSBCfactor;
+	CCPWrite( &CLK.PSCTRL, PSconfig );
+}
+ 364:	0f 90       	pop	r0
+ 366:	cf 91       	pop	r28
+ 368:	df 91       	pop	r29
+ 36a:	0f 91       	pop	r16
+ 36c:	08 95       	ret
+
+0000036e <CLKSYS_Main_ClockSource_Select>:
+ *                       prescaler block.
+ *
+ *  \return  Non-zero if change was successful.
+ */
+uint8_t CLKSYS_Main_ClockSource_Select( CLK_SCLKSEL_t clockSource )
+{
+ 36e:	0f 93       	push	r16
+ 370:	df 93       	push	r29
+ 372:	cf 93       	push	r28
+ 374:	0f 92       	push	r0
+ 376:	cd b7       	in	r28, 0x3d	; 61
+ 378:	de b7       	in	r29, 0x3e	; 62
+	uint8_t clkCtrl = ( CLK.CTRL & ~CLK_SCLKSEL_gm ) | clockSource;
+ 37a:	20 91 40 00 	lds	r18, 0x0040
+
+	// Restore global interrupt setting from scratch register.
+        asm("out  0x3F, R1");
+
+#elif defined __GNUC__
+	AVR_ENTER_CRITICAL_REGION( );
+ 37e:	9f b7       	in	r25, 0x3f	; 63
+ 380:	99 83       	std	Y+1, r25	; 0x01
+ 382:	f8 94       	cli
+	volatile uint8_t * tmpAddr = address;
+#ifdef RAMPZ
+	RAMPZ = 0;
+ 384:	1b be       	out	0x3b, r1	; 59
+#endif
+	asm volatile(
+ 386:	a0 e4       	ldi	r26, 0x40	; 64
+ 388:	b0 e0       	ldi	r27, 0x00	; 0
+ 38a:	28 7f       	andi	r18, 0xF8	; 248
+ 38c:	28 2b       	or	r18, r24
+ 38e:	fd 01       	movw	r30, r26
+ 390:	08 ed       	ldi	r16, 0xD8	; 216
+ 392:	04 bf       	out	0x34, r16	; 52
+ 394:	20 83       	st	Z, r18
+		:
+		: "r" (tmpAddr), "r" (value), "M" (CCP_IOREG_gc), "i" (&CCP)
+		: "r16", "r30", "r31"
+		);
+
+	AVR_LEAVE_CRITICAL_REGION( );
+ 396:	99 81       	ldd	r25, Y+1	; 0x01
+ 398:	9f bf       	out	0x3f, r25	; 63
+ */
+uint8_t CLKSYS_Main_ClockSource_Select( CLK_SCLKSEL_t clockSource )
+{
+	uint8_t clkCtrl = ( CLK.CTRL & ~CLK_SCLKSEL_gm ) | clockSource;
+	CCPWrite( &CLK.CTRL, clkCtrl );
+	clkCtrl = ( CLK.CTRL & clockSource );
+ 39a:	9c 91       	ld	r25, X
+	return clkCtrl;
+}
+ 39c:	89 23       	and	r24, r25
+ 39e:	0f 90       	pop	r0
+ 3a0:	cf 91       	pop	r28
+ 3a2:	df 91       	pop	r29
+ 3a4:	0f 91       	pop	r16
+ 3a6:	08 95       	ret
+
+000003a8 <CLKSYS_RTC_ClockSource_Enable>:
+ *
+ *  \param  clockSource  Clock source to use for the RTC.
+ */
+void CLKSYS_RTC_ClockSource_Enable( CLK_RTCSRC_t clockSource )
+{
+	CLK.RTCCTRL = ( CLK.RTCCTRL & ~CLK_RTCSRC_gm ) |
+ 3a8:	e0 e4       	ldi	r30, 0x40	; 64
+ 3aa:	f0 e0       	ldi	r31, 0x00	; 0
+ 3ac:	93 81       	ldd	r25, Z+3	; 0x03
+ 3ae:	91 7f       	andi	r25, 0xF1	; 241
+ 3b0:	91 60       	ori	r25, 0x01	; 1
+ 3b2:	98 2b       	or	r25, r24
+ 3b4:	93 83       	std	Z+3, r25	; 0x03
+	              clockSource |
+	              CLK_RTCEN_bm;
+}
+ 3b6:	08 95       	ret
+
+000003b8 <CLKSYS_AutoCalibration_Enable>:
+ *  \param  clkSource    Clock source to calibrate, either OSC_RC2MCREF_bm or
+ *                       OSC_RC32MCREF_bm.
+ *  \param  extReference True if external crystal should be used as reference.
+ */
+void CLKSYS_AutoCalibration_Enable( uint8_t clkSource, bool extReference )
+{
+ 3b8:	28 2f       	mov	r18, r24
+	OSC.DFLLCTRL = ( OSC.DFLLCTRL & ~clkSource ) |
+ 3ba:	30 91 56 00 	lds	r19, 0x0056
+ 3be:	66 23       	and	r22, r22
+ 3c0:	11 f0       	breq	.+4      	; 0x3c6 <CLKSYS_AutoCalibration_Enable+0xe>
+ 3c2:	98 2f       	mov	r25, r24
+ 3c4:	01 c0       	rjmp	.+2      	; 0x3c8 <CLKSYS_AutoCalibration_Enable+0x10>
+ 3c6:	90 e0       	ldi	r25, 0x00	; 0
+ 3c8:	82 2f       	mov	r24, r18
+ 3ca:	80 95       	com	r24
+ 3cc:	83 23       	and	r24, r19
+ 3ce:	98 2b       	or	r25, r24
+ 3d0:	e0 e5       	ldi	r30, 0x50	; 80
+ 3d2:	f0 e0       	ldi	r31, 0x00	; 0
+ 3d4:	96 83       	std	Z+6, r25	; 0x06
+	               ( extReference ? clkSource : 0 );
+	if (clkSource == OSC_RC2MCREF_bm) {
+ 3d6:	21 30       	cpi	r18, 0x01	; 1
+ 3d8:	31 f4       	brne	.+12     	; 0x3e6 <CLKSYS_AutoCalibration_Enable+0x2e>
+		DFLLRC2M.CTRL |= DFLL_ENABLE_bm;
+ 3da:	80 91 68 00 	lds	r24, 0x0068
+ 3de:	81 60       	ori	r24, 0x01	; 1
+ 3e0:	80 93 68 00 	sts	0x0068, r24
+ 3e4:	08 95       	ret
+	} else if (clkSource == OSC_RC32MCREF_bm) {
+ 3e6:	22 30       	cpi	r18, 0x02	; 2
+ 3e8:	29 f4       	brne	.+10     	; 0x3f4 <CLKSYS_AutoCalibration_Enable+0x3c>
+		DFLLRC32M.CTRL |= DFLL_ENABLE_bm;
+ 3ea:	80 91 60 00 	lds	r24, 0x0060
+ 3ee:	81 60       	ori	r24, 0x01	; 1
+ 3f0:	80 93 60 00 	sts	0x0060, r24
+ 3f4:	08 95       	ret
+
+000003f6 <CLKSYS_XOSC_FailureDetection_Enable>:
+ *  XOSCFD _will_ issue the XOSCF Non-maskable Interrupt (NMI) regardless of
+ *  any interrupt priorities and settings. Therefore, make sure that a handler
+ *  is implemented for the XOSCF NMI when you enable it.
+ */
+void CLKSYS_XOSC_FailureDetection_Enable( void )
+{
+ 3f6:	0f 93       	push	r16
+ 3f8:	df 93       	push	r29
+ 3fa:	cf 93       	push	r28
+ 3fc:	0f 92       	push	r0
+ 3fe:	cd b7       	in	r28, 0x3d	; 61
+ 400:	de b7       	in	r29, 0x3e	; 62
+
+	// Restore global interrupt setting from scratch register.
+        asm("out  0x3F, R1");
+
+#elif defined __GNUC__
+	AVR_ENTER_CRITICAL_REGION( );
+ 402:	8f b7       	in	r24, 0x3f	; 63
+ 404:	89 83       	std	Y+1, r24	; 0x01
+ 406:	f8 94       	cli
+	volatile uint8_t * tmpAddr = address;
+#ifdef RAMPZ
+	RAMPZ = 0;
+ 408:	1b be       	out	0x3b, r1	; 59
+#endif
+	asm volatile(
+ 40a:	23 e0       	ldi	r18, 0x03	; 3
+ 40c:	83 e5       	ldi	r24, 0x53	; 83
+ 40e:	90 e0       	ldi	r25, 0x00	; 0
+ 410:	fc 01       	movw	r30, r24
+ 412:	08 ed       	ldi	r16, 0xD8	; 216
+ 414:	04 bf       	out	0x34, r16	; 52
+ 416:	20 83       	st	Z, r18
+		:
+		: "r" (tmpAddr), "r" (value), "M" (CCP_IOREG_gc), "i" (&CCP)
+		: "r16", "r30", "r31"
+		);
+
+	AVR_LEAVE_CRITICAL_REGION( );
+ 418:	89 81       	ldd	r24, Y+1	; 0x01
+ 41a:	8f bf       	out	0x3f, r24	; 63
+ *  is implemented for the XOSCF NMI when you enable it.
+ */
+void CLKSYS_XOSC_FailureDetection_Enable( void )
+{
+	CCPWrite( &OSC.XOSCFAIL, ( OSC_XOSCFDIF_bm | OSC_XOSCFDEN_bm ) );
+}
+ 41c:	0f 90       	pop	r0
+ 41e:	cf 91       	pop	r28
+ 420:	df 91       	pop	r29
+ 422:	0f 91       	pop	r16
+ 424:	08 95       	ret
+
+00000426 <CLKSYS_Configuration_Lock>:
+ *  This will lock the configuration until the next reset, or until the
+ *  External Oscillator Failure Detections (XOSCFD) feature detects a failure
+ *  and switches to internal 2MHz RC oscillator.
+ */
+void CLKSYS_Configuration_Lock( void )
+{
+ 426:	0f 93       	push	r16
+ 428:	df 93       	push	r29
+ 42a:	cf 93       	push	r28
+ 42c:	0f 92       	push	r0
+ 42e:	cd b7       	in	r28, 0x3d	; 61
+ 430:	de b7       	in	r29, 0x3e	; 62
+
+	// Restore global interrupt setting from scratch register.
+        asm("out  0x3F, R1");
+
+#elif defined __GNUC__
+	AVR_ENTER_CRITICAL_REGION( );
+ 432:	8f b7       	in	r24, 0x3f	; 63
+ 434:	89 83       	std	Y+1, r24	; 0x01
+ 436:	f8 94       	cli
+	volatile uint8_t * tmpAddr = address;
+#ifdef RAMPZ
+	RAMPZ = 0;
+ 438:	1b be       	out	0x3b, r1	; 59
+#endif
+	asm volatile(
+ 43a:	21 e0       	ldi	r18, 0x01	; 1
+ 43c:	82 e4       	ldi	r24, 0x42	; 66
+ 43e:	90 e0       	ldi	r25, 0x00	; 0
+ 440:	fc 01       	movw	r30, r24
+ 442:	08 ed       	ldi	r16, 0xD8	; 216
+ 444:	04 bf       	out	0x34, r16	; 52
+ 446:	20 83       	st	Z, r18
+		:
+		: "r" (tmpAddr), "r" (value), "M" (CCP_IOREG_gc), "i" (&CCP)
+		: "r16", "r30", "r31"
+		);
+
+	AVR_LEAVE_CRITICAL_REGION( );
+ 448:	89 81       	ldd	r24, Y+1	; 0x01
+ 44a:	8f bf       	out	0x3f, r24	; 63
+ *  and switches to internal 2MHz RC oscillator.
+ */
+void CLKSYS_Configuration_Lock( void )
+{
+	CCPWrite( &CLK.LOCK, CLK_LOCK_bm );
+}
+ 44c:	0f 90       	pop	r0
+ 44e:	cf 91       	pop	r28
+ 450:	df 91       	pop	r29
+ 452:	0f 91       	pop	r16
+ 454:	08 95       	ret
+
+00000456 <USART_InterruptDriver_Initialize>:
+ *  \param dreIntLevel          Data register empty interrupt level.
+ */
+void USART_InterruptDriver_Initialize(USART_data_t * usart_data,
+                                      USART_t * usart,
+                                      USART_DREINTLVL_t dreIntLevel)
+{
+ 456:	fc 01       	movw	r30, r24
+	usart_data->usart = usart;
+ 458:	60 83       	st	Z, r22
+ 45a:	71 83       	std	Z+1, r23	; 0x01
+	usart_data->dreIntLevel = dreIntLevel;
+ 45c:	42 83       	std	Z+2, r20	; 0x02
+
+	usart_data->buffer.RX_Tail = 0;
+ 45e:	14 86       	std	Z+12, r1	; 0x0c
+	usart_data->buffer.RX_Head = 0;
+ 460:	13 86       	std	Z+11, r1	; 0x0b
+	usart_data->buffer.TX_Tail = 0;
+ 462:	16 86       	std	Z+14, r1	; 0x0e
+	usart_data->buffer.TX_Head = 0;
+ 464:	15 86       	std	Z+13, r1	; 0x0d
+}
+ 466:	08 95       	ret
+
+00000468 <USART_InterruptDriver_DreInterruptLevel_Set>:
+ *  \param dreIntLevel        Interrupt level of the DRE interrupt.
+ */
+void USART_InterruptDriver_DreInterruptLevel_Set(USART_data_t * usart_data,
+                                                 USART_DREINTLVL_t dreIntLevel)
+{
+	usart_data->dreIntLevel = dreIntLevel;
+ 468:	fc 01       	movw	r30, r24
+ 46a:	62 83       	std	Z+2, r22	; 0x02
+}
+ 46c:	08 95       	ret
+
+0000046e <USART_TXBuffer_FreeSpace>:
+ *
+ *  \retval true      There is data in the receive buffer.
+ *  \retval false     The receive buffer is empty.
+ */
+bool USART_TXBuffer_FreeSpace(USART_data_t * usart_data)
+{
+ 46e:	fc 01       	movw	r30, r24
+	/* Make copies to make sure that volatile access is specified. */
+	uint8_t tempHead = (usart_data->buffer.TX_Head + 1) & USART_TX_BUFFER_MASK;
+ 470:	85 85       	ldd	r24, Z+13	; 0x0d
+	uint8_t tempTail = usart_data->buffer.TX_Tail;
+ 472:	96 85       	ldd	r25, Z+14	; 0x0e
+ 474:	20 e0       	ldi	r18, 0x00	; 0
+ 476:	8f 5f       	subi	r24, 0xFF	; 255
+ 478:	83 70       	andi	r24, 0x03	; 3
+ 47a:	89 13       	cpse	r24, r25
+ 47c:	21 e0       	ldi	r18, 0x01	; 1
+
+	/* There are data left in the buffer unless Head and Tail are equal. */
+	return (tempHead != tempTail);
+}
+ 47e:	82 2f       	mov	r24, r18
+ 480:	08 95       	ret
+
+00000482 <USART_TXBuffer_PutByte>:
+ *
+ *  \param usart_data The USART_data_t struct instance.
+ *  \param data       The data to send.
+ */
+bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
+{
+ 482:	dc 01       	movw	r26, r24
+ *  \retval false     The receive buffer is empty.
+ */
+bool USART_TXBuffer_FreeSpace(USART_data_t * usart_data)
+{
+	/* Make copies to make sure that volatile access is specified. */
+	uint8_t tempHead = (usart_data->buffer.TX_Head + 1) & USART_TX_BUFFER_MASK;
+ 484:	1d 96       	adiw	r26, 0x0d	; 13
+ 486:	8c 91       	ld	r24, X
+ 488:	1d 97       	sbiw	r26, 0x0d	; 13
+	uint8_t tempTail = usart_data->buffer.TX_Tail;
+ 48a:	1e 96       	adiw	r26, 0x0e	; 14
+ 48c:	9c 91       	ld	r25, X
+ 48e:	1e 97       	sbiw	r26, 0x0e	; 14
+
+	/* There are data left in the buffer unless Head and Tail are equal. */
+	return (tempHead != tempTail);
+ 490:	20 e0       	ldi	r18, 0x00	; 0
+ 492:	8f 5f       	subi	r24, 0xFF	; 255
+ 494:	83 70       	andi	r24, 0x03	; 3
+ 496:	89 17       	cp	r24, r25
+ 498:	b1 f0       	breq	.+44     	; 0x4c6 <USART_TXBuffer_PutByte+0x44>
+ 49a:	21 e0       	ldi	r18, 0x01	; 1
+	TXBuffer_FreeSpace = USART_TXBuffer_FreeSpace(usart_data);
+
+
+	if(TXBuffer_FreeSpace)
+	{
+	  	tempTX_Head = TXbufPtr->TX_Head;
+ 49c:	1d 96       	adiw	r26, 0x0d	; 13
+ 49e:	8c 91       	ld	r24, X
+ 4a0:	1d 97       	sbiw	r26, 0x0d	; 13
+	  	TXbufPtr->TX[tempTX_Head]= data;
+ 4a2:	fd 01       	movw	r30, r26
+ 4a4:	e8 0f       	add	r30, r24
+ 4a6:	f1 1d       	adc	r31, r1
+ 4a8:	67 83       	std	Z+7, r22	; 0x07
+		/* Advance buffer head. */
+		TXbufPtr->TX_Head = (tempTX_Head + 1) & USART_TX_BUFFER_MASK;
+ 4aa:	8f 5f       	subi	r24, 0xFF	; 255
+ 4ac:	83 70       	andi	r24, 0x03	; 3
+ 4ae:	1d 96       	adiw	r26, 0x0d	; 13
+ 4b0:	8c 93       	st	X, r24
+ 4b2:	1d 97       	sbiw	r26, 0x0d	; 13
+
+		/* Enable DRE interrupt. */
+		tempCTRLA = usart_data->usart->CTRLA;
+ 4b4:	ed 91       	ld	r30, X+
+ 4b6:	fc 91       	ld	r31, X
+ 4b8:	11 97       	sbiw	r26, 0x01	; 1
+ 4ba:	83 81       	ldd	r24, Z+3	; 0x03
+		tempCTRLA = (tempCTRLA & ~USART_DREINTLVL_gm) | usart_data->dreIntLevel;
+ 4bc:	8c 7f       	andi	r24, 0xFC	; 252
+ 4be:	12 96       	adiw	r26, 0x02	; 2
+ 4c0:	9c 91       	ld	r25, X
+ 4c2:	89 2b       	or	r24, r25
+		usart_data->usart->CTRLA = tempCTRLA;
+ 4c4:	83 83       	std	Z+3, r24	; 0x03
+	}
+	return TXBuffer_FreeSpace;
+}
+ 4c6:	82 2f       	mov	r24, r18
+ 4c8:	08 95       	ret
+
+000004ca <USART_RXBufferData_Available>:
+ *
+ *  \retval true      There is data in the receive buffer.
+ *  \retval false     The receive buffer is empty.
+ */
+bool USART_RXBufferData_Available(USART_data_t * usart_data)
+{
+ 4ca:	fc 01       	movw	r30, r24
+	/* Make copies to make sure that volatile access is specified. */
+	uint8_t tempHead = usart_data->buffer.RX_Head;
+ 4cc:	93 85       	ldd	r25, Z+11	; 0x0b
+	uint8_t tempTail = usart_data->buffer.RX_Tail;
+ 4ce:	84 85       	ldd	r24, Z+12	; 0x0c
+ 4d0:	20 e0       	ldi	r18, 0x00	; 0
+ 4d2:	98 13       	cpse	r25, r24
+ 4d4:	21 e0       	ldi	r18, 0x01	; 1
+
+	/* There are data left in the buffer unless Head and Tail are equal. */
+	return (tempHead != tempTail);
+}
+ 4d6:	82 2f       	mov	r24, r18
+ 4d8:	08 95       	ret
+
+000004da <USART_RXBuffer_GetByte>:
+ *  \param usart_data       The USART_data_t struct instance.
+ *
+ *  \return         Received data.
+ */
+uint8_t USART_RXBuffer_GetByte(USART_data_t * usart_data)
+{
+ 4da:	dc 01       	movw	r26, r24
+	USART_Buffer_t * bufPtr;
+	uint8_t ans;
+
+	bufPtr = &usart_data->buffer;
+	ans = (bufPtr->RX[bufPtr->RX_Tail]);
+ 4dc:	1c 96       	adiw	r26, 0x0c	; 12
+ 4de:	8c 91       	ld	r24, X
+ 4e0:	1c 97       	sbiw	r26, 0x0c	; 12
+ 4e2:	fd 01       	movw	r30, r26
+ 4e4:	e8 0f       	add	r30, r24
+ 4e6:	f1 1d       	adc	r31, r1
+ 4e8:	83 81       	ldd	r24, Z+3	; 0x03
+
+	/* Advance buffer tail. */
+	bufPtr->RX_Tail = (bufPtr->RX_Tail + 1) & USART_RX_BUFFER_MASK;
+ 4ea:	1c 96       	adiw	r26, 0x0c	; 12
+ 4ec:	9c 91       	ld	r25, X
+ 4ee:	1c 97       	sbiw	r26, 0x0c	; 12
+ 4f0:	9f 5f       	subi	r25, 0xFF	; 255
+ 4f2:	93 70       	andi	r25, 0x03	; 3
+ 4f4:	1c 96       	adiw	r26, 0x0c	; 12
+ 4f6:	9c 93       	st	X, r25
+
+	return ans;
+}
+ 4f8:	08 95       	ret
+
+000004fa <USART_RXComplete>:
+ *  Stores received data in RX software buffer.
+ *
+ *  \param usart_data      The USART_data_t struct instance.
+ */
+bool USART_RXComplete(USART_data_t * usart_data)
+{
+ 4fa:	dc 01       	movw	r26, r24
+	USART_Buffer_t * bufPtr;
+	bool ans;
+
+	bufPtr = &usart_data->buffer;
+	/* Advance buffer head. */
+	uint8_t tempRX_Head = (bufPtr->RX_Head + 1) & USART_RX_BUFFER_MASK;
+ 4fc:	1b 96       	adiw	r26, 0x0b	; 11
+ 4fe:	9c 91       	ld	r25, X
+ 500:	1b 97       	sbiw	r26, 0x0b	; 11
+ 502:	9f 5f       	subi	r25, 0xFF	; 255
+ 504:	93 70       	andi	r25, 0x03	; 3
+
+	/* Check for overflow. */
+	uint8_t tempRX_Tail = bufPtr->RX_Tail;
+ 506:	1c 96       	adiw	r26, 0x0c	; 12
+ 508:	8c 91       	ld	r24, X
+ 50a:	1c 97       	sbiw	r26, 0x0c	; 12
+	uint8_t data = usart_data->usart->DATA;
+ 50c:	ed 91       	ld	r30, X+
+ 50e:	fc 91       	ld	r31, X
+ 510:	11 97       	sbiw	r26, 0x01	; 1
+ 512:	20 81       	ld	r18, Z
+
+	if (tempRX_Head == tempRX_Tail) {
+ 514:	98 17       	cp	r25, r24
+ 516:	11 f4       	brne	.+4      	; 0x51c <USART_RXComplete+0x22>
+ 518:	80 e0       	ldi	r24, 0x00	; 0
+ 51a:	08 95       	ret
+	  	ans = false;
+	}else{
+		ans = true;
+		usart_data->buffer.RX[usart_data->buffer.RX_Head] = data;
+ 51c:	1b 96       	adiw	r26, 0x0b	; 11
+ 51e:	8c 91       	ld	r24, X
+ 520:	1b 97       	sbiw	r26, 0x0b	; 11
+ 522:	fd 01       	movw	r30, r26
+ 524:	e8 0f       	add	r30, r24
+ 526:	f1 1d       	adc	r31, r1
+ 528:	23 83       	std	Z+3, r18	; 0x03
+		usart_data->buffer.RX_Head = tempRX_Head;
+ 52a:	1b 96       	adiw	r26, 0x0b	; 11
+ 52c:	9c 93       	st	X, r25
+ 52e:	81 e0       	ldi	r24, 0x01	; 1
+	}
+	return ans;
+}
+ 530:	08 95       	ret
+
+00000532 <USART_DataRegEmpty>:
+ *  is empty. Argument is pointer to USART (USART_data_t).
+ *
+ *  \param usart_data      The USART_data_t struct instance.
+ */
+void USART_DataRegEmpty(USART_data_t * usart_data)
+{
+ 532:	cf 93       	push	r28
+ 534:	df 93       	push	r29
+ 536:	dc 01       	movw	r26, r24
+	USART_Buffer_t * bufPtr;
+	bufPtr = &usart_data->buffer;
+
+	/* Check if all data is transmitted. */
+	uint8_t tempTX_Tail = usart_data->buffer.TX_Tail;
+ 538:	1e 96       	adiw	r26, 0x0e	; 14
+ 53a:	9c 91       	ld	r25, X
+ 53c:	1e 97       	sbiw	r26, 0x0e	; 14
+	if (bufPtr->TX_Head == tempTX_Tail){
+ 53e:	1d 96       	adiw	r26, 0x0d	; 13
+ 540:	8c 91       	ld	r24, X
+ 542:	1d 97       	sbiw	r26, 0x0d	; 13
+ 544:	cd 91       	ld	r28, X+
+ 546:	dc 91       	ld	r29, X
+ 548:	11 97       	sbiw	r26, 0x01	; 1
+ 54a:	89 17       	cp	r24, r25
+ 54c:	21 f4       	brne	.+8      	; 0x556 <USART_DataRegEmpty+0x24>
+	    /* Disable DRE interrupts. */
+		uint8_t tempCTRLA = usart_data->usart->CTRLA;
+ 54e:	8b 81       	ldd	r24, Y+3	; 0x03
+		tempCTRLA = (tempCTRLA & ~USART_DREINTLVL_gm) | USART_DREINTLVL_OFF_gc;
+ 550:	8c 7f       	andi	r24, 0xFC	; 252
+		usart_data->usart->CTRLA = tempCTRLA;
+ 552:	8b 83       	std	Y+3, r24	; 0x03
+ 554:	0f c0       	rjmp	.+30     	; 0x574 <USART_DataRegEmpty+0x42>
+
+	}else{
+		/* Start transmitting. */
+		uint8_t data = bufPtr->TX[usart_data->buffer.TX_Tail];
+ 556:	1e 96       	adiw	r26, 0x0e	; 14
+ 558:	8c 91       	ld	r24, X
+ 55a:	1e 97       	sbiw	r26, 0x0e	; 14
+ 55c:	fd 01       	movw	r30, r26
+ 55e:	e8 0f       	add	r30, r24
+ 560:	f1 1d       	adc	r31, r1
+ 562:	87 81       	ldd	r24, Z+7	; 0x07
+		usart_data->usart->DATA = data;
+ 564:	88 83       	st	Y, r24
+
+		/* Advance buffer tail. */
+		bufPtr->TX_Tail = (bufPtr->TX_Tail + 1) & USART_TX_BUFFER_MASK;
+ 566:	1e 96       	adiw	r26, 0x0e	; 14
+ 568:	8c 91       	ld	r24, X
+ 56a:	1e 97       	sbiw	r26, 0x0e	; 14
+ 56c:	8f 5f       	subi	r24, 0xFF	; 255
+ 56e:	83 70       	andi	r24, 0x03	; 3
+ 570:	1e 96       	adiw	r26, 0x0e	; 14
+ 572:	8c 93       	st	X, r24
+	}
+}
+ 574:	df 91       	pop	r29
+ 576:	cf 91       	pop	r28
+ 578:	08 95       	ret
+
+0000057a <USART_NineBits_PutChar>:
+ *
+ *  \param usart      The USART module.
+ *  \param data       The data to send.
+ */
+void USART_NineBits_PutChar(USART_t * usart, uint16_t data)
+{
+ 57a:	fc 01       	movw	r30, r24
+	if(data & 0x0100) {
+ 57c:	70 ff       	sbrs	r23, 0
+ 57e:	03 c0       	rjmp	.+6      	; 0x586 <USART_NineBits_PutChar+0xc>
+		usart->CTRLB |= USART_TXB8_bm;
+ 580:	84 81       	ldd	r24, Z+4	; 0x04
+ 582:	81 60       	ori	r24, 0x01	; 1
+ 584:	02 c0       	rjmp	.+4      	; 0x58a <USART_NineBits_PutChar+0x10>
+	}else {
+		usart->CTRLB &= ~USART_TXB8_bm;
+ 586:	84 81       	ldd	r24, Z+4	; 0x04
+ 588:	8e 7f       	andi	r24, 0xFE	; 254
+ 58a:	84 83       	std	Z+4, r24	; 0x04
+	}
+
+	usart->DATA = (data & 0x00FF);
+ 58c:	60 83       	st	Z, r22
+}
+ 58e:	08 95       	ret
+
+00000590 <USART_NineBits_GetChar>:
+ *  \param usart      The USART module.
+ *
+ *  \retval           Received data.
+ */
+uint16_t USART_NineBits_GetChar(USART_t * usart)
+{
+ 590:	fc 01       	movw	r30, r24
+	if(usart->CTRLB & USART_RXB8_bm) {
+ 592:	84 81       	ldd	r24, Z+4	; 0x04
+ 594:	80 ff       	sbrs	r24, 0
+ 596:	05 c0       	rjmp	.+10     	; 0x5a2 <USART_NineBits_GetChar+0x12>
+		return(0x0100 | usart->DATA);
+ 598:	80 81       	ld	r24, Z
+ 59a:	28 2f       	mov	r18, r24
+ 59c:	30 e0       	ldi	r19, 0x00	; 0
+ 59e:	31 60       	ori	r19, 0x01	; 1
+ 5a0:	03 c0       	rjmp	.+6      	; 0x5a8 <USART_NineBits_GetChar+0x18>
+	}else {
+		return(usart->DATA);
+ 5a2:	80 81       	ld	r24, Z
+ 5a4:	28 2f       	mov	r18, r24
+ 5a6:	30 e0       	ldi	r19, 0x00	; 0
+	}
+}
+ 5a8:	c9 01       	movw	r24, r18
+ 5aa:	08 95       	ret
+
+000005ac <puts>:
+ 5ac:	0f 93       	push	r16
+ 5ae:	1f 93       	push	r17
+ 5b0:	cf 93       	push	r28
+ 5b2:	df 93       	push	r29
+ 5b4:	8c 01       	movw	r16, r24
+ 5b6:	e0 91 22 20 	lds	r30, 0x2022
+ 5ba:	f0 91 23 20 	lds	r31, 0x2023
+ 5be:	83 81       	ldd	r24, Z+3	; 0x03
+ 5c0:	81 ff       	sbrs	r24, 1
+ 5c2:	21 c0       	rjmp	.+66     	; 0x606 <puts+0x5a>
+ 5c4:	c0 e0       	ldi	r28, 0x00	; 0
+ 5c6:	d0 e0       	ldi	r29, 0x00	; 0
+ 5c8:	0d c0       	rjmp	.+26     	; 0x5e4 <puts+0x38>
+ 5ca:	e0 91 22 20 	lds	r30, 0x2022
+ 5ce:	f0 91 23 20 	lds	r31, 0x2023
+ 5d2:	20 85       	ldd	r18, Z+8	; 0x08
+ 5d4:	31 85       	ldd	r19, Z+9	; 0x09
+ 5d6:	bf 01       	movw	r22, r30
+ 5d8:	f9 01       	movw	r30, r18
+ 5da:	19 95       	eicall
+ 5dc:	89 2b       	or	r24, r25
+ 5de:	11 f0       	breq	.+4      	; 0x5e4 <puts+0x38>
+ 5e0:	cf ef       	ldi	r28, 0xFF	; 255
+ 5e2:	df ef       	ldi	r29, 0xFF	; 255
+ 5e4:	f8 01       	movw	r30, r16
+ 5e6:	81 91       	ld	r24, Z+
+ 5e8:	8f 01       	movw	r16, r30
+ 5ea:	88 23       	and	r24, r24
+ 5ec:	71 f7       	brne	.-36     	; 0x5ca <puts+0x1e>
+ 5ee:	e0 91 22 20 	lds	r30, 0x2022
+ 5f2:	f0 91 23 20 	lds	r31, 0x2023
+ 5f6:	20 85       	ldd	r18, Z+8	; 0x08
+ 5f8:	31 85       	ldd	r19, Z+9	; 0x09
+ 5fa:	8a e0       	ldi	r24, 0x0A	; 10
+ 5fc:	bf 01       	movw	r22, r30
+ 5fe:	f9 01       	movw	r30, r18
+ 600:	19 95       	eicall
+ 602:	89 2b       	or	r24, r25
+ 604:	11 f0       	breq	.+4      	; 0x60a <puts+0x5e>
+ 606:	cf ef       	ldi	r28, 0xFF	; 255
+ 608:	df ef       	ldi	r29, 0xFF	; 255
+ 60a:	ce 01       	movw	r24, r28
+ 60c:	df 91       	pop	r29
+ 60e:	cf 91       	pop	r28
+ 610:	1f 91       	pop	r17
+ 612:	0f 91       	pop	r16
+ 614:	08 95       	ret
+
+00000616 <_exit>:
+ 616:	f8 94       	cli
+
+00000618 <__stop_program>:
+ 618:	ff cf       	rjmp	.-2      	; 0x618 <__stop_program>

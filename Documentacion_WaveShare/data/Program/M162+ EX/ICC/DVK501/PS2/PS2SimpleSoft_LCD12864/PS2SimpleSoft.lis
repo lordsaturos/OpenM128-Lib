@@ -1,0 +1,2816 @@
+                        .module PS2SimpleSoft.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ..\..\..\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 0000                   .dbfile D:\ICC_H\Software.H
+ 0000                   .dbfunc e speaData _speaData fV
+ 0000           ;              y -> y+4
+ 0000           ;              j -> y+0
+ 0000           ;              i -> R10
+ 0000           ;            len -> R12
+ 0000           ;            dat -> y+16
+                        .even
+ 0000           _speaData::
+ 0000 0E940000          xcall push_arg4
+ 0004 0E940000          xcall push_xgsetF03C
+ 0008 2897              sbiw R28,8
+ 000A CC88              ldd R12,y+20
+ 000C                   .dbline -1
+ 000C                   .dbline 116
+ 000C           ; /*********************************************************************
+ 000C           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 000C           ;                                                                       
+ 000C           ; 目    的:   建立AVR的软件提取库，增加各类补丁，方便系统程序移植
+ 000C           ;       
+ 000C           ; 目标系统:   基于AVR单片机
+ 000C           ;                                                                               
+ 000C           ; 应用软件:   ICCAVR
+ 000C           ;                                                                               
+ 000C           ; 版    本:   Version 1.0                                                       
+ 000C           ;                                                                               
+ 000C           ; 圆版时间:   2005-06-25
+ 000C           ;       
+ 000C           ; 开发人员:   SEE
+ 000C           ; 
+ 000C           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 000C           ;       
+ 000C           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 000C           ; *********************************************************************/
+ 000C           ; 
+ 000C           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 版本更新记录：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 入口参数说明：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 待定参数说明：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------        
+ 000C           ; 对外变量说明：
+ 000C           ;     
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 对外函数说明：
+ 000C           ;    
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 000C           ; 
+ 000C           ; #ifndef Software_H
+ 000C           ; #define Software_H
+ 000C           ; 
+ 000C           ; #include <math.h>
+ 000C           ; #include <string.h>
+ 000C           ; 
+ 000C           ; /* 兼容一般程序员的常用写法 */
+ 000C           ; typedef unsigned char uchar;
+ 000C           ; typedef unsigned int  uint;
+ 000C           ; typedef unsigned long ulong;
+ 000C           ; typedef signed char           schar;
+ 000C           ; typedef signed int            sint;
+ 000C           ; typedef signed long           slong;
+ 000C           ; 
+ 000C           ; /* 为方便移植，建议使用下面写法 */
+ 000C           ; typedef unsigned char bool;
+ 000C           ; typedef unsigned char uint8;
+ 000C           ; typedef unsigned int  uint16;
+ 000C           ; typedef unsigned long   uint32;
+ 000C           ; typedef signed  char  sint8;
+ 000C           ; typedef signed        int             sint16;
+ 000C           ; typedef signed        long    sint32;
+ 000C           ; typedef signed  char  int8;
+ 000C           ; typedef signed  int           int16;
+ 000C           ; typedef signed  long  int32;
+ 000C           ; 
+ 000C           ; /* 下面写法一般不推荐 */
+ 000C           ; //typedef unsigned char ubyte;
+ 000C           ; //typedef unsigned int        uword;
+ 000C           ; //typedef unsigned long udword;
+ 000C           ; //typedef signed   char       sbyte;
+ 000C           ; //typedef signed   int        sword;
+ 000C           ; //typedef signed   long       sdword;
+ 000C           ; 
+ 000C           ; /* 一般程序定义的默认值 */
+ 000C           ; //#define NULL                        0
+ 000C           ; //#define EOF                 -1
+ 000C           ; //#define TRUE                1
+ 000C           ; //#define FALSE               0
+ 000C           ; //#define YES                 1
+ 000C           ; //#define NO                          0
+ 000C           ; //#define ON                  1
+ 000C           ; //#define OFF                 0
+ 000C           ; //#define ENABLE              1
+ 000C           ; //#define DISABLE             0
+ 000C           ; //#define CRR                 1
+ 000C           ; //#define ERR                 0
+ 000C           ; //#define RIGHT                       1
+ 000C           ; //#define WRONG                       0
+ 000C           ; //#define SUCCESS             1
+ 000C           ; //#define FAILURE             0
+ 000C           ; //#define PI                  3.1415926       //3.1415926535897932
+ 000C           ; 
+ 000C           ; /* 如果你手头上的RAM实在很紧，不如尝试下面的define～ */
+ 000C           ; //#define _CALLOC(a)          ( (a *)calloc(n,sizeof(a)) )
+ 000C           ; //#define _MALLOC(a)          ( (a *)malloc(sizeof(a)) )
+ 000C           ; //#define _MIN(a,b)                   ( (a) < (b) ? (a) : (b) )
+ 000C           ; //#define _MAX(a,b)                   ( (a) > (b) ? (a) : (b) )
+ 000C           ; //#define _EXCHANGE(a,b)      { int t; t=a; a=b; b=t; }
+ 000C           ; //#define _TOLOWER(c)         ( (c)+32 )
+ 000C           ; //#define _TOUPPER(c)         ( (c)-32 )
+ 000C           ; 
+ 000C           ; //#ifndef BIT
+ 000C           ; //#define BIT(x)      ( 1<<(x) )
+ 000C           ; //#endif
+ 000C           ; 
+ 000C           ; /*--------------------------------------------------------------------
+ 000C           ; 函数全称：数据拆字
+ 000C           ; 函数功能：
+ 000C           ; 注意事项：D<=999999,C<=6
+ 000C           ; 提示说明：调用speaData(12,2)，得到dataElem[0]=2，dataElem[1]=1
+ 000C           ; 输    入：
+ 000C           ; 返    回：无
+ 000C           ; --------------------------------------------------------------------*/
+ 000C           ; uint8 dataElem[6];
+ 000C           ; void speaData(uint32 dat,sint8 len)
+ 000C           ; {
+ 000C                   .dbline 119
+ 000C           ;     uint8 i;
+ 000C           ;     uint32 j,y;
+ 000C           ;     for(i=0,j=1;i<len;i++)
+ 000C AA24              clr R10
+ 000E 81E0              ldi R24,1
+ 0010 8883              std y+0,R24
+ 0012 80E0              ldi R24,0
+ 0014 8983              std y+1,R24
+ 0016 8A83              std y+2,R24
+ 0018 8B83              std y+3,R24
+ 001A 3CC0              xjmp L5
+ 001C           L2:
+ 001C                   .dbline 120
+ 001C           ;     {
+ 001C                   .dbline 121
+ 001C           ;         y=dat/j;
+ 001C 2880              ldd R2,y+0
+ 001E 3980              ldd R3,y+1
+ 0020 4A80              ldd R4,y+2
+ 0022 5B80              ldd R5,y+3
+ 0024 0889              ldd R16,y+16
+ 0026 1989              ldd R17,y+17
+ 0028 2A89              ldd R18,y+18
+ 002A 3B89              ldd R19,y+19
+ 002C 5A92              st -y,R5
+ 002E 4A92              st -y,R4
+ 0030 3A92              st -y,R3
+ 0032 2A92              st -y,R2
+ 0034 0E940000          xcall div32u
+ 0038 0C83              std y+4,R16
+ 003A 1D83              std y+5,R17
+ 003C 2E83              std y+6,R18
+ 003E 3F83              std y+7,R19
+ 0040                   .dbline 122
+ 0040           ;         dataElem[i]=y%10;
+ 0040 4AE0              ldi R20,10
+ 0042 50E0              ldi R21,0
+ 0044 60E0              ldi R22,0
+ 0046 70E0              ldi R23,0
+ 0048 0C81              ldd R16,y+4
+ 004A 1D81              ldd R17,y+5
+ 004C 2E81              ldd R18,y+6
+ 004E 3F81              ldd R19,y+7
+ 0050 7A93              st -y,R23
+ 0052 6A93              st -y,R22
+ 0054 5A93              st -y,R21
+ 0056 4A93              st -y,R20
+ 0058 0E940000          xcall mod32u
+ 005C 80E0              ldi R24,<_dataElem
+ 005E 90E0              ldi R25,>_dataElem
+ 0060 EA2D              mov R30,R10
+ 0062 FF27              clr R31
+ 0064 E80F              add R30,R24
+ 0066 F91F              adc R31,R25
+ 0068 0083              std z+0,R16
+ 006A                   .dbline 123
+ 006A           ;         j*=10;
+ 006A 2880              ldd R2,y+0
+ 006C 3980              ldd R3,y+1
+ 006E 4A80              ldd R4,y+2
+ 0070 5B80              ldd R5,y+3
+ 0072 4AE0              ldi R20,10
+ 0074 50E0              ldi R21,0
+ 0076 60E0              ldi R22,0
+ 0078 70E0              ldi R23,0
+ 007A 5A92              st -y,R5
+ 007C 4A92              st -y,R4
+ 007E 3A92              st -y,R3
+ 0080 2A92              st -y,R2
+ 0082 8A01              movw R16,R20
+ 0084 9B01              movw R18,R22
+ 0086 0E940000          xcall empy32u
+ 008A 0883              std y+0,R16
+ 008C 1983              std y+1,R17
+ 008E 2A83              std y+2,R18
+ 0090 3B83              std y+3,R19
+ 0092                   .dbline 124
+ 0092           ;     }
+ 0092           L3:
+ 0092                   .dbline 119
+ 0092 A394              inc R10
+ 0094           L5:
+ 0094                   .dbline 119
+ 0094 2C2C              mov R2,R12
+ 0096 3324              clr R3
+ 0098 27FC              sbrc R2,7
+ 009A 3094              com R3
+ 009C 4A2C              mov R4,R10
+ 009E 5524              clr R5
+ 00A0 4214              cp R4,R2
+ 00A2 5304              cpc R5,R3
+ 00A4 0CF4              brge X1
+ 00A6 BACF              xjmp L2
+ 00A8           X1:
+ 00A8           X0:
+ 00A8                   .dbline -2
+ 00A8           L1:
+ 00A8                   .dbline 0 ; func end
+ 00A8 2896              adiw R28,8
+ 00AA 0E940000          xcall pop_xgsetF03C
+ 00AE 2496              adiw R28,4
+ 00B0 0895              ret
+ 00B2                   .dbsym l y 4 l
+ 00B2                   .dbsym l j 0 l
+ 00B2                   .dbsym r i 10 c
+ 00B2                   .dbsym r len 12 C
+ 00B2                   .dbsym l dat 16 l
+ 00B2                   .dbend
+ 00B2                   .dbfile D:\ICC_H\Hardware.H
+ 00B2                   .dbfunc e delay50us _delay50us fV
+ 00B2           ;              j -> R20
+ 00B2           ;              t -> R16,R17
+                        .even
+ 00B2           _delay50us::
+ 00B2 4A93              st -y,R20
+ 00B4                   .dbline -1
+ 00B4                   .dbline 105
+ 00B4           ; /*********************************************************************
+ 00B4           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 00B4           ;                                                                       
+ 00B4           ; 目    的:   建立AVR的硬件提取库，增加各类补丁，方便移植
+ 00B4           ;                                       
+ 00B4           ; 目标系统:   基于AVR单片机
+ 00B4           ;                                                                               
+ 00B4           ; 应用软件:   ICCAVR
+ 00B4           ;                                                                               
+ 00B4           ; 版    本:   Version 1.0                                                          
+ 00B4           ;                                                                               
+ 00B4           ; 圆版时间:   2005-06-25
+ 00B4           ;       
+ 00B4           ; 开发人员:   SEE
+ 00B4           ; 
+ 00B4           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 00B4           ;       
+ 00B4           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 00B4           ; *********************************************************************/
+ 00B4           ; 
+ 00B4           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 版本更新记录：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 入口参数说明：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 待定参数说明：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------        
+ 00B4           ; 对外变量说明：
+ 00B4           ;     
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 对外函数说明：
+ 00B4           ;    
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 00B4           ; 
+ 00B4           ; #ifndef Hardware_H
+ 00B4           ; #define Hardware_H
+ 00B4           ; 
+ 00B4           ; #include <math.h>
+ 00B4           ; #include <string.h>
+ 00B4           ; #include <stdio.h>
+ 00B4           ; #include <macros.h>
+ 00B4           ; #include <eeprom.h>
+ 00B4           ; //#include <wdt.h>
+ 00B4           ; 
+ 00B4           ; /* TWI configs */
+ 00B4           ; //如使用ATMEGA162(没有TWI接口)之类的MCU，在加载Hardware.H前，务必加“#define NO_INCLUDE_I2C_H 1”语句
+ 00B4           ; #if NO_INCLUDE_I2C_H
+ 00B4           ; ;
+ 00B4           ; #else
+ 00B4           ; #include "D:\ICC_H\I2C.H"     //i2c即AVR的"twi"
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; /* hard configs */
+ 00B4           ; #ifndef flash
+ 00B4           ;       #define flash   const
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; #ifndef code
+ 00B4           ;       #define code    const
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; #ifndef NOP
+ 00B4           ;       #define NOP()   asm("nop")
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; /* io configs */
+ 00B4           ; #define sbi(io,bit)           (  io |=  (1<<bit) )    //example: sbi(PORTA,0);sbi(DDRA,0);
+ 00B4           ; #define cbi(io,bit)           (  io &= ~(1<<bit) )    //example: cbi(PORTA,0);cbi(DDRA,0);
+ 00B4           ; #define gbi(pin ,bit) ( pin &   (1<<bit) )    //example: gbi(PINA,0);
+ 00B4           ; 
+ 00B4           ; /* interrupt configs */
+ 00B4           ; #define DIS_INT  asm("sei")
+ 00B4           ; #define EN_INT   asm("cli")
+ 00B4           ; 
+ 00B4           ; /* wdt configs */
+ 00B4           ; #define WDT()    asm("wdr")
+ 00B4           ; 
+ 00B4           ; /* bit operation */
+ 00B4           ; //#ifndef BIT
+ 00B4           ; //#define BIT(x)      ( 1<<(x) )
+ 00B4           ; //#endif
+ 00B4           ; 
+ 00B4           ; /* USART configs for 4 Mhz crystal */
+ 00B4           ; //#define BAUD9600                    25
+ 00B4           ; //#define BAUD19000                   12
+ 00B4           ; //#define UART_TRAN_ON()      UCR |=  0x08
+ 00B4           ; //#define UART_TRAN_OFF()     UCR &= ~0x08
+ 00B4           ; //#define UART_RCV_ON()               UCR |=  0x10
+ 00B4           ; //#define UART_RCV_OFF()      UCR &= ~0x10
+ 00B4           ; 
+ 00B4           ; /*--------------------------------------------------------------------
+ 00B4           ; 函数全称：50us 延时
+ 00B4           ; 函数功能：当然是 50us延时 啦
+ 00B4           ; 注意事项：基于7.3728M晶振，稍微有点误差
+ 00B4           ; 提示说明：调用delay50us（20），得到1ms延时
+ 00B4           ; 输    入：    
+ 00B4           ; 返    回：无 
+ 00B4           ; --------------------------------------------------------------------*/
+ 00B4           ; void delay50us(sint16 t)
+ 00B4           ; {
+ 00B4                   .dbline 107
+ 00B4           ;     uint8 j;          
+ 00B4           ;     for(;t>0;t--)                     
+ 00B4 07C0              xjmp L10
+ 00B6           L7:
+ 00B6                   .dbline 108
+ 00B6           ;         for(j=0;j<70;j++)     
+ 00B6 4427              clr R20
+ 00B8 01C0              xjmp L14
+ 00BA           L11:
+ 00BA                   .dbline 109
+ 00BA           ;             ;
+ 00BA           L12:
+ 00BA                   .dbline 108
+ 00BA 4395              inc R20
+ 00BC           L14:
+ 00BC                   .dbline 108
+ 00BC 4634              cpi R20,70
+ 00BE E8F3              brlo L11
+ 00C0           X2:
+ 00C0           L8:
+ 00C0                   .dbline 107
+ 00C0 0150              subi R16,1
+ 00C2 1040              sbci R17,0
+ 00C4           L10:
+ 00C4                   .dbline 107
+ 00C4 2224              clr R2
+ 00C6 3324              clr R3
+ 00C8 2016              cp R2,R16
+ 00CA 3106              cpc R3,R17
+ 00CC A4F3              brlt L7
+ 00CE           X3:
+ 00CE                   .dbline -2
+ 00CE           L6:
+ 00CE                   .dbline 0 ; func end
+ 00CE 4991              ld R20,y+
+ 00D0 0895              ret
+ 00D2                   .dbsym r j 20 c
+ 00D2                   .dbsym r t 16 I
+ 00D2                   .dbend
+ 00D2                   .dbfunc e delay50ms _delay50ms fV
+ 00D2           ;              i -> R20,R21
+ 00D2           ;              t -> R16,R17
+                        .even
+ 00D2           _delay50ms::
+ 00D2 4A93              st -y,R20
+ 00D4 5A93              st -y,R21
+ 00D6                   .dbline -1
+ 00D6                   .dbline 120
+ 00D6           ; }
+ 00D6           ; /*--------------------------------------------------------------------
+ 00D6           ; 函数全称：50ms 延时
+ 00D6           ; 函数功能：当然是 50ms延时 啦
+ 00D6           ; 注意事项：基于7.3728M晶振，稍微有点误差
+ 00D6           ; 提示说明：调用delay50ms（20），得到1s延时 
+ 00D6           ; 输    入：
+ 00D6           ; 返    回：无
+ 00D6           ; --------------------------------------------------------------------*/
+ 00D6           ; void delay50ms(sint16 t)
+ 00D6           ; {
+ 00D6                   .dbline 122
+ 00D6           ;       uint16 i; 
+ 00D6           ;       for(;t>0;t--)
+ 00D6 13C0              xjmp L19
+ 00D8           L16:
+ 00D8                   .dbline 123
+ 00D8           ;               for(i=0;i<52642;i++)
+ 00D8 4427              clr R20
+ 00DA 5527              clr R21
+ 00DC 02C0              xjmp L23
+ 00DE           L20:
+ 00DE                   .dbline 124
+ 00DE           ;                       ; 
+ 00DE           L21:
+ 00DE                   .dbline 123
+ 00DE 4F5F              subi R20,255  ; offset = 1
+ 00E0 5F4F              sbci R21,255
+ 00E2           L23:
+ 00E2                   .dbline 123
+ 00E2 82EA              ldi R24,162
+ 00E4 9DEC              ldi R25,205
+ 00E6 A0E0              ldi R26,0
+ 00E8 B0E0              ldi R27,0
+ 00EA 1A01              movw R2,R20
+ 00EC 4424              clr R4
+ 00EE 5524              clr R5
+ 00F0 2816              cp R2,R24
+ 00F2 3906              cpc R3,R25
+ 00F4 4A06              cpc R4,R26
+ 00F6 5B06              cpc R5,R27
+ 00F8 94F3              brlt L20
+ 00FA           X4:
+ 00FA           L17:
+ 00FA                   .dbline 122
+ 00FA 0150              subi R16,1
+ 00FC 1040              sbci R17,0
+ 00FE           L19:
+ 00FE                   .dbline 122
+ 00FE 2224              clr R2
+ 0100 3324              clr R3
+ 0102 2016              cp R2,R16
+ 0104 3106              cpc R3,R17
+ 0106 44F3              brlt L16
+ 0108           X5:
+ 0108                   .dbline -2
+ 0108           L15:
+ 0108                   .dbline 0 ; func end
+ 0108 5991              ld R21,y+
+ 010A 4991              ld R20,y+
+ 010C 0895              ret
+ 010E                   .dbsym r i 20 i
+ 010E                   .dbsym r t 16 I
+ 010E                   .dbend
+ 010E                   .dbfunc e delayus _delayus fV
+ 010E           ;              i -> R20,R21
+ 010E           ;              t -> R16,R17
+                        .even
+ 010E           _delayus::
+ 010E 4A93              st -y,R20
+ 0110 5A93              st -y,R21
+ 0112                   .dbline -1
+ 0112                   .dbline 129
+ 0112           ; }
+ 0112           ; 
+ 0112           ; 
+ 0112           ; void delayus(uint16 t)
+ 0112           ; {
+ 0112                   .dbline 131
+ 0112           ;       uint16 i;
+ 0112           ;       for(i=0;i<t;i++)
+ 0112 4427              clr R20
+ 0114 5527              clr R21
+ 0116 02C0              xjmp L28
+ 0118           L25:
+ 0118                   .dbline 132
+ 0118           ;               {
+ 0118                   .dbline 135
+ 0118           ;                       //asm("NOP\n");
+ 0118           ;                       //asm("NOP\n");
+ 0118           ;               }
+ 0118           L26:
+ 0118                   .dbline 131
+ 0118 4F5F              subi R20,255  ; offset = 1
+ 011A 5F4F              sbci R21,255
+ 011C           L28:
+ 011C                   .dbline 131
+ 011C 4017              cp R20,R16
+ 011E 5107              cpc R21,R17
+ 0120 D8F3              brlo L25
+ 0122           X6:
+ 0122                   .dbline -2
+ 0122           L24:
+ 0122                   .dbline 0 ; func end
+ 0122 5991              ld R21,y+
+ 0124 4991              ld R20,y+
+ 0126 0895              ret
+ 0128                   .dbsym r i 20 i
+ 0128                   .dbsym r t 16 i
+ 0128                   .dbend
+ 0128                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0128                   .dbfunc e SPI_init _SPI_init fV
+                        .even
+ 0128           _SPI_init::
+ 0128                   .dbline -1
+ 0128                   .dbline 83
+ 0128           ; /*********************************************************************
+ 0128           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 0128           ;                                                               
+ 0128           ; 目    的:   建立LCD12864_ST7920的串模式操作库
+ 0128           ; 
+ 0128           ; 目标系统:   基于AVR单片机
+ 0128           ;                                                                       
+ 0128           ; 应用软件:   ICCAVR                                               
+ 0128           ;                                                                       
+ 0128           ; 版    本:   Version 1.0
+ 0128           ;                                                                       
+ 0128           ; 圆版时间:   2005-09-06
+ 0128           ; 
+ 0128           ; 开发人员:   SEE
+ 0128           ; 
+ 0128           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 0128           ; 
+ 0128           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权 
+ 0128           ; *********************************************************************/
+ 0128           ; 
+ 0128           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 版本更新记录：
+ 0128           ; 
+ 0128           ; 
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 入口参数说明：
+ 0128           ;       //#define OUT_LCD_CS    sbi(DDRD,0)
+ 0128           ;       //#define SET_LCD_CS    sbi(PORTD,0)
+ 0128           ;       //#define CLR_LCD_CS    cbi(PORTD,0)
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 待定参数说明：
+ 0128           ;       
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------        
+ 0128           ; 对外变量说明：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 对外函数说明：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 0128           ; 
+ 0128           ; 
+ 0128           ; /*--------------------------------------------------------------------
+ 0128           ; 接口定义：
+ 0128           ; 
+ 0128           ; LCD12864_ST7920                       ATmega16
+ 0128           ; 1.GND         --------        GND
+ 0128           ; 2.VCC         --------        VCC
+ 0128           ; 3.V0          --------        V0
+ 0128           ; 4.RS(CS)      --------        VCC
+ 0128           ; 5.R/W(SID)    --------        MOSI/PB5
+ 0128           ; 6.E(SCLK)     --------        SCK/PB7
+ 0128           ; 7.D0          --------        NC
+ 0128           ; 8.D1          --------        NC
+ 0128           ; 9.D2          --------        NC
+ 0128           ; 10.D3         --------        NC
+ 0128           ; 11.D4         --------        NC
+ 0128           ; 12.D5         --------        NC
+ 0128           ; 13.D6         --------        NC
+ 0128           ; 14.D7         --------        NC
+ 0128           ; 15.PSB                --------        GND
+ 0128           ; 16.NC         --------        NC
+ 0128           ; 17.RST                --------        NC
+ 0128           ; 18.NC         --------        NC
+ 0128           ; 19.LED+               --------        VCC
+ 0128           ; 20.LED-               --------        GND
+ 0128           ; 
+ 0128           ; 说明：
+ 0128           ; （1）使用ATmega16的硬件SPI操作LCD12864_ST7920
+ 0128           ; （2）PIN4/CS接VCC，其实也可接到特定的IO口，但外部程序需要指定
+ 0128           ; --------------------------------------------------------------------*/
+ 0128           ; 
+ 0128           ; #ifndef LCD12864_ST7920_H
+ 0128           ; #define LCD12864_ST7920_H
+ 0128           ; 
+ 0128           ; #include "D:\ICC_H\CmmIcc.h"
+ 0128           ; 
+ 0128           ; void SPI_init()
+ 0128           ; {
+ 0128                   .dbline 84
+ 0128           ;       DDRB =0xFF;
+ 0128 8FEF              ldi R24,255
+ 012A 87BB              out 0x17,R24
+ 012C                   .dbline 85
+ 012C           ;       SPCR = 0x50;    //setup SPI
+ 012C 80E5              ldi R24,80
+ 012E 8DB9              out 0xd,R24
+ 0130                   .dbline 86
+ 0130           ;       SPSR = 0x01;    //setup SPI
+ 0130 81E0              ldi R24,1
+ 0132 8EB9              out 0xe,R24
+ 0134                   .dbline 87
+ 0134           ;       SEI();                  
+ 0134 7894              sei
+ 0136                   .dbline -2
+ 0136           L29:
+ 0136                   .dbline 0 ; func end
+ 0136 0895              ret
+ 0138                   .dbend
+ 0138                   .dbfunc e lcd_wrByte _lcd_wrByte fV
+ 0138           ;           data -> R16
+                        .even
+ 0138           _lcd_wrByte::
+ 0138                   .dbline -1
+ 0138                   .dbline 91
+ 0138           ; }
+ 0138           ; 
+ 0138           ; void lcd_wrByte(uint8 data)
+ 0138           ; {  
+ 0138                   .dbline 92
+ 0138           ;       SPDR = data;        
+ 0138 0FB9              out 0xf,R16
+ 013A           L31:
+ 013A                   .dbline 93
+ 013A           ;       while ((SPSR & 0x80) == 0);  
+ 013A           L32:
+ 013A                   .dbline 93
+ 013A 779B              sbis 0xe,7
+ 013C FECF              rjmp L31
+ 013E           X7:
+ 013E                   .dbline -2
+ 013E           L30:
+ 013E                   .dbline 0 ; func end
+ 013E 0895              ret
+ 0140                   .dbsym r data 16 c
+ 0140                   .dbend
+ 0140                   .dbfunc e lcd_wrCmd _lcd_wrCmd fV
+ 0140           ;             LC -> R10
+ 0140           ;             HC -> R12
+                        .even
+ 0140           _lcd_wrCmd::
+ 0140 AA92              st -y,R10
+ 0142 CA92              st -y,R12
+ 0144 A22E              mov R10,R18
+ 0146 C02E              mov R12,R16
+ 0148                   .dbline -1
+ 0148                   .dbline 97
+ 0148           ; }
+ 0148           ; 
+ 0148           ; void lcd_wrCmd(uint8 HC,uint8 LC)
+ 0148           ; {
+ 0148                   .dbline 98
+ 0148           ;       lcd_wrByte(0xF8);
+ 0148 08EF              ldi R16,248
+ 014A F6DF              xcall _lcd_wrByte
+ 014C                   .dbline 99
+ 014C           ;       lcd_wrByte(HC);         //传输高四位
+ 014C 0C2D              mov R16,R12
+ 014E F4DF              xcall _lcd_wrByte
+ 0150                   .dbline 100
+ 0150           ;       lcd_wrByte(LC);         //传输低四位
+ 0150 0A2D              mov R16,R10
+ 0152 F2DF              xcall _lcd_wrByte
+ 0154                   .dbline -2
+ 0154           L34:
+ 0154                   .dbline 0 ; func end
+ 0154 C990              ld R12,y+
+ 0156 A990              ld R10,y+
+ 0158 0895              ret
+ 015A                   .dbsym r LC 10 c
+ 015A                   .dbsym r HC 12 c
+ 015A                   .dbend
+ 015A                   .dbfunc e lcd_wrDat _lcd_wrDat fV
+ 015A           ;             LD -> R10
+ 015A           ;             HD -> R12
+                        .even
+ 015A           _lcd_wrDat::
+ 015A AA92              st -y,R10
+ 015C CA92              st -y,R12
+ 015E A22E              mov R10,R18
+ 0160 C02E              mov R12,R16
+ 0162                   .dbline -1
+ 0162                   .dbline 104
+ 0162           ; }
+ 0162           ; 
+ 0162           ; void lcd_wrDat(uint8 HD,uint8 LD)
+ 0162           ; {
+ 0162                   .dbline 105
+ 0162           ;       lcd_wrByte(0xFA);
+ 0162 0AEF              ldi R16,250
+ 0164 E9DF              xcall _lcd_wrByte
+ 0166                   .dbline 106
+ 0166           ;       lcd_wrByte(HD);         //传输高四位
+ 0166 0C2D              mov R16,R12
+ 0168 E7DF              xcall _lcd_wrByte
+ 016A                   .dbline 107
+ 016A           ;       lcd_wrByte(LD);         //传输低四位
+ 016A 0A2D              mov R16,R10
+ 016C E5DF              xcall _lcd_wrByte
+ 016E                   .dbline -2
+ 016E           L35:
+ 016E                   .dbline 0 ; func end
+ 016E C990              ld R12,y+
+ 0170 A990              ld R10,y+
+ 0172 0895              ret
+ 0174                   .dbsym r LD 10 c
+ 0174                   .dbsym r HD 12 c
+ 0174                   .dbend
+ 0174                   .dbfunc e lcd_set_xy _lcd_set_xy fV
+ 0174           ;            adr -> R20
+ 0174           ;              y -> R22
+ 0174           ;              x -> R10
+                        .even
+ 0174           _lcd_set_xy::
+ 0174 0E940000          xcall push_xgsetF00C
+ 0178 622F              mov R22,R18
+ 017A A02E              mov R10,R16
+ 017C                   .dbline -1
+ 017C                   .dbline 114
+ 017C           ; } 
+ 017C           ; 
+ 017C           ; /*
+ 017C           ; x表示在第几行显示，y表示在第几列显示
+ 017C           ; */
+ 017C           ; void lcd_set_xy(uint8 x,uint8 y) 
+ 017C           ; {
+ 017C                   .dbline 117
+ 017C           ;       uint8 adr;
+ 017C           ; 
+ 017C           ;       switch(x)
+ 017C BB24              clr R11
+ 017E C501              movw R24,R10
+ 0180 8130              cpi R24,1
+ 0182 E0E0              ldi R30,0
+ 0184 9E07              cpc R25,R30
+ 0186 69F0              breq L40
+ 0188           X8:
+ 0188 8230              cpi R24,2
+ 018A E0E0              ldi R30,0
+ 018C 9E07              cpc R25,R30
+ 018E 61F0              breq L41
+ 0190           X9:
+ 0190 8330              cpi R24,3
+ 0192 E0E0              ldi R30,0
+ 0194 9E07              cpc R25,R30
+ 0196 59F0              breq L42
+ 0198           X10:
+ 0198 8430              cpi R24,4
+ 019A E0E0              ldi R30,0
+ 019C 9E07              cpc R25,R30
+ 019E 51F0              breq L43
+ 01A0           X11:
+ 01A0 0BC0              xjmp L37
+ 01A2           L40:
+ 01A2                   .dbline 119
+ 01A2           ;       {
+ 01A2           ;       case 1: adr = 0x7F + y;
+ 01A2 462F              mov R20,R22
+ 01A4 4158              subi R20,129    ; addi 127
+ 01A6                   .dbline 120
+ 01A6           ;               break;          //在第1行y列显示
+ 01A6 08C0              xjmp L38
+ 01A8           L41:
+ 01A8                   .dbline 121
+ 01A8           ;       case 2: adr = 0x8F + y;
+ 01A8 462F              mov R20,R22
+ 01AA 4157              subi R20,113    ; addi 143
+ 01AC                   .dbline 122
+ 01AC           ;               break;          //在第2行y列显示
+ 01AC 05C0              xjmp L38
+ 01AE           L42:
+ 01AE                   .dbline 123
+ 01AE           ;       case 3: adr = 0x87 + y;
+ 01AE 462F              mov R20,R22
+ 01B0 4957              subi R20,121    ; addi 135
+ 01B2                   .dbline 124
+ 01B2           ;               break;          //在第3行y列显示
+ 01B2 02C0              xjmp L38
+ 01B4           L43:
+ 01B4                   .dbline 125
+ 01B4           ;       case 4: adr = 0x97 + y;
+ 01B4 462F              mov R20,R22
+ 01B6 4956              subi R20,105    ; addi 151
+ 01B8                   .dbline 126
+ 01B8           ;               break;          //在第4行y列显示
+ 01B8           L37:
+ 01B8                   .dbline 127
+ 01B8           ;       default:        ;
+ 01B8                   .dbline 128
+ 01B8           ;       }
+ 01B8           L38:
+ 01B8                   .dbline 129
+ 01B8           ;       lcd_wrCmd(adr&0xF0,(adr&0x0F)<<4);
+ 01B8 242F              mov R18,R20
+ 01BA 2F70              andi R18,15
+ 01BC 2F70              andi R18,#0x0F
+ 01BE 2295              swap R18
+ 01C0 042F              mov R16,R20
+ 01C2 007F              andi R16,240
+ 01C4 BDDF              xcall _lcd_wrCmd
+ 01C6                   .dbline -2
+ 01C6           L36:
+ 01C6                   .dbline 0 ; func end
+ 01C6 0C940000          xjmp pop_xgsetF00C
+ 01CA                   .dbsym r adr 20 c
+ 01CA                   .dbsym r y 22 c
+ 01CA                   .dbsym r x 10 c
+ 01CA                   .dbend
+ 01CA                   .dbfunc e lcd_putc _lcd_putc fV
+ 01CA           ;             ch -> R20
+ 01CA           ;              y -> R12
+ 01CA           ;              x -> R10
+                        .even
+ 01CA           _lcd_putc::
+ 01CA 0E940000          xcall push_xgset303C
+ 01CE C22E              mov R12,R18
+ 01D0 A02E              mov R10,R16
+ 01D2 4E81              ldd R20,y+6
+ 01D4                   .dbline -1
+ 01D4                   .dbline 133
+ 01D4           ; }
+ 01D4           ; 
+ 01D4           ; void lcd_putc(uint8 x,uint8 y,uint8 ch)
+ 01D4           ; {
+ 01D4                   .dbline 134
+ 01D4           ;       lcd_set_xy(x,y);
+ 01D4 2C2D              mov R18,R12
+ 01D6 0A2D              mov R16,R10
+ 01D8 CDDF              xcall _lcd_set_xy
+ 01DA                   .dbline 135
+ 01DA           ;       delay50us(20); 
+ 01DA 04E1              ldi R16,20
+ 01DC 10E0              ldi R17,0
+ 01DE 69DF              xcall _delay50us
+ 01E0                   .dbline 136
+ 01E0           ;       lcd_wrDat(ch&0xF0,(ch&0x0F)<<4);
+ 01E0 242F              mov R18,R20
+ 01E2 2F70              andi R18,15
+ 01E4 2F70              andi R18,#0x0F
+ 01E6 2295              swap R18
+ 01E8 042F              mov R16,R20
+ 01EA 007F              andi R16,240
+ 01EC B6DF              xcall _lcd_wrDat
+ 01EE                   .dbline -2
+ 01EE           L44:
+ 01EE                   .dbline 0 ; func end
+ 01EE 0C940000          xjmp pop_xgset303C
+ 01F2                   .dbsym r ch 20 c
+ 01F2                   .dbsym r y 12 c
+ 01F2                   .dbsym r x 10 c
+ 01F2                   .dbend
+ 01F2                   .dbfunc e lcd_putd0 _lcd_putd0 fV
+ 01F2           ;              i -> R20
+ 01F2           ;         length -> R20
+ 01F2           ;            dat -> y+7
+ 01F2           ;              y -> R12
+ 01F2           ;              x -> R10
+                        .even
+ 01F2           _lcd_putd0::
+ 01F2 0E940000          xcall push_xgset303C
+ 01F6 C22E              mov R12,R18
+ 01F8 A02E              mov R10,R16
+ 01FA 2197              sbiw R28,1
+ 01FC 4B85              ldd R20,y+11
+ 01FE                   .dbline -1
+ 01FE                   .dbline 140
+ 01FE           ; }
+ 01FE           ; 
+ 01FE           ; void lcd_putd0(uint8 x,uint8 y,uint32 dat,uint8 length)
+ 01FE           ; {
+ 01FE                   .dbline 143
+ 01FE           ;       sint8 i;
+ 01FE           ; 
+ 01FE           ;       speaData(dat,length);
+ 01FE 4883              std y+0,R20
+ 0200 0F81              ldd R16,y+7
+ 0202 1885              ldd R17,y+8
+ 0204 2985              ldd R18,y+9
+ 0206 3A85              ldd R19,y+10
+ 0208 FBDE              xcall _speaData
+ 020A                   .dbline 144
+ 020A           ;       lcd_set_xy(x,y);
+ 020A 2C2D              mov R18,R12
+ 020C 0A2D              mov R16,R10
+ 020E B2DF              xcall _lcd_set_xy
+ 0210                   .dbline 145
+ 0210           ;       delay50us(40);
+ 0210 08E2              ldi R16,40
+ 0212 10E0              ldi R17,0
+ 0214 4EDF              xcall _delay50us
+ 0216                   .dbline 146
+ 0216           ;       for(i=length-1;i>=0;i--)
+ 0216 4150              subi R20,1
+ 0218 1EC0              xjmp L49
+ 021A           L46:
+ 021A                   .dbline 147
+ 021A           ;       {
+ 021A                   .dbline 148
+ 021A           ;               lcd_wrDat( (dataElem[i]+0x30)&0xF0 ,( (dataElem[i]+0x30)&0x0F )<<4 );
+ 021A 80E0              ldi R24,<_dataElem
+ 021C 90E0              ldi R25,>_dataElem
+ 021E E42F              mov R30,R20
+ 0220 FF27              clr R31
+ 0222 E7FD              sbrc R30,7
+ 0224 F095              com R31
+ 0226 E80F              add R30,R24
+ 0228 F91F              adc R31,R25
+ 022A 8081              ldd R24,z+0
+ 022C 9927              clr R25
+ 022E C096              adiw R24,48
+ 0230 9C01              movw R18,R24
+ 0232 2F70              andi R18,15
+ 0234 3070              andi R19,0
+ 0236 220F              lsl R18
+ 0238 331F              rol R19
+ 023A 220F              lsl R18
+ 023C 331F              rol R19
+ 023E 220F              lsl R18
+ 0240 331F              rol R19
+ 0242 220F              lsl R18
+ 0244 331F              rol R19
+ 0246 8C01              movw R16,R24
+ 0248 007F              andi R16,240
+ 024A 1070              andi R17,0
+ 024C 86DF              xcall _lcd_wrDat
+ 024E                   .dbline 149
+ 024E           ;               delay50us(40); 
+ 024E 08E2              ldi R16,40
+ 0250 10E0              ldi R17,0
+ 0252 2FDF              xcall _delay50us
+ 0254                   .dbline 150
+ 0254           ;       }
+ 0254           L47:
+ 0254                   .dbline 146
+ 0254 4A95              dec R20
+ 0256           L49:
+ 0256                   .dbline 146
+ 0256 4030              cpi R20,0
+ 0258 04F7              brge L46
+ 025A           X12:
+ 025A                   .dbline -2
+ 025A           L45:
+ 025A                   .dbline 0 ; func end
+ 025A 2196              adiw R28,1
+ 025C 0C940000          xjmp pop_xgset303C
+ 0260                   .dbsym r i 20 C
+ 0260                   .dbsym r length 20 c
+ 0260                   .dbsym l dat 7 l
+ 0260                   .dbsym r y 12 c
+ 0260                   .dbsym r x 10 c
+ 0260                   .dbend
+ 0260                   .dbfunc e lcd_putd _lcd_putd fV
+ 0260           ;      effectLen -> R22
+ 0260           ;              i -> R20
+ 0260           ;         length -> R10
+ 0260           ;            dat -> y+11
+ 0260           ;              y -> R14
+ 0260           ;              x -> R12
+                        .even
+ 0260           _lcd_putd::
+ 0260 0E940000          xcall push_xgsetF0FC
+ 0264 E22E              mov R14,R18
+ 0266 C02E              mov R12,R16
+ 0268 2197              sbiw R28,1
+ 026A AF84              ldd R10,y+15
+ 026C                   .dbline -1
+ 026C                   .dbline 154
+ 026C           ; }
+ 026C           ; 
+ 026C           ; void lcd_putd(uint8 x,uint8 y,uint32 dat,uint8 length)
+ 026C           ; {
+ 026C                   .dbline 158
+ 026C           ;       sint8 i;
+ 026C           ;       sint8 effectLen;
+ 026C           ; 
+ 026C           ;       if(dat>999999)
+ 026C 8FE3              ldi R24,63
+ 026E 92E4              ldi R25,66
+ 0270 AFE0              ldi R26,15
+ 0272 B0E0              ldi R27,0
+ 0274 2B84              ldd R2,y+11
+ 0276 3C84              ldd R3,y+12
+ 0278 4D84              ldd R4,y+13
+ 027A 5E84              ldd R5,y+14
+ 027C 8215              cp R24,R2
+ 027E 9305              cpc R25,R3
+ 0280 A405              cpc R26,R4
+ 0282 B505              cpc R27,R5
+ 0284 10F4              brsh L51
+ 0286           X13:
+ 0286                   .dbline 159
+ 0286           ;               effectLen=7;
+ 0286 67E0              ldi R22,7
+ 0288 4CC0              xjmp L52
+ 028A           L51:
+ 028A                   .dbline 160
+ 028A           ;       else if(dat>99999)
+ 028A 8FE9              ldi R24,159
+ 028C 96E8              ldi R25,134
+ 028E A1E0              ldi R26,1
+ 0290 B0E0              ldi R27,0
+ 0292 2B84              ldd R2,y+11
+ 0294 3C84              ldd R3,y+12
+ 0296 4D84              ldd R4,y+13
+ 0298 5E84              ldd R5,y+14
+ 029A 8215              cp R24,R2
+ 029C 9305              cpc R25,R3
+ 029E A405              cpc R26,R4
+ 02A0 B505              cpc R27,R5
+ 02A2 10F4              brsh L53
+ 02A4           X14:
+ 02A4                   .dbline 161
+ 02A4           ;               effectLen=6;
+ 02A4 66E0              ldi R22,6
+ 02A6 3DC0              xjmp L54
+ 02A8           L53:
+ 02A8                   .dbline 162
+ 02A8           ;       else if(dat>9999)
+ 02A8 8FE0              ldi R24,15
+ 02AA 97E2              ldi R25,39
+ 02AC A0E0              ldi R26,0
+ 02AE B0E0              ldi R27,0
+ 02B0 2B84              ldd R2,y+11
+ 02B2 3C84              ldd R3,y+12
+ 02B4 4D84              ldd R4,y+13
+ 02B6 5E84              ldd R5,y+14
+ 02B8 8215              cp R24,R2
+ 02BA 9305              cpc R25,R3
+ 02BC A405              cpc R26,R4
+ 02BE B505              cpc R27,R5
+ 02C0 10F4              brsh L55
+ 02C2           X15:
+ 02C2                   .dbline 163
+ 02C2           ;               effectLen=5;
+ 02C2 65E0              ldi R22,5
+ 02C4 2EC0              xjmp L56
+ 02C6           L55:
+ 02C6                   .dbline 164
+ 02C6           ;       else if(dat>999)
+ 02C6 87EE              ldi R24,231
+ 02C8 93E0              ldi R25,3
+ 02CA A0E0              ldi R26,0
+ 02CC B0E0              ldi R27,0
+ 02CE 2B84              ldd R2,y+11
+ 02D0 3C84              ldd R3,y+12
+ 02D2 4D84              ldd R4,y+13
+ 02D4 5E84              ldd R5,y+14
+ 02D6 8215              cp R24,R2
+ 02D8 9305              cpc R25,R3
+ 02DA A405              cpc R26,R4
+ 02DC B505              cpc R27,R5
+ 02DE 10F4              brsh L57
+ 02E0           X16:
+ 02E0                   .dbline 165
+ 02E0           ;               effectLen=4;
+ 02E0 64E0              ldi R22,4
+ 02E2 1FC0              xjmp L58
+ 02E4           L57:
+ 02E4                   .dbline 166
+ 02E4           ;       else if(dat>99)
+ 02E4 83E6              ldi R24,99
+ 02E6 90E0              ldi R25,0
+ 02E8 A0E0              ldi R26,0
+ 02EA B0E0              ldi R27,0
+ 02EC 2B84              ldd R2,y+11
+ 02EE 3C84              ldd R3,y+12
+ 02F0 4D84              ldd R4,y+13
+ 02F2 5E84              ldd R5,y+14
+ 02F4 8215              cp R24,R2
+ 02F6 9305              cpc R25,R3
+ 02F8 A405              cpc R26,R4
+ 02FA B505              cpc R27,R5
+ 02FC 10F4              brsh L59
+ 02FE           X17:
+ 02FE                   .dbline 167
+ 02FE           ;               effectLen=3;
+ 02FE 63E0              ldi R22,3
+ 0300 10C0              xjmp L60
+ 0302           L59:
+ 0302                   .dbline 168
+ 0302           ;       else if(dat>9)
+ 0302 89E0              ldi R24,9
+ 0304 90E0              ldi R25,0
+ 0306 A0E0              ldi R26,0
+ 0308 B0E0              ldi R27,0
+ 030A 2B84              ldd R2,y+11
+ 030C 3C84              ldd R3,y+12
+ 030E 4D84              ldd R4,y+13
+ 0310 5E84              ldd R5,y+14
+ 0312 8215              cp R24,R2
+ 0314 9305              cpc R25,R3
+ 0316 A405              cpc R26,R4
+ 0318 B505              cpc R27,R5
+ 031A 10F4              brsh L61
+ 031C           X18:
+ 031C                   .dbline 169
+ 031C           ;               effectLen=2;
+ 031C 62E0              ldi R22,2
+ 031E 01C0              xjmp L62
+ 0320           L61:
+ 0320                   .dbline 171
+ 0320           ;       else
+ 0320           ;               effectLen=1;
+ 0320 61E0              ldi R22,1
+ 0322           L62:
+ 0322           L60:
+ 0322           L58:
+ 0322           L56:
+ 0322           L54:
+ 0322           L52:
+ 0322                   .dbline 172
+ 0322           ;       speaData(dat,effectLen);
+ 0322 6883              std y+0,R22
+ 0324 0B85              ldd R16,y+11
+ 0326 1C85              ldd R17,y+12
+ 0328 2D85              ldd R18,y+13
+ 032A 3E85              ldd R19,y+14
+ 032C 69DE              xcall _speaData
+ 032E                   .dbline 174
+ 032E           ; 
+ 032E           ;       lcd_set_xy(x,y);
+ 032E 2E2D              mov R18,R14
+ 0330 0C2D              mov R16,R12
+ 0332 20DF              xcall _lcd_set_xy
+ 0334                   .dbline 175
+ 0334           ;       delay50us(40); 
+ 0334 08E2              ldi R16,40
+ 0336 10E0              ldi R17,0
+ 0338 BCDE              xcall _delay50us
+ 033A                   .dbline 176
+ 033A           ;       if(length>effectLen)
+ 033A 262E              mov R2,R22
+ 033C 3324              clr R3
+ 033E 27FC              sbrc R2,7
+ 0340 3094              com R3
+ 0342 4A2C              mov R4,R10
+ 0344 5524              clr R5
+ 0346 2414              cp R2,R4
+ 0348 3504              cpc R3,R5
+ 034A 6CF4              brge L63
+ 034C           X19:
+ 034C                   .dbline 177
+ 034C           ;       {
+ 034C                   .dbline 178
+ 034C           ;               for(i=length-effectLen-1;i>=0;i--)
+ 034C 442D              mov R20,R4
+ 034E 461B              sub R20,R22
+ 0350 4150              subi R20,1
+ 0352 07C0              xjmp L68
+ 0354           L65:
+ 0354                   .dbline 179
+ 0354           ;               {
+ 0354                   .dbline 180
+ 0354           ;                       lcd_wrDat(' '&0xF0,(' '&0x0F)<<4);
+ 0354 2227              clr R18
+ 0356 00E2              ldi R16,32
+ 0358 00DF              xcall _lcd_wrDat
+ 035A                   .dbline 181
+ 035A           ;                       delay50us(40); 
+ 035A 08E2              ldi R16,40
+ 035C 10E0              ldi R17,0
+ 035E A9DE              xcall _delay50us
+ 0360                   .dbline 182
+ 0360           ;               }
+ 0360           L66:
+ 0360                   .dbline 178
+ 0360 4A95              dec R20
+ 0362           L68:
+ 0362                   .dbline 178
+ 0362 4030              cpi R20,0
+ 0364 BCF7              brge L65
+ 0366           X20:
+ 0366                   .dbline 183
+ 0366           ;       }
+ 0366           L63:
+ 0366                   .dbline 184
+ 0366           ;       for(i=effectLen-1;i>=0;i--)
+ 0366 462F              mov R20,R22
+ 0368 4150              subi R20,1
+ 036A 1EC0              xjmp L72
+ 036C           L69:
+ 036C                   .dbline 185
+ 036C           ;       {
+ 036C                   .dbline 186
+ 036C           ;               lcd_wrDat( (dataElem[i]+0x30)&0xF0 ,( (dataElem[i]+0x30)&0x0F )<<4 );
+ 036C 80E0              ldi R24,<_dataElem
+ 036E 90E0              ldi R25,>_dataElem
+ 0370 E42F              mov R30,R20
+ 0372 FF27              clr R31
+ 0374 E7FD              sbrc R30,7
+ 0376 F095              com R31
+ 0378 E80F              add R30,R24
+ 037A F91F              adc R31,R25
+ 037C 8081              ldd R24,z+0
+ 037E 9927              clr R25
+ 0380 C096              adiw R24,48
+ 0382 9C01              movw R18,R24
+ 0384 2F70              andi R18,15
+ 0386 3070              andi R19,0
+ 0388 220F              lsl R18
+ 038A 331F              rol R19
+ 038C 220F              lsl R18
+ 038E 331F              rol R19
+ 0390 220F              lsl R18
+ 0392 331F              rol R19
+ 0394 220F              lsl R18
+ 0396 331F              rol R19
+ 0398 8C01              movw R16,R24
+ 039A 007F              andi R16,240
+ 039C 1070              andi R17,0
+ 039E DDDE              xcall _lcd_wrDat
+ 03A0                   .dbline 187
+ 03A0           ;               delay50us(40);
+ 03A0 08E2              ldi R16,40
+ 03A2 10E0              ldi R17,0
+ 03A4 86DE              xcall _delay50us
+ 03A6                   .dbline 188
+ 03A6           ;       }
+ 03A6           L70:
+ 03A6                   .dbline 184
+ 03A6 4A95              dec R20
+ 03A8           L72:
+ 03A8                   .dbline 184
+ 03A8 4030              cpi R20,0
+ 03AA 04F7              brge L69
+ 03AC           X21:
+ 03AC                   .dbline -2
+ 03AC           L50:
+ 03AC                   .dbline 0 ; func end
+ 03AC 2196              adiw R28,1
+ 03AE 0C940000          xjmp pop_xgsetF0FC
+ 03B2                   .dbsym r effectLen 22 C
+ 03B2                   .dbsym r i 20 C
+ 03B2                   .dbsym r length 10 c
+ 03B2                   .dbsym l dat 11 l
+ 03B2                   .dbsym r y 14 c
+ 03B2                   .dbsym r x 12 c
+ 03B2                   .dbend
+ 03B2                   .dbfunc e lcd_puts _lcd_puts fV
+ 03B2           ;            str -> R20,R21
+ 03B2           ;              y -> R12
+ 03B2           ;              x -> R10
+                        .even
+ 03B2           _lcd_puts::
+ 03B2 0E940000          xcall push_xgset303C
+ 03B6 C22E              mov R12,R18
+ 03B8 A02E              mov R10,R16
+ 03BA 4E81              ldd R20,y+6
+ 03BC 5F81              ldd R21,y+7
+ 03BE                   .dbline -1
+ 03BE                   .dbline 192
+ 03BE           ; }
+ 03BE           ; 
+ 03BE           ; void lcd_puts(uint8 x,uint8 y,uint8 *str)
+ 03BE           ; { 
+ 03BE                   .dbline 193
+ 03BE           ;       lcd_set_xy(x,y);
+ 03BE 2C2D              mov R18,R12
+ 03C0 0A2D              mov R16,R10
+ 03C2 D8DE              xcall _lcd_set_xy
+ 03C4                   .dbline 194
+ 03C4           ;       delay50us(20);   
+ 03C4 04E1              ldi R16,20
+ 03C6 10E0              ldi R17,0
+ 03C8 74DE              xcall _delay50us
+ 03CA 0FC0              xjmp L75
+ 03CC           L74:
+ 03CC                   .dbline 196
+ 03CC           ;       while(*str)
+ 03CC           ;       {
+ 03CC                   .dbline 197
+ 03CC           ;               lcd_wrDat((*(str))&0xF0,((*(str))&0x0F)<<4);
+ 03CC FA01              movw R30,R20
+ 03CE 2080              ldd R2,z+0
+ 03D0 3324              clr R3
+ 03D2 222D              mov R18,R2
+ 03D4 2F70              andi R18,15
+ 03D6 2F70              andi R18,#0x0F
+ 03D8 2295              swap R18
+ 03DA 022D              mov R16,R2
+ 03DC 007F              andi R16,240
+ 03DE BDDE              xcall _lcd_wrDat
+ 03E0                   .dbline 198
+ 03E0           ;               str++;
+ 03E0 4F5F              subi R20,255  ; offset = 1
+ 03E2 5F4F              sbci R21,255
+ 03E4                   .dbline 199
+ 03E4           ;               delay50us(20);
+ 03E4 04E1              ldi R16,20
+ 03E6 10E0              ldi R17,0
+ 03E8 64DE              xcall _delay50us
+ 03EA                   .dbline 200
+ 03EA           ;       } 
+ 03EA           L75:
+ 03EA                   .dbline 195
+ 03EA FA01              movw R30,R20
+ 03EC 2080              ldd R2,z+0
+ 03EE 2220              tst R2
+ 03F0 69F7              brne L74
+ 03F2           X22:
+ 03F2                   .dbline -2
+ 03F2           L73:
+ 03F2                   .dbline 0 ; func end
+ 03F2 0C940000          xjmp pop_xgset303C
+ 03F6                   .dbsym r str 20 pc
+ 03F6                   .dbsym r y 12 c
+ 03F6                   .dbsym r x 10 c
+ 03F6                   .dbend
+ 03F6                   .dbfunc e lcd_puts_ _lcd_puts_ fV
+ 03F6           ;          dlyMs -> R10
+ 03F6           ;            str -> R20,R21
+ 03F6           ;              y -> R14
+ 03F6           ;              x -> R12
+                        .even
+ 03F6           _lcd_puts_::
+ 03F6 0E940000          xcall push_xgset30FC
+ 03FA E22E              mov R14,R18
+ 03FC C02E              mov R12,R16
+ 03FE 4885              ldd R20,y+8
+ 0400 5985              ldd R21,y+9
+ 0402 AA84              ldd R10,y+10
+ 0404                   .dbline -1
+ 0404                   .dbline 204
+ 0404           ; }
+ 0404           ; 
+ 0404           ; void lcd_puts_(uint8 x,uint8 y,uint8 *str,uint8 dlyMs)
+ 0404           ; { 
+ 0404                   .dbline 205
+ 0404           ;       lcd_set_xy(x,y);
+ 0404 2E2D              mov R18,R14
+ 0406 0C2D              mov R16,R12
+ 0408 B5DE              xcall _lcd_set_xy
+ 040A                   .dbline 206
+ 040A           ;       delay50us(20);   
+ 040A 04E1              ldi R16,20
+ 040C 10E0              ldi R17,0
+ 040E 51DE              xcall _delay50us
+ 0410 0FC0              xjmp L79
+ 0412           L78:
+ 0412                   .dbline 208
+ 0412           ;       while(*str)
+ 0412           ;       {
+ 0412                   .dbline 209
+ 0412           ;               lcd_wrDat((*(str))&0xF0,((*(str))&0x0F)<<4);
+ 0412 FA01              movw R30,R20
+ 0414 2080              ldd R2,z+0
+ 0416 3324              clr R3
+ 0418 222D              mov R18,R2
+ 041A 2F70              andi R18,15
+ 041C 2F70              andi R18,#0x0F
+ 041E 2295              swap R18
+ 0420 022D              mov R16,R2
+ 0422 007F              andi R16,240
+ 0424 9ADE              xcall _lcd_wrDat
+ 0426                   .dbline 210
+ 0426           ;               str++;
+ 0426 4F5F              subi R20,255  ; offset = 1
+ 0428 5F4F              sbci R21,255
+ 042A                   .dbline 211
+ 042A           ;               delay50ms(dlyMs);
+ 042A 0A2D              mov R16,R10
+ 042C 1127              clr R17
+ 042E 51DE              xcall _delay50ms
+ 0430                   .dbline 212
+ 0430           ;       } 
+ 0430           L79:
+ 0430                   .dbline 207
+ 0430 FA01              movw R30,R20
+ 0432 2080              ldd R2,z+0
+ 0434 2220              tst R2
+ 0436 69F7              brne L78
+ 0438           X23:
+ 0438                   .dbline -2
+ 0438           L77:
+ 0438                   .dbline 0 ; func end
+ 0438 0C940000          xjmp pop_xgset30FC
+ 043C                   .dbsym r dlyMs 10 c
+ 043C                   .dbsym r str 20 pc
+ 043C                   .dbsym r y 14 c
+ 043C                   .dbsym r x 12 c
+ 043C                   .dbend
+ 043C                   .dbfunc e lcd_clr _lcd_clr fV
+                        .even
+ 043C           _lcd_clr::
+ 043C                   .dbline -1
+ 043C                   .dbline 216
+ 043C           ; }
+ 043C           ; 
+ 043C           ; void lcd_clr()
+ 043C           ; {
+ 043C                   .dbline 217
+ 043C           ;       lcd_wrCmd(0x00,0x10);
+ 043C 20E1              ldi R18,16
+ 043E 0027              clr R16
+ 0440 7FDE              xcall _lcd_wrCmd
+ 0442                   .dbline 218
+ 0442           ;       delay50us(200);
+ 0442 08EC              ldi R16,200
+ 0444 10E0              ldi R17,0
+ 0446                   .dbline -2
+ 0446           L81:
+ 0446                   .dbline 0 ; func end
+ 0446 35CE              xjmp _delay50us
+ 0448                   .dbend
+ 0448                   .dbfunc e lcd_init _lcd_init fV
+                        .even
+ 0448           _lcd_init::
+ 0448                   .dbline -1
+ 0448                   .dbline 222
+ 0448           ; }
+ 0448           ; 
+ 0448           ; void lcd_init(void)
+ 0448           ; {
+ 0448                   .dbline 223
+ 0448           ;       SPI_init();     
+ 0448 6FDE              xcall _SPI_init
+ 044A                   .dbline 226
+ 044A           ;       //OUT_LCD_CS;           //若LCD_CS
+ 044A           ;       //SET_LCD_CS;           
+ 044A           ;       delay50ms(1);
+ 044A 01E0              ldi R16,1
+ 044C 10E0              ldi R17,0
+ 044E 41DE              xcall _delay50ms
+ 0450                   .dbline 227
+ 0450           ;       lcd_wrCmd(0x30,0x30);   //使用8位控制界面,使用基本指令集
+ 0450 20E3              ldi R18,48
+ 0452 00E3              ldi R16,48
+ 0454 75DE              xcall _lcd_wrCmd
+ 0456                   .dbline 229
+ 0456           ;       //lcd_wrCmd(0x00,0xF0); //整体显示ON
+ 0456           ;       lcd_wrCmd(0x00,0xC0);   //整体显示ON
+ 0456 20EC              ldi R18,192
+ 0458 0027              clr R16
+ 045A 72DE              xcall _lcd_wrCmd
+ 045C                   .dbline 230
+ 045C           ;       lcd_wrCmd(0x00,0x10);   //清屏
+ 045C 20E1              ldi R18,16
+ 045E 0027              clr R16
+ 0460 6FDE              xcall _lcd_wrCmd
+ 0462                   .dbline 232
+ 0462           ;       //lcd_wrCmd(0x10,0x00); //光标
+ 0462           ;       lcd_wrCmd(0x00,0x60);
+ 0462 20E6              ldi R18,96
+ 0464 0027              clr R16
+ 0466 6CDE              xcall _lcd_wrCmd
+ 0468                   .dbline 234
+ 0468           ;       //lcd_wrCmd(0x00,0x70); //显示右移
+ 0468           ;       delay50ms(1);           //不可省去！！！
+ 0468 01E0              ldi R16,1
+ 046A 10E0              ldi R17,0
+ 046C                   .dbline -2
+ 046C           L82:
+ 046C                   .dbline 0 ; func end
+ 046C 32CE              xjmp _delay50ms
+ 046E                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0000           _unshifted::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 1C61              .byte 28,'a
+                        .area data(ram, con, rel)
+ 0002                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0002                   .blkb 2
+                        .area idata
+ 0002 3262              .byte 50,'b
+                        .area data(ram, con, rel)
+ 0004                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0004                   .blkb 2
+                        .area idata
+ 0004 2163              .byte 33,'c
+                        .area data(ram, con, rel)
+ 0006                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0006                   .blkb 2
+                        .area idata
+ 0006 2364              .byte 35,'d
+                        .area data(ram, con, rel)
+ 0008                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0008                   .blkb 2
+                        .area idata
+ 0008 2465              .byte 36,'e
+                        .area data(ram, con, rel)
+ 000A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 000A                   .blkb 2
+                        .area idata
+ 000A 2B66              .byte 43,'f
+                        .area data(ram, con, rel)
+ 000C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 000C                   .blkb 2
+                        .area idata
+ 000C 3467              .byte 52,'g
+                        .area data(ram, con, rel)
+ 000E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 000E                   .blkb 2
+                        .area idata
+ 000E 3368              .byte 51,'h
+                        .area data(ram, con, rel)
+ 0010                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0010                   .blkb 2
+                        .area idata
+ 0010 4369              .byte 'C,'i
+                        .area data(ram, con, rel)
+ 0012                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0012                   .blkb 2
+                        .area idata
+ 0012 3B6A              .byte 59,'j
+                        .area data(ram, con, rel)
+ 0014                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0014                   .blkb 2
+                        .area idata
+ 0014 426B              .byte 'B,'k
+                        .area data(ram, con, rel)
+ 0016                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0016                   .blkb 2
+                        .area idata
+ 0016 4B6C              .byte 'K,'l
+                        .area data(ram, con, rel)
+ 0018                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0018                   .blkb 2
+                        .area idata
+ 0018 3A6D              .byte 58,'m
+                        .area data(ram, con, rel)
+ 001A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 001A                   .blkb 2
+                        .area idata
+ 001A 316E              .byte 49,'n
+                        .area data(ram, con, rel)
+ 001C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 001C                   .blkb 2
+                        .area idata
+ 001C 446F              .byte 'D,'o
+                        .area data(ram, con, rel)
+ 001E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 001E                   .blkb 2
+                        .area idata
+ 001E 4D70              .byte 'M,'p
+                        .area data(ram, con, rel)
+ 0020                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0020                   .blkb 2
+                        .area idata
+ 0020 1571              .byte 21,'q
+                        .area data(ram, con, rel)
+ 0022                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0022                   .blkb 2
+                        .area idata
+ 0022 2D72              .byte 45,'r
+                        .area data(ram, con, rel)
+ 0024                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0024                   .blkb 2
+                        .area idata
+ 0024 1B73              .byte 27,'s
+                        .area data(ram, con, rel)
+ 0026                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0026                   .blkb 2
+                        .area idata
+ 0026 2C74              .byte 44,'t
+                        .area data(ram, con, rel)
+ 0028                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0028                   .blkb 2
+                        .area idata
+ 0028 3C75              .byte 60,'u
+                        .area data(ram, con, rel)
+ 002A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 002A                   .blkb 2
+                        .area idata
+ 002A 2A76              .byte 42,'v
+                        .area data(ram, con, rel)
+ 002C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 002C                   .blkb 2
+                        .area idata
+ 002C 1D77              .byte 29,'w
+                        .area data(ram, con, rel)
+ 002E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 002E                   .blkb 2
+                        .area idata
+ 002E 2278              .byte 34,'x
+                        .area data(ram, con, rel)
+ 0030                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0030                   .blkb 2
+                        .area idata
+ 0030 3579              .byte 53,'y
+                        .area data(ram, con, rel)
+ 0032                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0032                   .blkb 2
+                        .area idata
+ 0032 1A7A              .byte 26,'z
+                        .area data(ram, con, rel)
+ 0034                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0034                   .blkb 2
+                        .area idata
+ 0034 4530              .byte 'E,48
+                        .area data(ram, con, rel)
+ 0036                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0036                   .blkb 2
+                        .area idata
+ 0036 1631              .byte 22,49
+                        .area data(ram, con, rel)
+ 0038                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0038                   .blkb 2
+                        .area idata
+ 0038 1E32              .byte 30,50
+                        .area data(ram, con, rel)
+ 003A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 003A                   .blkb 2
+                        .area idata
+ 003A 2633              .byte 38,51
+                        .area data(ram, con, rel)
+ 003C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 003C                   .blkb 2
+                        .area idata
+ 003C 2534              .byte 37,52
+                        .area data(ram, con, rel)
+ 003E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 003E                   .blkb 2
+                        .area idata
+ 003E 2E35              .byte 46,53
+                        .area data(ram, con, rel)
+ 0040                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0040                   .blkb 2
+                        .area idata
+ 0040 3636              .byte 54,54
+                        .area data(ram, con, rel)
+ 0042                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0042                   .blkb 2
+                        .area idata
+ 0042 3D37              .byte 61,55
+                        .area data(ram, con, rel)
+ 0044                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0044                   .blkb 2
+                        .area idata
+ 0044 3E38              .byte 62,56
+                        .area data(ram, con, rel)
+ 0046                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0046                   .blkb 2
+                        .area idata
+ 0046 4639              .byte 'F,57
+                        .area data(ram, con, rel)
+ 0048                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0048                   .blkb 2
+                        .area idata
+ 0048 0E60              .byte 14,96
+                        .area data(ram, con, rel)
+ 004A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 004A                   .blkb 2
+                        .area idata
+ 004A 4E2D              .byte 'N,45
+                        .area data(ram, con, rel)
+ 004C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 004C                   .blkb 2
+                        .area idata
+ 004C 553D              .byte 'U,61
+                        .area data(ram, con, rel)
+ 004E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 004E                   .blkb 2
+                        .area idata
+ 004E 5D5C              .byte 93,92
+                        .area data(ram, con, rel)
+ 0050                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0050                   .blkb 2
+                        .area idata
+ 0050 2920              .byte 41,32
+                        .area data(ram, con, rel)
+ 0052                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0052                   .blkb 2
+                        .area idata
+ 0052 545B              .byte 'T,91
+                        .area data(ram, con, rel)
+ 0054                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0054                   .blkb 2
+                        .area idata
+ 0054 5B5D              .byte 91,93
+                        .area data(ram, con, rel)
+ 0056                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0056                   .blkb 2
+                        .area idata
+ 0056 4C3B              .byte 'L,59
+                        .area data(ram, con, rel)
+ 0058                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0058                   .blkb 2
+                        .area idata
+ 0058 5227              .byte 'R,39
+                        .area data(ram, con, rel)
+ 005A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 005A                   .blkb 2
+                        .area idata
+ 005A 412C              .byte 'A,44
+                        .area data(ram, con, rel)
+ 005C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 005C                   .blkb 2
+                        .area idata
+ 005C 492E              .byte 'I,46
+                        .area data(ram, con, rel)
+ 005E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 005E                   .blkb 2
+                        .area idata
+ 005E 4A2F              .byte 'J,47
+                        .area data(ram, con, rel)
+ 0060                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0060                   .blkb 2
+                        .area idata
+ 0060 712E              .byte 'q,46
+                        .area data(ram, con, rel)
+ 0062                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0062                   .blkb 2
+                        .area idata
+ 0062 7030              .byte 'p,48
+                        .area data(ram, con, rel)
+ 0064                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0064                   .blkb 2
+                        .area idata
+ 0064 6931              .byte 'i,49
+                        .area data(ram, con, rel)
+ 0066                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0066                   .blkb 2
+                        .area idata
+ 0066 7232              .byte 'r,50
+                        .area data(ram, con, rel)
+ 0068                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0068                   .blkb 2
+                        .area idata
+ 0068 7A33              .byte 'z,51
+                        .area data(ram, con, rel)
+ 006A                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 006A                   .blkb 2
+                        .area idata
+ 006A 6B34              .byte 'k,52
+                        .area data(ram, con, rel)
+ 006C                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 006C                   .blkb 2
+                        .area idata
+ 006C 7335              .byte 's,53
+                        .area data(ram, con, rel)
+ 006E                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 006E                   .blkb 2
+                        .area idata
+ 006E 7436              .byte 't,54
+                        .area data(ram, con, rel)
+ 0070                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0070                   .blkb 2
+                        .area idata
+ 0070 6C37              .byte 'l,55
+                        .area data(ram, con, rel)
+ 0072                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0072                   .blkb 2
+                        .area idata
+ 0072 7538              .byte 'u,56
+                        .area data(ram, con, rel)
+ 0074                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0074                   .blkb 2
+                        .area idata
+ 0074 7D39              .byte 125,57
+                        .area data(ram, con, rel)
+ 0076                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0076                   .blkb 2
+                        .area idata
+ 0076 6620              .byte 'f,32
+                        .area data(ram, con, rel)
+ 0078                   .dbfile D:\ICC_H\LCD12864_ST7920_M48.H
+ 0078                   .dbfile D:\ICC_H\PS2_.H
+ 0078                   .dbsym e unshifted _unshifted A[120:60:2]c
+ 0078           _shifted::
+ 0078                   .blkb 2
+                        .area idata
+ 0078 1C41              .byte 28,'A
+                        .area data(ram, con, rel)
+ 007A                   .dbfile D:\ICC_H\PS2_.H
+ 007A                   .blkb 2
+                        .area idata
+ 007A 3242              .byte 50,'B
+                        .area data(ram, con, rel)
+ 007C                   .dbfile D:\ICC_H\PS2_.H
+ 007C                   .blkb 2
+                        .area idata
+ 007C 2143              .byte 33,'C
+                        .area data(ram, con, rel)
+ 007E                   .dbfile D:\ICC_H\PS2_.H
+ 007E                   .blkb 2
+                        .area idata
+ 007E 2344              .byte 35,'D
+                        .area data(ram, con, rel)
+ 0080                   .dbfile D:\ICC_H\PS2_.H
+ 0080                   .blkb 2
+                        .area idata
+ 0080 2445              .byte 36,'E
+                        .area data(ram, con, rel)
+ 0082                   .dbfile D:\ICC_H\PS2_.H
+ 0082                   .blkb 2
+                        .area idata
+ 0082 2B46              .byte 43,'F
+                        .area data(ram, con, rel)
+ 0084                   .dbfile D:\ICC_H\PS2_.H
+ 0084                   .blkb 2
+                        .area idata
+ 0084 3447              .byte 52,'G
+                        .area data(ram, con, rel)
+ 0086                   .dbfile D:\ICC_H\PS2_.H
+ 0086                   .blkb 2
+                        .area idata
+ 0086 3348              .byte 51,'H
+                        .area data(ram, con, rel)
+ 0088                   .dbfile D:\ICC_H\PS2_.H
+ 0088                   .blkb 2
+                        .area idata
+ 0088 4349              .byte 'C,'I
+                        .area data(ram, con, rel)
+ 008A                   .dbfile D:\ICC_H\PS2_.H
+ 008A                   .blkb 2
+                        .area idata
+ 008A 3B4A              .byte 59,'J
+                        .area data(ram, con, rel)
+ 008C                   .dbfile D:\ICC_H\PS2_.H
+ 008C                   .blkb 2
+                        .area idata
+ 008C 424B              .byte 'B,'K
+                        .area data(ram, con, rel)
+ 008E                   .dbfile D:\ICC_H\PS2_.H
+ 008E                   .blkb 2
+                        .area idata
+ 008E 4B4C              .byte 'K,'L
+                        .area data(ram, con, rel)
+ 0090                   .dbfile D:\ICC_H\PS2_.H
+ 0090                   .blkb 2
+                        .area idata
+ 0090 3A4D              .byte 58,'M
+                        .area data(ram, con, rel)
+ 0092                   .dbfile D:\ICC_H\PS2_.H
+ 0092                   .blkb 2
+                        .area idata
+ 0092 314E              .byte 49,'N
+                        .area data(ram, con, rel)
+ 0094                   .dbfile D:\ICC_H\PS2_.H
+ 0094                   .blkb 2
+                        .area idata
+ 0094 444F              .byte 'D,'O
+                        .area data(ram, con, rel)
+ 0096                   .dbfile D:\ICC_H\PS2_.H
+ 0096                   .blkb 2
+                        .area idata
+ 0096 4D50              .byte 'M,'P
+                        .area data(ram, con, rel)
+ 0098                   .dbfile D:\ICC_H\PS2_.H
+ 0098                   .blkb 2
+                        .area idata
+ 0098 1551              .byte 21,'Q
+                        .area data(ram, con, rel)
+ 009A                   .dbfile D:\ICC_H\PS2_.H
+ 009A                   .blkb 2
+                        .area idata
+ 009A 2D52              .byte 45,'R
+                        .area data(ram, con, rel)
+ 009C                   .dbfile D:\ICC_H\PS2_.H
+ 009C                   .blkb 2
+                        .area idata
+ 009C 1B53              .byte 27,'S
+                        .area data(ram, con, rel)
+ 009E                   .dbfile D:\ICC_H\PS2_.H
+ 009E                   .blkb 2
+                        .area idata
+ 009E 2C54              .byte 44,'T
+                        .area data(ram, con, rel)
+ 00A0                   .dbfile D:\ICC_H\PS2_.H
+ 00A0                   .blkb 2
+                        .area idata
+ 00A0 3C55              .byte 60,'U
+                        .area data(ram, con, rel)
+ 00A2                   .dbfile D:\ICC_H\PS2_.H
+ 00A2                   .blkb 2
+                        .area idata
+ 00A2 2A56              .byte 42,'V
+                        .area data(ram, con, rel)
+ 00A4                   .dbfile D:\ICC_H\PS2_.H
+ 00A4                   .blkb 2
+                        .area idata
+ 00A4 1D57              .byte 29,'W
+                        .area data(ram, con, rel)
+ 00A6                   .dbfile D:\ICC_H\PS2_.H
+ 00A6                   .blkb 2
+                        .area idata
+ 00A6 2258              .byte 34,'X
+                        .area data(ram, con, rel)
+ 00A8                   .dbfile D:\ICC_H\PS2_.H
+ 00A8                   .blkb 2
+                        .area idata
+ 00A8 3559              .byte 53,'Y
+                        .area data(ram, con, rel)
+ 00AA                   .dbfile D:\ICC_H\PS2_.H
+ 00AA                   .blkb 2
+                        .area idata
+ 00AA 1A5A              .byte 26,'Z
+                        .area data(ram, con, rel)
+ 00AC                   .dbfile D:\ICC_H\PS2_.H
+ 00AC                   .blkb 2
+                        .area idata
+ 00AC 4530              .byte 'E,48
+                        .area data(ram, con, rel)
+ 00AE                   .dbfile D:\ICC_H\PS2_.H
+ 00AE                   .blkb 2
+                        .area idata
+ 00AE 1631              .byte 22,49
+                        .area data(ram, con, rel)
+ 00B0                   .dbfile D:\ICC_H\PS2_.H
+ 00B0                   .blkb 2
+                        .area idata
+ 00B0 1E32              .byte 30,50
+                        .area data(ram, con, rel)
+ 00B2                   .dbfile D:\ICC_H\PS2_.H
+ 00B2                   .blkb 2
+                        .area idata
+ 00B2 2633              .byte 38,51
+                        .area data(ram, con, rel)
+ 00B4                   .dbfile D:\ICC_H\PS2_.H
+ 00B4                   .blkb 2
+                        .area idata
+ 00B4 2534              .byte 37,52
+                        .area data(ram, con, rel)
+ 00B6                   .dbfile D:\ICC_H\PS2_.H
+ 00B6                   .blkb 2
+                        .area idata
+ 00B6 2E35              .byte 46,53
+                        .area data(ram, con, rel)
+ 00B8                   .dbfile D:\ICC_H\PS2_.H
+ 00B8                   .blkb 2
+                        .area idata
+ 00B8 3636              .byte 54,54
+                        .area data(ram, con, rel)
+ 00BA                   .dbfile D:\ICC_H\PS2_.H
+ 00BA                   .blkb 2
+                        .area idata
+ 00BA 3D37              .byte 61,55
+                        .area data(ram, con, rel)
+ 00BC                   .dbfile D:\ICC_H\PS2_.H
+ 00BC                   .blkb 2
+                        .area idata
+ 00BC 3E38              .byte 62,56
+                        .area data(ram, con, rel)
+ 00BE                   .dbfile D:\ICC_H\PS2_.H
+ 00BE                   .blkb 2
+                        .area idata
+ 00BE 4639              .byte 'F,57
+                        .area data(ram, con, rel)
+ 00C0                   .dbfile D:\ICC_H\PS2_.H
+ 00C0                   .blkb 2
+                        .area idata
+ 00C0 0E7E              .byte 14,126
+                        .area data(ram, con, rel)
+ 00C2                   .dbfile D:\ICC_H\PS2_.H
+ 00C2                   .blkb 2
+                        .area idata
+ 00C2 4E5F              .byte 'N,95
+                        .area data(ram, con, rel)
+ 00C4                   .dbfile D:\ICC_H\PS2_.H
+ 00C4                   .blkb 2
+                        .area idata
+ 00C4 552B              .byte 'U,43
+                        .area data(ram, con, rel)
+ 00C6                   .dbfile D:\ICC_H\PS2_.H
+ 00C6                   .blkb 2
+                        .area idata
+ 00C6 5D7C              .byte 93,124
+                        .area data(ram, con, rel)
+ 00C8                   .dbfile D:\ICC_H\PS2_.H
+ 00C8                   .blkb 2
+                        .area idata
+ 00C8 2920              .byte 41,32
+                        .area data(ram, con, rel)
+ 00CA                   .dbfile D:\ICC_H\PS2_.H
+ 00CA                   .blkb 2
+                        .area idata
+ 00CA 547B              .byte 'T,123
+                        .area data(ram, con, rel)
+ 00CC                   .dbfile D:\ICC_H\PS2_.H
+ 00CC                   .blkb 2
+                        .area idata
+ 00CC 5B7D              .byte 91,125
+                        .area data(ram, con, rel)
+ 00CE                   .dbfile D:\ICC_H\PS2_.H
+ 00CE                   .blkb 2
+                        .area idata
+ 00CE 4C3A              .byte 'L,58
+                        .area data(ram, con, rel)
+ 00D0                   .dbfile D:\ICC_H\PS2_.H
+ 00D0                   .blkb 2
+                        .area idata
+ 00D0 5222              .byte 'R,34
+                        .area data(ram, con, rel)
+ 00D2                   .dbfile D:\ICC_H\PS2_.H
+ 00D2                   .blkb 2
+                        .area idata
+ 00D2 413C              .byte 'A,60
+                        .area data(ram, con, rel)
+ 00D4                   .dbfile D:\ICC_H\PS2_.H
+ 00D4                   .blkb 2
+                        .area idata
+ 00D4 493E              .byte 'I,62
+                        .area data(ram, con, rel)
+ 00D6                   .dbfile D:\ICC_H\PS2_.H
+ 00D6                   .blkb 2
+                        .area idata
+ 00D6 4A3F              .byte 'J,63
+                        .area data(ram, con, rel)
+ 00D8                   .dbfile D:\ICC_H\PS2_.H
+ 00D8                   .blkb 2
+                        .area idata
+ 00D8 712E              .byte 'q,46
+                        .area data(ram, con, rel)
+ 00DA                   .dbfile D:\ICC_H\PS2_.H
+ 00DA                   .blkb 2
+                        .area idata
+ 00DA 7030              .byte 'p,48
+                        .area data(ram, con, rel)
+ 00DC                   .dbfile D:\ICC_H\PS2_.H
+ 00DC                   .blkb 2
+                        .area idata
+ 00DC 6931              .byte 'i,49
+                        .area data(ram, con, rel)
+ 00DE                   .dbfile D:\ICC_H\PS2_.H
+ 00DE                   .blkb 2
+                        .area idata
+ 00DE 7232              .byte 'r,50
+                        .area data(ram, con, rel)
+ 00E0                   .dbfile D:\ICC_H\PS2_.H
+ 00E0                   .blkb 2
+                        .area idata
+ 00E0 7A33              .byte 'z,51
+                        .area data(ram, con, rel)
+ 00E2                   .dbfile D:\ICC_H\PS2_.H
+ 00E2                   .blkb 2
+                        .area idata
+ 00E2 6B34              .byte 'k,52
+                        .area data(ram, con, rel)
+ 00E4                   .dbfile D:\ICC_H\PS2_.H
+ 00E4                   .blkb 2
+                        .area idata
+ 00E4 7335              .byte 's,53
+                        .area data(ram, con, rel)
+ 00E6                   .dbfile D:\ICC_H\PS2_.H
+ 00E6                   .blkb 2
+                        .area idata
+ 00E6 7436              .byte 't,54
+                        .area data(ram, con, rel)
+ 00E8                   .dbfile D:\ICC_H\PS2_.H
+ 00E8                   .blkb 2
+                        .area idata
+ 00E8 6C37              .byte 'l,55
+                        .area data(ram, con, rel)
+ 00EA                   .dbfile D:\ICC_H\PS2_.H
+ 00EA                   .blkb 2
+                        .area idata
+ 00EA 7538              .byte 'u,56
+                        .area data(ram, con, rel)
+ 00EC                   .dbfile D:\ICC_H\PS2_.H
+ 00EC                   .blkb 2
+                        .area idata
+ 00EC 7D39              .byte 125,57
+                        .area data(ram, con, rel)
+ 00EE                   .dbfile D:\ICC_H\PS2_.H
+ 00EE                   .blkb 2
+                        .area idata
+ 00EE 6620              .byte 'f,32
+                        .area data(ram, con, rel)
+ 00F0                   .dbfile D:\ICC_H\PS2_.H
+ 00F0                   .dbsym e shifted _shifted A[120:60:2]c
+ 00F0           _rcvF::
+ 00F0                   .blkb 1
+                        .area idata
+ 00F0 00                .byte 0
+                        .area data(ram, con, rel)
+ 00F1                   .dbfile D:\ICC_H\PS2_.H
+ 00F1                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 00F1                   .dbsym e rcvF _rcvF c
+ 00F1           L84:
+ 00F1                   .blkb 1
+                        .area idata
+ 00F1 00                .byte 0
+                        .area data(ram, con, rel)
+ 00F2                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+                        .area text(rom, con, rel)
+ 046E                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 046E                   .dbfunc e check _check fV
+ 046E                   .dbsym s rcvBits L84 c
+                        .even
+ 046E           _check::
+ 046E                   .dbline -1
+ 046E                   .dbline 83
+ 046E           ; /*********************************************************************
+ 046E           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 046E           ;                                                                       
+ 046E           ; 目    的:   建立PS/2的SimpleSoft测试程序（软件查询读取PS/2接收到的数据）
+ 046E           ;       
+ 046E           ; 目标系统:   基于AVR单片机
+ 046E           ;                                                                               
+ 046E           ; 应用软件:   ICCAVR
+ 046E           ;                                                                               
+ 046E           ; 版    本:   Version 1.0                                                          
+ 046E           ;                                                                               
+ 046E           ; 圆版时间:   2005-06-25
+ 046E           ;       
+ 046E           ; 开发人员:   SEE
+ 046E           ; 
+ 046E           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 046E           ;       
+ 046E           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 046E           ; *********************************************************************/
+ 046E           ; 
+ 046E           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 046E           ; ----------------------------------------------------------------------
+ 046E           ; 版本更新记录：
+ 046E           ; 
+ 046E           ; ----------------------------------------------------------------------
+ 046E           ; 实验内容：
+ 046E           ; 按PC键盘，观察单片机读到的数据，使用LCD12864观察。
+ 046E           ; ----------------------------------------------------------------------
+ 046E           ; 硬件连接：
+ 046E           ; 将PA/PD口的LED指示灯使用短路帽或线短接；
+ 046E           ; 将PC键盘插入PS2接口，
+ 046E           ; 使用短路帽短接PD3与DATA，
+ 046E           ; 使用短路帽短接PD2与CLK
+ 046E           ;                         DVK500                                 STK162+
+ 046E           ;                               CS              ---------         VCC
+ 046E           ;                               PSB         ---------     GND
+ 046E           ;                               SID             ---------         PB5
+ 046E           ;                               CLK             ---------         PB7
+ 046E           ; ----------------------------------------------------------------------
+ 046E           ; 注意事项： 
+ 046E           ; （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+ 046E           ; （2）请详细阅读“使用必读”及相关资料。
+ 046E           ; ----------------------------------------------------------------------
+ 046E           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 046E           ; 
+ 046E           ; #include <iom162v.h>
+ 046E           ; #define NO_INCLUDE_I2C_H 1
+ 046E           ; #include "D:\ICC_H\CmmICC.H"
+ 046E           ; #include "D:\ICC_H\LCD12864_ST7920_M48.H"
+ 046E           ; 
+ 046E           ; #include "D:\ICC_H\PS2_.H"
+ 046E           ; 
+ 046E           ; #define PRESS_DATA_DDR        DDRA
+ 046E           ; #define PRESS_DATA_PORT PORTA
+ 046E           ; #define SHIFT_DATA_DDR        DDRD
+ 046E           ; #define SHIFT_DATA_PORT PORTD
+ 046E           ; 
+ 046E           ; #define SET_SDA               sbi(PORTD,3)
+ 046E           ; #define CLR_SDA               cbi(PORTD,3)
+ 046E           ; #define GET_SDA               gbi(PIND,3)
+ 046E           ; #define OUT_SDA       sbi(DDRD,3)
+ 046E           ; #define IN_SDA                cbi(DDRD,3)
+ 046E           ; 
+ 046E           ; #define SET_SCK               sbi(PORTD,2)
+ 046E           ; #define CLR_SCK               cbi(PORTD,2)
+ 046E           ; #define GET_SCK               gbi(PIND,2)
+ 046E           ; #define OUT_SCK       sbi(DDRD,2)
+ 046E           ; #define IN_SCK                cbi(DDRD,2)
+ 046E           ; #define DELAY() {NOP();NOP();NOP();NOP();}
+ 046E           ; 
+ 046E           ; bool rcvF             = 0;    //是否收到字符标志
+ 046E           ; uint8 keyVal;                         //键值
+ 046E           ; uint8 tmp,tmp2;
+ 046E           ; /*--------------------------------------------------------------------
+ 046E           ; 函数名称：
+ 046E           ; 函数功能：
+ 046E           ; 注意事项：
+ 046E           ; 提示说明：
+ 046E           ; 输    入：
+ 046E           ; 返    回：
+ 046E           ; --------------------------------------------------------------------*/
+ 046E           ; void check(void)
+ 046E           ; {
+ 046E                   .dbline 86
+ 046E           ;     static uint8 rcvBits = 0; //接收次数，中断次数
+ 046E           ;       
+ 046E           ;       OUT_SCK;                                        //设置"SCK_DDR"为输出
+ 046E 8A9A              sbi 0x11,2
+ 0470                   .dbline 87
+ 0470           ;       DELAY();
+ 0470                   .dbline 87
+ 0470 0000              nop
+ 0472                   .dbline 87
+ 0472 0000              nop
+ 0474                   .dbline 87
+ 0474 0000              nop
+ 0476                   .dbline 87
+ 0476 0000              nop
+ 0478                   .dbline 87
+ 0478                   .dbline 87
+ 0478                   .dbline 88
+ 0478           ;       SET_SCK;                                        //"SCK_PORT"输出"1"
+ 0478 929A              sbi 0x12,2
+ 047A                   .dbline 89
+ 047A           ;       DELAY();
+ 047A                   .dbline 89
+ 047A 0000              nop
+ 047C                   .dbline 89
+ 047C 0000              nop
+ 047E                   .dbline 89
+ 047E 0000              nop
+ 0480                   .dbline 89
+ 0480 0000              nop
+ 0482                   .dbline 89
+ 0482                   .dbline 89
+ 0482                   .dbline 91
+ 0482           ;       
+ 0482           ;       IN_SCK;                                         //设置"SCK_DDR"为输入
+ 0482 8A98              cbi 0x11,2
+ 0484                   .dbline 92
+ 0484           ;       DELAY();
+ 0484                   .dbline 92
+ 0484 0000              nop
+ 0486                   .dbline 92
+ 0486 0000              nop
+ 0488                   .dbline 92
+ 0488 0000              nop
+ 048A                   .dbline 92
+ 048A 0000              nop
+ 048C                   .dbline 92
+ 048C                   .dbline 92
+ 048C                   .dbline 93
+ 048C           ;       if(!GET_SCK)
+ 048C 8299              sbic 0x10,2
+ 048E 25C0              rjmp L85
+ 0490           X24:
+ 0490                   .dbline 94
+ 0490           ;       {
+ 0490                   .dbline 95
+ 0490           ;               if((rcvBits>0) && (rcvBits<9))
+ 0490 2090F100          lds R2,L84
+ 0494 80E0              ldi R24,0
+ 0496 8215              cp R24,R2
+ 0498 70F4              brsh L87
+ 049A           X25:
+ 049A 822D              mov R24,R2
+ 049C 8930              cpi R24,9
+ 049E 58F4              brsh L87
+ 04A0           X26:
+ 04A0                   .dbline 96
+ 04A0           ;               { 
+ 04A0                   .dbline 97
+ 04A0           ;                       keyVal=keyVal>>1;       //数据是LSB格式
+ 04A0 20900200          lds R2,_keyVal
+ 04A4 2694              lsr R2
+ 04A6 20920200          sts _keyVal,R2
+ 04AA                   .dbline 100
+ 04AA           ;                       //IN_SDA;                       //当有对键盘有属性设置时，注意输入输出切换
+ 04AA           ;                       //DELAY();
+ 04AA           ;                       if(GET_SDA) 
+ 04AA 839B              sbis 0x10,3
+ 04AC 04C0              rjmp L89
+ 04AE           X27:
+ 04AE                   .dbline 101
+ 04AE           ;                               keyVal=keyVal|0x80; 
+ 04AE 822D              mov R24,R2
+ 04B0 8068              ori R24,128
+ 04B2 80930200          sts _keyVal,R24
+ 04B6           L89:
+ 04B6                   .dbline 102
+ 04B6           ;               }
+ 04B6           L87:
+ 04B6                   .dbline 103
+ 04B6           ;               rcvBits++;
+ 04B6 8091F100          lds R24,L84
+ 04BA 8F5F              subi R24,255    ; addi 1
+ 04BC 8093F100          sts L84,R24
+ 04C0           L91:
+ 04C0                   .dbline 104
+ 04C0           ;               while(!GET_SCK);                //等待PS/2CLK拉高
+ 04C0           L92:
+ 04C0                   .dbline 104
+ 04C0 829B              sbis 0x10,2
+ 04C2 FECF              rjmp L91
+ 04C4           X28:
+ 04C4                   .dbline 106
+ 04C4           ;       
+ 04C4           ;               if(rcvBits>10)
+ 04C4 8AE0              ldi R24,10
+ 04C6 2090F100          lds R2,L84
+ 04CA 8215              cp R24,R2
+ 04CC 30F4              brsh L94
+ 04CE           X29:
+ 04CE                   .dbline 107
+ 04CE           ;               {
+ 04CE                   .dbline 108
+ 04CE           ;                       rcvBits=0;                      //接收11次表示接收完一帧数据
+ 04CE 2224              clr R2
+ 04D0 2092F100          sts L84,R2
+ 04D4                   .dbline 109
+ 04D4           ;                       rcvF=1;                         //标识有字符已经输入
+ 04D4 81E0              ldi R24,1
+ 04D6 8093F000          sts _rcvF,R24
+ 04DA                   .dbline 110
+ 04DA           ;               }
+ 04DA           L94:
+ 04DA                   .dbline 111
+ 04DA           ;       }
+ 04DA           L85:
+ 04DA                   .dbline -2
+ 04DA           L83:
+ 04DA                   .dbline 0 ; func end
+ 04DA 0895              ret
+ 04DC                   .dbend
+                        .area data(ram, con, rel)
+ 00F2                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 00F2           L97:
+ 00F2                   .blkb 1
+                        .area idata
+ 00F2 00                .byte 0
+                        .area data(ram, con, rel)
+ 00F3                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 00F3           L98:
+ 00F3                   .blkb 1
+                        .area idata
+ 00F3 00                .byte 0
+                        .area data(ram, con, rel)
+ 00F4                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+                        .area text(rom, con, rel)
+ 04DC                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 04DC                   .dbfunc e keyHandle _keyHandle fV
+ 04DC                   .dbsym s shift L98 c
+ 04DC                   .dbsym s isUp L97 c
+ 04DC           ;              i -> R20
+ 04DC           ;            val -> R16
+                        .even
+ 04DC           _keyHandle::
+ 04DC 4A93              st -y,R20
+ 04DE 5A93              st -y,R21
+ 04E0                   .dbline -1
+ 04E0                   .dbline 122
+ 04E0           ; }
+ 04E0           ; /*--------------------------------------------------------------------
+ 04E0           ; 函数名称：
+ 04E0           ; 函数功能：
+ 04E0           ; 注意事项：
+ 04E0           ; 提示说明：
+ 04E0           ; 输    入：
+ 04E0           ; 返    回：
+ 04E0           ; --------------------------------------------------------------------*/
+ 04E0           ; void keyHandle(uint8 val) 
+ 04E0           ; {
+ 04E0                   .dbline 126
+ 04E0           ;       uint8 i;
+ 04E0           ;       static bool isUp=0;                     //按键释放动作标志
+ 04E0           ;       static bool shift=0;            //shift键按下标志
+ 04E0           ;       rcvF = 0; 
+ 04E0 2224              clr R2
+ 04E2 2092F000          sts _rcvF,R2
+ 04E6                   .dbline 128
+ 04E6           ;       //PRESS_DATA_PORT = val;                //状态指示
+ 04E6           ;       tmp= val;
+ 04E6 00930100          sts _tmp,R16
+ 04EA                   .dbline 129
+ 04EA           ;       if(!isUp)
+ 04EA 2090F200          lds R2,L97
+ 04EE 2220              tst R2
+ 04F0 09F0              breq X44
+ 04F2 52C0              xjmp L99
+ 04F4           X44:
+ 04F4           X30:
+ 04F4                   .dbline 130
+ 04F4           ;       {
+ 04F4                   .dbline 131
+ 04F4           ;               switch(val)
+ 04F4 402F              mov R20,R16
+ 04F6 5527              clr R21
+ 04F8 4935              cpi R20,89
+ 04FA E0E0              ldi R30,0
+ 04FC 5E07              cpc R21,R30
+ 04FE B9F0              breq L106
+ 0500           X31:
+ 0500 89E5              ldi R24,89
+ 0502 90E0              ldi R25,0
+ 0504 8417              cp R24,R20
+ 0506 9507              cpc R25,R21
+ 0508 2CF0              brlt L122
+ 050A           X32:
+ 050A           L121:
+ 050A 4231              cpi R20,18
+ 050C E0E0              ldi R30,0
+ 050E 5E07              cpc R21,R30
+ 0510 51F0              breq L105
+ 0512           X33:
+ 0512 11C0              xjmp L101
+ 0514           L122:
+ 0514 403F              cpi R20,240
+ 0516 E0E0              ldi R30,0
+ 0518 5E07              cpc R21,R30
+ 051A 09F0              breq L104
+ 051C           X34:
+ 051C 0CC0              xjmp L101
+ 051E           L104:
+ 051E                   .dbline 134
+ 051E           ;               {
+ 051E           ;                       case 0xF0 :                     // a relase action
+ 051E           ;                               isUp = 1;
+ 051E 81E0              ldi R24,1
+ 0520 8093F200          sts L97,R24
+ 0524                   .dbline 135
+ 0524           ;                               break;
+ 0524 52C0              xjmp L100
+ 0526           L105:
+ 0526                   .dbline 137
+ 0526           ;                       case 0x12 :                     // Left shift
+ 0526           ;                               shift = 1;
+ 0526 81E0              ldi R24,1
+ 0528 8093F300          sts L98,R24
+ 052C                   .dbline 138
+ 052C           ;                               break;
+ 052C 4EC0              xjmp L100
+ 052E           L106:
+ 052E                   .dbline 140
+ 052E           ;                       case 0x59 :                     // Right shift
+ 052E           ;                               shift = 1;
+ 052E 81E0              ldi R24,1
+ 0530 8093F300          sts L98,R24
+ 0534                   .dbline 141
+ 0534           ;                               break;
+ 0534 4AC0              xjmp L100
+ 0536           L101:
+ 0536                   .dbline 143
+ 0536           ;                       default:
+ 0536           ;                               if(!shift)              // If shift not pressed
+ 0536 2090F300          lds R2,L98
+ 053A 2220              tst R2
+ 053C E1F4              brne L107
+ 053E           X35:
+ 053E                   .dbline 144
+ 053E           ;                               { 
+ 053E                   .dbline 150
+ 053E           ; /*
+ 053E           ;                                       for(i=0; unshifted[i][0]!=val && unshifted[i][0]; i++)
+ 053E           ;                                               ;
+ 053E           ;                                       上述写法较为灵活，但KEIL非UNIXC标准，不能采用该写法
+ 053E           ; */
+ 053E           ;                                       for(i=0; unshifted[i][0]!=val && i<59; i++)
+ 053E 4427              clr R20
+ 0540 01C0              xjmp L112
+ 0542           L109:
+ 0542                   .dbline 151
+ 0542           ;                                               ;
+ 0542           L110:
+ 0542                   .dbline 150
+ 0542 4395              inc R20
+ 0544           L112:
+ 0544                   .dbline 150
+ 0544 80E0              ldi R24,<_unshifted
+ 0546 90E0              ldi R25,>_unshifted
+ 0548 E42F              mov R30,R20
+ 054A FF27              clr R31
+ 054C EE0F              lsl R30
+ 054E FF1F              rol R31
+ 0550 E80F              add R30,R24
+ 0552 F91F              adc R31,R25
+ 0554 2080              ldd R2,z+0
+ 0556 2016              cp R2,R16
+ 0558 11F0              breq L113
+ 055A           X36:
+ 055A 4B33              cpi R20,59
+ 055C 90F3              brlo L109
+ 055E           X37:
+ 055E           L113:
+ 055E                   .dbline 152
+ 055E           ;                                       if(unshifted[i][0] == val) 
+ 055E 80E0              ldi R24,<_unshifted
+ 0560 90E0              ldi R25,>_unshifted
+ 0562 E42F              mov R30,R20
+ 0564 FF27              clr R31
+ 0566 EE0F              lsl R30
+ 0568 FF1F              rol R31
+ 056A E80F              add R30,R24
+ 056C F91F              adc R31,R25
+ 056E 2080              ldd R2,z+0
+ 0570 2016              cp R2,R16
+ 0572 59F5              brne L100
+ 0574           X38:
+ 0574                   .dbline 153
+ 0574           ;                                               ;               //状态指示
+ 0574                   .dbline 155
+ 0574           ;                                       
+ 0574           ;                               } 
+ 0574 2AC0              xjmp L100
+ 0576           L107:
+ 0576                   .dbline 157
+ 0576           ;                               else                    // If shift pressed
+ 0576           ;                               {                       
+ 0576                   .dbline 163
+ 0576           ; /*
+ 0576           ;                                       for(i=0; unshifted[i][0]!=val && unshifted[i][0]; i++)
+ 0576           ;                                               ;
+ 0576           ;                                       上述写法较为灵活，但KEIL非UNIXC标准，不能采用该写法
+ 0576           ; */
+ 0576           ;                                       for(i=0; shifted[i][0]!=val && i<59; i++)
+ 0576 4427              clr R20
+ 0578 01C0              xjmp L119
+ 057A           L116:
+ 057A                   .dbline 164
+ 057A           ;                                               ;
+ 057A           L117:
+ 057A                   .dbline 163
+ 057A 4395              inc R20
+ 057C           L119:
+ 057C                   .dbline 163
+ 057C 80E0              ldi R24,<_shifted
+ 057E 90E0              ldi R25,>_shifted
+ 0580 E42F              mov R30,R20
+ 0582 FF27              clr R31
+ 0584 EE0F              lsl R30
+ 0586 FF1F              rol R31
+ 0588 E80F              add R30,R24
+ 058A F91F              adc R31,R25
+ 058C 2080              ldd R2,z+0
+ 058E 2016              cp R2,R16
+ 0590 11F0              breq L120
+ 0592           X39:
+ 0592 4B33              cpi R20,59
+ 0594 90F3              brlo L116
+ 0596           X40:
+ 0596           L120:
+ 0596                   .dbline 167
+ 0596           ;                                       //if(shifted[i][0] == val) 
+ 0596           ;                                               //SHIFT_DATA_PORT = val;//状态指示
+ 0596           ;                               }
+ 0596                   .dbline 168
+ 0596           ;               }
+ 0596                   .dbline 169
+ 0596           ;       }
+ 0596 19C0              xjmp L100
+ 0598           L99:
+ 0598                   .dbline 171
+ 0598           ;       else 
+ 0598           ;       {
+ 0598                   .dbline 172
+ 0598           ;               isUp=0;                                 
+ 0598 2224              clr R2
+ 059A 2092F200          sts L97,R2
+ 059E                   .dbline 173
+ 059E           ;               switch(val)
+ 059E 402F              mov R20,R16
+ 05A0 5527              clr R21
+ 05A2 4231              cpi R20,18
+ 05A4 E0E0              ldi R30,0
+ 05A6 5E07              cpc R21,R30
+ 05A8 49F0              breq L126
+ 05AA           X41:
+ 05AA 4231              cpi R20,18
+ 05AC E0E0              ldi R30,0
+ 05AE 5E07              cpc R21,R30
+ 05B0 64F0              brlt L123
+ 05B2           X42:
+ 05B2           L128:
+ 05B2 4935              cpi R20,89
+ 05B4 E0E0              ldi R30,0
+ 05B6 5E07              cpc R21,R30
+ 05B8 29F0              breq L127
+ 05BA           X43:
+ 05BA 07C0              xjmp L123
+ 05BC           L126:
+ 05BC                   .dbline 176
+ 05BC           ;               {
+ 05BC           ;                       case 0x12 :                     // Left SHIFT
+ 05BC           ;                               shift = 0;
+ 05BC 2224              clr R2
+ 05BE 2092F300          sts L98,R2
+ 05C2                   .dbline 177
+ 05C2           ;                               break;
+ 05C2 03C0              xjmp L124
+ 05C4           L127:
+ 05C4                   .dbline 179
+ 05C4           ;                       case 0x59 :                     // Right SHIFT
+ 05C4           ;                               shift = 0;
+ 05C4 2224              clr R2
+ 05C6 2092F300          sts L98,R2
+ 05CA                   .dbline 180
+ 05CA           ;                               break;
+ 05CA           L123:
+ 05CA           L124:
+ 05CA                   .dbline 182
+ 05CA           ;               }
+ 05CA           ;       }
+ 05CA           L100:
+ 05CA                   .dbline -2
+ 05CA           L96:
+ 05CA                   .dbline 0 ; func end
+ 05CA 5991              ld R21,y+
+ 05CC 4991              ld R20,y+
+ 05CE 0895              ret
+ 05D0                   .dbsym r i 20 c
+ 05D0                   .dbsym r val 16 c
+ 05D0                   .dbend
+ 05D0                   .dbfunc e main _main fV
+ 05D0           ;              i -> R20
+                        .even
+ 05D0           _main::
+ 05D0 2297              sbiw R28,2
+ 05D2                   .dbline -1
+ 05D2                   .dbline 193
+ 05D2           ; }  
+ 05D2           ; /*--------------------------------------------------------------------
+ 05D2           ; 函数名称：
+ 05D2           ; 函数功能：
+ 05D2           ; 注意事项：
+ 05D2           ; 提示说明：
+ 05D2           ; 输    入：
+ 05D2           ; 返    回：
+ 05D2           ; --------------------------------------------------------------------*/
+ 05D2           ; void main(void)
+ 05D2           ; {
+ 05D2                   .dbline 196
+ 05D2           ;    unsigned char i;
+ 05D2           ; 
+ 05D2           ;       DDRA=0xFF;
+ 05D2 8FEF              ldi R24,255
+ 05D4 8ABB              out 0x1a,R24
+ 05D6                   .dbline 197
+ 05D6           ;       PORTA|=0x01;
+ 05D6 D89A              sbi 0x1b,0
+ 05D8                   .dbline 198
+ 05D8           ;       lcd_init();
+ 05D8 37DF              xcall _lcd_init
+ 05DA                   .dbline 199
+ 05DA           ;       lcd_clr();
+ 05DA 30DF              xcall _lcd_clr
+ 05DC                   .dbline 200
+ 05DC           ;       lcd_puts(1,1,"PS2 键盘实验");
+ 05DC 80E0              ldi R24,<L130
+ 05DE 90E0              ldi R25,>L130
+ 05E0 9983              std y+1,R25
+ 05E2 8883              std y+0,R24
+ 05E4 21E0              ldi R18,1
+ 05E6 01E0              ldi R16,1
+ 05E8 E4DE              xcall _lcd_puts
+ 05EA                   .dbline 201
+ 05EA           ;       lcd_puts(2,1,"PS2 PORT");
+ 05EA 80E0              ldi R24,<L131
+ 05EC 90E0              ldi R25,>L131
+ 05EE 9983              std y+1,R25
+ 05F0 8883              std y+0,R24
+ 05F2 21E0              ldi R18,1
+ 05F4 02E0              ldi R16,2
+ 05F6 DDDE              xcall _lcd_puts
+ 05F8                   .dbline 202
+ 05F8           ;       lcd_puts(3,1,"读取键盘的值:");  
+ 05F8 80E0              ldi R24,<L132
+ 05FA 90E0              ldi R25,>L132
+ 05FC 9983              std y+1,R25
+ 05FE 8883              std y+0,R24
+ 0600 21E0              ldi R18,1
+ 0602 03E0              ldi R16,3
+ 0604 D6DE              xcall _lcd_puts
+ 0606                   .dbline 204
+ 0606           ;       
+ 0606           ;       PORTA=0x00;
+ 0606 2224              clr R2
+ 0608 2BBA              out 0x1b,R2
+ 060A                   .dbline 206
+ 060A           ;       
+ 060A           ;       IN_SDA;
+ 060A 8B98              cbi 0x11,3
+ 060C 33C0              xjmp L134
+ 060E           L133:
+ 060E                   .dbline 208
+ 060E           ;       while(1)
+ 060E           ;       {
+ 060E                   .dbline 210
+ 060E           ;               
+ 060E           ;               check();
+ 060E 2FDF              xcall _check
+ 0610                   .dbline 211
+ 0610           ;               if(rcvF)
+ 0610 2090F000          lds R2,_rcvF
+ 0614 2220              tst R2
+ 0616 71F1              breq L136
+ 0618           X45:
+ 0618                   .dbline 212
+ 0618           ;               {
+ 0618                   .dbline 213
+ 0618           ;                       keyHandle(keyVal);
+ 0618 00910200          lds R16,_keyVal
+ 061C 5FDF              xcall _keyHandle
+ 061E                   .dbline 214
+ 061E           ;                       PORTA=0x01;
+ 061E 81E0              ldi R24,1
+ 0620 8BBB              out 0x1b,R24
+ 0622                   .dbline 216
+ 0622           ;                       //lcd_puts(3,1,"写入并读取内容");       
+ 0622           ;                       for(i=0;i<59;i++)
+ 0622 4427              clr R20
+ 0624 19C0              xjmp L141
+ 0626           L138:
+ 0626                   .dbline 217
+ 0626           ;                       {
+ 0626                   .dbline 218
+ 0626           ;                         if(unshifted[i][0]==tmp) 
+ 0626 80E0              ldi R24,<_unshifted
+ 0628 90E0              ldi R25,>_unshifted
+ 062A E42F              mov R30,R20
+ 062C FF27              clr R31
+ 062E EE0F              lsl R30
+ 0630 FF1F              rol R31
+ 0632 E80F              add R30,R24
+ 0634 F91F              adc R31,R25
+ 0636 2080              ldd R2,z+0
+ 0638 30900100          lds R3,_tmp
+ 063C 2314              cp R2,R3
+ 063E 59F4              brne L142
+ 0640           X46:
+ 0640                   .dbline 219
+ 0640           ;                         {
+ 0640                   .dbline 220
+ 0640           ;                          tmp2=unshifted[i][1];
+ 0640 80E0              ldi R24,<_unshifted+1
+ 0642 90E0              ldi R25,>_unshifted+1
+ 0644 E42F              mov R30,R20
+ 0646 FF27              clr R31
+ 0648 EE0F              lsl R30
+ 064A FF1F              rol R31
+ 064C E80F              add R30,R24
+ 064E F91F              adc R31,R25
+ 0650 2080              ldd R2,z+0
+ 0652 20920000          sts _tmp2,R2
+ 0656                   .dbline 221
+ 0656           ;                         }
+ 0656           L142:
+ 0656                   .dbline 222
+ 0656           ;                       }
+ 0656           L139:
+ 0656                   .dbline 216
+ 0656 4395              inc R20
+ 0658           L141:
+ 0658                   .dbline 216
+ 0658 4B33              cpi R20,59
+ 065A 28F3              brlo L138
+ 065C           X47:
+ 065C                   .dbline 223
+ 065C           ;                       PRESS_DATA_PORT = tmp2;
+ 065C 20900000          lds R2,_tmp2
+ 0660 2BBA              out 0x1b,R2
+ 0662                   .dbline 224
+ 0662           ;                       lcd_putc(4,5,tmp2);
+ 0662 2882              std y+0,R2
+ 0664 25E0              ldi R18,5
+ 0666 04E0              ldi R16,4
+ 0668 B0DD              xcall _lcd_putc
+ 066A                   .dbline 225
+ 066A           ;                       delay50us(10);
+ 066A 0AE0              ldi R16,10
+ 066C 10E0              ldi R17,0
+ 066E 21DD              xcall _delay50us
+ 0670                   .dbline 226
+ 0670           ;                       PORTA=0x00;
+ 0670 2224              clr R2
+ 0672 2BBA              out 0x1b,R2
+ 0674                   .dbline 227
+ 0674           ;               }       
+ 0674           L136:
+ 0674                   .dbline 228
+ 0674           ;       }
+ 0674           L134:
+ 0674                   .dbline 207
+ 0674 CCCF              xjmp L133
+ 0676           X48:
+ 0676                   .dbline -2
+ 0676           L129:
+ 0676                   .dbline 0 ; func end
+ 0676 2296              adiw R28,2
+ 0678 0895              ret
+ 067A                   .dbsym r i 20 c
+ 067A                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PS2PC~1\PS2SimpleSoft_LCD12864\PS2SimpleSoft.c
+ 0000           _tmp2::
+ 0000                   .blkb 1
+ 0001                   .dbsym e tmp2 _tmp2 c
+ 0001           _tmp::
+ 0001                   .blkb 1
+ 0002                   .dbsym e tmp _tmp c
+ 0002           _keyVal::
+ 0002                   .blkb 1
+ 0003                   .dbsym e keyVal _keyVal c
+ 0003           _dataElem::
+ 0003                   .blkb 6
+ 0009                   .dbfile D:\ICC_H\Software.H
+ 0009                   .dbsym e dataElem _dataElem A[6:6]c
+                        .area data(ram, con, rel)
+ 00F4                   .dbfile D:\ICC_H\Software.H
+ 00F4           L132:
+ 00F4                   .blkb 14
+                        .area idata
+ 00F4 B6C1C8A1BCFCC5CCB5C4D6B53A00      .byte 182,193,200,161,188,252,197,204,181,196,214,181,58,0
+                        .area data(ram, con, rel)
+ 0102                   .dbfile D:\ICC_H\Software.H
+ 0102           L131:
+ 0102                   .blkb 9
+                        .area idata
+ 0102 50533220504F525400        .byte 'P,'S,50,32,'P,'O,'R,'T,0
+                        .area data(ram, con, rel)
+ 010B                   .dbfile D:\ICC_H\Software.H
+ 010B           L130:
+ 010B                   .blkb 13
+                        .area idata
+ 010B 50533220BCFCC5CCCAB5D1E900        .byte 'P,'S,50,32,188,252,197,204,202,181,209,233,0
+                        .area data(ram, con, rel)
+ 0118                   .dbfile D:\ICC_H\Software.H
+ 0118           ; }

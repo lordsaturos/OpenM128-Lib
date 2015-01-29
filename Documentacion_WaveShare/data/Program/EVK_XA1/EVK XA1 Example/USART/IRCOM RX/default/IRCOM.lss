@@ -1,0 +1,869 @@
+
+IRCOM.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000520  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000004  00802000  00000520  000005b4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000013  00802004  00802004  000005b8  2**0
+                  ALLOC
+  3 .debug_aranges 00000060  00000000  00000000  000005b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 00000219  00000000  00000000  00000618  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000bb1  00000000  00000000  00000831  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000041b  00000000  00000000  000013e2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000005b3  00000000  00000000  000017fd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000130  00000000  00000000  00001db0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000710  00000000  00000000  00001ee0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000217  00000000  00000000  000025f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 fa 00 	jmp	0x1f4	; 0x1f4 <__ctors_end>
+   4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+   8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+   c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  10:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  14:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  18:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  1c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  20:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  24:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  28:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  2c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  30:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  34:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  38:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  3c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  40:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  44:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  48:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  4c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  50:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  54:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  58:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  5c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  60:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  64:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  68:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  6c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  70:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  74:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  78:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  7c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  80:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  84:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  88:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  8c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  90:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  94:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  98:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  9c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  ac:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  bc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  cc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  dc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  ec:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  fc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 100:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 104:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 108:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 10c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 110:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 114:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 118:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 11c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 120:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 124:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 128:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 12c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 130:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 134:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 138:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 13c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 140:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 144:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 148:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 14c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 150:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 154:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 158:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 15c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 160:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 164:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 168:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 16c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 170:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 174:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 178:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 17c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 180:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 184:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 188:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 18c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 190:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 194:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 198:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 19c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1ac:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1bc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1cc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1dc:	0c 94 64 01 	jmp	0x2c8	; 0x2c8 <__vector_119>
+ 1e0:	0c 94 2f 01 	jmp	0x25e	; 0x25e <__vector_120>
+ 1e4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1ec:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1f0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+
+000001f4 <__ctors_end>:
+ 1f4:	11 24       	eor	r1, r1
+ 1f6:	1f be       	out	0x3f, r1	; 63
+ 1f8:	cf ef       	ldi	r28, 0xFF	; 255
+ 1fa:	df e3       	ldi	r29, 0x3F	; 63
+ 1fc:	de bf       	out	0x3e, r29	; 62
+ 1fe:	cd bf       	out	0x3d, r28	; 61
+ 200:	00 e0       	ldi	r16, 0x00	; 0
+ 202:	0c bf       	out	0x3c, r16	; 60
+ 204:	18 be       	out	0x38, r1	; 56
+ 206:	19 be       	out	0x39, r1	; 57
+ 208:	1a be       	out	0x3a, r1	; 58
+ 20a:	1b be       	out	0x3b, r1	; 59
+
+0000020c <__do_copy_data>:
+ 20c:	10 e2       	ldi	r17, 0x20	; 32
+ 20e:	a0 e0       	ldi	r26, 0x00	; 0
+ 210:	b0 e2       	ldi	r27, 0x20	; 32
+ 212:	e0 e2       	ldi	r30, 0x20	; 32
+ 214:	f5 e0       	ldi	r31, 0x05	; 5
+ 216:	00 e0       	ldi	r16, 0x00	; 0
+ 218:	0b bf       	out	0x3b, r16	; 59
+ 21a:	02 c0       	rjmp	.+4      	; 0x220 <__do_copy_data+0x14>
+ 21c:	07 90       	elpm	r0, Z+
+ 21e:	0d 92       	st	X+, r0
+ 220:	a4 30       	cpi	r26, 0x04	; 4
+ 222:	b1 07       	cpc	r27, r17
+ 224:	d9 f7       	brne	.-10     	; 0x21c <__do_copy_data+0x10>
+ 226:	1b be       	out	0x3b, r1	; 59
+
+00000228 <__do_clear_bss>:
+ 228:	10 e2       	ldi	r17, 0x20	; 32
+ 22a:	a4 e0       	ldi	r26, 0x04	; 4
+ 22c:	b0 e2       	ldi	r27, 0x20	; 32
+ 22e:	01 c0       	rjmp	.+2      	; 0x232 <.do_clear_bss_start>
+
+00000230 <.do_clear_bss_loop>:
+ 230:	1d 92       	st	X+, r1
+
+00000232 <.do_clear_bss_start>:
+ 232:	a7 31       	cpi	r26, 0x17	; 23
+ 234:	b1 07       	cpc	r27, r17
+ 236:	e1 f7       	brne	.-8      	; 0x230 <.do_clear_bss_loop>
+ 238:	0e 94 99 01 	call	0x332	; 0x332 <main>
+ 23c:	0c 94 8e 02 	jmp	0x51c	; 0x51c <_exit>
+
+00000240 <__bad_interrupt>:
+ 240:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000244 <IRCOM_TXSetPulseLength>:
+ *  - 0xFF          : disable transmitter pulse encoding .
+ *                    (pulse length is equal to baud rate)
+ */
+void IRCOM_TXSetPulseLength(uint8_t transmitterPulseLength)
+{
+	IRCOM_TXPLCTRL = transmitterPulseLength;
+ 244:	80 93 f9 08 	sts	0x08F9, r24
+}
+ 248:	08 95       	ret
+
+0000024a <IRCOM_RXSetPulseLength>:
+ *  - 0xFF          : disable receiver pulse encoding.
+ *                    (pulse length is equal to baud rate)
+ */
+void IRCOM_RXSetPulseLength(uint8_t receiverPulseLength)
+{
+	IRCOM_RXPLCTRL = receiverPulseLength;
+ 24a:	80 93 fa 08 	sts	0x08FA, r24
+}
+ 24e:	08 95       	ret
+
+00000250 <IRCOM_EventChannelSelect>:
+ *  - 0x1 to 0x7   : NOT used.
+ *  - 0x8 to 0xF   : enable channel number (value -8).
+ */
+void IRCOM_EventChannelSelect(IRDA_EVSEL_t EventChannelSelect)
+{
+	IRCOM_CTRL = (IRCOM_CTRL & (~IRCOM_EVSEL_gm)) | EventChannelSelect;
+ 250:	e8 ef       	ldi	r30, 0xF8	; 248
+ 252:	f8 e0       	ldi	r31, 0x08	; 8
+ 254:	90 81       	ld	r25, Z
+ 256:	90 7f       	andi	r25, 0xF0	; 240
+ 258:	98 2b       	or	r25, r24
+ 25a:	90 83       	st	Z, r25
+}
+ 25c:	08 95       	ret
+
+0000025e <__vector_120>:
+ *  Data register empty  interrupt service routine.
+ *  Calls the common data register empty complete handler with pointer to the
+ *  correct USART as argument.
+ */
+ISR(USARTF0_DRE_vect)
+{
+ 25e:	1f 92       	push	r1
+ 260:	0f 92       	push	r0
+ 262:	0f b6       	in	r0, 0x3f	; 63
+ 264:	0f 92       	push	r0
+ 266:	08 b6       	in	r0, 0x38	; 56
+ 268:	0f 92       	push	r0
+ 26a:	09 b6       	in	r0, 0x39	; 57
+ 26c:	0f 92       	push	r0
+ 26e:	0b b6       	in	r0, 0x3b	; 59
+ 270:	0f 92       	push	r0
+ 272:	11 24       	eor	r1, r1
+ 274:	18 be       	out	0x38, r1	; 56
+ 276:	19 be       	out	0x39, r1	; 57
+ 278:	1b be       	out	0x3b, r1	; 59
+ 27a:	2f 93       	push	r18
+ 27c:	3f 93       	push	r19
+ 27e:	4f 93       	push	r20
+ 280:	5f 93       	push	r21
+ 282:	6f 93       	push	r22
+ 284:	7f 93       	push	r23
+ 286:	8f 93       	push	r24
+ 288:	9f 93       	push	r25
+ 28a:	af 93       	push	r26
+ 28c:	bf 93       	push	r27
+ 28e:	ef 93       	push	r30
+ 290:	ff 93       	push	r31
+	USART_DataRegEmpty(&USART_data);
+ 292:	88 e0       	ldi	r24, 0x08	; 8
+ 294:	90 e2       	ldi	r25, 0x20	; 32
+ 296:	0e 94 51 02 	call	0x4a2	; 0x4a2 <USART_DataRegEmpty>
+}
+ 29a:	ff 91       	pop	r31
+ 29c:	ef 91       	pop	r30
+ 29e:	bf 91       	pop	r27
+ 2a0:	af 91       	pop	r26
+ 2a2:	9f 91       	pop	r25
+ 2a4:	8f 91       	pop	r24
+ 2a6:	7f 91       	pop	r23
+ 2a8:	6f 91       	pop	r22
+ 2aa:	5f 91       	pop	r21
+ 2ac:	4f 91       	pop	r20
+ 2ae:	3f 91       	pop	r19
+ 2b0:	2f 91       	pop	r18
+ 2b2:	0f 90       	pop	r0
+ 2b4:	0b be       	out	0x3b, r0	; 59
+ 2b6:	0f 90       	pop	r0
+ 2b8:	09 be       	out	0x39, r0	; 57
+ 2ba:	0f 90       	pop	r0
+ 2bc:	08 be       	out	0x38, r0	; 56
+ 2be:	0f 90       	pop	r0
+ 2c0:	0f be       	out	0x3f, r0	; 63
+ 2c2:	0f 90       	pop	r0
+ 2c4:	1f 90       	pop	r1
+ 2c6:	18 95       	reti
+
+000002c8 <__vector_119>:
+ *  Receive complete interrupt service routine.
+ *  Calls the common receive complete handler with pointer to the correct USART
+ *  as argument.
+ */
+ISR(USARTF0_RXC_vect)
+{
+ 2c8:	1f 92       	push	r1
+ 2ca:	0f 92       	push	r0
+ 2cc:	0f b6       	in	r0, 0x3f	; 63
+ 2ce:	0f 92       	push	r0
+ 2d0:	08 b6       	in	r0, 0x38	; 56
+ 2d2:	0f 92       	push	r0
+ 2d4:	09 b6       	in	r0, 0x39	; 57
+ 2d6:	0f 92       	push	r0
+ 2d8:	0b b6       	in	r0, 0x3b	; 59
+ 2da:	0f 92       	push	r0
+ 2dc:	11 24       	eor	r1, r1
+ 2de:	18 be       	out	0x38, r1	; 56
+ 2e0:	19 be       	out	0x39, r1	; 57
+ 2e2:	1b be       	out	0x3b, r1	; 59
+ 2e4:	2f 93       	push	r18
+ 2e6:	3f 93       	push	r19
+ 2e8:	4f 93       	push	r20
+ 2ea:	5f 93       	push	r21
+ 2ec:	6f 93       	push	r22
+ 2ee:	7f 93       	push	r23
+ 2f0:	8f 93       	push	r24
+ 2f2:	9f 93       	push	r25
+ 2f4:	af 93       	push	r26
+ 2f6:	bf 93       	push	r27
+ 2f8:	ef 93       	push	r30
+ 2fa:	ff 93       	push	r31
+	USART_RXComplete(&USART_data);
+ 2fc:	88 e0       	ldi	r24, 0x08	; 8
+ 2fe:	90 e2       	ldi	r25, 0x20	; 32
+ 300:	0e 94 35 02 	call	0x46a	; 0x46a <USART_RXComplete>
+}
+ 304:	ff 91       	pop	r31
+ 306:	ef 91       	pop	r30
+ 308:	bf 91       	pop	r27
+ 30a:	af 91       	pop	r26
+ 30c:	9f 91       	pop	r25
+ 30e:	8f 91       	pop	r24
+ 310:	7f 91       	pop	r23
+ 312:	6f 91       	pop	r22
+ 314:	5f 91       	pop	r21
+ 316:	4f 91       	pop	r20
+ 318:	3f 91       	pop	r19
+ 31a:	2f 91       	pop	r18
+ 31c:	0f 90       	pop	r0
+ 31e:	0b be       	out	0x3b, r0	; 59
+ 320:	0f 90       	pop	r0
+ 322:	09 be       	out	0x39, r0	; 57
+ 324:	0f 90       	pop	r0
+ 326:	08 be       	out	0x38, r0	; 56
+ 328:	0f 90       	pop	r0
+ 32a:	0f be       	out	0x3f, r0	; 63
+ 32c:	0f 90       	pop	r0
+ 32e:	1f 90       	pop	r1
+ 330:	18 95       	reti
+
+00000332 <main>:
+ *  equal to the sent data. The code can be tested by connecting PC3 to PC2. If
+ *  the variable 'success' is true at the end of the function, the three bytes
+ *  have been successfully sent and received.
+*/
+int main(void)
+{
+ 332:	cf 93       	push	r28
+ 334:	df 93       	push	r29
+	/* counter variable. */
+	uint8_t i;
+
+	PORTC.DIR=0xFF;
+ 336:	8f ef       	ldi	r24, 0xFF	; 255
+ 338:	80 93 40 06 	sts	0x0640, r24
+	PORTC.OUT=0xFF;
+ 33c:	e0 e4       	ldi	r30, 0x40	; 64
+ 33e:	f6 e0       	ldi	r31, 0x06	; 6
+ 340:	84 83       	std	Z+4, r24	; 0x04
+	/* This PORT setting is only valid to USARTF0 if other USARTs is used a
+	 * different PORT and/or pins are used. */
+  	/* PF3 (TXD0) as output. */
+	PORTF.DIRSET   = PIN3_bm;
+ 342:	e0 ea       	ldi	r30, 0xA0	; 160
+ 344:	f6 e0       	ldi	r31, 0x06	; 6
+ 346:	88 e0       	ldi	r24, 0x08	; 8
+ 348:	81 83       	std	Z+1, r24	; 0x01
+	/* PF2 (RXD0) as input. */
+	PORTF.DIRCLR   = PIN2_bm;
+ 34a:	84 e0       	ldi	r24, 0x04	; 4
+ 34c:	82 83       	std	Z+2, r24	; 0x02
+
+	/* Use USARTF0 and initialize buffers. */
+	USART_InterruptDriver_Initialize(&USART_data, &USART, USART_DREINTLVL_LO_gc);
+ 34e:	88 e0       	ldi	r24, 0x08	; 8
+ 350:	90 e2       	ldi	r25, 0x20	; 32
+ 352:	60 ea       	ldi	r22, 0xA0	; 160
+ 354:	7b e0       	ldi	r23, 0x0B	; 11
+ 356:	41 e0       	ldi	r20, 0x01	; 1
+ 358:	0e 94 e3 01 	call	0x3c6	; 0x3c6 <USART_InterruptDriver_Initialize>
+
+	/* USARTF0, 8 Data bits, No Parity, 1 Stop bit. */
+	USART_Format_Set(USART_data.usart, USART_CHSIZE_8BIT_gc,
+ 35c:	e0 91 08 20 	lds	r30, 0x2008
+ 360:	f0 91 09 20 	lds	r31, 0x2009
+ 364:	83 e0       	ldi	r24, 0x03	; 3
+ 366:	85 83       	std	Z+5, r24	; 0x05
+                     USART_PMODE_DISABLED_gc, false);
+
+	/* Enable RXC interrupt. */
+	USART_RxdInterruptLevel_Set(USART_data.usart, USART_RXCINTLVL_LO_gc);
+ 368:	83 81       	ldd	r24, Z+3	; 0x03
+ 36a:	8f 7c       	andi	r24, 0xCF	; 207
+ 36c:	80 61       	ori	r24, 0x10	; 16
+ 36e:	83 83       	std	Z+3, r24	; 0x03
+	 * Do not use the baud rate scale factor
+	 *
+	 * Baud rate select = (1/(16*(((I/O clock frequency)/Baud rate)-1)
+	 *                 = 12
+	 */
+	USART_Baudrate_Set(&USART, 12 , 0);
+ 370:	a0 ea       	ldi	r26, 0xA0	; 160
+ 372:	bb e0       	ldi	r27, 0x0B	; 11
+ 374:	8c e0       	ldi	r24, 0x0C	; 12
+ 376:	16 96       	adiw	r26, 0x06	; 6
+ 378:	8c 93       	st	X, r24
+ 37a:	16 97       	sbiw	r26, 0x06	; 6
+ 37c:	17 96       	adiw	r26, 0x07	; 7
+ 37e:	1c 92       	st	X, r1
+ 380:	17 97       	sbiw	r26, 0x07	; 7
+
+	/* Set USARTF0 in IrDA mode.*/
+	USART_SetMode(&USARTF0, USART_CMODE_IRDA_gc);
+ 382:	80 91 a5 0b 	lds	r24, 0x0BA5
+ 386:	8f 73       	andi	r24, 0x3F	; 63
+ 388:	80 68       	ori	r24, 0x80	; 128
+ 38a:	15 96       	adiw	r26, 0x05	; 5
+ 38c:	8c 93       	st	X, r24
+	IRCOM_TXSetPulseLength(254);
+	IRCOM_RXSetPulseLength(254);
+	*/
+
+	/* Enable both RX and TX. */
+	USART_Rx_Enable(USART_data.usart);
+ 38e:	84 81       	ldd	r24, Z+4	; 0x04
+ 390:	80 61       	ori	r24, 0x10	; 16
+ 392:	84 83       	std	Z+4, r24	; 0x04
+	USART_Tx_Enable(USART_data.usart);
+ 394:	84 81       	ldd	r24, Z+4	; 0x04
+ 396:	88 60       	ori	r24, 0x08	; 8
+ 398:	84 83       	std	Z+4, r24	; 0x04
+
+	/* Enable PMIC interrupt level low. */
+	PMIC.CTRL |= PMIC_LOLVLEX_bm;
+ 39a:	80 91 a2 00 	lds	r24, 0x00A2
+ 39e:	81 60       	ori	r24, 0x01	; 1
+ 3a0:	e0 ea       	ldi	r30, 0xA0	; 160
+ 3a2:	f0 e0       	ldi	r31, 0x00	; 0
+ 3a4:	82 83       	std	Z+2, r24	; 0x02
+
+	/* Enable global interrupts. */
+	sei();
+ 3a6:	78 94       	sei
+
+	/* Fetch received data as it is received. */
+	i = 0;
+	while (1) {
+		if (USART_RXBufferData_Available(&USART_data)) {
+			PORTC.OUT = ~USART_RXBuffer_GetByte(&USART_data);
+ 3a8:	c0 e4       	ldi	r28, 0x40	; 64
+ 3aa:	d6 e0       	ldi	r29, 0x06	; 6
+
+
+	/* Fetch received data as it is received. */
+	i = 0;
+	while (1) {
+		if (USART_RXBufferData_Available(&USART_data)) {
+ 3ac:	88 e0       	ldi	r24, 0x08	; 8
+ 3ae:	90 e2       	ldi	r25, 0x20	; 32
+ 3b0:	0e 94 1d 02 	call	0x43a	; 0x43a <USART_RXBufferData_Available>
+ 3b4:	88 23       	and	r24, r24
+ 3b6:	d1 f3       	breq	.-12     	; 0x3ac <main+0x7a>
+			PORTC.OUT = ~USART_RXBuffer_GetByte(&USART_data);
+ 3b8:	88 e0       	ldi	r24, 0x08	; 8
+ 3ba:	90 e2       	ldi	r25, 0x20	; 32
+ 3bc:	0e 94 25 02 	call	0x44a	; 0x44a <USART_RXBuffer_GetByte>
+ 3c0:	80 95       	com	r24
+ 3c2:	8c 83       	std	Y+4, r24	; 0x04
+ 3c4:	f3 cf       	rjmp	.-26     	; 0x3ac <main+0x7a>
+
+000003c6 <USART_InterruptDriver_Initialize>:
+ *  \param dreIntLevel          Data register empty interrupt level.
+ */
+void USART_InterruptDriver_Initialize(USART_data_t * usart_data,
+                                      USART_t * usart,
+                                      USART_DREINTLVL_t dreIntLevel)
+{
+ 3c6:	fc 01       	movw	r30, r24
+	usart_data->usart = usart;
+ 3c8:	60 83       	st	Z, r22
+ 3ca:	71 83       	std	Z+1, r23	; 0x01
+	usart_data->dreIntLevel = dreIntLevel;
+ 3cc:	42 83       	std	Z+2, r20	; 0x02
+
+	usart_data->buffer.RX_Tail = 0;
+ 3ce:	14 86       	std	Z+12, r1	; 0x0c
+	usart_data->buffer.RX_Head = 0;
+ 3d0:	13 86       	std	Z+11, r1	; 0x0b
+	usart_data->buffer.TX_Tail = 0;
+ 3d2:	16 86       	std	Z+14, r1	; 0x0e
+	usart_data->buffer.TX_Head = 0;
+ 3d4:	15 86       	std	Z+13, r1	; 0x0d
+}
+ 3d6:	08 95       	ret
+
+000003d8 <USART_InterruptDriver_DreInterruptLevel_Set>:
+ *  \param dreIntLevel        Interrupt level of the DRE interrupt.
+ */
+void USART_InterruptDriver_DreInterruptLevel_Set(USART_data_t * usart_data,
+                                                 USART_DREINTLVL_t dreIntLevel)
+{
+	usart_data->dreIntLevel = dreIntLevel;
+ 3d8:	fc 01       	movw	r30, r24
+ 3da:	62 83       	std	Z+2, r22	; 0x02
+}
+ 3dc:	08 95       	ret
+
+000003de <USART_TXBuffer_FreeSpace>:
+ *
+ *  \retval true      There is data in the receive buffer.
+ *  \retval false     The receive buffer is empty.
+ */
+bool USART_TXBuffer_FreeSpace(USART_data_t * usart_data)
+{
+ 3de:	fc 01       	movw	r30, r24
+	/* Make copies to make sure that volatile access is specified. */
+	uint8_t tempHead = (usart_data->buffer.TX_Head + 1) & USART_TX_BUFFER_MASK;
+ 3e0:	85 85       	ldd	r24, Z+13	; 0x0d
+	uint8_t tempTail = usart_data->buffer.TX_Tail;
+ 3e2:	96 85       	ldd	r25, Z+14	; 0x0e
+ 3e4:	20 e0       	ldi	r18, 0x00	; 0
+ 3e6:	8f 5f       	subi	r24, 0xFF	; 255
+ 3e8:	83 70       	andi	r24, 0x03	; 3
+ 3ea:	89 13       	cpse	r24, r25
+ 3ec:	21 e0       	ldi	r18, 0x01	; 1
+
+	/* There are data left in the buffer unless Head and Tail are equal. */
+	return (tempHead != tempTail);
+}
+ 3ee:	82 2f       	mov	r24, r18
+ 3f0:	08 95       	ret
+
+000003f2 <USART_TXBuffer_PutByte>:
+ *
+ *  \param usart_data The USART_data_t struct instance.
+ *  \param data       The data to send.
+ */
+bool USART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
+{
+ 3f2:	dc 01       	movw	r26, r24
+ *  \retval false     The receive buffer is empty.
+ */
+bool USART_TXBuffer_FreeSpace(USART_data_t * usart_data)
+{
+	/* Make copies to make sure that volatile access is specified. */
+	uint8_t tempHead = (usart_data->buffer.TX_Head + 1) & USART_TX_BUFFER_MASK;
+ 3f4:	1d 96       	adiw	r26, 0x0d	; 13
+ 3f6:	8c 91       	ld	r24, X
+ 3f8:	1d 97       	sbiw	r26, 0x0d	; 13
+	uint8_t tempTail = usart_data->buffer.TX_Tail;
+ 3fa:	1e 96       	adiw	r26, 0x0e	; 14
+ 3fc:	9c 91       	ld	r25, X
+ 3fe:	1e 97       	sbiw	r26, 0x0e	; 14
+
+	/* There are data left in the buffer unless Head and Tail are equal. */
+	return (tempHead != tempTail);
+ 400:	20 e0       	ldi	r18, 0x00	; 0
+ 402:	8f 5f       	subi	r24, 0xFF	; 255
+ 404:	83 70       	andi	r24, 0x03	; 3
+ 406:	89 17       	cp	r24, r25
+ 408:	b1 f0       	breq	.+44     	; 0x436 <USART_TXBuffer_PutByte+0x44>
+ 40a:	21 e0       	ldi	r18, 0x01	; 1
+	TXBuffer_FreeSpace = USART_TXBuffer_FreeSpace(usart_data);
+
+
+	if(TXBuffer_FreeSpace)
+	{
+	  	tempTX_Head = TXbufPtr->TX_Head;
+ 40c:	1d 96       	adiw	r26, 0x0d	; 13
+ 40e:	8c 91       	ld	r24, X
+ 410:	1d 97       	sbiw	r26, 0x0d	; 13
+	  	TXbufPtr->TX[tempTX_Head]= data;
+ 412:	fd 01       	movw	r30, r26
+ 414:	e8 0f       	add	r30, r24
+ 416:	f1 1d       	adc	r31, r1
+ 418:	67 83       	std	Z+7, r22	; 0x07
+		/* Advance buffer head. */
+		TXbufPtr->TX_Head = (tempTX_Head + 1) & USART_TX_BUFFER_MASK;
+ 41a:	8f 5f       	subi	r24, 0xFF	; 255
+ 41c:	83 70       	andi	r24, 0x03	; 3
+ 41e:	1d 96       	adiw	r26, 0x0d	; 13
+ 420:	8c 93       	st	X, r24
+ 422:	1d 97       	sbiw	r26, 0x0d	; 13
+
+		/* Enable DRE interrupt. */
+		tempCTRLA = usart_data->usart->CTRLA;
+ 424:	ed 91       	ld	r30, X+
+ 426:	fc 91       	ld	r31, X
+ 428:	11 97       	sbiw	r26, 0x01	; 1
+ 42a:	83 81       	ldd	r24, Z+3	; 0x03
+		tempCTRLA = (tempCTRLA & ~USART_DREINTLVL_gm) | usart_data->dreIntLevel;
+ 42c:	8c 7f       	andi	r24, 0xFC	; 252
+ 42e:	12 96       	adiw	r26, 0x02	; 2
+ 430:	9c 91       	ld	r25, X
+ 432:	89 2b       	or	r24, r25
+		usart_data->usart->CTRLA = tempCTRLA;
+ 434:	83 83       	std	Z+3, r24	; 0x03
+	}
+	return TXBuffer_FreeSpace;
+}
+ 436:	82 2f       	mov	r24, r18
+ 438:	08 95       	ret
+
+0000043a <USART_RXBufferData_Available>:
+ *
+ *  \retval true      There is data in the receive buffer.
+ *  \retval false     The receive buffer is empty.
+ */
+bool USART_RXBufferData_Available(USART_data_t * usart_data)
+{
+ 43a:	fc 01       	movw	r30, r24
+	/* Make copies to make sure that volatile access is specified. */
+	uint8_t tempHead = usart_data->buffer.RX_Head;
+ 43c:	93 85       	ldd	r25, Z+11	; 0x0b
+	uint8_t tempTail = usart_data->buffer.RX_Tail;
+ 43e:	84 85       	ldd	r24, Z+12	; 0x0c
+ 440:	20 e0       	ldi	r18, 0x00	; 0
+ 442:	98 13       	cpse	r25, r24
+ 444:	21 e0       	ldi	r18, 0x01	; 1
+
+	/* There are data left in the buffer unless Head and Tail are equal. */
+	return (tempHead != tempTail);
+}
+ 446:	82 2f       	mov	r24, r18
+ 448:	08 95       	ret
+
+0000044a <USART_RXBuffer_GetByte>:
+ *  \param usart_data       The USART_data_t struct instance.
+ *
+ *  \return         Received data.
+ */
+uint8_t USART_RXBuffer_GetByte(USART_data_t * usart_data)
+{
+ 44a:	dc 01       	movw	r26, r24
+	USART_Buffer_t * bufPtr;
+	uint8_t ans;
+
+	bufPtr = &usart_data->buffer;
+	ans = (bufPtr->RX[bufPtr->RX_Tail]);
+ 44c:	1c 96       	adiw	r26, 0x0c	; 12
+ 44e:	8c 91       	ld	r24, X
+ 450:	1c 97       	sbiw	r26, 0x0c	; 12
+ 452:	fd 01       	movw	r30, r26
+ 454:	e8 0f       	add	r30, r24
+ 456:	f1 1d       	adc	r31, r1
+ 458:	83 81       	ldd	r24, Z+3	; 0x03
+
+	/* Advance buffer tail. */
+	bufPtr->RX_Tail = (bufPtr->RX_Tail + 1) & USART_RX_BUFFER_MASK;
+ 45a:	1c 96       	adiw	r26, 0x0c	; 12
+ 45c:	9c 91       	ld	r25, X
+ 45e:	1c 97       	sbiw	r26, 0x0c	; 12
+ 460:	9f 5f       	subi	r25, 0xFF	; 255
+ 462:	93 70       	andi	r25, 0x03	; 3
+ 464:	1c 96       	adiw	r26, 0x0c	; 12
+ 466:	9c 93       	st	X, r25
+
+	return ans;
+}
+ 468:	08 95       	ret
+
+0000046a <USART_RXComplete>:
+ *  Stores received data in RX software buffer.
+ *
+ *  \param usart_data      The USART_data_t struct instance.
+ */
+bool USART_RXComplete(USART_data_t * usart_data)
+{
+ 46a:	dc 01       	movw	r26, r24
+	USART_Buffer_t * bufPtr;
+	bool ans;
+
+	bufPtr = &usart_data->buffer;
+	/* Advance buffer head. */
+	uint8_t tempRX_Head = (bufPtr->RX_Head + 1) & USART_RX_BUFFER_MASK;
+ 46c:	1b 96       	adiw	r26, 0x0b	; 11
+ 46e:	9c 91       	ld	r25, X
+ 470:	1b 97       	sbiw	r26, 0x0b	; 11
+ 472:	9f 5f       	subi	r25, 0xFF	; 255
+ 474:	93 70       	andi	r25, 0x03	; 3
+
+	/* Check for overflow. */
+	uint8_t tempRX_Tail = bufPtr->RX_Tail;
+ 476:	1c 96       	adiw	r26, 0x0c	; 12
+ 478:	8c 91       	ld	r24, X
+ 47a:	1c 97       	sbiw	r26, 0x0c	; 12
+	uint8_t data = usart_data->usart->DATA;
+ 47c:	ed 91       	ld	r30, X+
+ 47e:	fc 91       	ld	r31, X
+ 480:	11 97       	sbiw	r26, 0x01	; 1
+ 482:	20 81       	ld	r18, Z
+
+	if (tempRX_Head == tempRX_Tail) {
+ 484:	98 17       	cp	r25, r24
+ 486:	11 f4       	brne	.+4      	; 0x48c <USART_RXComplete+0x22>
+ 488:	80 e0       	ldi	r24, 0x00	; 0
+ 48a:	08 95       	ret
+	  	ans = false;
+	}else{
+		ans = true;
+		usart_data->buffer.RX[usart_data->buffer.RX_Head] = data;
+ 48c:	1b 96       	adiw	r26, 0x0b	; 11
+ 48e:	8c 91       	ld	r24, X
+ 490:	1b 97       	sbiw	r26, 0x0b	; 11
+ 492:	fd 01       	movw	r30, r26
+ 494:	e8 0f       	add	r30, r24
+ 496:	f1 1d       	adc	r31, r1
+ 498:	23 83       	std	Z+3, r18	; 0x03
+		usart_data->buffer.RX_Head = tempRX_Head;
+ 49a:	1b 96       	adiw	r26, 0x0b	; 11
+ 49c:	9c 93       	st	X, r25
+ 49e:	81 e0       	ldi	r24, 0x01	; 1
+	}
+	return ans;
+}
+ 4a0:	08 95       	ret
+
+000004a2 <USART_DataRegEmpty>:
+ *  is empty. Argument is pointer to USART (USART_data_t).
+ *
+ *  \param usart_data      The USART_data_t struct instance.
+ */
+void USART_DataRegEmpty(USART_data_t * usart_data)
+{
+ 4a2:	cf 93       	push	r28
+ 4a4:	df 93       	push	r29
+ 4a6:	dc 01       	movw	r26, r24
+	USART_Buffer_t * bufPtr;
+	bufPtr = &usart_data->buffer;
+
+	/* Check if all data is transmitted. */
+	uint8_t tempTX_Tail = usart_data->buffer.TX_Tail;
+ 4a8:	1e 96       	adiw	r26, 0x0e	; 14
+ 4aa:	9c 91       	ld	r25, X
+ 4ac:	1e 97       	sbiw	r26, 0x0e	; 14
+	if (bufPtr->TX_Head == tempTX_Tail){
+ 4ae:	1d 96       	adiw	r26, 0x0d	; 13
+ 4b0:	8c 91       	ld	r24, X
+ 4b2:	1d 97       	sbiw	r26, 0x0d	; 13
+ 4b4:	cd 91       	ld	r28, X+
+ 4b6:	dc 91       	ld	r29, X
+ 4b8:	11 97       	sbiw	r26, 0x01	; 1
+ 4ba:	89 17       	cp	r24, r25
+ 4bc:	21 f4       	brne	.+8      	; 0x4c6 <USART_DataRegEmpty+0x24>
+	    /* Disable DRE interrupts. */
+		uint8_t tempCTRLA = usart_data->usart->CTRLA;
+ 4be:	8b 81       	ldd	r24, Y+3	; 0x03
+		tempCTRLA = (tempCTRLA & ~USART_DREINTLVL_gm) | USART_DREINTLVL_OFF_gc;
+ 4c0:	8c 7f       	andi	r24, 0xFC	; 252
+		usart_data->usart->CTRLA = tempCTRLA;
+ 4c2:	8b 83       	std	Y+3, r24	; 0x03
+ 4c4:	0f c0       	rjmp	.+30     	; 0x4e4 <USART_DataRegEmpty+0x42>
+
+	}else{
+		/* Start transmitting. */
+		uint8_t data = bufPtr->TX[usart_data->buffer.TX_Tail];
+ 4c6:	1e 96       	adiw	r26, 0x0e	; 14
+ 4c8:	8c 91       	ld	r24, X
+ 4ca:	1e 97       	sbiw	r26, 0x0e	; 14
+ 4cc:	fd 01       	movw	r30, r26
+ 4ce:	e8 0f       	add	r30, r24
+ 4d0:	f1 1d       	adc	r31, r1
+ 4d2:	87 81       	ldd	r24, Z+7	; 0x07
+		usart_data->usart->DATA = data;
+ 4d4:	88 83       	st	Y, r24
+
+		/* Advance buffer tail. */
+		bufPtr->TX_Tail = (bufPtr->TX_Tail + 1) & USART_TX_BUFFER_MASK;
+ 4d6:	1e 96       	adiw	r26, 0x0e	; 14
+ 4d8:	8c 91       	ld	r24, X
+ 4da:	1e 97       	sbiw	r26, 0x0e	; 14
+ 4dc:	8f 5f       	subi	r24, 0xFF	; 255
+ 4de:	83 70       	andi	r24, 0x03	; 3
+ 4e0:	1e 96       	adiw	r26, 0x0e	; 14
+ 4e2:	8c 93       	st	X, r24
+	}
+}
+ 4e4:	df 91       	pop	r29
+ 4e6:	cf 91       	pop	r28
+ 4e8:	08 95       	ret
+
+000004ea <USART_NineBits_PutChar>:
+ *
+ *  \param usart      The USART module.
+ *  \param data       The data to send.
+ */
+void USART_NineBits_PutChar(USART_t * usart, uint16_t data)
+{
+ 4ea:	fc 01       	movw	r30, r24
+	if(data & 0x0100) {
+ 4ec:	70 ff       	sbrs	r23, 0
+ 4ee:	03 c0       	rjmp	.+6      	; 0x4f6 <USART_NineBits_PutChar+0xc>
+		usart->CTRLB |= USART_TXB8_bm;
+ 4f0:	84 81       	ldd	r24, Z+4	; 0x04
+ 4f2:	81 60       	ori	r24, 0x01	; 1
+ 4f4:	02 c0       	rjmp	.+4      	; 0x4fa <USART_NineBits_PutChar+0x10>
+	}else {
+		usart->CTRLB &= ~USART_TXB8_bm;
+ 4f6:	84 81       	ldd	r24, Z+4	; 0x04
+ 4f8:	8e 7f       	andi	r24, 0xFE	; 254
+ 4fa:	84 83       	std	Z+4, r24	; 0x04
+	}
+
+	usart->DATA = (data & 0x00FF);
+ 4fc:	60 83       	st	Z, r22
+}
+ 4fe:	08 95       	ret
+
+00000500 <USART_NineBits_GetChar>:
+ *  \param usart      The USART module.
+ *
+ *  \retval           Received data.
+ */
+uint16_t USART_NineBits_GetChar(USART_t * usart)
+{
+ 500:	fc 01       	movw	r30, r24
+	if(usart->CTRLB & USART_RXB8_bm) {
+ 502:	84 81       	ldd	r24, Z+4	; 0x04
+ 504:	80 ff       	sbrs	r24, 0
+ 506:	05 c0       	rjmp	.+10     	; 0x512 <USART_NineBits_GetChar+0x12>
+		return(0x0100 | usart->DATA);
+ 508:	80 81       	ld	r24, Z
+ 50a:	28 2f       	mov	r18, r24
+ 50c:	30 e0       	ldi	r19, 0x00	; 0
+ 50e:	31 60       	ori	r19, 0x01	; 1
+ 510:	03 c0       	rjmp	.+6      	; 0x518 <USART_NineBits_GetChar+0x18>
+	}else {
+		return(usart->DATA);
+ 512:	80 81       	ld	r24, Z
+ 514:	28 2f       	mov	r18, r24
+ 516:	30 e0       	ldi	r19, 0x00	; 0
+	}
+}
+ 518:	c9 01       	movw	r24, r18
+ 51a:	08 95       	ret
+
+0000051c <_exit>:
+ 51c:	f8 94       	cli
+
+0000051e <__stop_program>:
+ 51e:	ff cf       	rjmp	.-2      	; 0x51e <__stop_program>

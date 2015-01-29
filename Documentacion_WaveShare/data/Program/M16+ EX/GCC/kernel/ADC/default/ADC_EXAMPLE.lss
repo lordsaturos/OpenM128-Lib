@@ -1,0 +1,252 @@
+
+ADC_EXAMPLE.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000016c  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000013  00800060  00800060  000001e0  2**0
+                  ALLOC
+  2 .debug_aranges 00000020  00000000  00000000  000001e0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 00000083  00000000  00000000  00000200  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000185  00000000  00000000  00000283  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 00000120  00000000  00000000  00000408  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   000001ef  00000000  00000000  00000528  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000050  00000000  00000000  00000718  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    000000e9  00000000  00000000  00000768  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    0000001e  00000000  00000000  00000851  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 44 00 	jmp	0x88	; 0x88 <__vector_14>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a3 37       	cpi	r26, 0x73	; 115
+  6c:	b1 07       	cpc	r27, r17
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 8f 00 	call	0x11e	; 0x11e <main>
+  74:	0c 94 b4 00 	jmp	0x168	; 0x168 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <adcInit>:
+void adcInit(void)
+{
+#if (ADC_MODE==2)	//8bit模式下，对ADLAR初始化。
+	ADMUX=(1<<REFS0); //参考电压使用AVCC，结果右对齐，通道为ADC0
+#else
+	ADMUX=(1<<REFS0)|(1<<ADLAR); //参考电压使用AVCC，结果默认左对齐，通道为ADC0
+  7c:	80 e6       	ldi	r24, 0x60	; 96
+  7e:	87 b9       	out	0x07, r24	; 7
+#endif
+ADCSRA=(1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1); //连续转换模式，中断时能，64分频
+  80:	8e ee       	ldi	r24, 0xEE	; 238
+  82:	86 b9       	out	0x06, r24	; 6
+asm("SEI");
+  84:	78 94       	sei
+}
+  86:	08 95       	ret
+
+00000088 <__vector_14>:
+*	ISR_BLOCK为GCC interrupt.h库的中断参数
+* 
+*-------------------------------------------------------------------------------------------------------
+*/
+ISR(ADC_vect,ISR_BLOCK)
+{
+  88:	1f 92       	push	r1
+  8a:	0f 92       	push	r0
+  8c:	0f b6       	in	r0, 0x3f	; 63
+  8e:	0f 92       	push	r0
+  90:	11 24       	eor	r1, r1
+  92:	8f 93       	push	r24
+  94:	ef 93       	push	r30
+  96:	ff 93       	push	r31
+#if (ADC_MODE==1)
+	adc_buffer[adc_wr_index]=ADCH;
+  98:	e0 91 60 00 	lds	r30, 0x0060
+  9c:	f0 e0       	ldi	r31, 0x00	; 0
+  9e:	85 b1       	in	r24, 0x05	; 5
+  a0:	ed 59       	subi	r30, 0x9D	; 157
+  a2:	ff 4f       	sbci	r31, 0xFF	; 255
+  a4:	80 83       	st	Z, r24
+#elif (ADC_MODE==2)
+	adc_buffer[adc_wr_index]=ADC;
+#endif
+
+   if (++adc_wr_index == ADC_BUFFER_SIZE) adc_wr_index=0;
+  a6:	80 91 60 00 	lds	r24, 0x0060
+  aa:	8f 5f       	subi	r24, 0xFF	; 255
+  ac:	80 93 60 00 	sts	0x0060, r24
+  b0:	80 91 60 00 	lds	r24, 0x0060
+  b4:	80 31       	cpi	r24, 0x10	; 16
+  b6:	11 f4       	brne	.+4      	; 0xbc <__vector_14+0x34>
+  b8:	10 92 60 00 	sts	0x0060, r1
+   if (++adc_counter == ADC_BUFFER_SIZE) adc_counter=0;
+  bc:	80 91 62 00 	lds	r24, 0x0062
+  c0:	8f 5f       	subi	r24, 0xFF	; 255
+  c2:	80 93 62 00 	sts	0x0062, r24
+  c6:	80 91 62 00 	lds	r24, 0x0062
+  ca:	80 31       	cpi	r24, 0x10	; 16
+  cc:	11 f4       	brne	.+4      	; 0xd2 <__vector_14+0x4a>
+  ce:	10 92 62 00 	sts	0x0062, r1
+}
+  d2:	ff 91       	pop	r31
+  d4:	ef 91       	pop	r30
+  d6:	8f 91       	pop	r24
+  d8:	0f 90       	pop	r0
+  da:	0f be       	out	0x3f, r0	; 63
+  dc:	0f 90       	pop	r0
+  de:	1f 90       	pop	r1
+  e0:	18 95       	reti
+
+000000e2 <getADC>:
+*-------------------------------------------------------------------------------------------------------
+*/
+adc_uint_t getADC(void)
+{
+adc_uint_t data;
+while(!adc_counter);
+  e2:	80 91 62 00 	lds	r24, 0x0062
+  e6:	88 23       	and	r24, r24
+  e8:	e1 f3       	breq	.-8      	; 0xe2 <getADC>
+data=adc_buffer[adc_rd_index];	/*从缓冲器读取数据*/
+  ea:	e0 91 61 00 	lds	r30, 0x0061
+  ee:	f0 e0       	ldi	r31, 0x00	; 0
+  f0:	ed 59       	subi	r30, 0x9D	; 157
+  f2:	ff 4f       	sbci	r31, 0xFF	; 255
+  f4:	e0 81       	ld	r30, Z
+if (++adc_rd_index == ADC_BUFFER_SIZE) adc_rd_index=0;	
+  f6:	80 91 61 00 	lds	r24, 0x0061
+  fa:	8f 5f       	subi	r24, 0xFF	; 255
+  fc:	80 93 61 00 	sts	0x0061, r24
+ 100:	80 91 61 00 	lds	r24, 0x0061
+ 104:	80 31       	cpi	r24, 0x10	; 16
+ 106:	11 f4       	brne	.+4      	; 0x10c <getADC+0x2a>
+ 108:	10 92 61 00 	sts	0x0061, r1
+cli();
+ 10c:	f8 94       	cli
+--adc_counter;
+ 10e:	80 91 62 00 	lds	r24, 0x0062
+ 112:	81 50       	subi	r24, 0x01	; 1
+ 114:	80 93 62 00 	sts	0x0062, r24
+sei();
+ 118:	78 94       	sei
+return data;
+}
+ 11a:	8e 2f       	mov	r24, r30
+ 11c:	08 95       	ret
+
+0000011e <main>:
+#include <avr/io.h>
+#include <ws_adc_port.h>
+
+int main(void)
+{
+	DDRB=0xFF;
+ 11e:	8f ef       	ldi	r24, 0xFF	; 255
+ 120:	87 bb       	out	0x17, r24	; 23
+void adcInit(void)
+{
+#if (ADC_MODE==2)	//8bit模式下，对ADLAR初始化。
+	ADMUX=(1<<REFS0); //参考电压使用AVCC，结果右对齐，通道为ADC0
+#else
+	ADMUX=(1<<REFS0)|(1<<ADLAR); //参考电压使用AVCC，结果默认左对齐，通道为ADC0
+ 122:	80 e6       	ldi	r24, 0x60	; 96
+ 124:	87 b9       	out	0x07, r24	; 7
+#endif
+ADCSRA=(1<<ADEN)|(1<<ADSC)|(1<<ADATE)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1); //连续转换模式，中断时能，64分频
+ 126:	8e ee       	ldi	r24, 0xEE	; 238
+ 128:	86 b9       	out	0x06, r24	; 6
+asm("SEI");
+ 12a:	78 94       	sei
+*-------------------------------------------------------------------------------------------------------
+*/
+adc_uint_t getADC(void)
+{
+adc_uint_t data;
+while(!adc_counter);
+ 12c:	80 91 62 00 	lds	r24, 0x0062
+ 130:	88 23       	and	r24, r24
+ 132:	e1 f3       	breq	.-8      	; 0x12c <main+0xe>
+data=adc_buffer[adc_rd_index];	/*从缓冲器读取数据*/
+ 134:	e0 91 61 00 	lds	r30, 0x0061
+ 138:	f0 e0       	ldi	r31, 0x00	; 0
+ 13a:	ed 59       	subi	r30, 0x9D	; 157
+ 13c:	ff 4f       	sbci	r31, 0xFF	; 255
+ 13e:	e0 81       	ld	r30, Z
+if (++adc_rd_index == ADC_BUFFER_SIZE) adc_rd_index=0;	
+ 140:	80 91 61 00 	lds	r24, 0x0061
+ 144:	8f 5f       	subi	r24, 0xFF	; 255
+ 146:	80 93 61 00 	sts	0x0061, r24
+ 14a:	80 91 61 00 	lds	r24, 0x0061
+ 14e:	80 31       	cpi	r24, 0x10	; 16
+ 150:	11 f4       	brne	.+4      	; 0x156 <main+0x38>
+ 152:	10 92 61 00 	sts	0x0061, r1
+cli();
+ 156:	f8 94       	cli
+--adc_counter;
+ 158:	80 91 62 00 	lds	r24, 0x0062
+ 15c:	81 50       	subi	r24, 0x01	; 1
+ 15e:	80 93 62 00 	sts	0x0062, r24
+sei();
+ 162:	78 94       	sei
+	adcInit();
+	while(1)
+	{
+		PORTB=getADC();
+ 164:	e8 bb       	out	0x18, r30	; 24
+ 166:	e2 cf       	rjmp	.-60     	; 0x12c <main+0xe>
+
+00000168 <_exit>:
+ 168:	f8 94       	cli
+
+0000016a <__stop_program>:
+ 16a:	ff cf       	rjmp	.-2      	; 0x16a <__stop_program>

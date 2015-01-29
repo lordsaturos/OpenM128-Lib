@@ -1,0 +1,94 @@
+#include <iot2313v.h>
+#include <macros.h>
+
+typedef unsigned char	uint8;
+typedef unsigned int	uint16;
+typedef signed  char	sint8;
+typedef signed	int		sint16;
+
+#define sbi(io,bit)		(  io |=  (1<<bit) )	//example: sbi(PORTA,0);sbi(DDRA,0);
+#define cbi(io,bit)		(  io &= ~(1<<bit) )	//example: cbi(PORTA,0);cbi(DDRA,0);
+#define gbi(pin ,bit)	( pin &   (1<<bit) )	//example: gbi(PINA,0);
+
+#define DATA_DDR   DDRB
+#define DATA_PORT  PORTB
+
+#define IN_RD_EN    cbi(DDRD,3)      //PD3
+#define SET_RD_EN   sbi(PORTD,3)
+#define GET_RD_EN   gbi(PIND,3)
+
+#define IN_WR_EN    cbi(DDRD,2)      //PD2
+#define SET_WR_EN   sbi(PORTD,2)
+#define GET_WR_EN   gbi(PIND,2)
+
+#define IN_RXF      cbi(DDRD,0)      //PD0
+#define SET_RXF     sbi(PORTD,0)
+#define GET_RXF     gbi(PIND,0)
+
+#define IN_TXE      cbi(DDRD,1)      //PD1
+#define SET_TXE     sbi(PORTD,1)
+#define GET_TXE     gbi(PIND,1)
+
+#define OUT_RD      sbi(DDRD,4)      //PD4
+#define RD_ON       sbi(PORTD,4)
+#define RD_OFF      cbi(PORTD,4)
+
+#define OUT_WR      sbi(DDRD,5)      //PD5
+#define WR_ON       sbi(PORTD,5)
+#define WR_OFF      cbi(PORTD,5)
+
+void delay50us(sint16 t)
+{
+    uint8 j;		
+    for(;t>0;t--)			
+        for(j=0;j<70;j++)	
+            ;
+}
+
+void delay50ms(sint16 t)
+{
+	uint16 i; 
+	for(;t>0;t--)
+		for(i=0;i<52642;i++)
+			; 
+}
+
+void write_to_ft245()
+{
+    DATA_PORT++;
+    delay50ms(10);
+    WR_OFF;
+    delay50us(10);
+    WR_ON;
+    delay50us(10);
+}
+
+void read_from_ft245()
+{
+    RD_OFF;
+    delay50us(10);
+    RD_ON;
+    delay50us(10);
+}
+
+void main()
+{
+    uint8 i,j;
+
+    DATA_DDR=0XFF;	
+    OUT_WR;		
+    OUT_RD;		
+    IN_WR_EN;		
+    IN_RD_EN;		
+
+    while(1)
+    {
+        SET_WR_EN;	
+        if(!GET_WR_EN)	
+            write_to_ft245();
+
+        SET_RD_EN;
+        if(!GET_RD_EN)	
+            read_from_ft245();
+    }  
+}

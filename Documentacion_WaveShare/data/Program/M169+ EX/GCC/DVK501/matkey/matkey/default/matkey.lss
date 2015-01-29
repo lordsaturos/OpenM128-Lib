@@ -1,0 +1,187 @@
+
+matkey.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000008  00800100  000000f2  00000166  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000000f2  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .debug_aranges 00000020  00000000  00000000  0000016e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 00000041  00000000  00000000  0000018e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000124  00000000  00000000  000001cf  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 000000d4  00000000  00000000  000002f3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000154  00000000  00000000  000003c7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000030  00000000  00000000  0000051c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    000000ad  00000000  00000000  0000054c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    0000005a  00000000  00000000  000005f9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2e 00 	jmp	0x5c	; 0x5c <__ctors_end>
+   4:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+   8:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+   c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  10:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  14:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  18:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  1c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  20:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  24:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  28:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  2c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  30:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  34:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  38:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  3c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  40:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  44:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  48:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  4c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  50:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  54:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+  58:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
+
+0000005c <__ctors_end>:
+  5c:	11 24       	eor	r1, r1
+  5e:	1f be       	out	0x3f, r1	; 63
+  60:	cf ef       	ldi	r28, 0xFF	; 255
+  62:	d4 e0       	ldi	r29, 0x04	; 4
+  64:	de bf       	out	0x3e, r29	; 62
+  66:	cd bf       	out	0x3d, r28	; 61
+
+00000068 <__do_copy_data>:
+  68:	11 e0       	ldi	r17, 0x01	; 1
+  6a:	a0 e0       	ldi	r26, 0x00	; 0
+  6c:	b1 e0       	ldi	r27, 0x01	; 1
+  6e:	e2 ef       	ldi	r30, 0xF2	; 242
+  70:	f0 e0       	ldi	r31, 0x00	; 0
+  72:	02 c0       	rjmp	.+4      	; 0x78 <.do_copy_data_start>
+
+00000074 <.do_copy_data_loop>:
+  74:	05 90       	lpm	r0, Z+
+  76:	0d 92       	st	X+, r0
+
+00000078 <.do_copy_data_start>:
+  78:	a8 30       	cpi	r26, 0x08	; 8
+  7a:	b1 07       	cpc	r27, r17
+  7c:	d9 f7       	brne	.-10     	; 0x74 <.do_copy_data_loop>
+  7e:	0e 94 6d 00 	call	0xda	; 0xda <main>
+  82:	0c 94 77 00 	jmp	0xee	; 0xee <_exit>
+
+00000086 <__bad_interrupt>:
+  86:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000008a <getKeyVal>:
+const uint8_t getSta_[4]={0x70,0xb0,0xd0,0xe0};  
+
+uint8_t getKeyVal()
+{
+    uint8_t i,j,getSta,keyVal;
+	MATKEY_PORT=0xFF;
+  8a:	8f ef       	ldi	r24, 0xFF	; 255
+  8c:	82 b9       	out	0x02, r24	; 2
+    MATKEY_DDR=0x0F;
+  8e:	8f e0       	ldi	r24, 0x0F	; 15
+  90:	81 b9       	out	0x01, r24	; 1
+  92:	20 e0       	ldi	r18, 0x00	; 0
+  94:	30 e0       	ldi	r19, 0x00	; 0
+    for(i=0;i<4;i++)              
+    {               			
+        MATKEY_PORT = setSta_[i];
+  96:	f9 01       	movw	r30, r18
+  98:	e0 50       	subi	r30, 0x00	; 0
+  9a:	ff 4f       	sbci	r31, 0xFF	; 255
+  9c:	90 81       	ld	r25, Z
+  9e:	92 b9       	out	0x02, r25	; 2
+        if(MATKEY_PIN!=setSta_[i])
+  a0:	80 b1       	in	r24, 0x00	; 0
+  a2:	89 17       	cp	r24, r25
+  a4:	99 f0       	breq	.+38     	; 0xcc <getKeyVal+0x42>
+        {
+            getSta=MATKEY_PIN&0xf0;
+  a6:	40 b1       	in	r20, 0x00	; 0
+  a8:	40 7f       	andi	r20, 0xF0	; 240
+  aa:	e4 e0       	ldi	r30, 0x04	; 4
+  ac:	f1 e0       	ldi	r31, 0x01	; 1
+  ae:	90 e0       	ldi	r25, 0x00	; 0
+            for(j=0;j<4;j++)    
+                if(getSta==getSta_[j])                                 
+  b0:	80 81       	ld	r24, Z
+  b2:	48 17       	cp	r20, r24
+  b4:	39 f4       	brne	.+14     	; 0xc4 <getKeyVal+0x3a>
+            	{
+                    keyVal=j+i*4;
+  b6:	22 0f       	add	r18, r18
+  b8:	33 1f       	adc	r19, r19
+  ba:	22 0f       	add	r18, r18
+  bc:	33 1f       	adc	r19, r19
+  be:	89 2f       	mov	r24, r25
+  c0:	82 0f       	add	r24, r18
+  c2:	08 95       	ret
+    {               			
+        MATKEY_PORT = setSta_[i];
+        if(MATKEY_PIN!=setSta_[i])
+        {
+            getSta=MATKEY_PIN&0xf0;
+            for(j=0;j<4;j++)    
+  c4:	9f 5f       	subi	r25, 0xFF	; 255
+  c6:	31 96       	adiw	r30, 0x01	; 1
+  c8:	94 30       	cpi	r25, 0x04	; 4
+  ca:	91 f7       	brne	.-28     	; 0xb0 <getKeyVal+0x26>
+  cc:	2f 5f       	subi	r18, 0xFF	; 255
+  ce:	3f 4f       	sbci	r19, 0xFF	; 255
+uint8_t getKeyVal()
+{
+    uint8_t i,j,getSta,keyVal;
+	MATKEY_PORT=0xFF;
+    MATKEY_DDR=0x0F;
+    for(i=0;i<4;i++)              
+  d0:	24 30       	cpi	r18, 0x04	; 4
+  d2:	31 05       	cpc	r19, r1
+  d4:	01 f7       	brne	.-64     	; 0x96 <getKeyVal+0xc>
+  d6:	8f ef       	ldi	r24, 0xFF	; 255
+                    return keyVal;
+            	}
+        }
+    }
+    return 0xFF;
+}
+  d8:	08 95       	ret
+
+000000da <main>:
+#include <ws_matkey_port.h>
+
+int main(void)
+{
+	uint8_t tmp;
+	DDRB=0xFF;
+  da:	8f ef       	ldi	r24, 0xFF	; 255
+  dc:	84 b9       	out	0x04, r24	; 4
+	while(1)
+	{
+		tmp=getKeyVal();
+  de:	0e 94 45 00 	call	0x8a	; 0x8a <getKeyVal>
+		if(tmp==0xFF) PORTB=0x00;
+  e2:	8f 3f       	cpi	r24, 0xFF	; 255
+  e4:	11 f4       	brne	.+4      	; 0xea <main+0x10>
+  e6:	15 b8       	out	0x05, r1	; 5
+  e8:	fa cf       	rjmp	.-12     	; 0xde <main+0x4>
+		else PORTB=tmp;
+  ea:	85 b9       	out	0x05, r24	; 5
+  ec:	f8 cf       	rjmp	.-16     	; 0xde <main+0x4>
+
+000000ee <_exit>:
+  ee:	f8 94       	cli
+
+000000f0 <__stop_program>:
+  f0:	ff cf       	rjmp	.-2      	; 0xf0 <__stop_program>

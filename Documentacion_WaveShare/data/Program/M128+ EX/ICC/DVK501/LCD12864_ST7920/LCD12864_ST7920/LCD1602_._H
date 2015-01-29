@@ -1,0 +1,638 @@
+/*********************************************************************
+	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+	                                                        
+目    的:   建立LCD1602的4位数据模式操作库
+
+目标系统:   基于AVR单片机
+	                                                                
+应用软件:   ICCAVR                                               
+	                                                                
+版    本:   Version 1.0
+	                                                                
+圆版时间:   2004-08-25
+
+开发人员:   SEE
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权 
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+	版    本:   Version 1.1
+	圆版时间:   2005-03-25
+
+----------------------------------------------------------------------
+入口参数说明：
+
+    /* control port */
+    #define SET_RS  sbi(PORTB,5)
+    #define CLR_RS  cbi(PORTB,5)
+    #define OUT_RS  sbi(DDRB,5)
+    
+    #define SET_RW  sbi(PORTB,6)
+    #define CLR_RW  cbi(PORTB,6)
+    #define OUT_RW  sbi(DDRB,6)
+    
+    #define SET_E   sbi(PORTB,7)
+    #define CLR_E   cbi(PORTB,7)
+    #define OUT_E   sbi(DDRB,7)
+    
+    /* data port */
+    #define SET_D4  sbi(PORTD,4)
+    #define CLR_D4  cbi(PORTD,4)
+    #define OUT_D4  sbi(DDRD,4)
+    
+    #define SET_D5  sbi(PORTD,5)
+    #define CLR_D5  cbi(PORTD,5)
+    #define OUT_D5  sbi(DDRD,5)
+    
+    #define SET_D6  sbi(PORTD,6)
+    #define CLR_D6  cbi(PORTD,6)
+    #define OUT_D6  sbi(DDRD,6)
+    
+    #define SET_D7  sbi(PORTD,7)
+    #define CLR_D7  cbi(PORTD,7)
+    #define OUT_D7  sbi(DDRD,7)
+    
+    /* busy port */
+    #define GET_BF	gbi(PIND,7)
+    #define OUT_BF	sbi(DDRD,7)
+    #define IN_BF	cbi(DDRD,7)
+
+----------------------------------------------------------------------
+待定参数说明：
+	#define DELAY()		{_nop_();_nop_();_nop_();}
+
+----------------------------------------------------------------------	
+对外变量说明：
+
+----------------------------------------------------------------------
+对外函数说明：
+
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+/*--------------------------------------------------------------------
+接口定义：
+
+LCD1602				ATmega16
+1.GND		--------	GND
+2.VCC		--------	VCC
+3.V0		--------	V0
+4.RS		--------	由外部程序定义
+5.R/W		--------	由外部程序定义
+6.E		--------	由外部程序定义
+7.D0		--------	NC
+8.D1		--------	NC
+9.D2		--------	NC
+10.D3		--------	NC
+11.D4		--------	由外部程序定义
+12.D5		--------	由外部程序定义
+13.D6		--------	由外部程序定义
+14.D7		--------	由外部程序定义
+15.LED+		--------	VCC
+16.LED-		--------	GND
+
+说明：
+（1）使用ATmega16的7根IO口操作LCD1602
+（2）该程序的优点是：7根IO可任意定义，不需分布在固定的一组PORT口上
+（3）该程序的缺点是：IO定义的写法较为繁琐
+--------------------------------------------------------------------*/
+
+#ifndef LCD1602_H
+#define LCD1602_H
+
+#include "D:\ICC_H\CmmICC.H"
+
+/* 待定参数 */
+#define DELAY()		{NOP();NOP();NOP();NOP();NOP();NOP();NOP();NOP();}
+
+/* 不考虑移植性的写法 */
+//uint8 bdata bdat;
+//sbit bdat0=bdat^0;
+//sbit bdat1=bdat^1;
+//sbit bdat2=bdat^2;
+//sbit bdat3=bdat^3;
+//sbit bdat4=bdat^4;
+//sbit bdat5=bdat^5;
+//sbit bdat6=bdat^6;
+//sbit bdat7=bdat^7;
+/* 考虑移植性的写法 */
+uint8 bdat;
+#define bdat0 (bdat&0x01)
+#define bdat1 (bdat&0x02)
+#define bdat2 (bdat&0x04)
+#define bdat3 (bdat&0x08)
+#define bdat4 (bdat&0x10)
+#define bdat5 (bdat&0x20)
+#define bdat6 (bdat&0x40)
+#define bdat7 (bdat&0x80)
+
+#define CGRAM0 0x00
+#define CGRAM1 0x01
+#define CGRAM2 0x02
+#define CGRAM3 0x03
+#define CGRAM4 0x04
+#define CGRAM5 0x05
+#define CGRAM6 0x06
+#define CGRAM7 0x07
+
+#define TRUE	1
+#define FALSE	0
+bool LCD1602Err = FALSE;
+
+/*--------------------------------------------------------------------
+函数名称：LCD1602读读读读读忙～
+函数功能：都说是读读读读读忙咯～
+注意事项：对于高速CPU，应加延时，好像是废话～
+提示说明：无
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+void busy(void)
+{
+	uint16 busyCounter=0;
+	bool busySta;		//用于探测 lcd busy status
+	IN_BF;
+	SET_D4;
+	SET_D5;
+	SET_D6;
+	SET_D7;
+	DELAY();
+	CLR_RS;
+	DELAY();
+	SET_RW;
+	DELAY();
+
+	do
+	{
+		SET_E;   
+		DELAY();
+/* 这里读取AC4-AC6位及BF的值，程序不需记录AC4-AC6的值，所以不存储 */
+		busySta=(bool)GET_BF;  
+		CLR_E;
+		DELAY(); 
+/* 读取 "BUSY"时，"D4-D7"状态可能已经改变，必须再次设为输出"1" */
+		SET_D4;
+		SET_D5;
+		SET_D6;
+		SET_D7;
+		DELAY();
+		SET_E;   
+		DELAY();
+/* 这里读取AC0-AC3位的值，程序不需记录AC0-AC3的值，所以不存储 */
+		CLR_E;   
+		DELAY();
+		if(busyCounter==1000)
+		{
+			LCD1602Err=TRUE;	//标识LCD1602错误，方便上缴系统报错
+			return ;			//避免由于LCD1602错误而导致程序阻塞
+		}
+		busyCounter++;
+	}
+	while(busySta);
+
+	LCD1602Err=FALSE;
+	CLR_E;
+	OUT_BF;
+}
+/*--------------------------------------------------------------------
+函数名称：LCD1602写操作
+函数功能：
+注意事项：对于高速CPU，应加延时，好像是废话～
+提示说明：无
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+void write(bool flag,uint8 dat)	//flag=0:command,flag=1:data
+{  
+	bdat=dat;
+	busy();
+	if(flag)
+		SET_RS;
+	else
+		CLR_RS;
+	DELAY();
+	CLR_RW;
+	DELAY();
+	if(bdat4)
+		SET_D4;
+	else
+		CLR_D4;
+	if(bdat5)
+		SET_D5;
+	else
+		CLR_D5;
+	if(bdat6)
+		SET_D6;
+	else
+		CLR_D6;
+	if(bdat7)
+		SET_D7;
+	else
+		CLR_D7;
+	DELAY();
+	SET_E;	
+	DELAY();
+	CLR_E;
+	DELAY(); 
+
+	if(bdat0)
+		SET_D4;
+	else
+		CLR_D4;
+	if(bdat1)
+		SET_D5;
+	else
+		CLR_D5;
+	if(bdat2)
+		SET_D6;
+	else
+		CLR_D6;
+	if(bdat3)
+		SET_D7;
+	else
+		CLR_D7;
+	DELAY();
+	SET_E;		
+	DELAY();
+	CLR_E;
+	DELAY();
+}
+/*--------------------------------------------------------------------
+函数名称：LCD1602读操作
+函数功能：
+注意事项：对于高速CPU，应加延时，好像是废话～
+提示说明：无
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+//void read(uint8 adr)
+//{	
+//}
+/*--------------------------------------------------------------------
+函数名称：LCD1602设置CGRAM内容
+函数功能：
+注意事项：对于高速CPU，应加延时，好像是废话～
+提示说明：调用LCD1602_setCG(0,userCh)，则写入用户定义的字符"userCh"
+输    入："adr"数据范围:0-8，"buf"为用户需要写入的字符"userCh"
+返    回：无
+--------------------------------------------------------------------*/
+void LCD1602_setCGRAM(uint8 adr,const uint8 buf[8])
+{	
+	uint8 i;
+	write(0,0x40+adr*8);
+	for(i=0;i<8;i++)
+		write(1,buf[i]);
+/* 不得采样下面写法，因为传入的是数组，最后一个不是'\0' */
+	//while(*buf)
+		//write(1,*buf++);
+}
+/*--------------------------------------------------------------------
+函数名称：LCD1602命令设置
+函数功能：
+注意事项：对于高速CPU，应加延时，好像是废话～
+提示说明：
+输    入："CLR_SCR"/"GO_HOME"/"AC_INC"/"AC_DEC"...
+返    回：无
+--------------------------------------------------------------------*/
+//----	function  ------  1  --------  0  ----LcdWordPos--
+//		dispEn		|   Enable	|  Disable	|	bit2
+//		cursorEn	|   Enable	|  Disable	|	bit1
+//		blinkEn		|   Enable	|  Disable	|	bit0
+//------------------------------------------------------
+//		isACinc		|	INC_AC  |  DEC_AC	|	bit1
+//		shiftEn		|   Enable	|  Disable	|	bit0
+//------------------------------------------------------
+void LCD1602_setCmd(uint8  *str)
+{
+	static bool dispEn  =0;
+	static bool cursorEn=0;
+	static bool blinkEn =0;
+	static bool shiftEn =0;
+	static bool isACinc =0;
+	
+	if(!strcmp(str,"CLR_SCR"))			//clear screen
+		write(0,0x01);
+
+	else if(!strcmp(str,"GO_HOME"))		//set AC go home
+		write(0,0x02);
+/*--------------------------------------------------
+isACinc & shiftEn 共用一个命令设置
+--------------------------------------------------*/
+	else if(!strcmp(str,"INC_AC"))		//set AC as inc mode
+	{
+		isACinc=1;
+		if(shiftEn)
+			write(0,0x07);
+		else 
+			write(0,0x06);
+	}		
+	else if(!strcmp(str,"DEC_AC"))		//set AC as dec mode
+	{	
+		isACinc=0;
+		if(shiftEn)
+			write(0,0x05);
+		else
+			write(0,0x04);
+	}		
+	else if(!strcmp(str,"EN_SHIFT"))	//enable shift
+	{
+		shiftEn=1;
+		if(isACinc)
+			write(0,0x07);
+		else
+			write(0,0x06);
+	}
+	else if(!strcmp(str,"DIS_SHIFT"))	//disable shift
+	{
+		shiftEn=0;
+		if(isACinc)
+			write(0,0x05);
+		else
+			write(0,0x04);
+	}	
+/*--------------------------------------------------
+dispEn & cursorEn & blinkEn共用一个命令设置
+--------------------------------------------------*/
+	else if(!strcmp(str,"OPEN_LCD"))	//opern lcd
+	{
+		dispEn=1;
+		if(cursorEn)
+			if(blinkEn)
+				write(0,0x0F);
+			else
+				write(0,0x0E);
+		else
+			if(blinkEn)
+				write(0,0x0D);
+			else
+				write(0,0x0C);
+	}		
+	else if(!strcmp(str,"CLOSE_LCD"))	//close lcd
+	{
+		dispEn=0;
+		if(cursorEn)
+			if(blinkEn)
+				write(0,0x0B);
+			else
+				write(0,0x0A);
+		else
+			if(blinkEn)
+				write(0,0x09);
+			else
+				write(0,0x08);
+	}	
+	else if(!strcmp(str,"OPEN_CURS"))	//open cursor	
+	{
+		cursorEn=1;
+		if(dispEn)
+			if(blinkEn)
+				write(0,0x0F);
+			else
+				write(0,0x0E);
+		else
+			if(blinkEn)
+				write(0,0x0B);
+			else
+				write(0,0x0A);
+	}	
+	else if(!strcmp(str,"CLOSE_CURS"))	//close cursor
+	{
+		cursorEn=0;
+		if(dispEn)
+			if(blinkEn)
+				write(0,0x0D);
+			else
+				write(0,0x0C);
+		else
+			if(blinkEn)
+				write(0,0x09);
+			else
+				write(0,0x08);
+	}
+	else if(!strcmp(str,"EN_BLINK"))	//enable blink cursor
+	{
+		blinkEn=1;
+		if(dispEn)
+			if(cursorEn)
+				write(0,0x0F);
+			else
+				write(0,0x0D);
+		else
+			if(cursorEn)
+				write(0,0x0B);
+			else
+				write(0,0x09);
+	}
+	else if(!strcmp(str,"DIS_BLINK"))	//disable blink cursor
+	{
+		blinkEn=0;
+		if(dispEn)
+			if(cursorEn)
+				write(0,0x0E);
+			else
+				write(0,0x0C);
+		else
+			if(cursorEn)
+				write(0,0x0A);
+			else
+				write(0,0x08);
+	}
+/*--------------------------------------------------
+dispEn & cursorEn & blinkEn共用一个命令设置
+--------------------------------------------------*/
+	else if(!strcmp(str,"RIGHT_SCR"))	//right shift screen
+		write(0,0x1c);
+	else if(!strcmp(str,"LEFT_SCR"))	//left shift screen
+		write(0,0x18);
+	else if(!strcmp(str,"RIGHT_CURS"))	//right shift cursor
+		write(0,0x14);
+	else if(!strcmp(str,"LEFT_CURS"))	//left shift cursor
+		write(0,0x10);
+}
+/*--------------------------------------------------------------------
+函数名称：LCD1602初始化
+函数功能：
+注意事项：
+提示说明：无
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+void LCD1602_init(void)
+{   
+	OUT_RS;
+	OUT_RW;
+	OUT_E;
+	OUT_D4;
+	OUT_D5;
+	OUT_D6;
+	OUT_D7;
+	delay50ms(1);
+
+	CLR_D7;
+	CLR_D6;
+	SET_D5;
+	SET_D4;
+	DELAY();
+	CLR_RS;
+	DELAY();
+	CLR_RW;         				
+
+	SET_E;
+	DELAY();
+	CLR_E;
+	delay50us(200);		
+	SET_E;
+	DELAY();
+	CLR_E;
+	delay50us(200);	
+	SET_E;
+	DELAY();
+	CLR_E;
+	delay50us(200);	
+	
+	CLR_D7;
+	CLR_D6;
+	SET_D5;
+	CLR_D4;
+	DELAY();
+	SET_E;
+	DELAY();
+	CLR_E;		       			
+	DELAY();
+	LCD1602_setCmd("OPEN_LCD");
+	LCD1602_setCmd("CLR_SCR");
+	LCD1602_setCmd("INC_AC");
+	//LCD1602_setCmd("OPEN_CURS");
+	//LCD1602_setCmd("GO_HOME");
+}
+/*--------------------------------------------------------------------
+  宏名称：设置AC值
+  宏功能：设置AC值啦
+注意事项：
+提示说明：
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+#define LCD1602_setAC(adr) write(0,adr)
+/*--------------------------------------------------------------------
+函数名称：输出一个字符
+函数功能：
+注意事项：对于高速CPU，应加延时，好像是废话～
+提示说明：调用LCD1602_putc(0x80,'A')，则在第一行第一个字符处输出'A'
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+void LCD1602_putc(uint8 adr,uint8 ch)
+{
+	write(0,adr);
+	write(1,ch);
+}
+/*--------------------------------------------------------------------
+函数名称：输出一个字符串
+函数功能：
+注意事项：无
+提示说明：调用LCD1602_puts(0x80,"waveShare")，则从第一行第一个位置开始输出"waveShare"
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+void LCD1602_puts(uint8 startAdr,uint8 *str)
+{
+	/*
+	while(*str)
+	{
+		LCD1602_putc(addr++,*str++);
+	}
+	*/
+	//LCD1602_setCmd("AC++");
+	write(0,startAdr);
+	while(*str)
+		write(1,*str++);
+}
+/*--------------------------------------------------------------------
+函数名称：输出一个数值（带0）
+函数功能：有时候你可能不是需要"123"，而是需要"00123"吧
+注意事项：无
+提示说明：调用LCD1602_putd0(0x8F,123,5)，则从0x8B开始到0X8F输出"00123"
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+//for example:dat=123,length=6,output 000123 
+void LCD1602_putd0(uint8 endAdr,uint32 dat,uint8 length)
+{
+	sint8 i;
+	speaData(dat,length);
+	//LCD1602_setCmd("AC++");
+	write(0,endAdr-length+1);
+	for(i=length-1;i>=0;i--)
+		write(1,dataElem[i]+0x30);
+}
+/*--------------------------------------------------------------------
+函数名称：输出一个数值（不带0）
+函数功能：
+注意事项：无
+提示说明：调用LCD1602_putd(0x8F,123,5)，则从0x8B开始到0X8F输出"  123"
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+void LCD1602_putd(uint8 endAdr,uint32 dat,uint8 length)
+{
+	sint8 i;
+	sint8 effectLen;
+	if(dat>999999)
+ 		effectLen=7;
+	else if(dat>99999)
+ 		effectLen=6;
+	else if(dat>9999)
+ 		effectLen=5;
+	else if(dat>999)
+ 		effectLen=4;
+	else if(dat>99)
+ 		effectLen=3;
+	else if(dat>9)
+ 		effectLen=2;
+	else
+ 		effectLen=1;
+	speaData(dat,effectLen);
+	//LCD1602_setCmd("AC++");
+	if(length>effectLen)
+	{
+		write(0,endAdr-length+1);
+		for(i=length-effectLen-1;i>=0;i--)
+			write(1,' ');
+	}
+	for(i=effectLen-1;i>=0;i--)
+	{
+		if(i==0||dataElem[i])
+		{
+			write(0,endAdr-i);
+			for(;i>=0;i--)
+				write(1,dataElem[i]+0x30);
+		}
+	}
+}
+/*--------------------------------------------------------------------
+函数名称：输出一个混合串
+函数功能：
+注意事项：最好不要加载这个函数，因为它将占用将近1K空间
+提示说明：调用LCD1602_sprintf(0x8F,12AB,4)，则从0x8B开始到0X8F输出"12ABok"
+输    入：
+返    回：无
+--------------------------------------------------------------------*/
+//void LCD1602_sprintf(uint8 startAdr,uint32 dat,uint8 length)
+//{
+//	/* clear the display area first here! */
+//	//LCD1602_puts(addr,"      ");
+//	sprintf(t,"%luok",dat);
+//	//LCD1602_setCmd("AC++");
+//	LCD1602_puts(addr,t);
+//}
+
+#endif
+
+
+

@@ -1,0 +1,1535 @@
+                        .module PCF8591.C
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ..\..\..\STK162~1.0\PCF859~1\PCF8591\PCF8591.C
+ 0000                   .dbfile D:\ICC_H\Software.H
+ 0000                   .dbfunc e speaData _speaData fV
+ 0000           ;              y -> y+4
+ 0000           ;              j -> y+0
+ 0000           ;              i -> R10
+ 0000           ;            len -> R12
+ 0000           ;            dat -> y+16
+                        .even
+ 0000           _speaData::
+ 0000 0E940000          xcall push_arg4
+ 0004 0E940000          xcall push_xgsetF03C
+ 0008 2897              sbiw R28,8
+ 000A CC88              ldd R12,y+20
+ 000C                   .dbline -1
+ 000C                   .dbline 116
+ 000C           ; /*********************************************************************
+ 000C           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 000C           ;                                                                       
+ 000C           ; 目    的:   建立AVR的软件提取库，增加各类补丁，方便系统程序移植
+ 000C           ;       
+ 000C           ; 目标系统:   基于AVR单片机
+ 000C           ;                                                                               
+ 000C           ; 应用软件:   ICCAVR
+ 000C           ;                                                                               
+ 000C           ; 版    本:   Version 1.0                                                       
+ 000C           ;                                                                               
+ 000C           ; 圆版时间:   2005-06-25
+ 000C           ;       
+ 000C           ; 开发人员:   SEE
+ 000C           ; 
+ 000C           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 000C           ;       
+ 000C           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 000C           ; *********************************************************************/
+ 000C           ; 
+ 000C           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 版本更新记录：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 入口参数说明：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 待定参数说明：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------        
+ 000C           ; 对外变量说明：
+ 000C           ;     
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 对外函数说明：
+ 000C           ;    
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 000C           ; 
+ 000C           ; #ifndef Software_H
+ 000C           ; #define Software_H
+ 000C           ; 
+ 000C           ; #include <math.h>
+ 000C           ; #include <string.h>
+ 000C           ; 
+ 000C           ; /* 兼容一般程序员的常用写法 */
+ 000C           ; typedef unsigned char uchar;
+ 000C           ; typedef unsigned int  uint;
+ 000C           ; typedef unsigned long ulong;
+ 000C           ; typedef signed char           schar;
+ 000C           ; typedef signed int            sint;
+ 000C           ; typedef signed long           slong;
+ 000C           ; 
+ 000C           ; /* 为方便移植，建议使用下面写法 */
+ 000C           ; typedef unsigned char bool;
+ 000C           ; typedef unsigned char uint8;
+ 000C           ; typedef unsigned int  uint16;
+ 000C           ; typedef unsigned long   uint32;
+ 000C           ; typedef signed  char  sint8;
+ 000C           ; typedef signed        int             sint16;
+ 000C           ; typedef signed        long    sint32;
+ 000C           ; typedef signed  char  int8;
+ 000C           ; typedef signed  int           int16;
+ 000C           ; typedef signed  long  int32;
+ 000C           ; 
+ 000C           ; /* 下面写法一般不推荐 */
+ 000C           ; //typedef unsigned char ubyte;
+ 000C           ; //typedef unsigned int        uword;
+ 000C           ; //typedef unsigned long udword;
+ 000C           ; //typedef signed   char       sbyte;
+ 000C           ; //typedef signed   int        sword;
+ 000C           ; //typedef signed   long       sdword;
+ 000C           ; 
+ 000C           ; /* 一般程序定义的默认值 */
+ 000C           ; //#define NULL                        0
+ 000C           ; //#define EOF                 -1
+ 000C           ; //#define TRUE                1
+ 000C           ; //#define FALSE               0
+ 000C           ; //#define YES                 1
+ 000C           ; //#define NO                          0
+ 000C           ; //#define ON                  1
+ 000C           ; //#define OFF                 0
+ 000C           ; //#define ENABLE              1
+ 000C           ; //#define DISABLE             0
+ 000C           ; //#define CRR                 1
+ 000C           ; //#define ERR                 0
+ 000C           ; //#define RIGHT                       1
+ 000C           ; //#define WRONG                       0
+ 000C           ; //#define SUCCESS             1
+ 000C           ; //#define FAILURE             0
+ 000C           ; //#define PI                  3.1415926       //3.1415926535897932
+ 000C           ; 
+ 000C           ; /* 如果你手头上的RAM实在很紧，不如尝试下面的define～ */
+ 000C           ; //#define _CALLOC(a)          ( (a *)calloc(n,sizeof(a)) )
+ 000C           ; //#define _MALLOC(a)          ( (a *)malloc(sizeof(a)) )
+ 000C           ; //#define _MIN(a,b)                   ( (a) < (b) ? (a) : (b) )
+ 000C           ; //#define _MAX(a,b)                   ( (a) > (b) ? (a) : (b) )
+ 000C           ; //#define _EXCHANGE(a,b)      { int t; t=a; a=b; b=t; }
+ 000C           ; //#define _TOLOWER(c)         ( (c)+32 )
+ 000C           ; //#define _TOUPPER(c)         ( (c)-32 )
+ 000C           ; 
+ 000C           ; //#ifndef BIT
+ 000C           ; //#define BIT(x)      ( 1<<(x) )
+ 000C           ; //#endif
+ 000C           ; 
+ 000C           ; /*--------------------------------------------------------------------
+ 000C           ; 函数全称：数据拆字
+ 000C           ; 函数功能：
+ 000C           ; 注意事项：D<=999999,C<=6
+ 000C           ; 提示说明：调用speaData(12,2)，得到dataElem[0]=2，dataElem[1]=1
+ 000C           ; 输    入：
+ 000C           ; 返    回：无
+ 000C           ; --------------------------------------------------------------------*/
+ 000C           ; uint8 dataElem[6];
+ 000C           ; void speaData(uint32 dat,sint8 len)
+ 000C           ; {
+ 000C                   .dbline 119
+ 000C           ;     uint8 i;
+ 000C           ;     uint32 j,y;
+ 000C           ;     for(i=0,j=1;i<len;i++)
+ 000C AA24              clr R10
+ 000E 81E0              ldi R24,1
+ 0010 8883              std y+0,R24
+ 0012 80E0              ldi R24,0
+ 0014 8983              std y+1,R24
+ 0016 8A83              std y+2,R24
+ 0018 8B83              std y+3,R24
+ 001A 3CC0              xjmp L5
+ 001C           L2:
+ 001C                   .dbline 120
+ 001C           ;     {
+ 001C                   .dbline 121
+ 001C           ;         y=dat/j;
+ 001C 2880              ldd R2,y+0
+ 001E 3980              ldd R3,y+1
+ 0020 4A80              ldd R4,y+2
+ 0022 5B80              ldd R5,y+3
+ 0024 0889              ldd R16,y+16
+ 0026 1989              ldd R17,y+17
+ 0028 2A89              ldd R18,y+18
+ 002A 3B89              ldd R19,y+19
+ 002C 5A92              st -y,R5
+ 002E 4A92              st -y,R4
+ 0030 3A92              st -y,R3
+ 0032 2A92              st -y,R2
+ 0034 0E940000          xcall div32u
+ 0038 0C83              std y+4,R16
+ 003A 1D83              std y+5,R17
+ 003C 2E83              std y+6,R18
+ 003E 3F83              std y+7,R19
+ 0040                   .dbline 122
+ 0040           ;         dataElem[i]=y%10;
+ 0040 4AE0              ldi R20,10
+ 0042 50E0              ldi R21,0
+ 0044 60E0              ldi R22,0
+ 0046 70E0              ldi R23,0
+ 0048 0C81              ldd R16,y+4
+ 004A 1D81              ldd R17,y+5
+ 004C 2E81              ldd R18,y+6
+ 004E 3F81              ldd R19,y+7
+ 0050 7A93              st -y,R23
+ 0052 6A93              st -y,R22
+ 0054 5A93              st -y,R21
+ 0056 4A93              st -y,R20
+ 0058 0E940000          xcall mod32u
+ 005C 80E0              ldi R24,<_dataElem
+ 005E 90E0              ldi R25,>_dataElem
+ 0060 EA2D              mov R30,R10
+ 0062 FF27              clr R31
+ 0064 E80F              add R30,R24
+ 0066 F91F              adc R31,R25
+ 0068 0083              std z+0,R16
+ 006A                   .dbline 123
+ 006A           ;         j*=10;
+ 006A 2880              ldd R2,y+0
+ 006C 3980              ldd R3,y+1
+ 006E 4A80              ldd R4,y+2
+ 0070 5B80              ldd R5,y+3
+ 0072 4AE0              ldi R20,10
+ 0074 50E0              ldi R21,0
+ 0076 60E0              ldi R22,0
+ 0078 70E0              ldi R23,0
+ 007A 5A92              st -y,R5
+ 007C 4A92              st -y,R4
+ 007E 3A92              st -y,R3
+ 0080 2A92              st -y,R2
+ 0082 8A01              movw R16,R20
+ 0084 9B01              movw R18,R22
+ 0086 0E940000          xcall empy32u
+ 008A 0883              std y+0,R16
+ 008C 1983              std y+1,R17
+ 008E 2A83              std y+2,R18
+ 0090 3B83              std y+3,R19
+ 0092                   .dbline 124
+ 0092           ;     }
+ 0092           L3:
+ 0092                   .dbline 119
+ 0092 A394              inc R10
+ 0094           L5:
+ 0094                   .dbline 119
+ 0094 2C2C              mov R2,R12
+ 0096 3324              clr R3
+ 0098 27FC              sbrc R2,7
+ 009A 3094              com R3
+ 009C 4A2C              mov R4,R10
+ 009E 5524              clr R5
+ 00A0 4214              cp R4,R2
+ 00A2 5304              cpc R5,R3
+ 00A4 0CF4              brge X1
+ 00A6 BACF              xjmp L2
+ 00A8           X1:
+ 00A8           X0:
+ 00A8                   .dbline -2
+ 00A8           L1:
+ 00A8                   .dbline 0 ; func end
+ 00A8 2896              adiw R28,8
+ 00AA 0E940000          xcall pop_xgsetF03C
+ 00AE 2496              adiw R28,4
+ 00B0 0895              ret
+ 00B2                   .dbsym l y 4 l
+ 00B2                   .dbsym l j 0 l
+ 00B2                   .dbsym r i 10 c
+ 00B2                   .dbsym r len 12 C
+ 00B2                   .dbsym l dat 16 l
+ 00B2                   .dbend
+ 00B2                   .dbfile D:\ICC_H\Hardware.H
+ 00B2                   .dbfunc e delay50us _delay50us fV
+ 00B2           ;              j -> R20
+ 00B2           ;              t -> R16,R17
+                        .even
+ 00B2           _delay50us::
+ 00B2 4A93              st -y,R20
+ 00B4                   .dbline -1
+ 00B4                   .dbline 105
+ 00B4           ; /*********************************************************************
+ 00B4           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 00B4           ;                                                                       
+ 00B4           ; 目    的:   建立AVR的硬件提取库，增加各类补丁，方便移植
+ 00B4           ;                                       
+ 00B4           ; 目标系统:   基于AVR单片机
+ 00B4           ;                                                                               
+ 00B4           ; 应用软件:   ICCAVR
+ 00B4           ;                                                                               
+ 00B4           ; 版    本:   Version 1.0                                                          
+ 00B4           ;                                                                               
+ 00B4           ; 圆版时间:   2005-06-25
+ 00B4           ;       
+ 00B4           ; 开发人员:   SEE
+ 00B4           ; 
+ 00B4           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 00B4           ;       
+ 00B4           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 00B4           ; *********************************************************************/
+ 00B4           ; 
+ 00B4           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 版本更新记录：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 入口参数说明：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 待定参数说明：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------        
+ 00B4           ; 对外变量说明：
+ 00B4           ;     
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 对外函数说明：
+ 00B4           ;    
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 00B4           ; 
+ 00B4           ; #ifndef Hardware_H
+ 00B4           ; #define Hardware_H
+ 00B4           ; 
+ 00B4           ; #include <math.h>
+ 00B4           ; #include <string.h>
+ 00B4           ; #include <stdio.h>
+ 00B4           ; #include <macros.h>
+ 00B4           ; #include <eeprom.h>
+ 00B4           ; //#include <wdt.h>
+ 00B4           ; 
+ 00B4           ; /* TWI configs */
+ 00B4           ; //如使用ATMEGA162(没有TWI接口)之类的MCU，在加载Hardware.H前，务必加“#define NO_INCLUDE_I2C_H 1”语句
+ 00B4           ; #if NO_INCLUDE_I2C_H
+ 00B4           ; ;
+ 00B4           ; #else
+ 00B4           ; #include "D:\ICC_H\I2C.H"     //i2c即AVR的"twi"
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; /* hard configs */
+ 00B4           ; #ifndef flash
+ 00B4           ;       #define flash   const
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; #ifndef code
+ 00B4           ;       #define code    const
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; #ifndef NOP
+ 00B4           ;       #define NOP()   asm("nop")
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; /* io configs */
+ 00B4           ; #define sbi(io,bit)           (  io |=  (1<<bit) )    //example: sbi(PORTA,0);sbi(DDRA,0);
+ 00B4           ; #define cbi(io,bit)           (  io &= ~(1<<bit) )    //example: cbi(PORTA,0);cbi(DDRA,0);
+ 00B4           ; #define gbi(pin ,bit) ( pin &   (1<<bit) )    //example: gbi(PINA,0);
+ 00B4           ; 
+ 00B4           ; /* interrupt configs */
+ 00B4           ; #define DIS_INT  asm("sei")
+ 00B4           ; #define EN_INT   asm("cli")
+ 00B4           ; 
+ 00B4           ; /* wdt configs */
+ 00B4           ; #define WDT()    asm("wdr")
+ 00B4           ; 
+ 00B4           ; /* bit operation */
+ 00B4           ; //#ifndef BIT
+ 00B4           ; //#define BIT(x)      ( 1<<(x) )
+ 00B4           ; //#endif
+ 00B4           ; 
+ 00B4           ; /* USART configs for 4 Mhz crystal */
+ 00B4           ; //#define BAUD9600                    25
+ 00B4           ; //#define BAUD19000                   12
+ 00B4           ; //#define UART_TRAN_ON()      UCR |=  0x08
+ 00B4           ; //#define UART_TRAN_OFF()     UCR &= ~0x08
+ 00B4           ; //#define UART_RCV_ON()               UCR |=  0x10
+ 00B4           ; //#define UART_RCV_OFF()      UCR &= ~0x10
+ 00B4           ; 
+ 00B4           ; /*--------------------------------------------------------------------
+ 00B4           ; 函数全称：50us 延时
+ 00B4           ; 函数功能：当然是 50us延时 啦
+ 00B4           ; 注意事项：基于7.3728M晶振，稍微有点误差
+ 00B4           ; 提示说明：调用delay50us（20），得到1ms延时
+ 00B4           ; 输    入：    
+ 00B4           ; 返    回：无 
+ 00B4           ; --------------------------------------------------------------------*/
+ 00B4           ; void delay50us(sint16 t)
+ 00B4           ; {
+ 00B4                   .dbline 107
+ 00B4           ;     uint8 j;          
+ 00B4           ;     for(;t>0;t--)                     
+ 00B4 07C0              xjmp L10
+ 00B6           L7:
+ 00B6                   .dbline 108
+ 00B6           ;         for(j=0;j<70;j++)     
+ 00B6 4427              clr R20
+ 00B8 01C0              xjmp L14
+ 00BA           L11:
+ 00BA                   .dbline 109
+ 00BA           ;             ;
+ 00BA           L12:
+ 00BA                   .dbline 108
+ 00BA 4395              inc R20
+ 00BC           L14:
+ 00BC                   .dbline 108
+ 00BC 4634              cpi R20,70
+ 00BE E8F3              brlo L11
+ 00C0           X2:
+ 00C0           L8:
+ 00C0                   .dbline 107
+ 00C0 0150              subi R16,1
+ 00C2 1040              sbci R17,0
+ 00C4           L10:
+ 00C4                   .dbline 107
+ 00C4 2224              clr R2
+ 00C6 3324              clr R3
+ 00C8 2016              cp R2,R16
+ 00CA 3106              cpc R3,R17
+ 00CC A4F3              brlt L7
+ 00CE           X3:
+ 00CE                   .dbline -2
+ 00CE           L6:
+ 00CE                   .dbline 0 ; func end
+ 00CE 4991              ld R20,y+
+ 00D0 0895              ret
+ 00D2                   .dbsym r j 20 c
+ 00D2                   .dbsym r t 16 I
+ 00D2                   .dbend
+ 00D2                   .dbfunc e delay50ms _delay50ms fV
+ 00D2           ;              i -> R20,R21
+ 00D2           ;              t -> R16,R17
+                        .even
+ 00D2           _delay50ms::
+ 00D2 4A93              st -y,R20
+ 00D4 5A93              st -y,R21
+ 00D6                   .dbline -1
+ 00D6                   .dbline 120
+ 00D6           ; }
+ 00D6           ; /*--------------------------------------------------------------------
+ 00D6           ; 函数全称：50ms 延时
+ 00D6           ; 函数功能：当然是 50ms延时 啦
+ 00D6           ; 注意事项：基于7.3728M晶振，稍微有点误差
+ 00D6           ; 提示说明：调用delay50ms（20），得到1s延时 
+ 00D6           ; 输    入：
+ 00D6           ; 返    回：无
+ 00D6           ; --------------------------------------------------------------------*/
+ 00D6           ; void delay50ms(sint16 t)
+ 00D6           ; {
+ 00D6                   .dbline 122
+ 00D6           ;       uint16 i; 
+ 00D6           ;       for(;t>0;t--)
+ 00D6 13C0              xjmp L19
+ 00D8           L16:
+ 00D8                   .dbline 123
+ 00D8           ;               for(i=0;i<52642;i++)
+ 00D8 4427              clr R20
+ 00DA 5527              clr R21
+ 00DC 02C0              xjmp L23
+ 00DE           L20:
+ 00DE                   .dbline 124
+ 00DE           ;                       ; 
+ 00DE           L21:
+ 00DE                   .dbline 123
+ 00DE 4F5F              subi R20,255  ; offset = 1
+ 00E0 5F4F              sbci R21,255
+ 00E2           L23:
+ 00E2                   .dbline 123
+ 00E2 82EA              ldi R24,162
+ 00E4 9DEC              ldi R25,205
+ 00E6 A0E0              ldi R26,0
+ 00E8 B0E0              ldi R27,0
+ 00EA 1A01              movw R2,R20
+ 00EC 4424              clr R4
+ 00EE 5524              clr R5
+ 00F0 2816              cp R2,R24
+ 00F2 3906              cpc R3,R25
+ 00F4 4A06              cpc R4,R26
+ 00F6 5B06              cpc R5,R27
+ 00F8 94F3              brlt L20
+ 00FA           X4:
+ 00FA           L17:
+ 00FA                   .dbline 122
+ 00FA 0150              subi R16,1
+ 00FC 1040              sbci R17,0
+ 00FE           L19:
+ 00FE                   .dbline 122
+ 00FE 2224              clr R2
+ 0100 3324              clr R3
+ 0102 2016              cp R2,R16
+ 0104 3106              cpc R3,R17
+ 0106 44F3              brlt L16
+ 0108           X5:
+ 0108                   .dbline -2
+ 0108           L15:
+ 0108                   .dbline 0 ; func end
+ 0108 5991              ld R21,y+
+ 010A 4991              ld R20,y+
+ 010C 0895              ret
+ 010E                   .dbsym r i 20 i
+ 010E                   .dbsym r t 16 I
+ 010E                   .dbend
+ 010E                   .dbfunc e delayus _delayus fV
+ 010E           ;              i -> R20,R21
+ 010E           ;              t -> R16,R17
+                        .even
+ 010E           _delayus::
+ 010E 4A93              st -y,R20
+ 0110 5A93              st -y,R21
+ 0112                   .dbline -1
+ 0112                   .dbline 129
+ 0112           ; }
+ 0112           ; 
+ 0112           ; 
+ 0112           ; void delayus(uint16 t)
+ 0112           ; {
+ 0112                   .dbline 131
+ 0112           ;       uint16 i;
+ 0112           ;       for(i=0;i<t;i++)
+ 0112 4427              clr R20
+ 0114 5527              clr R21
+ 0116 02C0              xjmp L28
+ 0118           L25:
+ 0118                   .dbline 132
+ 0118           ;               {
+ 0118                   .dbline 135
+ 0118           ;                       //asm("NOP\n");
+ 0118           ;                       //asm("NOP\n");
+ 0118           ;               }
+ 0118           L26:
+ 0118                   .dbline 131
+ 0118 4F5F              subi R20,255  ; offset = 1
+ 011A 5F4F              sbci R21,255
+ 011C           L28:
+ 011C                   .dbline 131
+ 011C 4017              cp R20,R16
+ 011E 5107              cpc R21,R17
+ 0120 D8F3              brlo L25
+ 0122           X6:
+ 0122                   .dbline -2
+ 0122           L24:
+ 0122                   .dbline 0 ; func end
+ 0122 5991              ld R21,y+
+ 0124 4991              ld R20,y+
+ 0126 0895              ret
+ 0128                   .dbsym r i 20 i
+ 0128                   .dbsym r t 16 i
+ 0128                   .dbend
+ 0128                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PCF859~1\PCF8591\PCF8591.C
+ 0128                   .dbfunc e sDelay _sDelay fV
+ 0128           ;              n -> R16
+                        .even
+ 0128           _sDelay::
+ 0128                   .dbline -1
+ 0128                   .dbline 55
+ 0128           ; /*********************************************************************
+ 0128           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 0128           ;                                                                       
+ 0128           ; 目    的:   建立使用PCF8591的示例程序
+ 0128           ;       
+ 0128           ; 目标系统:   基于AVR单片机
+ 0128           ;                                                                               
+ 0128           ; 应用软件:   ICCAVR
+ 0128           ;                                                                               
+ 0128           ; 版    本:   Version 1.0                                                          
+ 0128           ;                                                                               
+ 0128           ; 圆版时间:   2005-06-25
+ 0128           ;       
+ 0128           ; 开发人员:   SEE
+ 0128           ; 
+ 0128           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 0128           ;       
+ 0128           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 0128           ; *********************************************************************/
+ 0128           ; 
+ 0128           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 版本更新记录：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 实验内容：
+ 0128           ; 初始化、读取AD、输出DA，使用PD口的LED指示获取的AD数据，使用万用表测量DA的输出电压。
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 硬件连接：将PCF8591的A0、A1、A2使用短路帽短接至“－  ”。
+ 0128           ;                 将PCF8591的IN0接可调电阻的AD1
+ 0128           ;                 将PCF8591的OUT外接万用表的表笔(用电压档)
+ 0128           ;                  STK169P+                             STK162+
+ 0128           ;                          PORTC        ---------   LED0~7
+ 0128           ;                               
+ 0128           ;                         DVK500                                 STK162+
+ 0128           ;                               VCC             ---------         VCC
+ 0128           ;                               GND             ---------         GND
+ 0128           ;                               SDA             ---------         PA0
+ 0128           ;                               SCK             ---------         PA1
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 注意事项： 
+ 0128           ; （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+ 0128           ; （2）请详细阅读“使用必读”及相关资料。
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 0128           ; 
+ 0128           ; #include <iom162v.h>
+ 0128           ; #define NO_INCLUDE_I2C_H 1
+ 0128           ; #include "D:\ICC_H\CmmICC.h"
+ 0128           ; 
+ 0128           ; #define WR_DADR               0x90    //write device-address
+ 0128           ; #define RD_DADR               0x91    //read device-address
+ 0128           ; 
+ 0128           ; void sDelay()
+ 0128           ; {
+ 0128                   .dbline 56
+ 0128           ;    unsigned char n=0x07;
+ 0128 07E0              ldi R16,7
+ 012A           L30:
+ 012A                   .dbline 57
+ 012A           ;    while(n--);
+ 012A           L31:
+ 012A                   .dbline 57
+ 012A 202E              mov R2,R16
+ 012C 3324              clr R3
+ 012E 0150              subi R16,1
+ 0130 2220              tst R2
+ 0132 D9F7              brne L30
+ 0134           X7:
+ 0134                   .dbline -2
+ 0134           L29:
+ 0134                   .dbline 0 ; func end
+ 0134 0895              ret
+ 0136                   .dbsym r n 16 c
+ 0136                   .dbend
+ 0136                   .dbfile D:\ICC_H\DVK501_IIC_sim.h
+ 0136                   .dbfunc e I2C_Start _I2C_Start fV
+                        .even
+ 0136           _I2C_Start::
+ 0136                   .dbline -1
+ 0136                   .dbline 66
+ 0136           ; /*********************************************************************
+ 0136           ; 微 雪 电 子   WaveShare   http://www.waveShare.net                    
+ 0136           ;                                                                       
+ 0136           ; 目    的:   建立IO模拟I2C操作库
+ 0136           ;       
+ 0136           ; 目标系统:   基于AVR单片机
+ 0136           ;                                                                               
+ 0136           ; 应用软件:   ICCAVR 6.31A
+ 0136           ;                                                                               
+ 0136           ; 版    本:   Version 1.0                                                          
+ 0136           ;                                                                               
+ 0136           ; 圆版时间:   2009-03-6
+ 0136           ;       
+ 0136           ; 开发人员:   zz
+ 0136           ; 
+ 0136           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 0136           ;       
+ 0136           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 0136           ; *********************************************************************/
+ 0136           ; 
+ 0136           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 0136           ; ----------------------------------------------------------------------
+ 0136           ; 版本更新记录：
+ 0136           ; 
+ 0136           ; ----------------------------------------------------------------------
+ 0136           ; 入口参数说明：
+ 0136           ; 
+ 0136           ; ----------------------------------------------------------------------
+ 0136           ; 待定参数说明：
+ 0136           ; 
+ 0136           ; ----------------------------------------------------------------------        
+ 0136           ; 对外变量说明：
+ 0136           ; 
+ 0136           ; ----------------------------------------------------------------------
+ 0136           ; 对外函数说明：
+ 0136           ; 
+ 0136           ; ----------------------------------------------------------------------
+ 0136           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 0136           ; 
+ 0136           ; #ifndef DVK501_IIC_sim_h
+ 0136           ; #define DVK501_IIC_sim_h
+ 0136           ; 
+ 0136           ; 
+ 0136           ; 
+ 0136           ; //读写定义
+ 0136           ; #define READ 1
+ 0136           ; #define WRITE 0
+ 0136           ; 
+ 0136           ; //有无act
+ 0136           ; #define ACT 1
+ 0136           ; #define nACT 0
+ 0136           ; 
+ 0136           ; /* I2C Config */
+ 0136           ; #define I2C_ERR                       0
+ 0136           ; #define I2C_CRR                       1
+ 0136           ; 
+ 0136           ; /*--------------------------------------------------------------------
+ 0136           ; 函数名称：I2C Start
+ 0136           ; 函数功能：用于给出start信号
+ 0136           ; 注意事项：AVR工作于高频率时钟信号时，有可能无法正常运行
+ 0136           ; 提示说明：在无法正常工作时请适当提高延时时间
+ 0136           ; 输    入：
+ 0136           ; 返    回：
+ 0136           ; --------------------------------------------------------------------*/
+ 0136           ; void I2C_Start()
+ 0136           ; {
+ 0136                   .dbline 67
+ 0136           ;       SCL_OUT;
+ 0136                   .dbline 67
+ 0136 8D9A              sbi 0x11,5
+ 0138                   .dbline 67
+ 0138 F7DF              xcall _sDelay
+ 013A                   .dbline 67
+ 013A                   .dbline 67
+ 013A                   .dbline 68
+ 013A           ;       SDA_OUT;
+ 013A                   .dbline 68
+ 013A 8C9A              sbi 0x11,4
+ 013C                   .dbline 68
+ 013C F5DF              xcall _sDelay
+ 013E                   .dbline 68
+ 013E                   .dbline 68
+ 013E                   .dbline 69
+ 013E           ;       SDA_SET;
+ 013E                   .dbline 69
+ 013E 949A              sbi 0x12,4
+ 0140                   .dbline 69
+ 0140 F3DF              xcall _sDelay
+ 0142                   .dbline 69
+ 0142                   .dbline 69
+ 0142                   .dbline 70
+ 0142           ;       SCL_SET;
+ 0142                   .dbline 70
+ 0142 959A              sbi 0x12,5
+ 0144                   .dbline 70
+ 0144 F1DF              xcall _sDelay
+ 0146                   .dbline 70
+ 0146                   .dbline 70
+ 0146                   .dbline 71
+ 0146           ;       SDA_CLR;
+ 0146                   .dbline 71
+ 0146 9498              cbi 0x12,4
+ 0148                   .dbline 71
+ 0148 EFDF              xcall _sDelay
+ 014A                   .dbline 71
+ 014A                   .dbline 71
+ 014A                   .dbline 72
+ 014A           ;       SCL_CLR;
+ 014A                   .dbline 72
+ 014A 9598              cbi 0x12,5
+ 014C                   .dbline 72
+ 014C                   .dbline 72
+ 014C                   .dbline 72
+ 014C                   .dbline -2
+ 014C           L33:
+ 014C                   .dbline 0 ; func end
+ 014C EDCF              xjmp _sDelay
+ 014E                   .dbend
+ 014E                   .dbfunc e I2C_Stop _I2C_Stop fV
+                        .even
+ 014E           _I2C_Stop::
+ 014E                   .dbline -1
+ 014E                   .dbline 84
+ 014E           ; }
+ 014E           ; 
+ 014E           ; /*--------------------------------------------------------------------
+ 014E           ; 函数名称：I2C Stop
+ 014E           ; 函数功能：用于给出stop信号
+ 014E           ; 注意事项：AVR工作于高频率时钟信号时，有可能无法正常运行
+ 014E           ; 提示说明：在无法正常工作时请适当提高延时时间
+ 014E           ; 输    入：
+ 014E           ; 返    回：
+ 014E           ; --------------------------------------------------------------------*/
+ 014E           ; void I2C_Stop()
+ 014E           ; {
+ 014E                   .dbline 85
+ 014E           ;       SCL_OUT;
+ 014E                   .dbline 85
+ 014E 8D9A              sbi 0x11,5
+ 0150                   .dbline 85
+ 0150 EBDF              xcall _sDelay
+ 0152                   .dbline 85
+ 0152                   .dbline 85
+ 0152                   .dbline 86
+ 0152           ;       SDA_OUT;
+ 0152                   .dbline 86
+ 0152 8C9A              sbi 0x11,4
+ 0154                   .dbline 86
+ 0154 E9DF              xcall _sDelay
+ 0156                   .dbline 86
+ 0156                   .dbline 86
+ 0156                   .dbline 87
+ 0156           ;       SDA_CLR;
+ 0156                   .dbline 87
+ 0156 9498              cbi 0x12,4
+ 0158                   .dbline 87
+ 0158 E7DF              xcall _sDelay
+ 015A                   .dbline 87
+ 015A                   .dbline 87
+ 015A                   .dbline 88
+ 015A           ;       SCL_SET;
+ 015A                   .dbline 88
+ 015A 959A              sbi 0x12,5
+ 015C                   .dbline 88
+ 015C E5DF              xcall _sDelay
+ 015E                   .dbline 88
+ 015E                   .dbline 88
+ 015E                   .dbline 89
+ 015E           ;       SDA_SET;
+ 015E                   .dbline 89
+ 015E 949A              sbi 0x12,4
+ 0160                   .dbline 89
+ 0160 E3DF              xcall _sDelay
+ 0162                   .dbline 89
+ 0162                   .dbline 89
+ 0162                   .dbline 90
+ 0162           ;       SCL_CLR;
+ 0162                   .dbline 90
+ 0162 9598              cbi 0x12,5
+ 0164                   .dbline 90
+ 0164                   .dbline 90
+ 0164                   .dbline 90
+ 0164                   .dbline -2
+ 0164           L34:
+ 0164                   .dbline 0 ; func end
+ 0164 E1CF              xjmp _sDelay
+ 0166                   .dbend
+ 0166                   .dbfunc e I2C_Send_DataAddr _I2C_Send_DataAddr fV
+ 0166           ;          I2C_n -> R10
+ 0166           ;         wrDAdr -> R20
+                        .even
+ 0166           _I2C_Send_DataAddr::
+ 0166 AA92              st -y,R10
+ 0168 4A93              st -y,R20
+ 016A 402F              mov R20,R16
+ 016C                   .dbline -1
+ 016C                   .dbline 102
+ 016C           ; }
+ 016C           ; 
+ 016C           ; /*--------------------------------------------------------------------
+ 016C           ; 函数名称：发送8位数据/地址
+ 016C           ; 函数功能：
+ 016C           ; 注意事项：
+ 016C           ; 提示说明：
+ 016C           ; 输    入：wrDAdr
+ 016C           ; 返    回：
+ 016C           ; --------------------------------------------------------------------*/
+ 016C           ; void I2C_Send_DataAddr(uchar wrDAdr)  
+ 016C           ; {
+ 016C                   .dbline 104
+ 016C           ;       uchar I2C_n;
+ 016C           ;       SCL_OUT;
+ 016C                   .dbline 104
+ 016C 8D9A              sbi 0x11,5
+ 016E                   .dbline 104
+ 016E DCDF              xcall _sDelay
+ 0170                   .dbline 104
+ 0170                   .dbline 104
+ 0170                   .dbline 105
+ 0170           ;       SDA_OUT;
+ 0170                   .dbline 105
+ 0170 8C9A              sbi 0x11,4
+ 0172                   .dbline 105
+ 0172 DADF              xcall _sDelay
+ 0174                   .dbline 105
+ 0174                   .dbline 105
+ 0174                   .dbline 106
+ 0174           ;       for(I2C_n=0;I2C_n<=7;I2C_n++)
+ 0174 AA24              clr R10
+ 0176 0FC0              xjmp L39
+ 0178           L36:
+ 0178                   .dbline 107
+ 0178           ;       {
+ 0178                   .dbline 108
+ 0178           ;               if((wrDAdr&0x80)==0x80) {SDA_SET;}
+ 0178 842F              mov R24,R20
+ 017A 8078              andi R24,128
+ 017C 8038              cpi R24,128
+ 017E 19F4              brne L40
+ 0180           X8:
+ 0180                   .dbline 108
+ 0180                   .dbline 108
+ 0180                   .dbline 108
+ 0180 949A              sbi 0x12,4
+ 0182                   .dbline 108
+ 0182 D2DF              xcall _sDelay
+ 0184                   .dbline 108
+ 0184                   .dbline 108
+ 0184                   .dbline 108
+ 0184 02C0              xjmp L41
+ 0186           L40:
+ 0186                   .dbline 109
+ 0186           ;               else {SDA_CLR;} 
+ 0186                   .dbline 109
+ 0186                   .dbline 109
+ 0186 9498              cbi 0x12,4
+ 0188                   .dbline 109
+ 0188 CFDF              xcall _sDelay
+ 018A                   .dbline 109
+ 018A                   .dbline 109
+ 018A                   .dbline 109
+ 018A           L41:
+ 018A                   .dbline 110
+ 018A           ;               SCL_SET;
+ 018A                   .dbline 110
+ 018A 959A              sbi 0x12,5
+ 018C                   .dbline 110
+ 018C CDDF              xcall _sDelay
+ 018E                   .dbline 110
+ 018E                   .dbline 110
+ 018E                   .dbline 111
+ 018E           ;               SCL_CLR;
+ 018E                   .dbline 111
+ 018E 9598              cbi 0x12,5
+ 0190                   .dbline 111
+ 0190 CBDF              xcall _sDelay
+ 0192                   .dbline 111
+ 0192                   .dbline 111
+ 0192                   .dbline 112
+ 0192           ;               wrDAdr<<=1;
+ 0192 440F              lsl R20
+ 0194                   .dbline 113
+ 0194           ;       }
+ 0194           L37:
+ 0194                   .dbline 106
+ 0194 A394              inc R10
+ 0196           L39:
+ 0196                   .dbline 106
+ 0196 87E0              ldi R24,7
+ 0198 8A15              cp R24,R10
+ 019A 70F7              brsh L36
+ 019C           X9:
+ 019C                   .dbline 114
+ 019C           ;       SDA_IN;
+ 019C                   .dbline 114
+ 019C 8C98              cbi 0x11,4
+ 019E                   .dbline 114
+ 019E C4DF              xcall _sDelay
+ 01A0                   .dbline 114
+ 01A0                   .dbline 114
+ 01A0                   .dbline 115
+ 01A0           ;       SDA_SET;
+ 01A0                   .dbline 115
+ 01A0 949A              sbi 0x12,4
+ 01A2                   .dbline 115
+ 01A2 C2DF              xcall _sDelay
+ 01A4                   .dbline 115
+ 01A4                   .dbline 115
+ 01A4                   .dbline 116
+ 01A4           ;       SCL_SET;
+ 01A4                   .dbline 116
+ 01A4 959A              sbi 0x12,5
+ 01A6                   .dbline 116
+ 01A6 C0DF              xcall _sDelay
+ 01A8                   .dbline 116
+ 01A8                   .dbline 116
+ 01A8           L42:
+ 01A8                   .dbline 117
+ 01A8           ;       while(SDA_PIN){};
+ 01A8                   .dbline 117
+ 01A8           L43:
+ 01A8                   .dbline 117
+ 01A8 8499              sbic 0x10,4
+ 01AA FECF              rjmp L42
+ 01AC           X10:
+ 01AC                   .dbline 117
+ 01AC                   .dbline 118
+ 01AC           ;       SCL_CLR;
+ 01AC                   .dbline 118
+ 01AC 9598              cbi 0x12,5
+ 01AE                   .dbline 118
+ 01AE BCDF              xcall _sDelay
+ 01B0                   .dbline 118
+ 01B0                   .dbline 118
+ 01B0                   .dbline -2
+ 01B0           L35:
+ 01B0                   .dbline 0 ; func end
+ 01B0 4991              ld R20,y+
+ 01B2 A990              ld R10,y+
+ 01B4 0895              ret
+ 01B6                   .dbsym r I2C_n 10 c
+ 01B6                   .dbsym r wrDAdr 20 c
+ 01B6                   .dbend
+ 01B6                   .dbfunc e I2C_Read_DataAddr _I2C_Read_DataAddr fc
+ 01B6           ;         rdDAdr -> R20
+ 01B6           ;              n -> R12
+ 01B6           ;           bAct -> R10
+                        .even
+ 01B6           _I2C_Read_DataAddr::
+ 01B6 0E940000          xcall push_xgset303C
+ 01BA A02E              mov R10,R16
+ 01BC                   .dbline -1
+ 01BC                   .dbline 131
+ 01BC           ; }
+ 01BC           ; 
+ 01BC           ; 
+ 01BC           ; /*--------------------------------------------------------------------
+ 01BC           ; 函数名称：读数据/地址(ACT)
+ 01BC           ; 函数功能：
+ 01BC           ; 注意事项：
+ 01BC           ; 提示说明：
+ 01BC           ; 输    入：有act bAct=1;无act bAct=0;
+ 01BC           ; 返    回：rdDAdr
+ 01BC           ; --------------------------------------------------------------------*/
+ 01BC           ; uchar I2C_Read_DataAddr(uchar bAct)
+ 01BC           ; {
+ 01BC                   .dbline 133
+ 01BC           ;       uchar n;
+ 01BC           ;       uchar rdDAdr=0;
+ 01BC 4427              clr R20
+ 01BE                   .dbline 134
+ 01BE           ;       SCL_CLR;
+ 01BE                   .dbline 134
+ 01BE 9598              cbi 0x12,5
+ 01C0                   .dbline 134
+ 01C0 B3DF              xcall _sDelay
+ 01C2                   .dbline 134
+ 01C2                   .dbline 134
+ 01C2                   .dbline 135
+ 01C2           ;       SCL_OUT;
+ 01C2                   .dbline 135
+ 01C2 8D9A              sbi 0x11,5
+ 01C4                   .dbline 135
+ 01C4 B1DF              xcall _sDelay
+ 01C6                   .dbline 135
+ 01C6                   .dbline 135
+ 01C6                   .dbline 136
+ 01C6           ;       SDA_IN;
+ 01C6                   .dbline 136
+ 01C6 8C98              cbi 0x11,4
+ 01C8                   .dbline 136
+ 01C8 AFDF              xcall _sDelay
+ 01CA                   .dbline 136
+ 01CA                   .dbline 136
+ 01CA                   .dbline 137
+ 01CA           ;       for(n=0;n<=7;n++)
+ 01CA CC24              clr R12
+ 01CC 0AC0              xjmp L49
+ 01CE           L46:
+ 01CE                   .dbline 138
+ 01CE           ;       {
+ 01CE                   .dbline 139
+ 01CE           ;               rdDAdr<<=1;
+ 01CE 440F              lsl R20
+ 01D0                   .dbline 140
+ 01D0           ;               SCL_SET;
+ 01D0                   .dbline 140
+ 01D0 959A              sbi 0x12,5
+ 01D2                   .dbline 140
+ 01D2 AADF              xcall _sDelay
+ 01D4                   .dbline 140
+ 01D4                   .dbline 140
+ 01D4                   .dbline 141
+ 01D4           ;               DELAY_NOP;
+ 01D4 A9DF              xcall _sDelay
+ 01D6                   .dbline 142
+ 01D6           ;     if(SDA_PIN)
+ 01D6 849B              sbis 0x10,4
+ 01D8 01C0              rjmp L50
+ 01DA           X11:
+ 01DA                   .dbline 143
+ 01DA           ;               rdDAdr|=0x01;
+ 01DA 4160              ori R20,1
+ 01DC           L50:
+ 01DC                   .dbline 144
+ 01DC           ;               SCL_CLR;
+ 01DC                   .dbline 144
+ 01DC 9598              cbi 0x12,5
+ 01DE                   .dbline 144
+ 01DE A4DF              xcall _sDelay
+ 01E0                   .dbline 144
+ 01E0                   .dbline 144
+ 01E0                   .dbline 146
+ 01E0           ;               
+ 01E0           ;       }
+ 01E0           L47:
+ 01E0                   .dbline 137
+ 01E0 C394              inc R12
+ 01E2           L49:
+ 01E2                   .dbline 137
+ 01E2 87E0              ldi R24,7
+ 01E4 8C15              cp R24,R12
+ 01E6 98F7              brsh L46
+ 01E8           X12:
+ 01E8                   .dbline 147
+ 01E8           ;       SDA_OUT;
+ 01E8                   .dbline 147
+ 01E8 8C9A              sbi 0x11,4
+ 01EA                   .dbline 147
+ 01EA 9EDF              xcall _sDelay
+ 01EC                   .dbline 147
+ 01EC                   .dbline 147
+ 01EC                   .dbline 148
+ 01EC           ;       if(bAct) {SDA_SET;}
+ 01EC AA20              tst R10
+ 01EE 19F0              breq L52
+ 01F0           X13:
+ 01F0                   .dbline 148
+ 01F0                   .dbline 148
+ 01F0                   .dbline 148
+ 01F0 949A              sbi 0x12,4
+ 01F2                   .dbline 148
+ 01F2 9ADF              xcall _sDelay
+ 01F4                   .dbline 148
+ 01F4                   .dbline 148
+ 01F4                   .dbline 148
+ 01F4 02C0              xjmp L53
+ 01F6           L52:
+ 01F6                   .dbline 149
+ 01F6           ;       else {SDA_CLR;}
+ 01F6                   .dbline 149
+ 01F6                   .dbline 149
+ 01F6 9498              cbi 0x12,4
+ 01F8                   .dbline 149
+ 01F8 97DF              xcall _sDelay
+ 01FA                   .dbline 149
+ 01FA                   .dbline 149
+ 01FA                   .dbline 149
+ 01FA           L53:
+ 01FA                   .dbline 150
+ 01FA           ;       SCL_SET;
+ 01FA                   .dbline 150
+ 01FA 959A              sbi 0x12,5
+ 01FC                   .dbline 150
+ 01FC 95DF              xcall _sDelay
+ 01FE                   .dbline 150
+ 01FE                   .dbline 150
+ 01FE                   .dbline 151
+ 01FE           ;       SCL_CLR;
+ 01FE                   .dbline 151
+ 01FE 9598              cbi 0x12,5
+ 0200                   .dbline 151
+ 0200 93DF              xcall _sDelay
+ 0202                   .dbline 151
+ 0202                   .dbline 151
+ 0202                   .dbline 152
+ 0202           ;       return(rdDAdr);
+ 0202 042F              mov R16,R20
+ 0204                   .dbline -2
+ 0204           L45:
+ 0204                   .dbline 0 ; func end
+ 0204 0C940000          xjmp pop_xgset303C
+ 0208                   .dbsym r rdDAdr 20 c
+ 0208                   .dbsym r n 12 c
+ 0208                   .dbsym r bAct 10 c
+ 0208                   .dbend
+ 0208                   .dbfunc e I2C_ReadBusy _I2C_ReadBusy fc
+ 0208           ;              n -> R10
+ 0208           ;         wrDAdr -> R20
+                        .even
+ 0208           _I2C_ReadBusy::
+ 0208 AA92              st -y,R10
+ 020A 4A93              st -y,R20
+ 020C 402F              mov R20,R16
+ 020E                   .dbline -1
+ 020E                   .dbline 166
+ 020E           ; }
+ 020E           ; 
+ 020E           ; 
+ 020E           ; 
+ 020E           ; /*--------------------------------------------------------------------
+ 020E           ; 函数名称：读忙
+ 020E           ; 函数功能：
+ 020E           ; 注意事项：
+ 020E           ; 提示说明：
+ 020E           ; 输    入：wrDAdr 忙返回1 不忙返回0
+ 020E           ; 返    回：
+ 020E           ; --------------------------------------------------------------------*/
+ 020E           ; uchar I2C_ReadBusy(uchar wrDAdr)      
+ 020E           ; {
+ 020E                   .dbline 168
+ 020E           ;       uchar n;
+ 020E           ;       SCL_OUT;
+ 020E                   .dbline 168
+ 020E 8D9A              sbi 0x11,5
+ 0210                   .dbline 168
+ 0210 8BDF              xcall _sDelay
+ 0212                   .dbline 168
+ 0212                   .dbline 168
+ 0212                   .dbline 169
+ 0212           ;       SDA_OUT;
+ 0212                   .dbline 169
+ 0212 8C9A              sbi 0x11,4
+ 0214                   .dbline 169
+ 0214 89DF              xcall _sDelay
+ 0216                   .dbline 169
+ 0216                   .dbline 169
+ 0216                   .dbline 170
+ 0216           ;       for(n=0;n<=7;n++)
+ 0216 AA24              clr R10
+ 0218 0FC0              xjmp L58
+ 021A           L55:
+ 021A                   .dbline 171
+ 021A           ;       {
+ 021A                   .dbline 172
+ 021A           ;               if((wrDAdr&0x80)==0x80) {SDA_SET;}
+ 021A 842F              mov R24,R20
+ 021C 8078              andi R24,128
+ 021E 8038              cpi R24,128
+ 0220 19F4              brne L59
+ 0222           X14:
+ 0222                   .dbline 172
+ 0222                   .dbline 172
+ 0222                   .dbline 172
+ 0222 949A              sbi 0x12,4
+ 0224                   .dbline 172
+ 0224 81DF              xcall _sDelay
+ 0226                   .dbline 172
+ 0226                   .dbline 172
+ 0226                   .dbline 172
+ 0226 02C0              xjmp L60
+ 0228           L59:
+ 0228                   .dbline 173
+ 0228           ;               else {SDA_CLR;}
+ 0228                   .dbline 173
+ 0228                   .dbline 173
+ 0228 9498              cbi 0x12,4
+ 022A                   .dbline 173
+ 022A 7EDF              xcall _sDelay
+ 022C                   .dbline 173
+ 022C                   .dbline 173
+ 022C                   .dbline 173
+ 022C           L60:
+ 022C                   .dbline 174
+ 022C           ;               SCL_SET;
+ 022C                   .dbline 174
+ 022C 959A              sbi 0x12,5
+ 022E                   .dbline 174
+ 022E 7CDF              xcall _sDelay
+ 0230                   .dbline 174
+ 0230                   .dbline 174
+ 0230                   .dbline 175
+ 0230           ;               SCL_CLR;
+ 0230                   .dbline 175
+ 0230 9598              cbi 0x12,5
+ 0232                   .dbline 175
+ 0232 7ADF              xcall _sDelay
+ 0234                   .dbline 175
+ 0234                   .dbline 175
+ 0234                   .dbline 176
+ 0234           ;               wrDAdr<<=1;
+ 0234 440F              lsl R20
+ 0236                   .dbline 177
+ 0236           ;       }
+ 0236           L56:
+ 0236                   .dbline 170
+ 0236 A394              inc R10
+ 0238           L58:
+ 0238                   .dbline 170
+ 0238 87E0              ldi R24,7
+ 023A 8A15              cp R24,R10
+ 023C 70F7              brsh L55
+ 023E           X15:
+ 023E                   .dbline 178
+ 023E           ;       SDA_IN;
+ 023E                   .dbline 178
+ 023E 8C98              cbi 0x11,4
+ 0240                   .dbline 178
+ 0240 73DF              xcall _sDelay
+ 0242                   .dbline 178
+ 0242                   .dbline 178
+ 0242                   .dbline 179
+ 0242           ;       SDA_SET;
+ 0242                   .dbline 179
+ 0242 949A              sbi 0x12,4
+ 0244                   .dbline 179
+ 0244 71DF              xcall _sDelay
+ 0246                   .dbline 179
+ 0246                   .dbline 179
+ 0246                   .dbline 180
+ 0246           ;       SCL_SET;
+ 0246                   .dbline 180
+ 0246 959A              sbi 0x12,5
+ 0248                   .dbline 180
+ 0248 6FDF              xcall _sDelay
+ 024A                   .dbline 180
+ 024A                   .dbline 180
+ 024A                   .dbline 181
+ 024A           ;       wrDAdr=SDA_PIN;
+ 024A 40B3              in R20,0x10
+ 024C 4071              andi R20,16
+ 024E                   .dbline 182
+ 024E           ;       SCL_CLR;        
+ 024E                   .dbline 182
+ 024E 9598              cbi 0x12,5
+ 0250                   .dbline 182
+ 0250 6BDF              xcall _sDelay
+ 0252                   .dbline 182
+ 0252                   .dbline 182
+ 0252                   .dbline 183
+ 0252           ;       return(wrDAdr);
+ 0252 042F              mov R16,R20
+ 0254                   .dbline -2
+ 0254           L54:
+ 0254                   .dbline 0 ; func end
+ 0254 4991              ld R20,y+
+ 0256 A990              ld R10,y+
+ 0258 0895              ret
+ 025A                   .dbsym r n 10 c
+ 025A                   .dbsym r wrDAdr 20 c
+ 025A                   .dbend
+ 025A                   .dbfile D:\ICC_H\PCF8591_sim.H
+ 025A                   .dbfunc e PCF8591_getAD _PCF8591_getAD fc
+ 025A           ;    PCF8591_num -> R10
+ 025A           ;        wordAdr -> R10
+                        .even
+ 025A           _PCF8591_getAD::
+ 025A AA92              st -y,R10
+ 025C A02E              mov R10,R16
+ 025E                   .dbline -1
+ 025E                   .dbline 90
+ 025E           ; /*********************************************************************
+ 025E           ;       微 雪 电 子   WaveShare   http://www.waveShare.net      
+ 025E           ; 
+ 025E           ; 目    的:   建立方便的PCF8591操作库
+ 025E           ; 
+ 025E           ; 目标系统:   基于AVR单片机
+ 025E           ;                                                                               
+ 025E           ; 应用软件:   ICCAVR
+ 025E           ;                                                                               
+ 025E           ; 版    本:   Version 1.0                                                
+ 025E           ;                                                                               
+ 025E           ; 圆版时间:   2005-06-25
+ 025E           ;       
+ 025E           ; 开发人员:   SEE
+ 025E           ; 
+ 025E           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 025E           ;       
+ 025E           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 025E           ; *********************************************************************/
+ 025E           ; 
+ 025E           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 025E           ; ----------------------------------------------------------------------
+ 025E           ; 版本更新记录：
+ 025E           ; 
+ 025E           ; ----------------------------------------------------------------------
+ 025E           ; 入口参数说明：
+ 025E           ;       sbit I2C_SCL=P3^1;
+ 025E           ;       sbit I2C_SDA=P3^0;
+ 025E           ;       #define WR_DADR 0x90    //器件地址：A2 A1 A0 = 0 0 0
+ 025E           ;       #define RD_DADR 0x91    //器件地址：A2 A1 A0 = 0 0 0
+ 025E           ; 
+ 025E           ; ----------------------------------------------------------------------
+ 025E           ; 待定参数说明：
+ 025E           ; 
+ 025E           ; ----------------------------------------------------------------------        
+ 025E           ; 对外变量说明：
+ 025E           ; 
+ 025E           ; ----------------------------------------------------------------------
+ 025E           ; 对外函数说明：
+ 025E           ; 
+ 025E           ; ----------------------------------------------------------------------
+ 025E           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 025E           ; 
+ 025E           ; #ifndef PCF8591_sim_H
+ 025E           ; #define PCF8591_sim_H
+ 025E           ; 
+ 025E           ; 
+ 025E           ; 
+ 025E           ; //器件地址：A0 A1 A2 = 0 0 0
+ 025E           ; #ifndef WR_DADR 
+ 025E           ;       #define WR_DADR         0x90    //write device-address 
+ 025E           ; #endif
+ 025E           ; #ifndef RD_DADR 
+ 025E           ;       #define RD_DADR         0x91    //read device-address
+ 025E           ; #endif
+ 025E           ; 
+ 025E           ; #define MODE0         0x00    //Channel0 = AIN0;
+ 025E           ;                                               //Channel1 = AIN1;
+ 025E           ;                                               //Channel2 = AIN2;
+ 025E           ;                                               //Channel3 = AIN3;
+ 025E           ; #define MODE1         0x10    //Channel0 = AIN3-AIN0;
+ 025E           ;                                               //Channel1 = AIN3-AIN1
+ 025E           ;                                               //Channel2 = AIN3-AIN2;
+ 025E           ; #define MODE2         0x20    //Channel0 = AIN0;
+ 025E           ;                                               //Channel1 = AIN1;
+ 025E           ;                                               //Channel2 = AIN3-AIN2;
+ 025E           ; #define MODE3         0x30    //Channel0 = AIN1-AIN0;
+ 025E           ;                                               //Channel1 = AIN3-AIN2;
+ 025E           ; 
+ 025E           ; #define CHNL0         0               //Using Channel0
+ 025E           ; #define CHNL1         1               //Using Channel1
+ 025E           ; #define CHNL2         2               //Using Channel2
+ 025E           ; #define CHNL3         3               //Using Channel3
+ 025E           ; 
+ 025E           ; #define DAouputEn     0x40    //0x50 or 0x60 or 0x70 is also ok!
+ 025E           ; 
+ 025E           ; 
+ 025E           ; /*--------------------------------------------------------------------
+ 025E           ; 函数名称：读一个字节
+ 025E           ; 函数功能：
+ 025E           ; 注意事项：
+ 025E           ; 提示说明：
+ 025E           ; 输    WR_DADR: write device-address 写器件地址
+ 025E           ;       
+ 025E           ;                wordAdr: word address 字地址
+ 025E           ; 返    回：
+ 025E           ; --------------------------------------------------------------------*/
+ 025E           ; 
+ 025E           ; uchar PCF8591_getAD(uchar wordAdr)
+ 025E           ; {
+ 025E                   .dbline 92
+ 025E           ;       uchar PCF8591_num;
+ 025E           ;       I2C_Start();
+ 025E 6BDF              xcall _I2C_Start
+ 0260                   .dbline 93
+ 0260           ;       I2C_Send_DataAddr(WR_DADR); //发送器件地址
+ 0260 00E9              ldi R16,144
+ 0262 81DF              xcall _I2C_Send_DataAddr
+ 0264                   .dbline 94
+ 0264           ;       I2C_Send_DataAddr(wordAdr); //发送字地址
+ 0264 0A2D              mov R16,R10
+ 0266 7FDF              xcall _I2C_Send_DataAddr
+ 0268                   .dbline 95
+ 0268           ;       I2C_Start();
+ 0268 66DF              xcall _I2C_Start
+ 026A                   .dbline 96
+ 026A           ;       I2C_Send_DataAddr(RD_DADR); //发送器件地址
+ 026A 01E9              ldi R16,145
+ 026C 7CDF              xcall _I2C_Send_DataAddr
+ 026E                   .dbline 97
+ 026E           ;       PCF8591_num=I2C_Read_DataAddr(ACT);     
+ 026E 01E0              ldi R16,1
+ 0270 A2DF              xcall _I2C_Read_DataAddr
+ 0272 A02E              mov R10,R16
+ 0274                   .dbline 98
+ 0274           ;       I2C_Stop();
+ 0274 6CDF              xcall _I2C_Stop
+ 0276                   .dbline 99
+ 0276           ;       return(PCF8591_num); //读取数据
+ 0276 0A2D              mov R16,R10
+ 0278                   .dbline -2
+ 0278           L61:
+ 0278                   .dbline 0 ; func end
+ 0278 A990              ld R10,y+
+ 027A 0895              ret
+ 027C                   .dbsym r PCF8591_num 10 c
+ 027C                   .dbsym r wordAdr 10 c
+ 027C                   .dbend
+ 027C                   .dbfunc e PCF8591_setDA _PCF8591_setDA fV
+ 027C           ;            val -> R10
+                        .even
+ 027C           _PCF8591_setDA::
+ 027C AA92              st -y,R10
+ 027E A02E              mov R10,R16
+ 0280                   .dbline -1
+ 0280                   .dbline 112
+ 0280           ; }
+ 0280           ; 
+ 0280           ; /*--------------------------------------------------------------------
+ 0280           ; 函数名称：字节写
+ 0280           ; 函数功能：
+ 0280           ; 注意事项：
+ 0280           ; 提示说明：
+ 0280           ; 输    入：val:电压
+ 0280           ; 返    回：
+ 0280           ; --------------------------------------------------------------------*/
+ 0280           ; 
+ 0280           ; void PCF8591_setDA(uchar val)
+ 0280           ; {
+ 0280                   .dbline 113
+ 0280           ;       I2C_Start(); 
+ 0280 5ADF              xcall _I2C_Start
+ 0282                   .dbline 114
+ 0282           ;       I2C_Send_DataAddr(WR_DADR); //发送器件地址
+ 0282 00E9              ldi R16,144
+ 0284 70DF              xcall _I2C_Send_DataAddr
+ 0286                   .dbline 115
+ 0286           ;       I2C_Send_DataAddr(DAouputEn); //发送字地址
+ 0286 00E4              ldi R16,64
+ 0288 6EDF              xcall _I2C_Send_DataAddr
+ 028A                   .dbline 116
+ 028A           ;       I2C_Send_DataAddr(val); //发送数据
+ 028A 0A2D              mov R16,R10
+ 028C 6CDF              xcall _I2C_Send_DataAddr
+ 028E                   .dbline 117
+ 028E           ;       I2C_Stop();
+ 028E 5FDF              xcall _I2C_Stop
+ 0290                   .dbline -2
+ 0290           L62:
+ 0290                   .dbline 0 ; func end
+ 0290 A990              ld R10,y+
+ 0292 0895              ret
+ 0294                   .dbsym r val 10 c
+ 0294                   .dbend
+ 0294                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PCF859~1\PCF8591\PCF8591.C
+ 0294                   .dbfunc e main _main fV
+ 0294           ;          DAval -> R10
+                        .even
+ 0294           _main::
+ 0294                   .dbline -1
+ 0294                   .dbline 93
+ 0294           ; }
+ 0294           ; 
+ 0294           ; #define DELAY_NOP  sDelay()
+ 0294           ; 
+ 0294           ; //SDA端口定义
+ 0294           ; #define SDA_IN                {cbi(DDRD,4);DELAY_NOP;}
+ 0294           ; #define SDA_OUT               {sbi(DDRD,4);DELAY_NOP;}
+ 0294           ; #define SDA_SET               {sbi(PORTD,4);DELAY_NOP;}
+ 0294           ; #define SDA_CLR               {cbi(PORTD,4);DELAY_NOP;}
+ 0294           ; #define SDA_PIN               gbi(PIND,4)
+ 0294           ; 
+ 0294           ; //SCL端口定义
+ 0294           ; #define SCL_IN        {cbi(DDRD,5);DELAY_NOP;}
+ 0294           ; #define SCL_OUT               {sbi(DDRD,5);DELAY_NOP;}
+ 0294           ; #define SCL_SET               {sbi(PORTD,5);DELAY_NOP;}
+ 0294           ; #define SCL_CLR               {cbi(PORTD,5);DELAY_NOP;}
+ 0294           ; #define SCL_PIN               gbi(PIND,5)
+ 0294           ; 
+ 0294           ; 
+ 0294           ; #include "D:\ICC_H\DVK501_IIC_sim.h"
+ 0294           ; #include "D:\ICC_H\PCF8591_sim.H"  
+ 0294           ; 
+ 0294           ; #define DISP_DDR      DDRA
+ 0294           ; #define DISP_PORT     PORTA
+ 0294           ; 
+ 0294           ; 
+ 0294           ; /*--------------------------------------------------------------------
+ 0294           ; 函数名称：
+ 0294           ; 函数功能：
+ 0294           ; 注意事项：
+ 0294           ; 提示说明：
+ 0294           ; 输    入：
+ 0294           ; 返    回：
+ 0294           ; --------------------------------------------------------------------*/
+ 0294           ; void main()
+ 0294           ; {
+ 0294                   .dbline 94
+ 0294           ;       unsigned char DAval=0;
+ 0294 AA24              clr R10
+ 0296                   .dbline 95
+ 0296           ;       DISP_DDR = 0XFF;                
+ 0296 8FEF              ldi R24,255
+ 0298 8ABB              out 0x1a,R24
+ 029A 06C0              xjmp L65
+ 029C           L64:
+ 029C                   .dbline 97
+ 029C           ;       while(1)
+ 029C           ;       {
+ 029C                   .dbline 98
+ 029C           ;               DISP_PORT = PCF8591_getAD(0x00);  //通道1,模式1
+ 029C 0027              clr R16
+ 029E DDDF              xcall _PCF8591_getAD
+ 02A0 0BBB              out 0x1b,R16
+ 02A2                   .dbline 101
+ 02A2           ;               //PCF8591_setDA(DAval++);
+ 02A2           ;               //while(I2C_ReadBusy(WR_DADR)){};
+ 02A2           ;               delay50ms(1);
+ 02A2 01E0              ldi R16,1
+ 02A4 10E0              ldi R17,0
+ 02A6 15DF              xcall _delay50ms
+ 02A8                   .dbline 102
+ 02A8           ;       }
+ 02A8           L65:
+ 02A8                   .dbline 96
+ 02A8 F9CF              xjmp L64
+ 02AA           X16:
+ 02AA                   .dbline -2
+ 02AA           L63:
+ 02AA                   .dbline 0 ; func end
+ 02AA 0895              ret
+ 02AC                   .dbsym r DAval 10 c
+ 02AC                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\PCF859~1\PCF8591\PCF8591.C
+ 0000           _dataElem::
+ 0000                   .blkb 6
+ 0006                   .dbfile D:\ICC_H\Software.H
+ 0006                   .dbsym e dataElem _dataElem A[6:6]c
+ 0006           ; }

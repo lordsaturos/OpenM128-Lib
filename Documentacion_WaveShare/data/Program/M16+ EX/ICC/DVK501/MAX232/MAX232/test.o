@@ -1,0 +1,84 @@
+XL
+H 1 areas 5 global symbols
+M test.c
+A text size 62 flags 0
+dbfile ..\..\..\STK16_~1.0\MAX232~1\MAX232\test.c
+dbfile E:\吴泽备份\DVK501光盘内容\STK16_~1.0\MAX232~1\MAX232\test.c
+dbfunc e UART_init 0 fV
+dbline FFFFFFFF 0
+dbline 32 0
+dbline 39 0
+dbline 3A 4
+dbline 3B 8
+dbline 3C C
+dbline 3D E
+dbline FFFFFFFE 12
+dbline 0 12
+dbfunc e uart_putchar0 14 fV
+dbsym r c 10 c
+dbline FFFFFFFF 14
+dbline 43 14
+dbline 44 14
+dbline 44 14
+dbline 45 18
+dbline FFFFFFFE 1A
+dbline 0 1A
+dbfunc e uart_getchar0 1C fi
+dbsym r res 10 c
+dbsym r status 12 c
+dbline FFFFFFFF 1C
+dbline 49 1C
+dbline 4B 1C
+dbline 4B 20
+dbline 4C 26
+dbline 4D 28
+dbline 4E 2A
+dbline 4E 30
+dbline 4F 36
+dbline FFFFFFFE 38
+dbline 0 38
+dbfunc e uart_waitchar0 3A fc
+dbsym r c A i
+dbline FFFFFFFF 3E
+dbline 53 3E
+dbline 55 3E
+dbline 55 3E
+dbline 56 4A
+dbline FFFFFFFE 4A
+dbline 0 4A
+dbfunc e main 50 fV
+dbline FFFFFFFF 50
+dbline 5A 50
+dbline 5B 50
+dbline 5C 54
+dbline 5D 56
+dbline 5F 5A
+dbline 60 5E
+dbline 60 5E
+dbline FFFFFFFE 60
+dbline 0 60
+S _main Def0050
+S _uart_getchar0 Def001C
+S _uart_putchar0 Def0014
+S _UART_init Def0000
+S _uart_waitchar0 Def003A
+T 00 00 22 24 2B B8 88 E1 8A B9 86 E0 80 BD 20 BC
+R 00 00 00 00
+T 0E 00 8F E2 89 B9 08 95
+R 00 00 00 00
+T 14 00 5D 9B FE CF 0C B9 08 95
+R 00 00 00 00
+T 1C 00 5F 99 03 C0 0F EF 1F EF 09 C0 2B B1 0C B1
+R 00 00 00 00
+T 2A 00 82 2F 8C 71 19 F0 0F EF 1F EF 01 C0 11 27
+R 00 00 00 00
+T 38 00 08 95
+R 00 00 00 00
+T 3A 00 AA 92 BA 92 EE DF 58 01 0F 3F EF EF 1E 07
+R 00 00 00 00
+T 48 00 D1 F3 B9 90 A9 90 08 95
+R 00 00 00 00
+T 50 00 8F EF 8A BB D5 DF 05 E5 DD DF EF DF 0B BB
+R 00 00 00 00
+T 5E 00 FF CF 08 95
+R 00 00 00 00

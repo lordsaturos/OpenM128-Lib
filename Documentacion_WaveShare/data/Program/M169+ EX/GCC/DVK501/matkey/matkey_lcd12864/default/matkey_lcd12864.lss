@@ -1,0 +1,1340 @@
+
+matkey_lcd12864.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000026  00800100  00000580  00000614  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000580  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000040  00800126  00800126  0000063a  2**0
+                  ALLOC
+  3 .debug_aranges 00000020  00000000  00000000  0000063a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 000000c3  00000000  00000000  0000065a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000947  00000000  00000000  0000071d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000001f9  00000000  00000000  00001064  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000766  00000000  00000000  0000125d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000a0  00000000  00000000  000019c4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000001e7  00000000  00000000  00001a64  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000002ad  00000000  00000000  00001c4b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 000001e0  00000000  00000000  00001ef8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2e 00 	jmp	0x5c	; 0x5c <__ctors_end>
+   4:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+   8:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+   c:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  10:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  14:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  18:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  1c:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  20:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  24:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  28:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  2c:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  30:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  34:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  38:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  3c:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  40:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  44:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  48:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  4c:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  50:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  54:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+  58:	0c 94 4b 00 	jmp	0x96	; 0x96 <__bad_interrupt>
+
+0000005c <__ctors_end>:
+  5c:	11 24       	eor	r1, r1
+  5e:	1f be       	out	0x3f, r1	; 63
+  60:	cf ef       	ldi	r28, 0xFF	; 255
+  62:	d4 e0       	ldi	r29, 0x04	; 4
+  64:	de bf       	out	0x3e, r29	; 62
+  66:	cd bf       	out	0x3d, r28	; 61
+
+00000068 <__do_copy_data>:
+  68:	11 e0       	ldi	r17, 0x01	; 1
+  6a:	a0 e0       	ldi	r26, 0x00	; 0
+  6c:	b1 e0       	ldi	r27, 0x01	; 1
+  6e:	e0 e8       	ldi	r30, 0x80	; 128
+  70:	f5 e0       	ldi	r31, 0x05	; 5
+  72:	02 c0       	rjmp	.+4      	; 0x78 <.do_copy_data_start>
+
+00000074 <.do_copy_data_loop>:
+  74:	05 90       	lpm	r0, Z+
+  76:	0d 92       	st	X+, r0
+
+00000078 <.do_copy_data_start>:
+  78:	a6 32       	cpi	r26, 0x26	; 38
+  7a:	b1 07       	cpc	r27, r17
+  7c:	d9 f7       	brne	.-10     	; 0x74 <.do_copy_data_loop>
+
+0000007e <__do_clear_bss>:
+  7e:	11 e0       	ldi	r17, 0x01	; 1
+  80:	a6 e2       	ldi	r26, 0x26	; 38
+  82:	b1 e0       	ldi	r27, 0x01	; 1
+  84:	01 c0       	rjmp	.+2      	; 0x88 <.do_clear_bss_start>
+
+00000086 <.do_clear_bss_loop>:
+  86:	1d 92       	st	X+, r1
+
+00000088 <.do_clear_bss_start>:
+  88:	a6 36       	cpi	r26, 0x66	; 102
+  8a:	b1 07       	cpc	r27, r17
+  8c:	e1 f7       	brne	.-8      	; 0x86 <.do_clear_bss_loop>
+  8e:	0e 94 1b 02 	call	0x436	; 0x436 <main>
+  92:	0c 94 be 02 	jmp	0x57c	; 0x57c <_exit>
+
+00000096 <__bad_interrupt>:
+  96:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000009a <getKeyVal>:
+const uint8_t getSta_[4]={0x70,0xb0,0xd0,0xe0};  
+
+uint8_t getKeyVal()
+{
+    uint8_t i,j,getSta,keyVal;
+	MATKEY_PORT=0xFF;
+  9a:	8f ef       	ldi	r24, 0xFF	; 255
+  9c:	82 b9       	out	0x02, r24	; 2
+    MATKEY_DDR=0x0F;
+  9e:	8f e0       	ldi	r24, 0x0F	; 15
+  a0:	81 b9       	out	0x01, r24	; 1
+  a2:	20 e0       	ldi	r18, 0x00	; 0
+  a4:	30 e0       	ldi	r19, 0x00	; 0
+    for(i=0;i<4;i++)              
+    {               			
+        MATKEY_PORT = setSta_[i];
+  a6:	f9 01       	movw	r30, r18
+  a8:	e3 5e       	subi	r30, 0xE3	; 227
+  aa:	fe 4f       	sbci	r31, 0xFE	; 254
+  ac:	90 81       	ld	r25, Z
+  ae:	92 b9       	out	0x02, r25	; 2
+        if(MATKEY_PIN!=setSta_[i])
+  b0:	80 b1       	in	r24, 0x00	; 0
+  b2:	89 17       	cp	r24, r25
+  b4:	99 f0       	breq	.+38     	; 0xdc <getKeyVal+0x42>
+        {
+            getSta=MATKEY_PIN&0xf0;
+  b6:	40 b1       	in	r20, 0x00	; 0
+  b8:	40 7f       	andi	r20, 0xF0	; 240
+  ba:	e1 e2       	ldi	r30, 0x21	; 33
+  bc:	f1 e0       	ldi	r31, 0x01	; 1
+  be:	90 e0       	ldi	r25, 0x00	; 0
+            for(j=0;j<4;j++)    
+                if(getSta==getSta_[j])                                 
+  c0:	80 81       	ld	r24, Z
+  c2:	48 17       	cp	r20, r24
+  c4:	39 f4       	brne	.+14     	; 0xd4 <getKeyVal+0x3a>
+            	{
+                    keyVal=j+i*4;
+  c6:	22 0f       	add	r18, r18
+  c8:	33 1f       	adc	r19, r19
+  ca:	22 0f       	add	r18, r18
+  cc:	33 1f       	adc	r19, r19
+  ce:	89 2f       	mov	r24, r25
+  d0:	82 0f       	add	r24, r18
+  d2:	08 95       	ret
+    {               			
+        MATKEY_PORT = setSta_[i];
+        if(MATKEY_PIN!=setSta_[i])
+        {
+            getSta=MATKEY_PIN&0xf0;
+            for(j=0;j<4;j++)    
+  d4:	9f 5f       	subi	r25, 0xFF	; 255
+  d6:	31 96       	adiw	r30, 0x01	; 1
+  d8:	94 30       	cpi	r25, 0x04	; 4
+  da:	91 f7       	brne	.-28     	; 0xc0 <getKeyVal+0x26>
+  dc:	2f 5f       	subi	r18, 0xFF	; 255
+  de:	3f 4f       	sbci	r19, 0xFF	; 255
+uint8_t getKeyVal()
+{
+    uint8_t i,j,getSta,keyVal;
+	MATKEY_PORT=0xFF;
+    MATKEY_DDR=0x0F;
+    for(i=0;i<4;i++)              
+  e0:	24 30       	cpi	r18, 0x04	; 4
+  e2:	31 05       	cpc	r19, r1
+  e4:	01 f7       	brne	.-64     	; 0xa6 <getKeyVal+0xc>
+  e6:	8f ef       	ldi	r24, 0xFF	; 255
+                    return keyVal;
+            	}
+        }
+    }
+    return 0xFF;
+}
+  e8:	08 95       	ret
+
+000000ea <spiSendChar>:
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+  ea:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+  ec:	0d b4       	in	r0, 0x2d	; 45
+  ee:	07 fe       	sbrs	r0, 7
+  f0:	fd cf       	rjmp	.-6      	; 0xec <spiSendChar+0x2>
+}
+  f2:	08 95       	ret
+
+000000f4 <sendCodeST7920>:
+*	给LCD控制芯片ST7920发送指令的函数
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendCodeST7920(uint8_t code)
+{
+  f4:	98 2f       	mov	r25, r24
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+  f6:	88 ef       	ldi	r24, 0xF8	; 248
+  f8:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+  fa:	0d b4       	in	r0, 0x2d	; 45
+  fc:	07 fe       	sbrs	r0, 7
+  fe:	fd cf       	rjmp	.-6      	; 0xfa <sendCodeST7920+0x6>
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendCodeST7920(uint8_t code)
+{
+	spiSendChar(0xF8);
+	spiSendChar(code & 0xF0);
+ 100:	89 2f       	mov	r24, r25
+ 102:	80 7f       	andi	r24, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 104:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 106:	0d b4       	in	r0, 0x2d	; 45
+ 108:	07 fe       	sbrs	r0, 7
+ 10a:	fd cf       	rjmp	.-6      	; 0x106 <sendCodeST7920+0x12>
+*/
+void sendCodeST7920(uint8_t code)
+{
+	spiSendChar(0xF8);
+	spiSendChar(code & 0xF0);
+	spiSendChar((code<<4));
+ 10c:	92 95       	swap	r25
+ 10e:	90 7f       	andi	r25, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 110:	9e bd       	out	0x2e, r25	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 112:	0d b4       	in	r0, 0x2d	; 45
+ 114:	07 fe       	sbrs	r0, 7
+ 116:	fd cf       	rjmp	.-6      	; 0x112 <sendCodeST7920+0x1e>
+    can be achieved.
+*/
+void
+_delay_loop_1(uint8_t __count)
+{
+	__asm__ volatile (
+ 118:	88 eb       	ldi	r24, 0xB8	; 184
+ 11a:	8a 95       	dec	r24
+ 11c:	f1 f7       	brne	.-4      	; 0x11a <sendCodeST7920+0x26>
+{
+	spiSendChar(0xF8);
+	spiSendChar(code & 0xF0);
+	spiSendChar((code<<4));
+	LCD_DELAY();
+}
+ 11e:	08 95       	ret
+
+00000120 <sendDataST7920>:
+*	给LCD控制芯片ST7920发送数据的函数
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+ 120:	98 2f       	mov	r25, r24
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 122:	8a ef       	ldi	r24, 0xFA	; 250
+ 124:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 126:	0d b4       	in	r0, 0x2d	; 45
+ 128:	07 fe       	sbrs	r0, 7
+ 12a:	fd cf       	rjmp	.-6      	; 0x126 <sendDataST7920+0x6>
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+ 12c:	89 2f       	mov	r24, r25
+ 12e:	80 7f       	andi	r24, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 130:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 132:	0d b4       	in	r0, 0x2d	; 45
+ 134:	07 fe       	sbrs	r0, 7
+ 136:	fd cf       	rjmp	.-6      	; 0x132 <sendDataST7920+0x12>
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+	spiSendChar((data<<4));
+ 138:	92 95       	swap	r25
+ 13a:	90 7f       	andi	r25, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 13c:	9e bd       	out	0x2e, r25	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 13e:	0d b4       	in	r0, 0x2d	; 45
+ 140:	07 fe       	sbrs	r0, 7
+ 142:	fd cf       	rjmp	.-6      	; 0x13e <sendDataST7920+0x1e>
+ 144:	88 eb       	ldi	r24, 0xB8	; 184
+ 146:	8a 95       	dec	r24
+ 148:	f1 f7       	brne	.-4      	; 0x146 <sendDataST7920+0x26>
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+	spiSendChar((data<<4));
+	LCD_DELAY();
+}
+ 14a:	08 95       	ret
+
+0000014c <refreshLCD>:
+*	*lcd_stack指向用于刷新LCD的数据栈,需64byte容量
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void refreshLCD(const uint8_t *lcd_stack)
+{
+ 14c:	ac 01       	movw	r20, r24
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 14e:	88 ef       	ldi	r24, 0xF8	; 248
+ 150:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 152:	0d b4       	in	r0, 0x2d	; 45
+ 154:	07 fe       	sbrs	r0, 7
+ 156:	fd cf       	rjmp	.-6      	; 0x152 <refreshLCD+0x6>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 158:	1e bc       	out	0x2e, r1	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 15a:	0d b4       	in	r0, 0x2d	; 45
+ 15c:	07 fe       	sbrs	r0, 7
+ 15e:	fd cf       	rjmp	.-6      	; 0x15a <refreshLCD+0xe>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 160:	80 e2       	ldi	r24, 0x20	; 32
+ 162:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 164:	0d b4       	in	r0, 0x2d	; 45
+ 166:	07 fe       	sbrs	r0, 7
+ 168:	fd cf       	rjmp	.-6      	; 0x164 <refreshLCD+0x18>
+ 16a:	88 eb       	ldi	r24, 0xB8	; 184
+ 16c:	8a 95       	dec	r24
+ 16e:	f1 f7       	brne	.-4      	; 0x16c <refreshLCD+0x20>
+ 170:	20 e0       	ldi	r18, 0x00	; 0
+ 172:	30 e0       	ldi	r19, 0x00	; 0
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 174:	6a ef       	ldi	r22, 0xFA	; 250
+ 176:	98 eb       	ldi	r25, 0xB8	; 184
+{
+	uint8_t addr;
+	sendCodeST7920(0x02);	/*地址归位*/
+	for(addr=0;addr < 16;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 178:	fa 01       	movw	r30, r20
+ 17a:	e2 0f       	add	r30, r18
+ 17c:	f3 1f       	adc	r31, r19
+ 17e:	e0 81       	ld	r30, Z
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 180:	6e bd       	out	0x2e, r22	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 182:	0d b4       	in	r0, 0x2d	; 45
+ 184:	07 fe       	sbrs	r0, 7
+ 186:	fd cf       	rjmp	.-6      	; 0x182 <refreshLCD+0x36>
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+ 188:	8e 2f       	mov	r24, r30
+ 18a:	80 7f       	andi	r24, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 18c:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 18e:	0d b4       	in	r0, 0x2d	; 45
+ 190:	07 fe       	sbrs	r0, 7
+ 192:	fd cf       	rjmp	.-6      	; 0x18e <refreshLCD+0x42>
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+	spiSendChar((data<<4));
+ 194:	e2 95       	swap	r30
+ 196:	e0 7f       	andi	r30, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 198:	ee bd       	out	0x2e, r30	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 19a:	0d b4       	in	r0, 0x2d	; 45
+ 19c:	07 fe       	sbrs	r0, 7
+ 19e:	fd cf       	rjmp	.-6      	; 0x19a <refreshLCD+0x4e>
+ 1a0:	89 2f       	mov	r24, r25
+ 1a2:	8a 95       	dec	r24
+ 1a4:	f1 f7       	brne	.-4      	; 0x1a2 <refreshLCD+0x56>
+ 1a6:	2f 5f       	subi	r18, 0xFF	; 255
+ 1a8:	3f 4f       	sbci	r19, 0xFF	; 255
+*/
+void refreshLCD(const uint8_t *lcd_stack)
+{
+	uint8_t addr;
+	sendCodeST7920(0x02);	/*地址归位*/
+	for(addr=0;addr < 16;addr++)
+ 1aa:	20 31       	cpi	r18, 0x10	; 16
+ 1ac:	31 05       	cpc	r19, r1
+ 1ae:	21 f7       	brne	.-56     	; 0x178 <refreshLCD+0x2c>
+ 1b0:	da 01       	movw	r26, r20
+ 1b2:	fa 01       	movw	r30, r20
+ 1b4:	60 e2       	ldi	r22, 0x20	; 32
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 1b6:	3a ef       	ldi	r19, 0xFA	; 250
+ 1b8:	98 eb       	ldi	r25, 0xB8	; 184
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=32;addr < 48;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 1ba:	20 a1       	ldd	r18, Z+32	; 0x20
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 1bc:	3e bd       	out	0x2e, r19	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 1be:	0d b4       	in	r0, 0x2d	; 45
+ 1c0:	07 fe       	sbrs	r0, 7
+ 1c2:	fd cf       	rjmp	.-6      	; 0x1be <refreshLCD+0x72>
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+ 1c4:	82 2f       	mov	r24, r18
+ 1c6:	80 7f       	andi	r24, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 1c8:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 1ca:	0d b4       	in	r0, 0x2d	; 45
+ 1cc:	07 fe       	sbrs	r0, 7
+ 1ce:	fd cf       	rjmp	.-6      	; 0x1ca <refreshLCD+0x7e>
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+	spiSendChar((data<<4));
+ 1d0:	22 95       	swap	r18
+ 1d2:	20 7f       	andi	r18, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 1d4:	2e bd       	out	0x2e, r18	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 1d6:	0d b4       	in	r0, 0x2d	; 45
+ 1d8:	07 fe       	sbrs	r0, 7
+ 1da:	fd cf       	rjmp	.-6      	; 0x1d6 <refreshLCD+0x8a>
+ 1dc:	89 2f       	mov	r24, r25
+ 1de:	8a 95       	dec	r24
+ 1e0:	f1 f7       	brne	.-4      	; 0x1de <refreshLCD+0x92>
+	sendCodeST7920(0x02);	/*地址归位*/
+	for(addr=0;addr < 16;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=32;addr < 48;addr++)
+ 1e2:	6f 5f       	subi	r22, 0xFF	; 255
+ 1e4:	31 96       	adiw	r30, 0x01	; 1
+ 1e6:	60 33       	cpi	r22, 0x30	; 48
+ 1e8:	41 f7       	brne	.-48     	; 0x1ba <refreshLCD+0x6e>
+ 1ea:	30 e1       	ldi	r19, 0x10	; 16
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 1ec:	7a ef       	ldi	r23, 0xFA	; 250
+ 1ee:	98 eb       	ldi	r25, 0xB8	; 184
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=16;addr < 32;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 1f0:	50 96       	adiw	r26, 0x10	; 16
+ 1f2:	2c 91       	ld	r18, X
+ 1f4:	50 97       	sbiw	r26, 0x10	; 16
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 1f6:	7e bd       	out	0x2e, r23	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 1f8:	0d b4       	in	r0, 0x2d	; 45
+ 1fa:	07 fe       	sbrs	r0, 7
+ 1fc:	fd cf       	rjmp	.-6      	; 0x1f8 <refreshLCD+0xac>
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+ 1fe:	82 2f       	mov	r24, r18
+ 200:	80 7f       	andi	r24, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 202:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 204:	0d b4       	in	r0, 0x2d	; 45
+ 206:	07 fe       	sbrs	r0, 7
+ 208:	fd cf       	rjmp	.-6      	; 0x204 <refreshLCD+0xb8>
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+	spiSendChar((data<<4));
+ 20a:	22 95       	swap	r18
+ 20c:	20 7f       	andi	r18, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 20e:	2e bd       	out	0x2e, r18	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 210:	0d b4       	in	r0, 0x2d	; 45
+ 212:	07 fe       	sbrs	r0, 7
+ 214:	fd cf       	rjmp	.-6      	; 0x210 <refreshLCD+0xc4>
+ 216:	89 2f       	mov	r24, r25
+ 218:	8a 95       	dec	r24
+ 21a:	f1 f7       	brne	.-4      	; 0x218 <refreshLCD+0xcc>
+	}
+	for(addr=32;addr < 48;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=16;addr < 32;addr++)
+ 21c:	3f 5f       	subi	r19, 0xFF	; 255
+ 21e:	11 96       	adiw	r26, 0x01	; 1
+ 220:	30 32       	cpi	r19, 0x20	; 32
+ 222:	31 f7       	brne	.-52     	; 0x1f0 <refreshLCD+0xa4>
+ 224:	fa 01       	movw	r30, r20
+ 226:	f0 96       	adiw	r30, 0x30	; 48
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 228:	3a ef       	ldi	r19, 0xFA	; 250
+ 22a:	28 eb       	ldi	r18, 0xB8	; 184
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	
+	for(addr=48;addr < 63;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 22c:	90 81       	ld	r25, Z
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 22e:	3e bd       	out	0x2e, r19	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 230:	0d b4       	in	r0, 0x2d	; 45
+ 232:	07 fe       	sbrs	r0, 7
+ 234:	fd cf       	rjmp	.-6      	; 0x230 <refreshLCD+0xe4>
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+ 236:	89 2f       	mov	r24, r25
+ 238:	80 7f       	andi	r24, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 23a:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 23c:	0d b4       	in	r0, 0x2d	; 45
+ 23e:	07 fe       	sbrs	r0, 7
+ 240:	fd cf       	rjmp	.-6      	; 0x23c <refreshLCD+0xf0>
+*/
+void sendDataST7920(uint8_t data)
+{
+	spiSendChar(0xFA);
+	spiSendChar(data & 0xF0);
+	spiSendChar((data<<4));
+ 242:	92 95       	swap	r25
+ 244:	90 7f       	andi	r25, 0xF0	; 240
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 246:	9e bd       	out	0x2e, r25	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 248:	0d b4       	in	r0, 0x2d	; 45
+ 24a:	07 fe       	sbrs	r0, 7
+ 24c:	fd cf       	rjmp	.-6      	; 0x248 <refreshLCD+0xfc>
+ 24e:	82 2f       	mov	r24, r18
+ 250:	8a 95       	dec	r24
+ 252:	f1 f7       	brne	.-4      	; 0x250 <refreshLCD+0x104>
+	for(addr=16;addr < 32;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	
+	for(addr=48;addr < 63;addr++)
+ 254:	6f 5f       	subi	r22, 0xFF	; 255
+ 256:	31 96       	adiw	r30, 0x01	; 1
+ 258:	6f 33       	cpi	r22, 0x3F	; 63
+ 25a:	41 f7       	brne	.-48     	; 0x22c <refreshLCD+0xe0>
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+}
+ 25c:	08 95       	ret
+
+0000025e <decToAscii>:
+*	width是转换宽度
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void decToAscii(uint8_t* str,uint16_t dec,uint8_t width)
+{
+ 25e:	cf 93       	push	r28
+ 260:	df 93       	push	r29
+ 262:	fb 01       	movw	r30, r22
+ 264:	ec 01       	movw	r28, r24
+			case 1:
+			{
+				*(str+num) = (dec+'0');
+				break;
+			}
+			default: *(str+num) = '0';
+ 266:	20 e3       	ldi	r18, 0x30	; 48
+ 268:	43 c0       	rjmp	.+134    	; 0x2f0 <decToAscii+0x92>
+void decToAscii(uint8_t* str,uint16_t dec,uint8_t width)
+{
+	uint8_t num=0;
+	while(width)
+	{
+		switch(width)
+ 26a:	43 30       	cpi	r20, 0x03	; 3
+ 26c:	21 f1       	breq	.+72     	; 0x2b6 <decToAscii+0x58>
+ 26e:	44 30       	cpi	r20, 0x04	; 4
+ 270:	28 f4       	brcc	.+10     	; 0x27c <decToAscii+0x1e>
+ 272:	41 30       	cpi	r20, 0x01	; 1
+ 274:	b1 f1       	breq	.+108    	; 0x2e2 <decToAscii+0x84>
+ 276:	42 30       	cpi	r20, 0x02	; 2
+ 278:	c1 f5       	brne	.+112    	; 0x2ea <decToAscii+0x8c>
+ 27a:	28 c0       	rjmp	.+80     	; 0x2cc <decToAscii+0x6e>
+ 27c:	44 30       	cpi	r20, 0x04	; 4
+ 27e:	69 f0       	breq	.+26     	; 0x29a <decToAscii+0x3c>
+ 280:	45 30       	cpi	r20, 0x05	; 5
+ 282:	99 f5       	brne	.+102    	; 0x2ea <decToAscii+0x8c>
+		{
+			case 5:
+			{
+				*(str+num) = (dec/10000+'0');
+ 284:	cf 01       	movw	r24, r30
+ 286:	60 e1       	ldi	r22, 0x10	; 16
+ 288:	77 e2       	ldi	r23, 0x27	; 39
+ 28a:	0e 94 aa 02 	call	0x554	; 0x554 <__udivmodhi4>
+ 28e:	60 5d       	subi	r22, 0xD0	; 208
+ 290:	68 83       	st	Y, r22
+				dec%=10000;
+ 292:	cf 01       	movw	r24, r30
+ 294:	60 e1       	ldi	r22, 0x10	; 16
+ 296:	77 e2       	ldi	r23, 0x27	; 39
+ 298:	0a c0       	rjmp	.+20     	; 0x2ae <decToAscii+0x50>
+				break;
+			}			
+			case 4:
+			{
+				*(str+num) = (dec/1000+'0');
+ 29a:	cf 01       	movw	r24, r30
+ 29c:	68 ee       	ldi	r22, 0xE8	; 232
+ 29e:	73 e0       	ldi	r23, 0x03	; 3
+ 2a0:	0e 94 aa 02 	call	0x554	; 0x554 <__udivmodhi4>
+ 2a4:	60 5d       	subi	r22, 0xD0	; 208
+ 2a6:	68 83       	st	Y, r22
+				dec%=1000;
+ 2a8:	cf 01       	movw	r24, r30
+ 2aa:	68 ee       	ldi	r22, 0xE8	; 232
+ 2ac:	73 e0       	ldi	r23, 0x03	; 3
+ 2ae:	0e 94 aa 02 	call	0x554	; 0x554 <__udivmodhi4>
+ 2b2:	fc 01       	movw	r30, r24
+ 2b4:	1b c0       	rjmp	.+54     	; 0x2ec <decToAscii+0x8e>
+				break;
+			}
+			case 3:
+			{
+				*(str+num) = (dec/100+'0');
+ 2b6:	cf 01       	movw	r24, r30
+ 2b8:	64 e6       	ldi	r22, 0x64	; 100
+ 2ba:	70 e0       	ldi	r23, 0x00	; 0
+ 2bc:	0e 94 aa 02 	call	0x554	; 0x554 <__udivmodhi4>
+ 2c0:	60 5d       	subi	r22, 0xD0	; 208
+ 2c2:	68 83       	st	Y, r22
+				dec%=100;
+ 2c4:	cf 01       	movw	r24, r30
+ 2c6:	64 e6       	ldi	r22, 0x64	; 100
+ 2c8:	70 e0       	ldi	r23, 0x00	; 0
+ 2ca:	f1 cf       	rjmp	.-30     	; 0x2ae <decToAscii+0x50>
+				break;
+			}
+			case 2:
+			{
+				*(str+num) = (dec/10+'0');
+ 2cc:	cf 01       	movw	r24, r30
+ 2ce:	6a e0       	ldi	r22, 0x0A	; 10
+ 2d0:	70 e0       	ldi	r23, 0x00	; 0
+ 2d2:	0e 94 aa 02 	call	0x554	; 0x554 <__udivmodhi4>
+ 2d6:	60 5d       	subi	r22, 0xD0	; 208
+ 2d8:	68 83       	st	Y, r22
+				dec%=10;
+ 2da:	cf 01       	movw	r24, r30
+ 2dc:	6a e0       	ldi	r22, 0x0A	; 10
+ 2de:	70 e0       	ldi	r23, 0x00	; 0
+ 2e0:	e6 cf       	rjmp	.-52     	; 0x2ae <decToAscii+0x50>
+				break;
+			}
+			case 1:
+			{
+				*(str+num) = (dec+'0');
+ 2e2:	e0 5d       	subi	r30, 0xD0	; 208
+ 2e4:	e8 83       	st	Y, r30
+ 2e6:	e0 53       	subi	r30, 0x30	; 48
+ 2e8:	01 c0       	rjmp	.+2      	; 0x2ec <decToAscii+0x8e>
+				break;
+			}
+			default: *(str+num) = '0';
+ 2ea:	28 83       	st	Y, r18
+		}
+		width--;
+ 2ec:	41 50       	subi	r20, 0x01	; 1
+ 2ee:	21 96       	adiw	r28, 0x01	; 1
+*-------------------------------------------------------------------------------------------------------
+*/
+void decToAscii(uint8_t* str,uint16_t dec,uint8_t width)
+{
+	uint8_t num=0;
+	while(width)
+ 2f0:	44 23       	and	r20, r20
+ 2f2:	09 f0       	breq	.+2      	; 0x2f6 <decToAscii+0x98>
+ 2f4:	ba cf       	rjmp	.-140    	; 0x26a <decToAscii+0xc>
+			default: *(str+num) = '0';
+		}
+		width--;
+		num++;
+	}
+}
+ 2f6:	df 91       	pop	r29
+ 2f8:	cf 91       	pop	r28
+ 2fa:	08 95       	ret
+
+000002fc <st7920LcdInit>:
+}
+/*Hardware Environment：DVK501 && M169+ EX*/
+#elif defined(_DVK501_M169_EX_)
+void st7920LcdInit(void)
+{
+DDRB|=0x0F;
+ 2fc:	84 b1       	in	r24, 0x04	; 4
+ 2fe:	8f 60       	ori	r24, 0x0F	; 15
+ 300:	84 b9       	out	0x04, r24	; 4
+// SPI Type: Master
+// SPI Clock Rate: 2*1843.200 kHz
+// SPI Clock Phase: Cycle Half
+// SPI Clock Polarity: Low
+// SPI Data Order: MSB First
+SPCR=0x50;
+ 302:	80 e5       	ldi	r24, 0x50	; 80
+ 304:	8c bd       	out	0x2c, r24	; 44
+SPSR=0x01;
+ 306:	81 e0       	ldi	r24, 0x01	; 1
+ 308:	8d bd       	out	0x2d, r24	; 45
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 30a:	88 ef       	ldi	r24, 0xF8	; 248
+ 30c:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 30e:	0d b4       	in	r0, 0x2d	; 45
+ 310:	07 fe       	sbrs	r0, 7
+ 312:	fd cf       	rjmp	.-6      	; 0x30e <st7920LcdInit+0x12>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 314:	1e bc       	out	0x2e, r1	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 316:	0d b4       	in	r0, 0x2d	; 45
+ 318:	07 fe       	sbrs	r0, 7
+ 31a:	fd cf       	rjmp	.-6      	; 0x316 <st7920LcdInit+0x1a>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 31c:	80 ec       	ldi	r24, 0xC0	; 192
+ 31e:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 320:	0d b4       	in	r0, 0x2d	; 45
+ 322:	07 fe       	sbrs	r0, 7
+ 324:	fd cf       	rjmp	.-6      	; 0x320 <st7920LcdInit+0x24>
+ 326:	88 eb       	ldi	r24, 0xB8	; 184
+ 328:	8a 95       	dec	r24
+ 32a:	f1 f7       	brne	.-4      	; 0x328 <st7920LcdInit+0x2c>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 32c:	88 ef       	ldi	r24, 0xF8	; 248
+ 32e:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 330:	0d b4       	in	r0, 0x2d	; 45
+ 332:	07 fe       	sbrs	r0, 7
+ 334:	fd cf       	rjmp	.-6      	; 0x330 <st7920LcdInit+0x34>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 336:	1e bc       	out	0x2e, r1	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 338:	0d b4       	in	r0, 0x2d	; 45
+ 33a:	07 fe       	sbrs	r0, 7
+ 33c:	fd cf       	rjmp	.-6      	; 0x338 <st7920LcdInit+0x3c>
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendChar(uint8_t send_char)
+{
+	SPDR = send_char;
+ 33e:	80 e1       	ldi	r24, 0x10	; 16
+ 340:	8e bd       	out	0x2e, r24	; 46
+	while (!(SPSR & (1<<SPIF)));
+ 342:	0d b4       	in	r0, 0x2d	; 45
+ 344:	07 fe       	sbrs	r0, 7
+ 346:	fd cf       	rjmp	.-6      	; 0x342 <st7920LcdInit+0x46>
+ 348:	88 eb       	ldi	r24, 0xB8	; 184
+ 34a:	8a 95       	dec	r24
+ 34c:	f1 f7       	brne	.-4      	; 0x34a <st7920LcdInit+0x4e>
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 34e:	86 e6       	ldi	r24, 0x66	; 102
+ 350:	9e e0       	ldi	r25, 0x0E	; 14
+ 352:	01 97       	sbiw	r24, 0x01	; 1
+ 354:	f1 f7       	brne	.-4      	; 0x352 <st7920LcdInit+0x56>
+sendCodeST7920(0x0C);//整体显示
+sendCodeST7920(0x01);//清屏
+_delay_ms(2);
+memset(lcd_buffer,' ',sizeof(lcd_buffer));
+ 356:	86 e2       	ldi	r24, 0x26	; 38
+ 358:	91 e0       	ldi	r25, 0x01	; 1
+ 35a:	60 e2       	ldi	r22, 0x20	; 32
+ 35c:	70 e0       	ldi	r23, 0x00	; 0
+ 35e:	40 e4       	ldi	r20, 0x40	; 64
+ 360:	50 e0       	ldi	r21, 0x00	; 0
+ 362:	0e 94 a3 02 	call	0x546	; 0x546 <memset>
+}
+ 366:	08 95       	ret
+
+00000368 <showLine>:
+*	*str指向用于将要显示的内容
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void showLine(const uint8_t x,const uint8_t y,uint8_t* lcd_stack,char * str,...)
+{
+ 368:	af 92       	push	r10
+ 36a:	bf 92       	push	r11
+ 36c:	cf 92       	push	r12
+ 36e:	df 92       	push	r13
+ 370:	ef 92       	push	r14
+ 372:	ff 92       	push	r15
+ 374:	0f 93       	push	r16
+ 376:	df 93       	push	r29
+ 378:	cf 93       	push	r28
+ 37a:	cd b7       	in	r28, 0x3d	; 61
+ 37c:	de b7       	in	r29, 0x3e	; 62
+ 37e:	0d 85       	ldd	r16, Y+13	; 0x0d
+ 380:	ae 84       	ldd	r10, Y+14	; 0x0e
+ 382:	bf 84       	ldd	r11, Y+15	; 0x0f
+ 384:	e8 88       	ldd	r14, Y+16	; 0x10
+ 386:	f9 88       	ldd	r15, Y+17	; 0x11
+	uint8_t coordinate = 16*y + x;
+ 388:	02 95       	swap	r16
+ 38a:	00 7f       	andi	r16, 0xF0	; 240
+ 38c:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 38e:	08 0f       	add	r16, r24
+*	*str指向用于将要显示的内容
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void showLine(const uint8_t x,const uint8_t y,uint8_t* lcd_stack,char * str,...)
+{
+ 390:	de 01       	movw	r26, r28
+ 392:	52 96       	adiw	r26, 0x12	; 18
+ 394:	41 c0       	rjmp	.+130    	; 0x418 <showLine+0xb0>
+	uint8_t coordinate = 16*y + x;
+	va_list marker;
+	va_start(marker,str); /* Initialize variable arguments. */ 
+	while(*str!='\0')
+	{
+		if(coordinate>64) break;	/*防止堆栈溢出*/
+ 396:	01 34       	cpi	r16, 0x41	; 65
+ 398:	08 f0       	brcs	.+2      	; 0x39c <showLine+0x34>
+ 39a:	43 c0       	rjmp	.+134    	; 0x422 <showLine+0xba>
+
+		if(*str == '\\')
+ 39c:	8c 35       	cpi	r24, 0x5C	; 92
+ 39e:	51 f4       	brne	.+20     	; 0x3b4 <showLine+0x4c>
+		{
+			str++;
+ 3a0:	08 94       	sec
+ 3a2:	e1 1c       	adc	r14, r1
+ 3a4:	f1 1c       	adc	r15, r1
+			lcd_stack[coordinate] = *str;
+ 3a6:	95 01       	movw	r18, r10
+ 3a8:	20 0f       	add	r18, r16
+ 3aa:	31 1d       	adc	r19, r1
+ 3ac:	f7 01       	movw	r30, r14
+ 3ae:	80 81       	ld	r24, Z
+ 3b0:	f9 01       	movw	r30, r18
+ 3b2:	2d c0       	rjmp	.+90     	; 0x40e <showLine+0xa6>
+		}
+		else if(*str == '%')
+ 3b4:	85 32       	cpi	r24, 0x25	; 37
+ 3b6:	41 f5       	brne	.+80     	; 0x408 <showLine+0xa0>
+		{
+			str++;
+ 3b8:	08 94       	sec
+ 3ba:	e1 1c       	adc	r14, r1
+ 3bc:	f1 1c       	adc	r15, r1
+			if (*str=='d')
+ 3be:	f7 01       	movw	r30, r14
+ 3c0:	80 81       	ld	r24, Z
+ 3c2:	84 36       	cpi	r24, 0x64	; 100
+ 3c4:	c1 f4       	brne	.+48     	; 0x3f6 <showLine+0x8e>
+			{
+				str++;
+ 3c6:	08 94       	sec
+ 3c8:	e1 1c       	adc	r14, r1
+ 3ca:	f1 1c       	adc	r15, r1
+				decToAscii(&lcd_stack[coordinate],va_arg(marker,uint16_t),(*str-'0'));
+ 3cc:	92 e0       	ldi	r25, 0x02	; 2
+ 3ce:	c9 2e       	mov	r12, r25
+ 3d0:	d1 2c       	mov	r13, r1
+ 3d2:	ca 0e       	add	r12, r26
+ 3d4:	db 1e       	adc	r13, r27
+ 3d6:	6d 91       	ld	r22, X+
+ 3d8:	7c 91       	ld	r23, X
+ 3da:	f7 01       	movw	r30, r14
+ 3dc:	40 81       	ld	r20, Z
+ 3de:	40 53       	subi	r20, 0x30	; 48
+ 3e0:	c5 01       	movw	r24, r10
+ 3e2:	80 0f       	add	r24, r16
+ 3e4:	91 1d       	adc	r25, r1
+ 3e6:	0e 94 2f 01 	call	0x25e	; 0x25e <decToAscii>
+				coordinate+=(*str-'0'-1);
+ 3ea:	01 53       	subi	r16, 0x31	; 49
+ 3ec:	f7 01       	movw	r30, r14
+ 3ee:	80 81       	ld	r24, Z
+ 3f0:	08 0f       	add	r16, r24
+ 3f2:	d6 01       	movw	r26, r12
+ 3f4:	0d c0       	rjmp	.+26     	; 0x410 <showLine+0xa8>
+			}
+			else if(*str=='c')
+ 3f6:	83 36       	cpi	r24, 0x63	; 99
+ 3f8:	59 f4       	brne	.+22     	; 0x410 <showLine+0xa8>
+			{
+				lcd_stack[coordinate] = va_arg(marker,uint16_t);
+ 3fa:	f5 01       	movw	r30, r10
+ 3fc:	e0 0f       	add	r30, r16
+ 3fe:	f1 1d       	adc	r31, r1
+ 400:	8c 91       	ld	r24, X
+ 402:	80 83       	st	Z, r24
+ 404:	12 96       	adiw	r26, 0x02	; 2
+ 406:	04 c0       	rjmp	.+8      	; 0x410 <showLine+0xa8>
+			}
+		}
+		/*如有新的转义符指令请添加在这里*/
+		else
+		{
+			lcd_stack[coordinate] = *str;
+ 408:	f5 01       	movw	r30, r10
+ 40a:	e0 0f       	add	r30, r16
+ 40c:	f1 1d       	adc	r31, r1
+ 40e:	80 83       	st	Z, r24
+		}
+		str++;
+ 410:	08 94       	sec
+ 412:	e1 1c       	adc	r14, r1
+ 414:	f1 1c       	adc	r15, r1
+		coordinate++;
+ 416:	0f 5f       	subi	r16, 0xFF	; 255
+void showLine(const uint8_t x,const uint8_t y,uint8_t* lcd_stack,char * str,...)
+{
+	uint8_t coordinate = 16*y + x;
+	va_list marker;
+	va_start(marker,str); /* Initialize variable arguments. */ 
+	while(*str!='\0')
+ 418:	f7 01       	movw	r30, r14
+ 41a:	80 81       	ld	r24, Z
+ 41c:	88 23       	and	r24, r24
+ 41e:	09 f0       	breq	.+2      	; 0x422 <showLine+0xba>
+ 420:	ba cf       	rjmp	.-140    	; 0x396 <showLine+0x2e>
+		}
+		str++;
+		coordinate++;
+	}
+	va_end( marker ); /* Reset variable arguments. */ 
+}
+ 422:	cf 91       	pop	r28
+ 424:	df 91       	pop	r29
+ 426:	0f 91       	pop	r16
+ 428:	ff 90       	pop	r15
+ 42a:	ef 90       	pop	r14
+ 42c:	df 90       	pop	r13
+ 42e:	cf 90       	pop	r12
+ 430:	bf 90       	pop	r11
+ 432:	af 90       	pop	r10
+ 434:	08 95       	ret
+
+00000436 <main>:
+#include <avr/io.h>
+#include <ws_matkey_port.h>
+#include <ws_lcd_ST7920_port.h>
+
+int main(void)
+{
+ 436:	af 92       	push	r10
+ 438:	bf 92       	push	r11
+ 43a:	cf 92       	push	r12
+ 43c:	df 92       	push	r13
+ 43e:	ef 92       	push	r14
+ 440:	ff 92       	push	r15
+ 442:	0f 93       	push	r16
+ 444:	1f 93       	push	r17
+ 446:	cf 93       	push	r28
+ 448:	df 93       	push	r29
+	uint8_t tmp1=0,tmp2=0;
+	st7920LcdInit(); /*LCD初始化*/
+ 44a:	0e 94 7e 01 	call	0x2fc	; 0x2fc <st7920LcdInit>
+	showLine(0,0,lcd_buffer,"矩阵式键盘试验");
+ 44e:	00 d0       	rcall	.+0      	; 0x450 <main+0x1a>
+ 450:	00 d0       	rcall	.+0      	; 0x452 <main+0x1c>
+ 452:	00 d0       	rcall	.+0      	; 0x454 <main+0x1e>
+ 454:	ed b7       	in	r30, 0x3d	; 61
+ 456:	fe b7       	in	r31, 0x3e	; 62
+ 458:	31 96       	adiw	r30, 0x01	; 1
+ 45a:	ad b7       	in	r26, 0x3d	; 61
+ 45c:	be b7       	in	r27, 0x3e	; 62
+ 45e:	11 96       	adiw	r26, 0x01	; 1
+ 460:	1c 92       	st	X, r1
+ 462:	11 82       	std	Z+1, r1	; 0x01
+ 464:	06 e2       	ldi	r16, 0x26	; 38
+ 466:	11 e0       	ldi	r17, 0x01	; 1
+ 468:	13 83       	std	Z+3, r17	; 0x03
+ 46a:	02 83       	std	Z+2, r16	; 0x02
+ 46c:	80 e0       	ldi	r24, 0x00	; 0
+ 46e:	91 e0       	ldi	r25, 0x01	; 1
+ 470:	95 83       	std	Z+5, r25	; 0x05
+ 472:	84 83       	std	Z+4, r24	; 0x04
+ 474:	0e 94 b4 01 	call	0x368	; 0x368 <showLine>
+	showLine(0,1,lcd_buffer,"键值：");
+ 478:	ed b7       	in	r30, 0x3d	; 61
+ 47a:	fe b7       	in	r31, 0x3e	; 62
+ 47c:	31 96       	adiw	r30, 0x01	; 1
+ 47e:	ad b7       	in	r26, 0x3d	; 61
+ 480:	be b7       	in	r27, 0x3e	; 62
+ 482:	11 96       	adiw	r26, 0x01	; 1
+ 484:	1c 92       	st	X, r1
+ 486:	81 e0       	ldi	r24, 0x01	; 1
+ 488:	81 83       	std	Z+1, r24	; 0x01
+ 48a:	13 83       	std	Z+3, r17	; 0x03
+ 48c:	02 83       	std	Z+2, r16	; 0x02
+ 48e:	8f e0       	ldi	r24, 0x0F	; 15
+ 490:	91 e0       	ldi	r25, 0x01	; 1
+ 492:	95 83       	std	Z+5, r25	; 0x05
+ 494:	84 83       	std	Z+4, r24	; 0x04
+ 496:	0e 94 b4 01 	call	0x368	; 0x368 <showLine>
+ 49a:	ff 24       	eor	r15, r15
+ 49c:	8d b7       	in	r24, 0x3d	; 61
+ 49e:	9e b7       	in	r25, 0x3e	; 62
+ 4a0:	06 96       	adiw	r24, 0x06	; 6
+ 4a2:	0f b6       	in	r0, 0x3f	; 63
+ 4a4:	f8 94       	cli
+ 4a6:	9e bf       	out	0x3e, r25	; 62
+ 4a8:	0f be       	out	0x3f, r0	; 63
+ 4aa:	8d bf       	out	0x3d, r24	; 61
+ 4ac:	e0 2e       	mov	r14, r16
+ 4ae:	01 2f       	mov	r16, r17
+	{
+		tmp1=getKeyVal();
+		if(tmp1!=tmp2)
+		{
+			if(tmp1==0xFF) showLine(6,1,lcd_buffer,"  ");
+			else showLine(6,1,lcd_buffer,"%d2",tmp1);
+ 4b0:	36 e0       	ldi	r19, 0x06	; 6
+ 4b2:	a3 2e       	mov	r10, r19
+ 4b4:	bb 24       	eor	r11, r11
+ 4b6:	b3 94       	inc	r11
+ 4b8:	29 e1       	ldi	r18, 0x19	; 25
+ 4ba:	c2 2e       	mov	r12, r18
+ 4bc:	21 e0       	ldi	r18, 0x01	; 1
+ 4be:	d2 2e       	mov	r13, r18
+	while(1)
+	{
+		tmp1=getKeyVal();
+		if(tmp1!=tmp2)
+		{
+			if(tmp1==0xFF) showLine(6,1,lcd_buffer,"  ");
+ 4c0:	c6 e1       	ldi	r28, 0x16	; 22
+ 4c2:	d1 e0       	ldi	r29, 0x01	; 1
+ 4c4:	01 c0       	rjmp	.+2      	; 0x4c8 <main+0x92>
+int main(void)
+{
+	uint8_t tmp1=0,tmp2=0;
+	st7920LcdInit(); /*LCD初始化*/
+	showLine(0,0,lcd_buffer,"矩阵式键盘试验");
+	showLine(0,1,lcd_buffer,"键值：");
+ 4c6:	f1 2e       	mov	r15, r17
+	while(1)
+	{
+		tmp1=getKeyVal();
+ 4c8:	0e 94 4d 00 	call	0x9a	; 0x9a <getKeyVal>
+ 4cc:	18 2f       	mov	r17, r24
+		if(tmp1!=tmp2)
+ 4ce:	8f 15       	cp	r24, r15
+ 4d0:	d1 f3       	breq	.-12     	; 0x4c6 <main+0x90>
+		{
+			if(tmp1==0xFF) showLine(6,1,lcd_buffer,"  ");
+ 4d2:	8f 3f       	cpi	r24, 0xFF	; 255
+ 4d4:	a9 f4       	brne	.+42     	; 0x500 <__stack+0x1>
+ 4d6:	00 d0       	rcall	.+0      	; 0x4d8 <main+0xa2>
+ 4d8:	00 d0       	rcall	.+0      	; 0x4da <main+0xa4>
+ 4da:	00 d0       	rcall	.+0      	; 0x4dc <main+0xa6>
+ 4dc:	ed b7       	in	r30, 0x3d	; 61
+ 4de:	fe b7       	in	r31, 0x3e	; 62
+ 4e0:	31 96       	adiw	r30, 0x01	; 1
+ 4e2:	ad b7       	in	r26, 0x3d	; 61
+ 4e4:	be b7       	in	r27, 0x3e	; 62
+ 4e6:	11 96       	adiw	r26, 0x01	; 1
+ 4e8:	ac 92       	st	X, r10
+ 4ea:	b1 82       	std	Z+1, r11	; 0x01
+ 4ec:	e2 82       	std	Z+2, r14	; 0x02
+ 4ee:	03 83       	std	Z+3, r16	; 0x03
+ 4f0:	d5 83       	std	Z+5, r29	; 0x05
+ 4f2:	c4 83       	std	Z+4, r28	; 0x04
+ 4f4:	0e 94 b4 01 	call	0x368	; 0x368 <showLine>
+ 4f8:	8d b7       	in	r24, 0x3d	; 61
+ 4fa:	9e b7       	in	r25, 0x3e	; 62
+ 4fc:	06 96       	adiw	r24, 0x06	; 6
+ 4fe:	19 c0       	rjmp	.+50     	; 0x532 <__stack+0x33>
+			else showLine(6,1,lcd_buffer,"%d2",tmp1);
+ 500:	ad b7       	in	r26, 0x3d	; 61
+ 502:	be b7       	in	r27, 0x3e	; 62
+ 504:	18 97       	sbiw	r26, 0x08	; 8
+ 506:	0f b6       	in	r0, 0x3f	; 63
+ 508:	f8 94       	cli
+ 50a:	be bf       	out	0x3e, r27	; 62
+ 50c:	0f be       	out	0x3f, r0	; 63
+ 50e:	ad bf       	out	0x3d, r26	; 61
+ 510:	ed b7       	in	r30, 0x3d	; 61
+ 512:	fe b7       	in	r31, 0x3e	; 62
+ 514:	31 96       	adiw	r30, 0x01	; 1
+ 516:	11 96       	adiw	r26, 0x01	; 1
+ 518:	ac 92       	st	X, r10
+ 51a:	b1 82       	std	Z+1, r11	; 0x01
+ 51c:	e2 82       	std	Z+2, r14	; 0x02
+ 51e:	03 83       	std	Z+3, r16	; 0x03
+ 520:	d5 82       	std	Z+5, r13	; 0x05
+ 522:	c4 82       	std	Z+4, r12	; 0x04
+ 524:	86 83       	std	Z+6, r24	; 0x06
+ 526:	17 82       	std	Z+7, r1	; 0x07
+ 528:	0e 94 b4 01 	call	0x368	; 0x368 <showLine>
+ 52c:	8d b7       	in	r24, 0x3d	; 61
+ 52e:	9e b7       	in	r25, 0x3e	; 62
+ 530:	08 96       	adiw	r24, 0x08	; 8
+ 532:	0f b6       	in	r0, 0x3f	; 63
+ 534:	f8 94       	cli
+ 536:	9e bf       	out	0x3e, r25	; 62
+ 538:	0f be       	out	0x3f, r0	; 63
+ 53a:	8d bf       	out	0x3d, r24	; 61
+			refreshLCD(lcd_buffer); /*刷新LCD*/
+ 53c:	86 e2       	ldi	r24, 0x26	; 38
+ 53e:	91 e0       	ldi	r25, 0x01	; 1
+ 540:	0e 94 a6 00 	call	0x14c	; 0x14c <refreshLCD>
+ 544:	c0 cf       	rjmp	.-128    	; 0x4c6 <main+0x90>
+
+00000546 <memset>:
+ 546:	dc 01       	movw	r26, r24
+ 548:	01 c0       	rjmp	.+2      	; 0x54c <memset+0x6>
+ 54a:	6d 93       	st	X+, r22
+ 54c:	41 50       	subi	r20, 0x01	; 1
+ 54e:	50 40       	sbci	r21, 0x00	; 0
+ 550:	e0 f7       	brcc	.-8      	; 0x54a <memset+0x4>
+ 552:	08 95       	ret
+
+00000554 <__udivmodhi4>:
+ 554:	aa 1b       	sub	r26, r26
+ 556:	bb 1b       	sub	r27, r27
+ 558:	51 e1       	ldi	r21, 0x11	; 17
+ 55a:	07 c0       	rjmp	.+14     	; 0x56a <__udivmodhi4_ep>
+
+0000055c <__udivmodhi4_loop>:
+ 55c:	aa 1f       	adc	r26, r26
+ 55e:	bb 1f       	adc	r27, r27
+ 560:	a6 17       	cp	r26, r22
+ 562:	b7 07       	cpc	r27, r23
+ 564:	10 f0       	brcs	.+4      	; 0x56a <__udivmodhi4_ep>
+ 566:	a6 1b       	sub	r26, r22
+ 568:	b7 0b       	sbc	r27, r23
+
+0000056a <__udivmodhi4_ep>:
+ 56a:	88 1f       	adc	r24, r24
+ 56c:	99 1f       	adc	r25, r25
+ 56e:	5a 95       	dec	r21
+ 570:	a9 f7       	brne	.-22     	; 0x55c <__udivmodhi4_loop>
+ 572:	80 95       	com	r24
+ 574:	90 95       	com	r25
+ 576:	bc 01       	movw	r22, r24
+ 578:	cd 01       	movw	r24, r26
+ 57a:	08 95       	ret
+
+0000057c <_exit>:
+ 57c:	f8 94       	cli
+
+0000057e <__stop_program>:
+ 57e:	ff cf       	rjmp	.-2      	; 0x57e <__stop_program>

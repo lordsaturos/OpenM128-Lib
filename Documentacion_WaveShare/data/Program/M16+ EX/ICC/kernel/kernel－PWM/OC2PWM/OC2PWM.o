@@ -1,0 +1,29 @@
+XL
+H 1 areas 2 global symbols
+M OC2PWM.C
+A text size 18 flags 0
+dbfile E:\微雪电子CD1\产品资料\开发板实验板\SMK系列\SMK1632\实验教程\内核及主板相关实验\内核－PWM\OC2PWM\OC2PWM.C
+dbfunc e timer2_init 0 fV
+dbline FFFFFFFF 0
+dbline 35 0
+dbline 36 0
+dbline 3C 4
+dbline 3D 8
+dbline FFFFFFFE C
+dbline 0 C
+dbfunc e main E fV
+dbline FFFFFFFF E
+dbline 48 E
+dbline 49 E
+dbline 4A 10
+dbline 4B 12
+dbline 4C 14
+dbline 4C 14
+dbline FFFFFFFE 16
+dbline 0 16
+S _main Def000E
+S _timer2_init Def0000
+T 00 00 89 E7 85 BD 22 24 24 BC 80 EE 83 BD 08 95
+R 00 00 00 00
+T 0E 00 8F 9A F7 DF 78 94 FF CF 08 95
+R 00 00 00 00

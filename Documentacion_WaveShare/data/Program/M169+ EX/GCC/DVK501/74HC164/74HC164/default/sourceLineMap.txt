@@ -1,0 +1,22 @@
+Address = 0x0000e0a4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:21:0:-1
+Address = 0x0000e0a4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:21:0:-1
+Address = 0x0000e0a6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:25:0:-1
+Address = 0x0000e0a8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:26:0:-1
+Address = 0x0000e0ac  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:27:0:-1
+Address = 0x0000e0b0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:29:0:-1
+Address = 0x0000e0b2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:30:0:-1
+Address = 0x0000e0b4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:23:0:-1
+Address = 0x0000e0ba  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:31:0:-1
+Address = 0x0000e0c0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:37:0:-1
+Address = 0x0000e0c2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:38:0:-1
+Address = 0x0000e0c4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:39:0:-1
+Address = 0x0000e0c6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\default/../74HC164.c:22:0:-1
+Address = 0x0000e0cc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:37:0:-1
+Address = 0x0000e0ce  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\..\..\..\..\ws_lib/74hc164.h:38:0:-1
+Address = 0x0000e0d2  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x0000e0d6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\default/../74HC164.c:27:0:-1
+Address = 0x0000e0dc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\74HC164\74HC164\default/../74HC164.c:28:0:-1
+Address = 0x0000e0e2  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x0000e0e8  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:124:0:-1
+Address = 0x0000e0ea  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1
+Address = 0x0000e0ee  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1

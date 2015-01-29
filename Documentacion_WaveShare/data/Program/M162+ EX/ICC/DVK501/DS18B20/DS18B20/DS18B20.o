@@ -1,0 +1,317 @@
+XL
+H 2 areas 13 global symbols
+M DS18B20.C
+S mod32u Ref0000
+S div32u Ref0000
+S push_xgsetF03C Ref0000
+S push_arg4 Ref0000
+S empy32u Ref0000
+S pop_xgsetF03C Ref0000
+A text size 23E flags 0
+dbfile ..\..\..\STK162~1.0\DS18B20_温度测量\DS18B20\DS18B20.C
+dbfile D:\ICC_H\Software.H
+dbfunc e speaData 0 fV
+dbsym l y 4 l
+dbsym l j 0 l
+dbsym r i A c
+dbsym r len C C
+dbsym l dat 10 l
+dbline FFFFFFFF C
+dbline 74 C
+dbline 77 C
+dbline 78 1C
+dbline 79 1C
+dbline 7A 40
+dbline 7B 6A
+dbline 7C 92
+dbline 77 92
+dbline 77 94
+dbline FFFFFFFE A8
+dbline 0 A8
+dbfile D:\ICC_H\Hardware.H
+dbfunc e delay50us B2 fV
+dbsym r j 14 c
+dbsym r t 10 I
+dbline FFFFFFFF B4
+dbline 69 B4
+dbline 6B B4
+dbline 6C B6
+dbline 6D BA
+dbline 6C BA
+dbline 6C BC
+dbline 6B C0
+dbline 6B C4
+dbline FFFFFFFE CE
+dbline 0 CE
+dbfunc e delay50ms D2 fV
+dbsym r i 14 i
+dbsym r t 10 I
+dbline FFFFFFFF D6
+dbline 78 D6
+dbline 7A D6
+dbline 7B D8
+dbline 7C DE
+dbline 7B DE
+dbline 7B E2
+dbline 7A FA
+dbline 7A FE
+dbline FFFFFFFE 108
+dbline 0 108
+dbfunc e delayus 10E fV
+dbsym r i 14 i
+dbsym r t 10 i
+dbline FFFFFFFF 112
+dbline 81 112
+dbline 83 112
+dbline 84 118
+dbline 87 118
+dbline 83 118
+dbline 83 11C
+dbline FFFFFFFE 122
+dbline 0 122
+dbfile D:\ICC_H\onewirefords18b20.H
+dbfunc e reset_onewire 128 fV
+dbline FFFFFFFF 128
+dbline 2B 128
+dbline 2C 128
+dbline 2D 12A
+dbline 2E 12C
+dbline 2F 132
+dbline 30 134
+dbline 31 13A
+dbline FFFFFFFE 13C
+dbline 0 13C
+dbfunc e ack_onewire 13E fV
+dbline FFFFFFFF 13E
+dbline 35 13E
+dbline 36 13E
+dbline 36 13E
+dbline 37 142
+dbline 37 142
+dbline 38 146
+dbline 39 14C
+dbline FFFFFFFE 14E
+dbline 0 14E
+dbfunc e read_onewire 150 fc
+dbsym r i 16 c
+dbsym r data 14 c
+dbline FFFFFFFF 154
+dbline 3D 154
+dbline 3E 154
+dbline 3E 156
+dbline 3F 156
+dbline 40 15A
+dbline 41 15A
+dbline 43 15C
+dbline 44 15E
+dbline 45 160
+dbline 46 166
+dbline 47 168
+dbline 49 16E
+dbline 4A 170
+dbline 4A 174
+dbline 4B 176
+dbline 4C 17C
+dbline 3F 17C
+dbline 3F 17E
+dbline 4D 182
+dbline FFFFFFFE 184
+dbline 0 184
+dbfunc e write_onewire 18A fV
+dbsym r i 14 c
+dbsym r data A c
+dbline FFFFFFFF 190
+dbline 51 190
+dbline 52 190
+dbline 53 190
+dbline 54 192
+dbline 55 196
+dbline 56 196
+dbline 57 19A
+dbline 58 19A
+dbline 59 19C
+dbline 5A 1A2
+dbline 5B 1A4
+dbline 5C 1AA
+dbline 5E 1AC
+dbline 5F 1AC
+dbline 60 1AE
+dbline 61 1B4
+dbline 62 1B6
+dbline 63 1BC
+dbline 64 1BC
+dbline 65 1BE
+dbline 54 1BE
+dbline 54 1C0
+dbline FFFFFFFE 1C4
+dbline 0 1C4
+dbfile D:\ICC_H\DS18B20_DVK501.H
+dbfunc e convert_ds18b20 1CA fV
+dbline FFFFFFFF 1CA
+dbline 30 1CA
+dbline 31 1CA
+dbline 32 1CC
+dbline 33 1CE
+dbline 34 1D4
+dbline 35 1D8
+dbline FFFFFFFE 1DA
+dbline 0 1DA
+dbfunc e read_temperature 1DC fc
+dbsym r temp1 16 c
+dbsym r temp2 14 c
+dbline FFFFFFFF 1E0
+dbline 39 1E0
+dbline 3B 1E0
+dbline 3C 1E2
+dbline 3D 1E4
+dbline 3E 1E6
+dbline 3F 1EC
+dbline 40 1F0
+dbline 41 1F4
+dbline 42 1F8
+dbline 43 1FC
+dbline 44 204
+dbline 45 20C
+dbline 47 20E
+dbline FFFFFFFE 210
+dbline 0 210
+dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\DS18B20_温度测量\DS18B20\DS18B20.C
+dbfunc e port_init 216 fV
+dbline FFFFFFFF 216
+dbline 34 216
+dbline 35 216
+dbline 36 21A
+dbline 37 21E
+dbline 38 220
+dbline 39 222
+dbline 3A 224
+dbline 3B 226
+dbline 3C 228
+dbline FFFFFFFE 22A
+dbline 0 22A
+dbfunc e main 22C fV
+dbline FFFFFFFF 22C
+dbline 3F 22C
+dbline 40 22C
+dbline 42 230
+dbline 43 230
+dbline 44 236
+dbline 45 23A
+dbline 41 23A
+dbline FFFFFFFE 23C
+dbline 0 23C
+S _main Def022C
+S _read_temperature Def01DC
+S _port_init Def0216
+S _read_onewire Def0150
+S _delayus Def010E
+S _speaData Def0000
+S _delay50ms Def00D2
+S _delay50us Def00B2
+S _convert_ds18b20 Def01CA
+S _reset_onewire Def0128
+S _write_onewire Def018A
+S _ack_onewire Def013E
+A bss size 6 flags 20
+dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\DS18B20_温度测量\DS18B20\DS18B20.C
+dbfile D:\ICC_H\Software.H
+dbsym e dataElem 0 A[6:6]c
+S _dataElem Def0000
+T 00 00 0E 94 00 00 0E 94 00 00 28 97 CC 88 AA 24
+R 00 00 00 00 12 04 03 00 12 08 02 00
+T 0E 00 81 E0 88 83 80 E0 89 83 8A 83 8B 83 3C C0
+R 00 00 00 00
+T 1C 00 28 80 39 80 4A 80 5B 80 08 89 19 89 2A 89
+R 00 00 00 00
+T 2A 00 3B 89 5A 92 4A 92 3A 92 2A 92 0E 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 38 00 0C 83 1D 83 2E 83 3F 83 4A E0 50 E0 60 E0
+R 00 00 00 00
+T 46 00 70 E0 0C 81 1D 81 2E 81 3F 81 7A 93 6A 93
+R 00 00 00 00
+T 54 00 5A 93 4A 93 0E 94 00 00 80 E0
+R 00 00 00 00 12 08 00 00 20 0A 01 00 00 00
+T 5E 00 90 E0 EA 2D FF 27 E8 0F F9 1F 00 83 28 80
+R 00 00 00 00 40 02 01 00 00 00
+T 6C 00 39 80 4A 80 5B 80 4A E0 50 E0 60 E0 70 E0
+R 00 00 00 00
+T 7A 00 5A 92 4A 92 3A 92 2A 92 8A 01 9B 01
+R 00 00 00 00
+T 86 00 0E 94 00 00 08 83 19 83 2A 83 3B 83 A3 94
+R 00 00 00 00 12 04 04 00
+T 94 00 2C 2C 33 24 27 FC 30 94 4A 2C 55 24 42 14
+R 00 00 00 00
+T A2 00 53 04 0C F4 BA CF 28 96 0E 94 00 00 24 96
+R 00 00 00 00 12 0C 05 00
+T B0 00 08 95
+R 00 00 00 00
+T B2 00 4A 93 07 C0 44 27 01 C0 43 95 46 34 E8 F3
+R 00 00 00 00
+T C0 00 01 50 10 40 22 24 33 24 20 16 31 06 A4 F3
+R 00 00 00 00
+T CE 00 49 91 08 95
+R 00 00 00 00
+T D2 00 4A 93 5A 93 13 C0 44 27 55 27 02 C0 4F 5F
+R 00 00 00 00
+T E0 00 5F 4F 82 EA 9D EC A0 E0 B0 E0 1A 01 44 24
+R 00 00 00 00
+T EE 00 55 24 28 16 39 06 4A 06 5B 06 94 F3 01 50
+R 00 00 00 00
+T FC 00 10 40 22 24 33 24 20 16 31 06 44 F3 59 91
+R 00 00 00 00
+T 0A 01 49 91 08 95
+R 00 00 00 00
+T 0E 01 4A 93 5A 93 44 27 55 27 02 C0 4F 5F 5F 4F
+R 00 00 00 00
+T 1C 01 40 17 51 07 D8 F3 59 91 49 91 08 95
+R 00 00 00 00
+T 28 01 BA 9A C2 98 04 EF 11 E0 EE DF C2 9A 0C E3
+R 00 00 00 00
+T 36 01 10 E0 EA DF BA 98 08 95
+R 00 00 00 00
+T 3E 01 B2 99 FE CF B2 9B FE CF 06 E2 10 E0 E1 DF
+R 00 00 00 00
+T 4C 01 BA 9A 08 95
+R 00 00 00 00
+T 50 01 4A 93 6A 93 44 27 66 27 12 C0 BA 9A 46 95
+R 00 00 00 00
+T 5E 01 C2 98 01 E0 10 E0 D4 DF C2 9A 02 E0 10 E0
+R 00 00 00 00
+T 6C 01 D0 DF BA 98 B2 9B 01 C0 40 68 06 E7 10 E0
+R 00 00 00 00
+T 7A 01 C9 DF 63 95 68 30 60 F3 04 2F 69 91 49 91
+R 00 00 00 00
+T 88 01 08 95
+R 00 00 00 00
+T 8A 01 AA 92 4A 93 A0 2E BA 9A 44 27 15 C0 A0 FE
+R 00 00 00 00
+T 98 01 09 C0 C2 98 0E E0 10 E0 B6 DF C2 9A 0C E6
+R 00 00 00 00
+T A6 01 10 E0 B2 DF 08 C0 C2 98 0C E6 10 E0 AD DF
+R 00 00 00 00
+T B4 01 C2 9A 0E E0 10 E0 A9 DF A6 94 43 95 48 30
+R 00 00 00 00
+T C2 01 48 F3 49 91 A9 90 08 95
+R 00 00 00 00
+T CA 01 AE DF B8 DF 08 EC 10 E0 6F DF 0C EC D9 DF
+R 00 00 00 00
+T D8 01 04 E4 D7 CF
+R 00 00 00 00
+T DC 01 4A 93 6A 93 F4 DF A2 DF AC DF 08 EC 10 E0
+R 00 00 00 00
+T EA 01 63 DF 0C EC CD DF 0E EB CB DF AD DF 60 2F
+R 00 00 00 00
+T F8 01 AB DF 40 2F 84 2F 8F 70 82 95 48 2F 86 2F
+R 00 00 00 00
+T 06 02 82 95 8F 70 68 2F 48 2B 04 2F 69 91 49 91
+R 00 00 00 00
+T 14 02 08 95
+R 00 00 00 00
+T 16 02 22 24 2B BA 8F EF 8A BB 88 BB 87 BB 85 BB
+R 00 00 00 00
+T 24 02 84 BB 82 BB 81 BB 08 95
+R 00 00 00 00
+T 2C 02 F4 DF 05 C0 01 E0 10 E0 4E DF D2 DF 0B BB
+R 00 00 00 00
+T 3A 02 FA CF 08 95
+R 00 00 00 00

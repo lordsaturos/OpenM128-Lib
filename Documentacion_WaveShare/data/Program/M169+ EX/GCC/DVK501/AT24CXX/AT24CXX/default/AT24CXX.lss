@@ -1,0 +1,789 @@
+
+AT24CXX.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000316  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  0000036a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 000000f5  00000000  00000000  0000038a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   0000064a  00000000  00000000  0000047f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 000001b4  00000000  00000000  00000ac9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   0000059b  00000000  00000000  00000c7d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000130  00000000  00000000  00001218  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    00000190  00000000  00000000  00001348  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    0000026f  00000000  00000000  000014d8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000048  00000000  00000000  00001747  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2e 00 	jmp	0x5c	; 0x5c <__ctors_end>
+   4:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+   8:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+   c:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  10:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  14:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  18:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  1c:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  20:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  24:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  28:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  2c:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  30:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  34:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  38:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  3c:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  40:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  44:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  48:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  4c:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  50:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  54:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+  58:	0c 94 38 00 	jmp	0x70	; 0x70 <__bad_interrupt>
+
+0000005c <__ctors_end>:
+  5c:	11 24       	eor	r1, r1
+  5e:	1f be       	out	0x3f, r1	; 63
+  60:	cf ef       	ldi	r28, 0xFF	; 255
+  62:	d4 e0       	ldi	r29, 0x04	; 4
+  64:	de bf       	out	0x3e, r29	; 62
+  66:	cd bf       	out	0x3d, r28	; 61
+  68:	0e 94 60 01 	call	0x2c0	; 0x2c0 <main>
+  6c:	0c 94 89 01 	jmp	0x312	; 0x312 <_exit>
+
+00000070 <__bad_interrupt>:
+  70:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000074 <SDA_IN>:
+  #warning "iic_sim interface undefined."
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+  74:	6d 98       	cbi	0x0d, 5	; 13
+  76:	00 00       	nop
+  78:	08 95       	ret
+
+0000007a <SDA_OUT>:
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+  7a:	6d 9a       	sbi	0x0d, 5	; 13
+  7c:	00 00       	nop
+  7e:	08 95       	ret
+
+00000080 <SDA_SET>:
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  80:	75 9a       	sbi	0x0e, 5	; 14
+  82:	00 00       	nop
+  84:	08 95       	ret
+
+00000086 <SDA_CLR>:
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  86:	75 98       	cbi	0x0e, 5	; 14
+  88:	00 00       	nop
+  8a:	08 95       	ret
+
+0000008c <SCL_IN>:
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+  8c:	6c 98       	cbi	0x0d, 4	; 13
+  8e:	00 00       	nop
+  90:	08 95       	ret
+
+00000092 <SCL_OUT>:
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+  92:	6c 9a       	sbi	0x0d, 4	; 13
+  94:	00 00       	nop
+  96:	08 95       	ret
+
+00000098 <SCL_SET>:
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  98:	74 9a       	sbi	0x0e, 4	; 14
+  9a:	00 00       	nop
+  9c:	08 95       	ret
+
+0000009e <SCL_CLR>:
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  9e:	74 98       	cbi	0x0e, 4	; 14
+  a0:	00 00       	nop
+  a2:	08 95       	ret
+
+000000a4 <iicStart>:
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+  a4:	6c 9a       	sbi	0x0d, 4	; 13
+  a6:	00 00       	nop
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  a8:	74 98       	cbi	0x0e, 4	; 14
+  aa:	00 00       	nop
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+  ac:	6d 9a       	sbi	0x0d, 5	; 13
+  ae:	00 00       	nop
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  b0:	75 9a       	sbi	0x0e, 5	; 14
+  b2:	00 00       	nop
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  b4:	74 9a       	sbi	0x0e, 4	; 14
+  b6:	00 00       	nop
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  b8:	75 98       	cbi	0x0e, 5	; 14
+  ba:	00 00       	nop
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  bc:	74 98       	cbi	0x0e, 4	; 14
+  be:	00 00       	nop
+	SDA_OUT();
+	SDA_SET();
+	SCL_SET();
+	SDA_CLR();
+	SCL_CLR();
+}
+  c0:	08 95       	ret
+
+000000c2 <iicStop>:
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+  c2:	6c 9a       	sbi	0x0d, 4	; 13
+  c4:	00 00       	nop
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  c6:	74 98       	cbi	0x0e, 4	; 14
+  c8:	00 00       	nop
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+  ca:	6d 9a       	sbi	0x0d, 5	; 13
+  cc:	00 00       	nop
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  ce:	75 98       	cbi	0x0e, 5	; 14
+  d0:	00 00       	nop
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  d2:	74 9a       	sbi	0x0e, 4	; 14
+  d4:	00 00       	nop
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  d6:	75 9a       	sbi	0x0e, 5	; 14
+  d8:	00 00       	nop
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  da:	74 98       	cbi	0x0e, 4	; 14
+  dc:	00 00       	nop
+	SDA_OUT();
+	SDA_CLR();
+	SCL_SET();
+	SDA_SET();
+	SCL_CLR();
+}
+  de:	08 95       	ret
+
+000000e0 <iicSendChar>:
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+  e0:	6d 9a       	sbi	0x0d, 5	; 13
+  e2:	00 00       	nop
+  e4:	90 e0       	ldi	r25, 0x00	; 0
+{
+	uint8_t I2C_n;
+	SDA_OUT();
+	for(I2C_n=0;I2C_n<=7;I2C_n++)
+	{
+		if(wrDAdr&0x80) {SDA_SET();}
+  e6:	87 ff       	sbrs	r24, 7
+  e8:	03 c0       	rjmp	.+6      	; 0xf0 <iicSendChar+0x10>
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  ea:	75 9a       	sbi	0x0e, 5	; 14
+  ec:	00 00       	nop
+  ee:	02 c0       	rjmp	.+4      	; 0xf4 <iicSendChar+0x14>
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+  f0:	75 98       	cbi	0x0e, 5	; 14
+  f2:	00 00       	nop
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  f4:	74 9a       	sbi	0x0e, 4	; 14
+  f6:	00 00       	nop
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+  f8:	74 98       	cbi	0x0e, 4	; 14
+  fa:	00 00       	nop
+--------------------------------------------------------------------*/
+void iicSendChar(uint8_t wrDAdr)	
+{
+	uint8_t I2C_n;
+	SDA_OUT();
+	for(I2C_n=0;I2C_n<=7;I2C_n++)
+  fc:	9f 5f       	subi	r25, 0xFF	; 255
+  fe:	98 30       	cpi	r25, 0x08	; 8
+ 100:	11 f0       	breq	.+4      	; 0x106 <iicSendChar+0x26>
+	{
+		if(wrDAdr&0x80) {SDA_SET();}
+		else {SDA_CLR();}	
+		SCL_SET();
+		SCL_CLR();
+		wrDAdr<<=1;
+ 102:	88 0f       	add	r24, r24
+ 104:	f0 cf       	rjmp	.-32     	; 0xe6 <iicSendChar+0x6>
+  #warning "iic_sim interface undefined."
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+ 106:	6d 98       	cbi	0x0d, 5	; 13
+ 108:	00 00       	nop
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 10a:	75 9a       	sbi	0x0e, 5	; 14
+ 10c:	00 00       	nop
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 10e:	74 9a       	sbi	0x0e, 4	; 14
+ 110:	00 00       	nop
+	}
+	SDA_IN();
+	SDA_SET();
+	SCL_SET();
+	while(SDA_PIN){};
+ 112:	65 99       	sbic	0x0c, 5	; 12
+ 114:	fe cf       	rjmp	.-4      	; 0x112 <iicSendChar+0x32>
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 116:	74 98       	cbi	0x0e, 4	; 14
+ 118:	00 00       	nop
+	SCL_CLR();
+}
+ 11a:	08 95       	ret
+
+0000011c <iicGetChar>:
+提示说明：
+输    入：有act bAct=1;无act bAct=0;
+返    回：rdDAdr
+--------------------------------------------------------------------*/
+uint8_t iicGetChar(uint8_t bAct)
+{
+ 11c:	28 2f       	mov	r18, r24
+  #warning "iic_sim interface undefined."
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+ 11e:	6d 98       	cbi	0x0d, 5	; 13
+ 120:	00 00       	nop
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 122:	75 9a       	sbi	0x0e, 5	; 14
+ 124:	00 00       	nop
+ 126:	90 e0       	ldi	r25, 0x00	; 0
+ 128:	80 e0       	ldi	r24, 0x00	; 0
+	uint8_t rdDAdr=0;
+	SDA_IN();
+	SDA_SET();
+	for(n=0;n<=7;n++)
+	{
+	 	rdDAdr<<=1;
+ 12a:	88 0f       	add	r24, r24
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 12c:	74 9a       	sbi	0x0e, 4	; 14
+ 12e:	00 00       	nop
+		SCL_SET();
+		if(SDA_PIN)	rdDAdr|=0x01;
+ 130:	65 99       	sbic	0x0c, 5	; 12
+ 132:	81 60       	ori	r24, 0x01	; 1
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 134:	74 98       	cbi	0x0e, 4	; 14
+ 136:	00 00       	nop
+{
+	uint8_t n;
+	uint8_t rdDAdr=0;
+	SDA_IN();
+	SDA_SET();
+	for(n=0;n<=7;n++)
+ 138:	9f 5f       	subi	r25, 0xFF	; 255
+ 13a:	98 30       	cpi	r25, 0x08	; 8
+ 13c:	b1 f7       	brne	.-20     	; 0x12a <iicGetChar+0xe>
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+ 13e:	6d 9a       	sbi	0x0d, 5	; 13
+ 140:	00 00       	nop
+		if(SDA_PIN)	rdDAdr|=0x01;
+		SCL_CLR();
+		
+	}
+	SDA_OUT();
+	if(bAct) {SDA_SET();}
+ 142:	22 23       	and	r18, r18
+ 144:	19 f0       	breq	.+6      	; 0x14c <iicGetChar+0x30>
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 146:	75 9a       	sbi	0x0e, 5	; 14
+ 148:	00 00       	nop
+ 14a:	02 c0       	rjmp	.+4      	; 0x150 <iicGetChar+0x34>
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 14c:	75 98       	cbi	0x0e, 5	; 14
+ 14e:	00 00       	nop
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 150:	74 9a       	sbi	0x0e, 4	; 14
+ 152:	00 00       	nop
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 154:	74 98       	cbi	0x0e, 4	; 14
+ 156:	00 00       	nop
+	else {SDA_CLR();}
+	SCL_SET();
+	SCL_CLR();
+	return(rdDAdr);
+}
+ 158:	08 95       	ret
+
+0000015a <iicReadBusy>:
+提示说明：
+输    入：wrDAdr 忙返回1 不忙返回0
+返    回：
+--------------------------------------------------------------------*/
+uint8_t iicReadBusy(uint8_t wrDAdr)	
+{
+ 15a:	1f 93       	push	r17
+ 15c:	18 2f       	mov	r17, r24
+	uint8_t n;
+	iicStart();
+ 15e:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+ 162:	80 e0       	ldi	r24, 0x00	; 0
+	for(n=0;n<=7;n++)
+	{
+		if(wrDAdr&0x80) {SDA_SET();}
+ 164:	17 ff       	sbrs	r17, 7
+ 166:	03 c0       	rjmp	.+6      	; 0x16e <iicReadBusy+0x14>
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 168:	75 9a       	sbi	0x0e, 5	; 14
+ 16a:	00 00       	nop
+ 16c:	02 c0       	rjmp	.+4      	; 0x172 <iicReadBusy+0x18>
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 16e:	75 98       	cbi	0x0e, 5	; 14
+ 170:	00 00       	nop
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 172:	74 9a       	sbi	0x0e, 4	; 14
+ 174:	00 00       	nop
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 176:	74 98       	cbi	0x0e, 4	; 14
+ 178:	00 00       	nop
+--------------------------------------------------------------------*/
+uint8_t iicReadBusy(uint8_t wrDAdr)	
+{
+	uint8_t n;
+	iicStart();
+	for(n=0;n<=7;n++)
+ 17a:	8f 5f       	subi	r24, 0xFF	; 255
+ 17c:	88 30       	cpi	r24, 0x08	; 8
+ 17e:	11 f0       	breq	.+4      	; 0x184 <iicReadBusy+0x2a>
+	{
+		if(wrDAdr&0x80) {SDA_SET();}
+		else {SDA_CLR();}
+		SCL_SET();
+		SCL_CLR();
+		wrDAdr<<=1;
+ 180:	11 0f       	add	r17, r17
+ 182:	f0 cf       	rjmp	.-32     	; 0x164 <iicReadBusy+0xa>
+  #warning "iic_sim interface undefined."
+#endif
+
+#define IIC_DELAY asm("nop")
+
+void SDA_IN()		{cbi(DDR_IIC,SDA_X);IIC_DELAY;}
+ 184:	6d 98       	cbi	0x0d, 5	; 13
+ 186:	00 00       	nop
+void SDA_OUT()		{sbi(DDR_IIC,SDA_X);IIC_DELAY;}  
+void SDA_SET()		{sbi(PORT_IIC,SDA_X);IIC_DELAY;}
+ 188:	75 9a       	sbi	0x0e, 5	; 14
+ 18a:	00 00       	nop
+void SDA_CLR()		{cbi(PORT_IIC,SDA_X);IIC_DELAY;}
+#define SDA_PIN		(gbi(PIN_IIC,SDA_X))
+
+void SCL_IN()		{cbi(DDR_IIC,SCL_X);IIC_DELAY;}
+void SCL_OUT()		{sbi(DDR_IIC,SCL_X);IIC_DELAY;}  
+void SCL_SET()		{sbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 18c:	74 9a       	sbi	0x0e, 4	; 14
+ 18e:	00 00       	nop
+	}
+	SDA_IN();
+	SDA_SET();
+	SCL_SET();
+	if(SDA_PIN)wrDAdr=1;
+ 190:	8c b1       	in	r24, 0x0c	; 12
+void SCL_CLR()		{cbi(PORT_IIC,SCL_X);IIC_DELAY;}
+ 192:	74 98       	cbi	0x0e, 4	; 14
+ 194:	00 00       	nop
+ 196:	90 e0       	ldi	r25, 0x00	; 0
+ 198:	25 e0       	ldi	r18, 0x05	; 5
+ 19a:	96 95       	lsr	r25
+ 19c:	87 95       	ror	r24
+ 19e:	2a 95       	dec	r18
+ 1a0:	e1 f7       	brne	.-8      	; 0x19a <iicReadBusy+0x40>
+	else wrDAdr=0;
+	SCL_CLR();	
+	return(wrDAdr);
+}
+ 1a2:	81 70       	andi	r24, 0x01	; 1
+ 1a4:	1f 91       	pop	r17
+ 1a6:	08 95       	ret
+
+000001a8 <iicWByte>:
+		 wordAdr: word address 字地址
+		 dat: data 数据
+返    回：
+--------------------------------------------------------------------*/
+void iicWByte(uint8_t wrDAdr,uint8_t wordAdr,uint8_t dat)
+{
+ 1a8:	ff 92       	push	r15
+ 1aa:	0f 93       	push	r16
+ 1ac:	1f 93       	push	r17
+ 1ae:	18 2f       	mov	r17, r24
+ 1b0:	06 2f       	mov	r16, r22
+ 1b2:	f4 2e       	mov	r15, r20
+	iicStart(); 
+ 1b4:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+	iicSendChar(wrDAdr); //发送器件地址
+ 1b8:	81 2f       	mov	r24, r17
+ 1ba:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	iicSendChar(wordAdr); //发送字地址
+ 1be:	80 2f       	mov	r24, r16
+ 1c0:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	iicSendChar(dat); //发送数据
+ 1c4:	8f 2d       	mov	r24, r15
+ 1c6:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	iicStop();
+ 1ca:	0e 94 61 00 	call	0xc2	; 0xc2 <iicStop>
+}
+ 1ce:	1f 91       	pop	r17
+ 1d0:	0f 91       	pop	r16
+ 1d2:	ff 90       	pop	r15
+ 1d4:	08 95       	ret
+
+000001d6 <iicWPage>:
+		 wordAdr: word address 字地址
+		 *pWrDat: p->write data 写入数据指针
+返    回：
+--------------------------------------------------------------------*/
+void iicWPage(uint8_t wrDAdr,uint8_t wordAdr,uint8_t *pWrDat)
+{
+ 1d6:	0f 93       	push	r16
+ 1d8:	1f 93       	push	r17
+ 1da:	cf 93       	push	r28
+ 1dc:	df 93       	push	r29
+ 1de:	18 2f       	mov	r17, r24
+ 1e0:	06 2f       	mov	r16, r22
+ 1e2:	ea 01       	movw	r28, r20
+	uint8_t n;
+	iicStart();
+ 1e4:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+	iicSendChar(wrDAdr); //发送器件地址
+ 1e8:	81 2f       	mov	r24, r17
+ 1ea:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	iicSendChar(wordAdr); //发送字地址
+ 1ee:	80 2f       	mov	r24, r16
+ 1f0:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+ 1f4:	00 e0       	ldi	r16, 0x00	; 0
+ 1f6:	10 e0       	ldi	r17, 0x00	; 0
+	for(n=0;n<=15;n++) //发送16个数据
+		iicSendChar(*(pWrDat+n));
+ 1f8:	fe 01       	movw	r30, r28
+ 1fa:	e0 0f       	add	r30, r16
+ 1fc:	f1 1f       	adc	r31, r17
+ 1fe:	80 81       	ld	r24, Z
+ 200:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+ 204:	0f 5f       	subi	r16, 0xFF	; 255
+ 206:	1f 4f       	sbci	r17, 0xFF	; 255
+{
+	uint8_t n;
+	iicStart();
+	iicSendChar(wrDAdr); //发送器件地址
+	iicSendChar(wordAdr); //发送字地址
+	for(n=0;n<=15;n++) //发送16个数据
+ 208:	00 31       	cpi	r16, 0x10	; 16
+ 20a:	11 05       	cpc	r17, r1
+ 20c:	a9 f7       	brne	.-22     	; 0x1f8 <iicWPage+0x22>
+		iicSendChar(*(pWrDat+n));
+	iicStop();
+ 20e:	0e 94 61 00 	call	0xc2	; 0xc2 <iicStop>
+}
+ 212:	df 91       	pop	r29
+ 214:	cf 91       	pop	r28
+ 216:	1f 91       	pop	r17
+ 218:	0f 91       	pop	r16
+ 21a:	08 95       	ret
+
+0000021c <iicRByte>:
+输    入：AT24C_wrDAdr: write device-address 写器件地址
+		 wordAdr: word address 字地址
+返    回：
+--------------------------------------------------------------------*/
+uint8_t iicRByte(uint8_t wrDAdr,uint8_t wordAdr)
+{
+ 21c:	0f 93       	push	r16
+ 21e:	1f 93       	push	r17
+ 220:	08 2f       	mov	r16, r24
+ 222:	16 2f       	mov	r17, r22
+	iicStart();
+ 224:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+	iicSendChar(wrDAdr); //发送器件地址
+ 228:	80 2f       	mov	r24, r16
+ 22a:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	iicSendChar(wordAdr); //发送字地址
+ 22e:	81 2f       	mov	r24, r17
+ 230:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	wrDAdr|=0x01; //强制将地址转换为0b1010xxx1 读使能
+	iicStart();
+ 234:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+	iicSendChar(wrDAdr); //发送器件地址
+ 238:	80 2f       	mov	r24, r16
+ 23a:	81 60       	ori	r24, 0x01	; 1
+ 23c:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	wrDAdr=iicGetChar(ACT);	
+ 240:	81 e0       	ldi	r24, 0x01	; 1
+ 242:	0e 94 8e 00 	call	0x11c	; 0x11c <iicGetChar>
+ 246:	18 2f       	mov	r17, r24
+	iicStop();
+ 248:	0e 94 61 00 	call	0xc2	; 0xc2 <iicStop>
+	return(wrDAdr); //读取数据
+}
+ 24c:	81 2f       	mov	r24, r17
+ 24e:	1f 91       	pop	r17
+ 250:	0f 91       	pop	r16
+ 252:	08 95       	ret
+
+00000254 <iicRPage>:
+		 *pRdDat: p->read data 读取数据起始指针
+		 num: number 读取数据个数
+返    回： 
+--------------------------------------------------------------------*/
+void iicRPage(uint8_t wrDAdr,uint8_t wordAdr,uint8_t *pRdDat,uint8_t num)
+{
+ 254:	df 92       	push	r13
+ 256:	ef 92       	push	r14
+ 258:	ff 92       	push	r15
+ 25a:	0f 93       	push	r16
+ 25c:	1f 93       	push	r17
+ 25e:	cf 93       	push	r28
+ 260:	df 93       	push	r29
+ 262:	08 2f       	mov	r16, r24
+ 264:	16 2f       	mov	r17, r22
+ 266:	ea 01       	movw	r28, r20
+ 268:	d2 2e       	mov	r13, r18
+	iicStart();
+ 26a:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+	iicSendChar(wrDAdr); //发送器件地址
+ 26e:	80 2f       	mov	r24, r16
+ 270:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	iicSendChar(wordAdr); //发送字地址
+ 274:	81 2f       	mov	r24, r17
+ 276:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	wrDAdr|=0x01; //强制将器件地址转换为0b1010xxx1 读使能
+	iicStart();
+ 27a:	0e 94 52 00 	call	0xa4	; 0xa4 <iicStart>
+	iicSendChar(wrDAdr); //发送器件地址
+ 27e:	80 2f       	mov	r24, r16
+ 280:	81 60       	ori	r24, 0x01	; 1
+ 282:	0e 94 70 00 	call	0xe0	; 0xe0 <iicSendChar>
+	for(num--;num>0;num--) //有ACT的读取num-1个数据
+ 286:	da 94       	dec	r13
+ 288:	7e 01       	movw	r14, r28
+ 28a:	1d 2d       	mov	r17, r13
+ 28c:	07 c0       	rjmp	.+14     	; 0x29c <iicRPage+0x48>
+	{
+		*pRdDat=iicGetChar(ACT);
+ 28e:	81 e0       	ldi	r24, 0x01	; 1
+ 290:	0e 94 8e 00 	call	0x11c	; 0x11c <iicGetChar>
+ 294:	f7 01       	movw	r30, r14
+ 296:	81 93       	st	Z+, r24
+ 298:	7f 01       	movw	r14, r30
+	iicSendChar(wrDAdr); //发送器件地址
+	iicSendChar(wordAdr); //发送字地址
+	wrDAdr|=0x01; //强制将器件地址转换为0b1010xxx1 读使能
+	iicStart();
+	iicSendChar(wrDAdr); //发送器件地址
+	for(num--;num>0;num--) //有ACT的读取num-1个数据
+ 29a:	11 50       	subi	r17, 0x01	; 1
+ 29c:	11 23       	and	r17, r17
+ 29e:	b9 f7       	brne	.-18     	; 0x28e <iicRPage+0x3a>
+	{
+		*pRdDat=iicGetChar(ACT);
+		pRdDat++;
+	}
+	*pRdDat=iicGetChar(nACT); //无ACT的读取第num个数据
+ 2a0:	80 e0       	ldi	r24, 0x00	; 0
+ 2a2:	0e 94 8e 00 	call	0x11c	; 0x11c <iicGetChar>
+ 2a6:	cd 0d       	add	r28, r13
+ 2a8:	d1 1d       	adc	r29, r1
+ 2aa:	88 83       	st	Y, r24
+	iicStop();
+ 2ac:	0e 94 61 00 	call	0xc2	; 0xc2 <iicStop>
+}
+ 2b0:	df 91       	pop	r29
+ 2b2:	cf 91       	pop	r28
+ 2b4:	1f 91       	pop	r17
+ 2b6:	0f 91       	pop	r16
+ 2b8:	ff 90       	pop	r15
+ 2ba:	ef 90       	pop	r14
+ 2bc:	df 90       	pop	r13
+ 2be:	08 95       	ret
+
+000002c0 <main>:
+#include <util/delay.h>
+#include <ws_iicsim_port.h>
+#include <ws_at24cxx_port.h>
+
+int main(void)
+{
+ 2c0:	ef 92       	push	r14
+ 2c2:	ff 92       	push	r15
+ 2c4:	1f 93       	push	r17
+ 2c6:	cf 93       	push	r28
+ 2c8:	df 93       	push	r29
+	uint8_t n=0;
+	DDRA=0xFF;
+ 2ca:	8f ef       	ldi	r24, 0xFF	; 255
+ 2cc:	81 b9       	out	0x01, r24	; 1
+ 2ce:	c0 e0       	ldi	r28, 0x00	; 0
+ 2d0:	d0 e0       	ldi	r29, 0x00	; 0
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 2d2:	38 eb       	ldi	r19, 0xB8	; 184
+ 2d4:	e3 2e       	mov	r14, r19
+ 2d6:	f1 2c       	mov	r15, r1
+ 2d8:	1c 2f       	mov	r17, r28
+	while(1)
+	{
+		iicWByte(AT24C_WR_ADDR,n,n);
+ 2da:	80 ea       	ldi	r24, 0xA0	; 160
+ 2dc:	6c 2f       	mov	r22, r28
+ 2de:	4c 2f       	mov	r20, r28
+ 2e0:	0e 94 d4 00 	call	0x1a8	; 0x1a8 <iicWByte>
+		while(iicReadBusy(AT24C_WR_ADDR));
+ 2e4:	80 ea       	ldi	r24, 0xA0	; 160
+ 2e6:	0e 94 ad 00 	call	0x15a	; 0x15a <iicReadBusy>
+ 2ea:	88 23       	and	r24, r24
+ 2ec:	d9 f7       	brne	.-10     	; 0x2e4 <main+0x24>
+		PORTA=iicRByte(AT24C_WR_ADDR,n);
+ 2ee:	80 ea       	ldi	r24, 0xA0	; 160
+ 2f0:	61 2f       	mov	r22, r17
+ 2f2:	0e 94 0e 01 	call	0x21c	; 0x21c <iicRByte>
+ 2f6:	82 b9       	out	0x02, r24	; 2
+		if(n==0xFF)break;
+ 2f8:	cf 3f       	cpi	r28, 0xFF	; 255
+ 2fa:	d1 05       	cpc	r29, r1
+ 2fc:	49 f0       	breq	.+18     	; 0x310 <main+0x50>
+ 2fe:	80 e1       	ldi	r24, 0x10	; 16
+ 300:	97 e2       	ldi	r25, 0x27	; 39
+ 302:	f7 01       	movw	r30, r14
+ 304:	31 97       	sbiw	r30, 0x01	; 1
+ 306:	f1 f7       	brne	.-4      	; 0x304 <main+0x44>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 308:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 30a:	d9 f7       	brne	.-10     	; 0x302 <main+0x42>
+ 30c:	21 96       	adiw	r28, 0x01	; 1
+ 30e:	e4 cf       	rjmp	.-56     	; 0x2d8 <main+0x18>
+ 310:	ff cf       	rjmp	.-2      	; 0x310 <main+0x50>
+
+00000312 <_exit>:
+ 312:	f8 94       	cli
+
+00000314 <__stop_program>:
+ 314:	ff cf       	rjmp	.-2      	; 0x314 <__stop_program>

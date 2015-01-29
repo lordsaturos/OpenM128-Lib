@@ -1,0 +1,231 @@
+__start:
+__text_start:
+    0038 EFCF      LDI	R28,0xFF
+    0039 E0D4      LDI	R29,4
+    003A BFCD      OUT	0x3D,R28
+    003B BFDE      OUT	0x3E,R29
+    003C 51C0      SUBI	R28,0x10
+    003D 40D0      SBCI	R29,0
+    003E EA0A      LDI	R16,0xAA
+    003F 8308      STD	Y+0,R16
+    0040 2400      CLR	R0
+    0041 E0E0      LDI	R30,0
+    0042 E0F1      LDI	R31,1
+    0043 E011      LDI	R17,1
+    0044 30E0      CPI	R30,0
+    0045 07F1      CPC	R31,R17
+    0046 F011      BEQ	0x0049
+    0047 9201      ST	R0,Z+
+    0048 CFFB      RJMP	0x0044
+    0049 8300      STD	Z+0,R16
+    004A E7E0      LDI	R30,0x70
+    004B E0F0      LDI	R31,0
+    004C E0A0      LDI	R26,0
+    004D E0B1      LDI	R27,1
+    004E E010      LDI	R17,0
+    004F 37E0      CPI	R30,0x70
+    0050 07F1      CPC	R31,R17
+    0051 F021      BEQ	0x0056
+    0052 95C8      LPM
+    0053 9631      ADIW	R30,1
+    0054 920D      ST	R0,X+
+    0055 CFF9      RJMP	0x004F
+    0056 940E0081  CALL	_main
+_exit:
+    0058 CFFF      RJMP	_exit
+FILE: E:\吴泽程序备份\DVK500\新建文件夹\STK162~1.0\MAX485~1\test.c
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立使用PCF8574的示例程序
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 		                                                                
+(0012) 圆版时间:   2009-03-31
+(0013) 	
+(0014) 开发人员:   zz
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 实验内容：
+(0027) 先把写数据并显示在MX485自发自收试验
+(0028) ----------------------------------------------------------------------
+(0029) 硬件连接：
+(0030) 		 	  DVK500				 DVK500
+(0031) 				U1:A	     ---------    U2:A
+(0032) 				U1:B		---------	  U2:B
+(0033) 				U1:EN		---------	  VCC
+(0034) 				U2:EN		---------	  GND
+(0035) 	
+(0036) 			  STK128+     			STK128+
+(0037) 			   PA	---------  		 LED0~7
+(0038) 
+(0039) 			   DVK500				  STK128+
+(0040) 				VCC		---------	  VCC
+(0041) 				GND		---------	  GND
+(0042) 				U1:DI   ---------	  PE1(TXD0)
+(0043) 				U2:RO	---------	  PE0(RXD0)
+(0044) 				
+(0045) ----------------------------------------------------------------------
+(0046) 注意事项： 
+(0047) （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+(0048) （2）请详细阅读“使用必读”及相关资料。
+(0049) ----------------------------------------------------------------------
+(0050) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0051) 
+(0052) #include <iom162v.h>
+(0053) void UART_init(void)
+(0054) {
+(0055) // USART0 initialization
+(0056) // Communication Parameters: 8 Data, 1 Stop, No Parity
+(0057) // USART0 Receiver: On
+(0058) // USART0 Transmitter: On
+(0059) // USART0 Mode: Asynchronous
+(0060) // USART0 Baud Rate: 9600
+(0061) UCSR0A=0x00;
+_UART_init:
+    0059 2422      CLR	R2
+    005A B82B      OUT	0x0B,R2
+(0062) UCSR0B=0x18;
+    005B E188      LDI	R24,0x18
+    005C B98A      OUT	0x0A,R24
+(0063) UCSR0C=0x06;
+    005D E086      LDI	R24,6
+    005E BD80      OUT	0x20,R24
+(0064) UBRR0H=0x00;
+    005F BC20      OUT	0x20,R2
+(0065) UBRR0L=0x2F;
+    0060 E28F      LDI	R24,0x2F
+    0061 B989      OUT	0x09,R24
+    0062 9508      RET
+(0066) }
+(0067) 
+(0068) 
+(0069) //从RS232发送一个字节 
+(0070) void uart_putchar0(char c) 
+(0071) { 
+(0072)     while(!(UCSR0A & 0x20));
+_uart_putchar0:
+  c                    --> R16
+    0063 9B5D      SBIS	0x0B,5
+    0064 CFFE      RJMP	_uart_putchar0
+(0073)     UDR0 = c; 
+    0065 B90C      OUT	0x0C,R16
+    0066 9508      RET
+(0074) } 
+(0075) //从RS232接收一个字节 
+(0076) unsigned int uart_getchar0(void) 
+(0077) { 
+(0078)     unsigned char status,res; 
+(0079)     if(!(UCSR0A & 0x80)) return -1;        //no data to be received 
+_uart_getchar0:
+  res                  --> R16
+  status               --> R18
+    0067 995F      SBIC	0x0B,7
+    0068 C003      RJMP	0x006C
+    0069 EF0F      LDI	R16,0xFF
+    006A EF1F      LDI	R17,0xFF
+    006B C009      RJMP	0x0075
+(0080)     status = UCSR0A; 
+    006C B12B      IN	R18,0x0B
+(0081)     res = UDR0; 
+    006D B10C      IN	R16,0x0C
+(0082)     if (status & 0x1c) return -1;        // If error, return -1 
+    006E 2F82      MOV	R24,R18
+    006F 718C      ANDI	R24,0x1C
+    0070 F019      BEQ	0x0074
+    0071 EF0F      LDI	R16,0xFF
+    0072 EF1F      LDI	R17,0xFF
+    0073 C001      RJMP	0x0075
+(0083)     return res; 
+    0074 2711      CLR	R17
+    0075 9508      RET
+_uart_waitchar0:
+  c                    --> R20
+    0076 940E0092  CALL	push_gset1
+(0084) } 
+(0085) //等待从RS232接收一个有效的字节 
+(0086) unsigned char uart_waitchar0(void) 
+(0087) { 
+(0088)     unsigned int c; 
+(0089)     while((c=uart_getchar0())==-1); 
+    0078 DFEE      RCALL	_uart_getchar0
+    0079 01A8      MOVW	R20,R16
+    007A 3F4F      CPI	R20,0xFF
+    007B EFEF      LDI	R30,0xFF
+    007C 075E      CPC	R21,R30
+    007D F3D1      BEQ	0x0078
+(0090)     return (unsigned char)c; 
+    007E 940E0095  CALL	pop_gset1
+    0080 9508      RET
+(0091) } 
+(0092) 
+(0093) void main(void)
+(0094) {
+(0095)  	DDRA=0xFF;
+_main:
+    0081 EF8F      LDI	R24,0xFF
+    0082 BB8A      OUT	0x1A,R24
+(0096)  	UART_init();
+    0083 DFD5      RCALL	_UART_init
+(0097) 	uart_putchar0(0x55);
+    0084 E505      LDI	R16,0x55
+    0085 DFDD      RCALL	_uart_putchar0
+(0098) 	
+(0099) 	PORTA=uart_waitchar0();
+    0086 DFEF      RCALL	_uart_waitchar0
+    0087 BB0B      OUT	0x1B,R16
+(0100) 	while(1);
+FILE: <library>
+    0088 CFFF      RJMP	0x0088
+    0089 9508      RET
+push_gset5:
+    008A 92FA      ST	R15,-Y
+    008B 92EA      ST	R14,-Y
+push_gset4:
+    008C 92DA      ST	R13,-Y
+    008D 92CA      ST	R12,-Y
+push_gset3:
+    008E 92BA      ST	R11,-Y
+    008F 92AA      ST	R10,-Y
+push_gset2:
+    0090 937A      ST	R23,-Y
+    0091 936A      ST	R22,-Y
+push_gset1:
+    0092 935A      ST	R21,-Y
+    0093 934A      ST	R20,-Y
+    0094 9508      RET
+pop_gset1:
+    0095 E0E1      LDI	R30,1
+pop:
+    0096 9149      LD	R20,Y+
+    0097 9159      LD	R21,Y+
+    0098 FDE0      SBRC	R30,0
+    0099 9508      RET
+    009A 9169      LD	R22,Y+
+    009B 9179      LD	R23,Y+
+    009C FDE1      SBRC	R30,1
+    009D 9508      RET
+    009E 90A9      LD	R10,Y+
+    009F 90B9      LD	R11,Y+
+    00A0 FDE2      SBRC	R30,2
+    00A1 9508      RET
+    00A2 90C9      LD	R12,Y+
+    00A3 90D9      LD	R13,Y+
+    00A4 FDE3      SBRC	R30,3
+    00A5 9508      RET
+    00A6 90E9      LD	R14,Y+
+    00A7 90F9      LD	R15,Y+
+    00A8 9508      RET

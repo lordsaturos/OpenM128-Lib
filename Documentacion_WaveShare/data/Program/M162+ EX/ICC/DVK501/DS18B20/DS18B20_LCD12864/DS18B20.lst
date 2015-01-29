@@ -1,0 +1,1897 @@
+Interrupt Vectors
+    00000 940C 004D JMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    0004D EFCF      LDI	R28,0xFF
+    0004E E0D4      LDI	R29,4
+    0004F BFCD      OUT	0x3D,R28
+    00050 BFDE      OUT	0x3E,R29
+    00051 51C0      SUBI	R28,0x10
+    00052 40D0      SBCI	R29,0
+    00053 EA0A      LDI	R16,0xAA
+    00054 8308      ST	Y,R16
+    00055 2400      CLR	R0
+    00056 E2E9      LDI	R30,0x29
+    00057 E0F1      LDI	R31,1
+    00058 E011      LDI	R17,1
+    00059 32EF      CPI	R30,0x2F
+    0005A 07F1      CPC	R31,R17
+    0005B F011      BEQ	0x005E
+    0005C 9201      ST	Z+,R0
+    0005D CFFB      RJMP	0x0059
+    0005E 8300      ST	Z,R16
+    0005F E7E0      LDI	R30,0x70
+    00060 E0F0      LDI	R31,0
+    00061 E0A0      LDI	R26,0
+    00062 E0B1      LDI	R27,1
+    00063 E010      LDI	R17,0
+    00064 E000      LDI	R16,0
+    00065 BF0B      OUT	0x3B,R16
+    00066 39E9      CPI	R30,0x99
+    00067 07F1      CPC	R31,R17
+    00068 F021      BEQ	0x006D
+    00069 95C8      LPM
+    0006A 9631      ADIW	R30,1
+    0006B 920D      ST	X+,R0
+    0006C CFF9      RJMP	0x0066
+    0006D 940E 0329 CALL	_main
+_exit:
+    0006F CFFF      RJMP	_exit
+_speaData:
+  y                    --> Y,+4
+  j                    --> Y,+0
+  i                    --> R10
+  len                  --> R12
+  dat                  --> Y,+16
+    00070 940E 0359 CALL	push_arg4
+    00072 940E 0437 CALL	push_xgsetF03C
+    00074 9728      SBIW	R28,0x8
+    00075 88CC      LDD	R12,Y+20
+FILE: D:\ICC_H\Software.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立AVR的软件提取库，增加各类补丁，方便系统程序移植
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                       
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033)     
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036)    
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) 
+(0040) #ifndef Software_H
+(0041) #define Software_H
+(0042) 
+(0043) #include <math.h>
+(0044) #include <string.h>
+(0045) 
+(0046) /* 兼容一般程序员的常用写法 */
+(0047) typedef unsigned char	uchar;
+(0048) typedef unsigned int	uint;
+(0049) typedef unsigned long	ulong;
+(0050) typedef signed char		schar;
+(0051) typedef signed int		sint;
+(0052) typedef signed long		slong;
+(0053) 
+(0054) /* 为方便移植，建议使用下面写法 */
+(0055) typedef unsigned char	bool;
+(0056) typedef unsigned char	uint8;
+(0057) typedef unsigned int	uint16;
+(0058) typedef unsigned long   uint32;
+(0059) typedef signed  char	sint8;
+(0060) typedef signed	int		sint16;
+(0061) typedef signed	long	sint32;
+(0062) typedef signed  char	int8;
+(0063) typedef signed  int		int16;
+(0064) typedef signed  long	int32;
+(0065) 
+(0066) /* 下面写法一般不推荐 */
+(0067) //typedef unsigned char ubyte;
+(0068) //typedef unsigned int	uword;
+(0069) //typedef unsigned long udword;
+(0070) //typedef signed   char	sbyte;
+(0071) //typedef signed   int	sword;
+(0072) //typedef signed   long	sdword;
+(0073) 
+(0074) /* 一般程序定义的默认值 */
+(0075) //#define NULL			0
+(0076) //#define EOF			-1
+(0077) //#define TRUE   		1
+(0078) //#define FALSE  		0
+(0079) //#define YES   		1
+(0080) //#define NO  			0
+(0081) //#define ON			1
+(0082) //#define OFF			0
+(0083) //#define ENABLE   		1
+(0084) //#define DISABLE		0
+(0085) //#define CRR			1
+(0086) //#define ERR			0
+(0087) //#define RIGHT			1
+(0088) //#define WRONG			0
+(0089) //#define SUCCESS		1
+(0090) //#define FAILURE		0
+(0091) //#define PI			3.1415926	//3.1415926535897932
+(0092) 
+(0093) /* 如果你手头上的RAM实在很紧，不如尝试下面的define～ */
+(0094) //#define _CALLOC(a)		( (a *)calloc(n,sizeof(a)) )
+(0095) //#define _MALLOC(a)		( (a *)malloc(sizeof(a)) )
+(0096) //#define _MIN(a,b)			( (a) < (b) ? (a) : (b) )
+(0097) //#define _MAX(a,b)			( (a) > (b) ? (a) : (b) )
+(0098) //#define _EXCHANGE(a,b)	{ int t; t=a; a=b; b=t; }
+(0099) //#define _TOLOWER(c)		( (c)+32 )
+(0100) //#define _TOUPPER(c)		( (c)-32 )
+(0101) 
+(0102) //#ifndef BIT
+(0103) //#define BIT(x)	( 1<<(x) )
+(0104) //#endif
+(0105) 
+(0106) /*--------------------------------------------------------------------
+(0107) 函数全称：数据拆字
+(0108) 函数功能：
+(0109) 注意事项：D<=999999,C<=6
+(0110) 提示说明：调用speaData(12,2)，得到dataElem[0]=2，dataElem[1]=1
+(0111) 输    入：
+(0112) 返    回：无
+(0113) --------------------------------------------------------------------*/
+(0114) uint8 dataElem[6];
+(0115) void speaData(uint32 dat,sint8 len)
+(0116) {
+(0117)     uint8 i;
+(0118)     uint32 j,y;
+(0119)     for(i=0,j=1;i<len;i++)
+    00076 24AA      CLR	R10
+    00077 E081      LDI	R24,1
+    00078 8388      ST	Y,R24
+    00079 E080      LDI	R24,0
+    0007A 8389      STD	Y+1,R24
+    0007B 838A      STD	Y+2,R24
+    0007C 838B      STD	Y+3,R24
+    0007D C03C      RJMP	0x00BA
+(0120)     {
+(0121)         y=dat/j;
+    0007E 8028      LD	R2,Y
+    0007F 8039      LDD	R3,Y+1
+    00080 804A      LDD	R4,Y+2
+    00081 805B      LDD	R5,Y+3
+    00082 8908      LDD	R16,Y+16
+    00083 8919      LDD	R17,Y+17
+    00084 892A      LDD	R18,Y+18
+    00085 893B      LDD	R19,Y+19
+    00086 925A      ST	-Y,R5
+    00087 924A      ST	-Y,R4
+    00088 923A      ST	-Y,R3
+    00089 922A      ST	-Y,R2
+    0008A 940E 035E CALL	div32u
+    0008C 830C      STD	Y+4,R16
+    0008D 831D      STD	Y+5,R17
+    0008E 832E      STD	Y+6,R18
+    0008F 833F      STD	Y+7,R19
+(0122)         dataElem[i]=y%10;
+    00090 E04A      LDI	R20,0xA
+    00091 E050      LDI	R21,0
+    00092 E060      LDI	R22,0
+    00093 E070      LDI	R23,0
+    00094 810C      LDD	R16,Y+4
+    00095 811D      LDD	R17,Y+5
+    00096 812E      LDD	R18,Y+6
+    00097 813F      LDD	R19,Y+7
+    00098 937A      ST	-Y,R23
+    00099 936A      ST	-Y,R22
+    0009A 935A      ST	-Y,R21
+    0009B 934A      ST	-Y,R20
+    0009C 940E 0360 CALL	mod32u
+    0009E E289      LDI	R24,0x29
+    0009F E091      LDI	R25,1
+    000A0 2DEA      MOV	R30,R10
+    000A1 27FF      CLR	R31
+    000A2 0FE8      ADD	R30,R24
+    000A3 1FF9      ADC	R31,R25
+    000A4 8300      ST	Z,R16
+(0123)         j*=10;
+    000A5 8028      LD	R2,Y
+    000A6 8039      LDD	R3,Y+1
+    000A7 804A      LDD	R4,Y+2
+    000A8 805B      LDD	R5,Y+3
+    000A9 E04A      LDI	R20,0xA
+    000AA E050      LDI	R21,0
+    000AB E060      LDI	R22,0
+    000AC E070      LDI	R23,0
+    000AD 925A      ST	-Y,R5
+    000AE 924A      ST	-Y,R4
+    000AF 923A      ST	-Y,R3
+    000B0 922A      ST	-Y,R2
+    000B1 018A      MOVW	R16,R20
+    000B2 019B      MOVW	R18,R22
+    000B3 940E 03C8 CALL	empy32u|empy32s
+    000B5 8308      ST	Y,R16
+    000B6 8319      STD	Y+1,R17
+    000B7 832A      STD	Y+2,R18
+    000B8 833B      STD	Y+3,R19
+    000B9 94A3      INC	R10
+    000BA 2C2C      MOV	R2,R12
+    000BB 2433      CLR	R3
+    000BC FC27      SBRC	R2,7
+    000BD 9430      COM	R3
+    000BE 2C4A      MOV	R4,R10
+    000BF 2455      CLR	R5
+    000C0 1442      CP	R4,R2
+    000C1 0453      CPC	R5,R3
+    000C2 F40C      BGE	0x00C4
+    000C3 CFBA      RJMP	0x007E
+    000C4 9628      ADIW	R28,0x8
+    000C5 940E 0440 CALL	pop_xgsetF03C
+    000C7 9624      ADIW	R28,4
+    000C8 9508      RET
+_delay50us:
+  j                    --> R20
+  t                    --> R16
+    000C9 934A      ST	-Y,R20
+FILE: D:\ICC_H\Hardware.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立AVR的硬件提取库，增加各类补丁，方便移植
+(0005) 					
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033)     
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036)    
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) 
+(0040) #ifndef Hardware_H
+(0041) #define Hardware_H
+(0042) 
+(0043) #include <math.h>
+(0044) #include <string.h>
+(0045) #include <stdio.h>
+(0046) #include <macros.h>
+(0047) #include <eeprom.h>
+(0048) //#include <wdt.h>
+(0049) 
+(0050) /* TWI configs */
+(0051) //如使用ATMEGA162(没有TWI接口)之类的MCU，在加载Hardware.H前，务必加“#define NO_INCLUDE_I2C_H 1”语句
+(0052) #if NO_INCLUDE_I2C_H
+(0053) ;
+(0054) #else
+(0055) #include "D:\ICC_H\I2C.H"	//i2c即AVR的"twi"
+(0056) #endif
+(0057) 
+(0058) /* hard configs */
+(0059) #ifndef flash
+(0060) 	#define flash	const
+(0061) #endif
+(0062) 
+(0063) #ifndef code
+(0064) 	#define code	const
+(0065) #endif
+(0066) 
+(0067) #ifndef NOP
+(0068) 	#define NOP()	asm("nop")
+(0069) #endif
+(0070) 
+(0071) /* io configs */
+(0072) #define sbi(io,bit)		(  io |=  (1<<bit) )	//example: sbi(PORTA,0);sbi(DDRA,0);
+(0073) #define cbi(io,bit)		(  io &= ~(1<<bit) )	//example: cbi(PORTA,0);cbi(DDRA,0);
+(0074) #define gbi(pin ,bit)	( pin &   (1<<bit) )	//example: gbi(PINA,0);
+(0075) 
+(0076) /* interrupt configs */
+(0077) #define DIS_INT  asm("sei")
+(0078) #define EN_INT   asm("cli")
+(0079) 
+(0080) /* wdt configs */
+(0081) #define WDT()    asm("wdr")
+(0082) 
+(0083) /* bit operation */
+(0084) //#ifndef BIT
+(0085) //#define BIT(x)	( 1<<(x) )
+(0086) //#endif
+(0087) 
+(0088) /* USART configs for 4 Mhz crystal */
+(0089) //#define BAUD9600			25
+(0090) //#define BAUD19000			12
+(0091) //#define UART_TRAN_ON()	UCR |=  0x08
+(0092) //#define UART_TRAN_OFF()	UCR &= ~0x08
+(0093) //#define UART_RCV_ON()		UCR |=  0x10
+(0094) //#define UART_RCV_OFF()	UCR &= ~0x10
+(0095) 
+(0096) /*--------------------------------------------------------------------
+(0097) 函数全称：50us 延时
+(0098) 函数功能：当然是 50us延时 啦
+(0099) 注意事项：基于7.3728M晶振，稍微有点误差
+(0100) 提示说明：调用delay50us（20），得到1ms延时
+(0101) 输    入：	
+(0102) 返    回：无 
+(0103) --------------------------------------------------------------------*/
+(0104) void delay50us(sint16 t)
+(0105) {
+(0106)     uint8 j;		
+(0107)     for(;t>0;t--)			
+    000CA C007      RJMP	0x00D2
+(0108)         for(j=0;j<70;j++)	
+    000CB 2744      CLR	R20
+    000CC C001      RJMP	0x00CE
+    000CD 9543      INC	R20
+    000CE 3446      CPI	R20,0x46
+    000CF F3E8      BCS	0x00CD
+    000D0 5001      SUBI	R16,1
+    000D1 4010      SBCI	R17,0
+    000D2 2422      CLR	R2
+    000D3 2433      CLR	R3
+    000D4 1620      CP	R2,R16
+    000D5 0631      CPC	R3,R17
+    000D6 F3A4      BLT	0x00CB
+    000D7 9149      LD	R20,Y+
+    000D8 9508      RET
+_delay50ms:
+  i                    --> R20
+  t                    --> R16
+    000D9 934A      ST	-Y,R20
+    000DA 935A      ST	-Y,R21
+(0109)             ;
+(0110) }
+(0111) /*--------------------------------------------------------------------
+(0112) 函数全称：50ms 延时
+(0113) 函数功能：当然是 50ms延时 啦
+(0114) 注意事项：基于7.3728M晶振，稍微有点误差
+(0115) 提示说明：调用delay50ms（20），得到1s延时 
+(0116) 输    入：
+(0117) 返    回：无
+(0118) --------------------------------------------------------------------*/
+(0119) void delay50ms(sint16 t)
+(0120) {
+(0121) 	uint16 i; 
+(0122) 	for(;t>0;t--)
+    000DB C013      RJMP	0x00EF
+(0123) 		for(i=0;i<52642;i++)
+    000DC 2744      CLR	R20
+    000DD 2755      CLR	R21
+    000DE C002      RJMP	0x00E1
+    000DF 5F4F      SUBI	R20,0xFF
+    000E0 4F5F      SBCI	R21,0xFF
+    000E1 EA82      LDI	R24,0xA2
+    000E2 EC9D      LDI	R25,0xCD
+    000E3 E0A0      LDI	R26,0
+    000E4 E0B0      LDI	R27,0
+    000E5 011A      MOVW	R2,R20
+    000E6 2444      CLR	R4
+    000E7 2455      CLR	R5
+    000E8 1628      CP	R2,R24
+    000E9 0639      CPC	R3,R25
+    000EA 064A      CPC	R4,R26
+    000EB 065B      CPC	R5,R27
+    000EC F394      BLT	0x00DF
+    000ED 5001      SUBI	R16,1
+    000EE 4010      SBCI	R17,0
+    000EF 2422      CLR	R2
+    000F0 2433      CLR	R3
+    000F1 1620      CP	R2,R16
+    000F2 0631      CPC	R3,R17
+    000F3 F344      BLT	0x00DC
+    000F4 9159      LD	R21,Y+
+    000F5 9149      LD	R20,Y+
+    000F6 9508      RET
+_delayus:
+  i                    --> R20
+  t                    --> R16
+    000F7 934A      ST	-Y,R20
+    000F8 935A      ST	-Y,R21
+(0124) 			; 
+(0125) }
+(0126) 
+(0127) 
+(0128) void delayus(uint16 t)
+(0129) {
+(0130) 	uint16 i;
+(0131) 	for(i=0;i<t;i++)
+    000F9 2744      CLR	R20
+    000FA 2755      CLR	R21
+    000FB C002      RJMP	0x00FE
+    000FC 5F4F      SUBI	R20,0xFF
+    000FD 4F5F      SBCI	R21,0xFF
+    000FE 1740      CP	R20,R16
+    000FF 0751      CPC	R21,R17
+    00100 F3D8      BCS	0x00FC
+    00101 9159      LD	R21,Y+
+    00102 9149      LD	R20,Y+
+    00103 9508      RET
+FILE: D:\ICC_H\LCD12864_ST7920_M48.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 	                                                        
+(0004) 目    的:   建立LCD12864_ST7920的串模式操作库
+(0005) 
+(0006) 目标系统:   基于AVR单片机
+(0007) 	                                                                
+(0008) 应用软件:   ICCAVR                                               
+(0009) 	                                                                
+(0010) 版    本:   Version 1.0
+(0011) 	                                                                
+(0012) 圆版时间:   2005-09-06
+(0013) 
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权 
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) 
+(0026) 
+(0027) ----------------------------------------------------------------------
+(0028) 入口参数说明：
+(0029) 	//#define OUT_LCD_CS	sbi(DDRD,0)
+(0030) 	//#define SET_LCD_CS	sbi(PORTD,0)
+(0031) 	//#define CLR_LCD_CS	cbi(PORTD,0)
+(0032) 
+(0033) ----------------------------------------------------------------------
+(0034) 待定参数说明：
+(0035) 	
+(0036) 
+(0037) ----------------------------------------------------------------------	
+(0038) 对外变量说明：
+(0039) 
+(0040) ----------------------------------------------------------------------
+(0041) 对外函数说明：
+(0042) 
+(0043) ----------------------------------------------------------------------
+(0044) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0045) 
+(0046) 
+(0047) /*--------------------------------------------------------------------
+(0048) 接口定义：
+(0049) 
+(0050) LCD12864_ST7920			ATmega16
+(0051) 1.GND		--------	GND
+(0052) 2.VCC		--------	VCC
+(0053) 3.V0		--------	V0
+(0054) 4.RS(CS)	--------	VCC
+(0055) 5.R/W(SID)	--------	MOSI/PB5
+(0056) 6.E(SCLK)	--------	SCK/PB7
+(0057) 7.D0		--------	NC
+(0058) 8.D1		--------	NC
+(0059) 9.D2		--------	NC
+(0060) 10.D3		--------	NC
+(0061) 11.D4		--------	NC
+(0062) 12.D5		--------	NC
+(0063) 13.D6		--------	NC
+(0064) 14.D7		--------	NC
+(0065) 15.PSB		--------	GND
+(0066) 16.NC		--------	NC
+(0067) 17.RST		--------	NC
+(0068) 18.NC		--------	NC
+(0069) 19.LED+		--------	VCC
+(0070) 20.LED-		--------	GND
+(0071) 
+(0072) 说明：
+(0073) （1）使用ATmega16的硬件SPI操作LCD12864_ST7920
+(0074) （2）PIN4/CS接VCC，其实也可接到特定的IO口，但外部程序需要指定
+(0075) --------------------------------------------------------------------*/
+(0076) 
+(0077) #ifndef LCD12864_ST7920_H
+(0078) #define LCD12864_ST7920_H
+(0079) 
+(0080) #include "D:\ICC_H\CmmIcc.h"
+(0081) 
+(0082) void SPI_init()
+(0083) {
+(0084) 	DDRB =0xFF;
+_SPI_init:
+    00104 EF8F      LDI	R24,0xFF
+    00105 BB87      OUT	0x17,R24
+(0085) 	SPCR = 0x50;	//setup SPI
+    00106 E580      LDI	R24,0x50
+    00107 B98D      OUT	0x0D,R24
+(0086) 	SPSR = 0x01;	//setup SPI
+    00108 E081      LDI	R24,1
+    00109 B98E      OUT	0x0E,R24
+(0087) 	SEI();			
+    0010A 9478      BSET	7
+    0010B 9508      RET
+(0088) }
+(0089) 
+(0090) void lcd_wrByte(uint8 data)
+(0091) {  
+(0092) 	SPDR = data;        
+_lcd_wrByte:
+  data                 --> R16
+    0010C B90F      OUT	0x0F,R16
+(0093) 	while ((SPSR & 0x80) == 0);  
+    0010D 9B77      SBIS	0x0E,7
+    0010E CFFE      RJMP	0x010D
+    0010F 9508      RET
+_lcd_wrCmd:
+  LC                   --> R10
+  HC                   --> R12
+    00110 92AA      ST	-Y,R10
+    00111 92CA      ST	-Y,R12
+    00112 2EA2      MOV	R10,R18
+    00113 2EC0      MOV	R12,R16
+(0094) }
+(0095) 
+(0096) void lcd_wrCmd(uint8 HC,uint8 LC)
+(0097) {
+(0098) 	lcd_wrByte(0xF8);
+    00114 EF08      LDI	R16,0xF8
+    00115 DFF6      RCALL	_lcd_wrByte
+(0099) 	lcd_wrByte(HC);		//传输高四位
+    00116 2D0C      MOV	R16,R12
+    00117 DFF4      RCALL	_lcd_wrByte
+(0100) 	lcd_wrByte(LC);		//传输低四位
+    00118 2D0A      MOV	R16,R10
+    00119 DFF2      RCALL	_lcd_wrByte
+    0011A 90C9      LD	R12,Y+
+    0011B 90A9      LD	R10,Y+
+    0011C 9508      RET
+_lcd_wrDat:
+  LD                   --> R10
+  HD                   --> R12
+    0011D 92AA      ST	-Y,R10
+    0011E 92CA      ST	-Y,R12
+    0011F 2EA2      MOV	R10,R18
+    00120 2EC0      MOV	R12,R16
+(0101) }
+(0102) 
+(0103) void lcd_wrDat(uint8 HD,uint8 LD)
+(0104) {
+(0105) 	lcd_wrByte(0xFA);
+    00121 EF0A      LDI	R16,0xFA
+    00122 DFE9      RCALL	_lcd_wrByte
+(0106) 	lcd_wrByte(HD);		//传输高四位
+    00123 2D0C      MOV	R16,R12
+    00124 DFE7      RCALL	_lcd_wrByte
+(0107) 	lcd_wrByte(LD);		//传输低四位
+    00125 2D0A      MOV	R16,R10
+    00126 DFE5      RCALL	_lcd_wrByte
+    00127 90C9      LD	R12,Y+
+    00128 90A9      LD	R10,Y+
+    00129 9508      RET
+_lcd_set_xy:
+  adr                  --> R20
+  y                    --> R22
+  x                    --> R10
+    0012A 940E 041B CALL	push_xgsetF00C
+    0012C 2F62      MOV	R22,R18
+    0012D 2EA0      MOV	R10,R16
+(0108) } 
+(0109) 
+(0110) /*
+(0111) x表示在第几行显示，y表示在第几列显示
+(0112) */
+(0113) void lcd_set_xy(uint8 x,uint8 y) 
+(0114) {
+(0115) 	uint8 adr;
+(0116) 
+(0117) 	switch(x)
+    0012E 24BB      CLR	R11
+    0012F 01C5      MOVW	R24,R10
+    00130 3081      CPI	R24,1
+    00131 E0E0      LDI	R30,0
+    00132 079E      CPC	R25,R30
+    00133 F069      BEQ	0x0141
+    00134 3082      CPI	R24,2
+    00135 E0E0      LDI	R30,0
+    00136 079E      CPC	R25,R30
+    00137 F061      BEQ	0x0144
+    00138 3083      CPI	R24,3
+    00139 E0E0      LDI	R30,0
+    0013A 079E      CPC	R25,R30
+    0013B F059      BEQ	0x0147
+    0013C 3084      CPI	R24,4
+    0013D E0E0      LDI	R30,0
+    0013E 079E      CPC	R25,R30
+    0013F F051      BEQ	0x014A
+    00140 C00B      RJMP	0x014C
+(0118) 	{
+(0119) 	case 1: adr = 0x7F + y;
+    00141 2F46      MOV	R20,R22
+    00142 5841      SUBI	R20,0x81
+(0120) 		break;		//在第1行y列显示
+    00143 C008      RJMP	0x014C
+(0121) 	case 2: adr = 0x8F + y;
+    00144 2F46      MOV	R20,R22
+    00145 5741      SUBI	R20,0x71
+(0122) 		break;		//在第2行y列显示
+    00146 C005      RJMP	0x014C
+(0123) 	case 3: adr = 0x87 + y;
+    00147 2F46      MOV	R20,R22
+    00148 5749      SUBI	R20,0x79
+(0124) 		break;		//在第3行y列显示
+    00149 C002      RJMP	0x014C
+(0125) 	case 4: adr = 0x97 + y;
+    0014A 2F46      MOV	R20,R22
+    0014B 5649      SUBI	R20,0x69
+(0126) 		break;		//在第4行y列显示
+(0127) 	default:	;
+(0128) 	}
+(0129) 	lcd_wrCmd(adr&0xF0,(adr&0x0F)<<4);
+    0014C 2F24      MOV	R18,R20
+    0014D 702F      ANDI	R18,0xF
+    0014E 702F      ANDI	R18,0xF
+    0014F 9522      SWAP	R18
+    00150 2F04      MOV	R16,R20
+    00151 7F00      ANDI	R16,0xF0
+    00152 DFBD      RCALL	_lcd_wrCmd
+    00153 940C 0422 JMP	pop_xgsetF00C
+_lcd_putc:
+  ch                   --> R20
+  y                    --> R12
+  x                    --> R10
+    00155 940E 0429 CALL	push_xgset303C
+    00157 2EC2      MOV	R12,R18
+    00158 2EA0      MOV	R10,R16
+    00159 814E      LDD	R20,Y+6
+(0130) }
+(0131) 
+(0132) void lcd_putc(uint8 x,uint8 y,uint8 ch)
+(0133) {
+(0134) 	lcd_set_xy(x,y);
+    0015A 2D2C      MOV	R18,R12
+    0015B 2D0A      MOV	R16,R10
+    0015C DFCD      RCALL	_lcd_set_xy
+(0135) 	delay50us(20); 
+    0015D E104      LDI	R16,0x14
+    0015E E010      LDI	R17,0
+    0015F DF69      RCALL	_delay50us
+(0136) 	lcd_wrDat(ch&0xF0,(ch&0x0F)<<4);
+    00160 2F24      MOV	R18,R20
+    00161 702F      ANDI	R18,0xF
+    00162 702F      ANDI	R18,0xF
+    00163 9522      SWAP	R18
+    00164 2F04      MOV	R16,R20
+    00165 7F00      ANDI	R16,0xF0
+    00166 DFB6      RCALL	_lcd_wrDat
+    00167 940C 0430 JMP	pop_xgset303C
+_lcd_putd0:
+  i                    --> R20
+  length               --> R20
+  dat                  --> Y,+7
+  y                    --> R12
+  x                    --> R10
+    00169 940E 0429 CALL	push_xgset303C
+    0016B 2EC2      MOV	R12,R18
+    0016C 2EA0      MOV	R10,R16
+    0016D 9721      SBIW	R28,1
+    0016E 854B      LDD	R20,Y+11
+(0137) }
+(0138) 
+(0139) void lcd_putd0(uint8 x,uint8 y,uint32 dat,uint8 length)
+(0140) {
+(0141) 	sint8 i;
+(0142) 
+(0143) 	speaData(dat,length);
+    0016F 8348      ST	Y,R20
+    00170 810F      LDD	R16,Y+7
+    00171 8518      LDD	R17,Y+8
+    00172 8529      LDD	R18,Y+9
+    00173 853A      LDD	R19,Y+10
+    00174 DEFB      RCALL	_speaData
+(0144) 	lcd_set_xy(x,y);
+    00175 2D2C      MOV	R18,R12
+    00176 2D0A      MOV	R16,R10
+    00177 DFB2      RCALL	_lcd_set_xy
+(0145) 	delay50us(40);
+    00178 E208      LDI	R16,0x28
+    00179 E010      LDI	R17,0
+    0017A DF4E      RCALL	_delay50us
+(0146) 	for(i=length-1;i>=0;i--)
+    0017B 5041      SUBI	R20,1
+    0017C C01E      RJMP	0x019B
+(0147) 	{
+(0148) 		lcd_wrDat( (dataElem[i]+0x30)&0xF0 ,( (dataElem[i]+0x30)&0x0F )<<4 );
+    0017D E289      LDI	R24,0x29
+    0017E E091      LDI	R25,1
+    0017F 2FE4      MOV	R30,R20
+    00180 27FF      CLR	R31
+    00181 FDE7      SBRC	R30,7
+    00182 95F0      COM	R31
+    00183 0FE8      ADD	R30,R24
+    00184 1FF9      ADC	R31,R25
+    00185 8180      LD	R24,Z
+    00186 2799      CLR	R25
+    00187 96C0      ADIW	R24,0x30
+    00188 019C      MOVW	R18,R24
+    00189 702F      ANDI	R18,0xF
+    0018A 7030      ANDI	R19,0
+    0018B 0F22      LSL	R18
+    0018C 1F33      ROL	R19
+    0018D 0F22      LSL	R18
+    0018E 1F33      ROL	R19
+    0018F 0F22      LSL	R18
+    00190 1F33      ROL	R19
+    00191 0F22      LSL	R18
+    00192 1F33      ROL	R19
+    00193 018C      MOVW	R16,R24
+    00194 7F00      ANDI	R16,0xF0
+    00195 7010      ANDI	R17,0
+    00196 DF86      RCALL	_lcd_wrDat
+(0149) 		delay50us(40); 
+    00197 E208      LDI	R16,0x28
+    00198 E010      LDI	R17,0
+    00199 DF2F      RCALL	_delay50us
+    0019A 954A      DEC	R20
+    0019B 3040      CPI	R20,0
+    0019C F704      BGE	0x017D
+    0019D 9621      ADIW	R28,1
+    0019E 940C 0430 JMP	pop_xgset303C
+_lcd_putd:
+  effectLen            --> R22
+  i                    --> R20
+  length               --> R10
+  dat                  --> Y,+11
+  y                    --> R14
+  x                    --> R12
+    001A0 940E 0410 CALL	push_xgsetF0FC
+    001A2 2EE2      MOV	R14,R18
+    001A3 2EC0      MOV	R12,R16
+    001A4 9721      SBIW	R28,1
+    001A5 84AF      LDD	R10,Y+15
+(0150) 	}
+(0151) }
+(0152) 
+(0153) void lcd_putd(uint8 x,uint8 y,uint32 dat,uint8 length)
+(0154) {
+(0155) 	sint8 i;
+(0156) 	sint8 effectLen;
+(0157) 
+(0158) 	if(dat>999999)
+    001A6 E38F      LDI	R24,0x3F
+    001A7 E492      LDI	R25,0x42
+    001A8 E0AF      LDI	R26,0xF
+    001A9 E0B0      LDI	R27,0
+    001AA 842B      LDD	R2,Y+11
+    001AB 843C      LDD	R3,Y+12
+    001AC 844D      LDD	R4,Y+13
+    001AD 845E      LDD	R5,Y+14
+    001AE 1582      CP	R24,R2
+    001AF 0593      CPC	R25,R3
+    001B0 05A4      CPC	R26,R4
+    001B1 05B5      CPC	R27,R5
+    001B2 F410      BCC	0x01B5
+(0159) 		effectLen=7;
+    001B3 E067      LDI	R22,7
+    001B4 C04C      RJMP	0x0201
+(0160) 	else if(dat>99999)
+    001B5 E98F      LDI	R24,0x9F
+    001B6 E896      LDI	R25,0x86
+    001B7 E0A1      LDI	R26,1
+    001B8 E0B0      LDI	R27,0
+    001B9 842B      LDD	R2,Y+11
+    001BA 843C      LDD	R3,Y+12
+    001BB 844D      LDD	R4,Y+13
+    001BC 845E      LDD	R5,Y+14
+    001BD 1582      CP	R24,R2
+    001BE 0593      CPC	R25,R3
+    001BF 05A4      CPC	R26,R4
+    001C0 05B5      CPC	R27,R5
+    001C1 F410      BCC	0x01C4
+(0161) 		effectLen=6;
+    001C2 E066      LDI	R22,6
+    001C3 C03D      RJMP	0x0201
+(0162) 	else if(dat>9999)
+    001C4 E08F      LDI	R24,0xF
+    001C5 E297      LDI	R25,0x27
+    001C6 E0A0      LDI	R26,0
+    001C7 E0B0      LDI	R27,0
+    001C8 842B      LDD	R2,Y+11
+    001C9 843C      LDD	R3,Y+12
+    001CA 844D      LDD	R4,Y+13
+    001CB 845E      LDD	R5,Y+14
+    001CC 1582      CP	R24,R2
+    001CD 0593      CPC	R25,R3
+    001CE 05A4      CPC	R26,R4
+    001CF 05B5      CPC	R27,R5
+    001D0 F410      BCC	0x01D3
+(0163) 		effectLen=5;
+    001D1 E065      LDI	R22,5
+    001D2 C02E      RJMP	0x0201
+(0164) 	else if(dat>999)
+    001D3 EE87      LDI	R24,0xE7
+    001D4 E093      LDI	R25,3
+    001D5 E0A0      LDI	R26,0
+    001D6 E0B0      LDI	R27,0
+    001D7 842B      LDD	R2,Y+11
+    001D8 843C      LDD	R3,Y+12
+    001D9 844D      LDD	R4,Y+13
+    001DA 845E      LDD	R5,Y+14
+    001DB 1582      CP	R24,R2
+    001DC 0593      CPC	R25,R3
+    001DD 05A4      CPC	R26,R4
+    001DE 05B5      CPC	R27,R5
+    001DF F410      BCC	0x01E2
+(0165) 		effectLen=4;
+    001E0 E064      LDI	R22,4
+    001E1 C01F      RJMP	0x0201
+(0166) 	else if(dat>99)
+    001E2 E683      LDI	R24,0x63
+    001E3 E090      LDI	R25,0
+    001E4 E0A0      LDI	R26,0
+    001E5 E0B0      LDI	R27,0
+    001E6 842B      LDD	R2,Y+11
+    001E7 843C      LDD	R3,Y+12
+    001E8 844D      LDD	R4,Y+13
+    001E9 845E      LDD	R5,Y+14
+    001EA 1582      CP	R24,R2
+    001EB 0593      CPC	R25,R3
+    001EC 05A4      CPC	R26,R4
+    001ED 05B5      CPC	R27,R5
+    001EE F410      BCC	0x01F1
+(0167) 		effectLen=3;
+    001EF E063      LDI	R22,3
+    001F0 C010      RJMP	0x0201
+(0168) 	else if(dat>9)
+    001F1 E089      LDI	R24,0x9
+    001F2 E090      LDI	R25,0
+    001F3 E0A0      LDI	R26,0
+    001F4 E0B0      LDI	R27,0
+    001F5 842B      LDD	R2,Y+11
+    001F6 843C      LDD	R3,Y+12
+    001F7 844D      LDD	R4,Y+13
+    001F8 845E      LDD	R5,Y+14
+    001F9 1582      CP	R24,R2
+    001FA 0593      CPC	R25,R3
+    001FB 05A4      CPC	R26,R4
+    001FC 05B5      CPC	R27,R5
+    001FD F410      BCC	0x0200
+(0169) 		effectLen=2;
+    001FE E062      LDI	R22,2
+    001FF C001      RJMP	0x0201
+(0170) 	else
+(0171) 		effectLen=1;
+    00200 E061      LDI	R22,1
+(0172) 	speaData(dat,effectLen);
+    00201 8368      ST	Y,R22
+    00202 850B      LDD	R16,Y+11
+    00203 851C      LDD	R17,Y+12
+    00204 852D      LDD	R18,Y+13
+    00205 853E      LDD	R19,Y+14
+    00206 DE69      RCALL	_speaData
+(0173) 
+(0174) 	lcd_set_xy(x,y);
+    00207 2D2E      MOV	R18,R14
+    00208 2D0C      MOV	R16,R12
+    00209 DF20      RCALL	_lcd_set_xy
+(0175) 	delay50us(40); 
+    0020A E208      LDI	R16,0x28
+    0020B E010      LDI	R17,0
+    0020C DEBC      RCALL	_delay50us
+(0176) 	if(length>effectLen)
+    0020D 2E26      MOV	R2,R22
+    0020E 2433      CLR	R3
+    0020F FC27      SBRC	R2,7
+    00210 9430      COM	R3
+    00211 2C4A      MOV	R4,R10
+    00212 2455      CLR	R5
+    00213 1424      CP	R2,R4
+    00214 0435      CPC	R3,R5
+    00215 F46C      BGE	0x0223
+(0177) 	{
+(0178) 		for(i=length-effectLen-1;i>=0;i--)
+    00216 2D44      MOV	R20,R4
+    00217 1B46      SUB	R20,R22
+    00218 5041      SUBI	R20,1
+    00219 C007      RJMP	0x0221
+(0179) 		{
+(0180) 			lcd_wrDat(' '&0xF0,(' '&0x0F)<<4);
+    0021A 2722      CLR	R18
+    0021B E200      LDI	R16,0x20
+    0021C DF00      RCALL	_lcd_wrDat
+(0181) 			delay50us(40); 
+    0021D E208      LDI	R16,0x28
+    0021E E010      LDI	R17,0
+    0021F DEA9      RCALL	_delay50us
+    00220 954A      DEC	R20
+    00221 3040      CPI	R20,0
+    00222 F7BC      BGE	0x021A
+(0182) 		}
+(0183) 	}
+(0184) 	for(i=effectLen-1;i>=0;i--)
+    00223 2F46      MOV	R20,R22
+    00224 5041      SUBI	R20,1
+    00225 C01E      RJMP	0x0244
+(0185) 	{
+(0186) 		lcd_wrDat( (dataElem[i]+0x30)&0xF0 ,( (dataElem[i]+0x30)&0x0F )<<4 );
+    00226 E289      LDI	R24,0x29
+    00227 E091      LDI	R25,1
+    00228 2FE4      MOV	R30,R20
+    00229 27FF      CLR	R31
+    0022A FDE7      SBRC	R30,7
+    0022B 95F0      COM	R31
+    0022C 0FE8      ADD	R30,R24
+    0022D 1FF9      ADC	R31,R25
+    0022E 8180      LD	R24,Z
+    0022F 2799      CLR	R25
+    00230 96C0      ADIW	R24,0x30
+    00231 019C      MOVW	R18,R24
+    00232 702F      ANDI	R18,0xF
+    00233 7030      ANDI	R19,0
+    00234 0F22      LSL	R18
+    00235 1F33      ROL	R19
+    00236 0F22      LSL	R18
+    00237 1F33      ROL	R19
+    00238 0F22      LSL	R18
+    00239 1F33      ROL	R19
+    0023A 0F22      LSL	R18
+    0023B 1F33      ROL	R19
+    0023C 018C      MOVW	R16,R24
+    0023D 7F00      ANDI	R16,0xF0
+    0023E 7010      ANDI	R17,0
+    0023F DEDD      RCALL	_lcd_wrDat
+(0187) 		delay50us(40);
+    00240 E208      LDI	R16,0x28
+    00241 E010      LDI	R17,0
+    00242 DE86      RCALL	_delay50us
+    00243 954A      DEC	R20
+    00244 3040      CPI	R20,0
+    00245 F704      BGE	0x0226
+    00246 9621      ADIW	R28,1
+    00247 940C 0405 JMP	pop_xgsetF0FC
+_lcd_puts:
+  str                  --> R20
+  y                    --> R12
+  x                    --> R10
+    00249 940E 0429 CALL	push_xgset303C
+    0024B 2EC2      MOV	R12,R18
+    0024C 2EA0      MOV	R10,R16
+    0024D 814E      LDD	R20,Y+6
+    0024E 815F      LDD	R21,Y+7
+(0188) 	}
+(0189) }
+(0190) 
+(0191) void lcd_puts(uint8 x,uint8 y,uint8 *str)
+(0192) { 
+(0193) 	lcd_set_xy(x,y);
+    0024F 2D2C      MOV	R18,R12
+    00250 2D0A      MOV	R16,R10
+    00251 DED8      RCALL	_lcd_set_xy
+(0194) 	delay50us(20);   
+    00252 E104      LDI	R16,0x14
+    00253 E010      LDI	R17,0
+    00254 DE74      RCALL	_delay50us
+    00255 C00F      RJMP	0x0265
+(0195) 	while(*str)
+(0196) 	{
+(0197) 		lcd_wrDat((*(str))&0xF0,((*(str))&0x0F)<<4);
+    00256 01FA      MOVW	R30,R20
+    00257 8020      LD	R2,Z
+    00258 2433      CLR	R3
+    00259 2D22      MOV	R18,R2
+    0025A 702F      ANDI	R18,0xF
+    0025B 702F      ANDI	R18,0xF
+    0025C 9522      SWAP	R18
+    0025D 2D02      MOV	R16,R2
+    0025E 7F00      ANDI	R16,0xF0
+    0025F DEBD      RCALL	_lcd_wrDat
+(0198) 		str++;
+    00260 5F4F      SUBI	R20,0xFF
+    00261 4F5F      SBCI	R21,0xFF
+(0199) 		delay50us(20);
+    00262 E104      LDI	R16,0x14
+    00263 E010      LDI	R17,0
+    00264 DE64      RCALL	_delay50us
+    00265 01FA      MOVW	R30,R20
+    00266 8020      LD	R2,Z
+    00267 2022      TST	R2
+    00268 F769      BNE	0x0256
+    00269 940C 0430 JMP	pop_xgset303C
+_lcd_puts_:
+  dlyMs                --> R10
+  str                  --> R20
+  y                    --> R14
+  x                    --> R12
+    0026B 940E 0412 CALL	push_xgset30FC
+    0026D 2EE2      MOV	R14,R18
+    0026E 2EC0      MOV	R12,R16
+    0026F 8548      LDD	R20,Y+8
+    00270 8559      LDD	R21,Y+9
+    00271 84AA      LDD	R10,Y+10
+(0200) 	} 
+(0201) }
+(0202) 
+(0203) void lcd_puts_(uint8 x,uint8 y,uint8 *str,uint8 dlyMs)
+(0204) { 
+(0205) 	lcd_set_xy(x,y);
+    00272 2D2E      MOV	R18,R14
+    00273 2D0C      MOV	R16,R12
+    00274 DEB5      RCALL	_lcd_set_xy
+(0206) 	delay50us(20);   
+    00275 E104      LDI	R16,0x14
+    00276 E010      LDI	R17,0
+    00277 DE51      RCALL	_delay50us
+    00278 C00F      RJMP	0x0288
+(0207) 	while(*str)
+(0208) 	{
+(0209) 		lcd_wrDat((*(str))&0xF0,((*(str))&0x0F)<<4);
+    00279 01FA      MOVW	R30,R20
+    0027A 8020      LD	R2,Z
+    0027B 2433      CLR	R3
+    0027C 2D22      MOV	R18,R2
+    0027D 702F      ANDI	R18,0xF
+    0027E 702F      ANDI	R18,0xF
+    0027F 9522      SWAP	R18
+    00280 2D02      MOV	R16,R2
+    00281 7F00      ANDI	R16,0xF0
+    00282 DE9A      RCALL	_lcd_wrDat
+(0210) 		str++;
+    00283 5F4F      SUBI	R20,0xFF
+    00284 4F5F      SBCI	R21,0xFF
+(0211) 		delay50ms(dlyMs);
+    00285 2D0A      MOV	R16,R10
+    00286 2711      CLR	R17
+    00287 DE51      RCALL	_delay50ms
+    00288 01FA      MOVW	R30,R20
+    00289 8020      LD	R2,Z
+    0028A 2022      TST	R2
+    0028B F769      BNE	0x0279
+    0028C 940C 03FC JMP	pop_xgset30FC
+(0212) 	} 
+(0213) }
+(0214) 
+(0215) void lcd_clr()
+(0216) {
+(0217) 	lcd_wrCmd(0x00,0x10);
+_lcd_clr:
+    0028E E120      LDI	R18,0x10
+    0028F 2700      CLR	R16
+    00290 DE7F      RCALL	_lcd_wrCmd
+(0218) 	delay50us(200);
+    00291 EC08      LDI	R16,0xC8
+    00292 E010      LDI	R17,0
+    00293 CE35      RJMP	_delay50us
+(0219) }
+(0220) 
+(0221) void lcd_init(void)
+(0222) {
+(0223) 	SPI_init();	
+_lcd_init:
+    00294 DE6F      RCALL	_SPI_init
+(0224) 	//OUT_LCD_CS;		//若LCD_CS
+(0225) 	//SET_LCD_CS;		
+(0226) 	delay50ms(1);
+    00295 E001      LDI	R16,1
+    00296 E010      LDI	R17,0
+    00297 DE41      RCALL	_delay50ms
+(0227) 	lcd_wrCmd(0x30,0x30);	//使用8位控制界面,使用基本指令集
+    00298 E320      LDI	R18,0x30
+    00299 E300      LDI	R16,0x30
+    0029A DE75      RCALL	_lcd_wrCmd
+(0228) 	//lcd_wrCmd(0x00,0xF0);	//整体显示ON
+(0229) 	lcd_wrCmd(0x00,0xC0);	//整体显示ON
+    0029B EC20      LDI	R18,0xC0
+    0029C 2700      CLR	R16
+    0029D DE72      RCALL	_lcd_wrCmd
+(0230) 	lcd_wrCmd(0x00,0x10);	//清屏
+    0029E E120      LDI	R18,0x10
+    0029F 2700      CLR	R16
+    002A0 DE6F      RCALL	_lcd_wrCmd
+(0231) 	//lcd_wrCmd(0x10,0x00);	//光标
+(0232) 	lcd_wrCmd(0x00,0x60);
+    002A1 E620      LDI	R18,0x60
+    002A2 2700      CLR	R16
+    002A3 DE6C      RCALL	_lcd_wrCmd
+(0233) 	//lcd_wrCmd(0x00,0x70);	//显示右移
+(0234) 	delay50ms(1);		//不可省去！！！
+    002A4 E001      LDI	R16,1
+    002A5 E010      LDI	R17,0
+    002A6 CE32      RJMP	_delay50ms
+FILE: D:\ICC_H\onewirefords18b20.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立onewire操作库
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033) 
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036) 
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) #ifndef _onewire_H_
+(0040) #define _onewire_H_
+(0041) //-----复位-----
+(0042) void reset_onewire(void) 
+(0043) { 
+(0044) 	set_onewire_dq_ddr();
+_reset_onewire:
+    002A7 9ABA      SBI	0x17,2
+(0045)     clr_onewire_dq(); 
+    002A8 98C2      CBI	0x18,2
+(0046)     delayus(500);
+    002A9 EF04      LDI	R16,0xF4
+    002AA E011      LDI	R17,1
+    002AB DE4B      RCALL	_delayus
+(0047)     set_onewire_dq(); 
+    002AC 9AC2      SBI	0x18,2
+(0048)     delayus(60);
+    002AD E30C      LDI	R16,0x3C
+    002AE E010      LDI	R17,0
+    002AF DE47      RCALL	_delayus
+(0049) 	clr_onewire_dq_ddr();
+    002B0 98BA      CBI	0x17,2
+    002B1 9508      RET
+(0050) } 
+(0051) //-----应答-----
+(0052) void ack_onewire(void) 
+(0053) { 	
+(0054)     while(in_onewire_dq());
+_ack_onewire:
+    002B2 99B2      SBIC	0x16,2
+    002B3 CFFE      RJMP	_ack_onewire
+(0055)     while(!(in_onewire_dq())); 
+    002B4 9BB2      SBIS	0x16,2
+    002B5 CFFE      RJMP	0x02B4
+(0056)     delayus(38);
+    002B6 E206      LDI	R16,0x26
+    002B7 E010      LDI	R17,0
+    002B8 DE3E      RCALL	_delayus
+(0057) 	set_onewire_dq_ddr();
+    002B9 9ABA      SBI	0x17,2
+    002BA 9508      RET
+_read_onewire:
+  i                    --> R22
+  data                 --> R20
+    002BB 934A      ST	-Y,R20
+    002BC 936A      ST	-Y,R22
+(0058) } 
+(0059) //-----读数据-----
+(0060) unsigned char read_onewire(void) 
+(0061) { 
+(0062)     unsigned char data=0,i=0; 
+    002BD 2744      CLR	R20
+(0063)     for(i=0;i<8;i++) 
+    002BE 2766      CLR	R22
+    002BF C012      RJMP	0x02D2
+(0064)     { 
+(0065) 		set_onewire_dq_ddr();
+    002C0 9ABA      SBI	0x17,2
+(0066) 
+(0067)         data=data>>1; 
+    002C1 9546      LSR	R20
+(0068)         clr_onewire_dq(); 
+    002C2 98C2      CBI	0x18,2
+(0069)         delayus(1);
+    002C3 E001      LDI	R16,1
+    002C4 E010      LDI	R17,0
+    002C5 DE31      RCALL	_delayus
+(0070)         set_onewire_dq(); 
+    002C6 9AC2      SBI	0x18,2
+(0071)         delayus(2);
+    002C7 E002      LDI	R16,2
+    002C8 E010      LDI	R17,0
+    002C9 DE2D      RCALL	_delayus
+(0072) 
+(0073) 		clr_onewire_dq_ddr();
+    002CA 98BA      CBI	0x17,2
+(0074)         if(in_onewire_dq()) data|=0x80; 
+    002CB 9BB2      SBIS	0x16,2
+    002CC C001      RJMP	0x02CE
+    002CD 6840      ORI	R20,0x80
+(0075)         delayus(118);
+    002CE E706      LDI	R16,0x76
+    002CF E010      LDI	R17,0
+    002D0 DE26      RCALL	_delayus
+    002D1 9563      INC	R22
+    002D2 3068      CPI	R22,0x8
+    002D3 F360      BCS	0x02C0
+(0076) 	} 
+(0077) 	return(data); 
+    002D4 2F04      MOV	R16,R20
+    002D5 9169      LD	R22,Y+
+    002D6 9149      LD	R20,Y+
+    002D7 9508      RET
+_write_onewire:
+  i                    --> R20
+  data                 --> R10
+    002D8 92AA      ST	-Y,R10
+    002D9 934A      ST	-Y,R20
+    002DA 2EA0      MOV	R10,R16
+(0078) } 
+(0079) //-----写数据-----
+(0080) void write_onewire(unsigned char data) 
+(0081) { 
+(0082)     unsigned char i=0; 
+(0083) 	set_onewire_dq_ddr();
+    002DB 9ABA      SBI	0x17,2
+(0084)     for(i=0;i<8;i++) 
+    002DC 2744      CLR	R20
+    002DD C015      RJMP	0x02F3
+(0085)     { 
+(0086)         if(data&0x01)
+    002DE FEA0      SBRS	R10,0
+    002DF C009      RJMP	0x02E9
+(0087) 		{ 
+(0088)             clr_onewire_dq(); 
+    002E0 98C2      CBI	0x18,2
+(0089)             delayus(14);
+    002E1 E00E      LDI	R16,0xE
+    002E2 E010      LDI	R17,0
+    002E3 DE13      RCALL	_delayus
+(0090)             set_onewire_dq(); 
+    002E4 9AC2      SBI	0x18,2
+(0091)             delayus(108);
+    002E5 E60C      LDI	R16,0x6C
+    002E6 E010      LDI	R17,0
+    002E7 DE0F      RCALL	_delayus
+(0092) 		}	 
+    002E8 C008      RJMP	0x02F1
+(0093)    	 	else 
+(0094)    	 	{ 
+(0095)        		 clr_onewire_dq(); 
+    002E9 98C2      CBI	0x18,2
+(0096)         	delayus(108);
+    002EA E60C      LDI	R16,0x6C
+    002EB E010      LDI	R17,0
+    002EC DE0A      RCALL	_delayus
+(0097)         	set_onewire_dq(); 
+    002ED 9AC2      SBI	0x18,2
+(0098)         	delayus(14);
+    002EE E00E      LDI	R16,0xE
+    002EF E010      LDI	R17,0
+    002F0 DE06      RCALL	_delayus
+(0099)     	} 
+(0100)     	data=data>>1; 
+    002F1 94A6      LSR	R10
+    002F2 9543      INC	R20
+    002F3 3048      CPI	R20,0x8
+    002F4 F348      BCS	0x02DE
+    002F5 9149      LD	R20,Y+
+    002F6 90A9      LD	R10,Y+
+    002F7 9508      RET
+FILE: D:\ICC_H\DS18B20_DVK501.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立DS18B20_DVK501操作库
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR 6.3A
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 
+(0012) 圆版时间:   2009-07-01
+(0013) 	
+(0014) 开发人员:   zz
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033) 
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036) 
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) 
+(0040) #define set_onewire_dq_ddr() sbi(DDRx,ds18b20_dq)
+(0041) #define set_onewire_dq() sbi(PORTx,ds18b20_dq)
+(0042) #define clr_onewire_dq() cbi(PORTx,ds18b20_dq)
+(0043) #define clr_onewire_dq_ddr() cbi(DDRx,ds18b20_dq)
+(0044) #define in_onewire_dq() gbi(PINx,ds18b20_dq)
+(0045) #include "D:\ICC_H\onewirefords18b20.H"
+(0046) //-----DS18B20转换温度-----
+(0047) void convert_ds18b20(void) 
+(0048) { 
+(0049)     reset_onewire(); 
+_convert_ds18b20:
+    002F8 DFAE      RCALL	_reset_onewire
+(0050)     ack_onewire(); 
+    002F9 DFB8      RCALL	_ack_onewire
+(0051)     delay50us(200); 
+    002FA EC08      LDI	R16,0xC8
+    002FB E010      LDI	R17,0
+    002FC DDCC      RCALL	_delay50us
+(0052)     write_onewire(0xcc); 
+    002FD EC0C      LDI	R16,0xCC
+    002FE DFD9      RCALL	_write_onewire
+(0053)     write_onewire(0x44); 
+    002FF E404      LDI	R16,0x44
+    00300 CFD7      RJMP	_write_onewire
+_read_temperature:
+  temp1                --> R22
+  temp2                --> R20
+    00301 934A      ST	-Y,R20
+    00302 936A      ST	-Y,R22
+(0054) } 
+(0055) //------------DS18BB0读温度----------
+(0056) unsigned char read_temperature(void) 
+(0057) { 
+(0058) 	unsigned char temp1,temp2;
+(0059) 	convert_ds18b20();
+    00303 DFF4      RCALL	_convert_ds18b20
+(0060)     reset_onewire(); 
+    00304 DFA2      RCALL	_reset_onewire
+(0061)     ack_onewire(); 
+    00305 DFAC      RCALL	_ack_onewire
+(0062)     delay50us(200); 
+    00306 EC08      LDI	R16,0xC8
+    00307 E010      LDI	R17,0
+    00308 DDC0      RCALL	_delay50us
+(0063)     write_onewire(0xcc); 
+    00309 EC0C      LDI	R16,0xCC
+    0030A DFCD      RCALL	_write_onewire
+(0064)     write_onewire(0xbe); 	
+    0030B EB0E      LDI	R16,0xBE
+    0030C DFCB      RCALL	_write_onewire
+(0065)     temp1=read_onewire(); 
+    0030D DFAD      RCALL	_read_onewire
+    0030E 2F60      MOV	R22,R16
+(0066)     temp2=read_onewire(); 
+    0030F DFAB      RCALL	_read_onewire
+    00310 2F40      MOV	R20,R16
+(0067) 	temp2=temp2<<4;
+    00311 2F84      MOV	R24,R20
+    00312 708F      ANDI	R24,0xF
+    00313 9582      SWAP	R24
+    00314 2F48      MOV	R20,R24
+(0068) 	temp1=temp1>>4;
+    00315 2F86      MOV	R24,R22
+    00316 9582      SWAP	R24
+    00317 708F      ANDI	R24,0xF
+    00318 2F68      MOV	R22,R24
+(0069) 	temp2|=temp1;
+    00319 2B48      OR	R20,R24
+(0070) 
+(0071) 	return temp2;
+    0031A 2F04      MOV	R16,R20
+    0031B 9169      LD	R22,Y+
+    0031C 9149      LD	R20,Y+
+    0031D 9508      RET
+FILE: E:\吴泽备份\DVK501光盘内容\STK162~1.0\DS18B20_温度测量\DS18B20_LCD12864\DS18B20.C
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立使用DS18B20的示例程序
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 实验内容：
+(0027) 通过DS18B20把转换出来的温度通过LCD12864显示出来
+(0028) ----------------------------------------------------------------------
+(0029) 硬件连接：将DS18B20与DVK500正确连接，并保证其接触良好
+(0030) 		  将STK162+的PA口与八个LED相连
+(0031) 		 	  DVK500				 STK162+
+(0032) 				VCC		---------	  VCC
+(0033) 				GND		---------	  GND
+(0034) 		 		DQ		---------	  PB2
+(0035) 				
+(0036) 			 DVK500				 	  STK128+
+(0037) 				CS		---------	  VCC
+(0038) 				PSB	    ---------	  GND
+(0039) 				SID		---------	  PB5
+(0040) 				CLK		---------	  PB7
+(0041) ----------------------------------------------------------------------
+(0042) 注意事项： 
+(0043) （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+(0044) （2）请详细阅读“使用必读”及相关资料。
+(0045) ----------------------------------------------------------------------
+(0046) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0047) #include <iom162v.h>
+(0048) #define NO_INCLUDE_I2C_H 1
+(0049) #include "D:\ICC_H\CmmICC.H"
+(0050) #include "D:\ICC_H\LCD12864_ST7920_M48.H"
+(0051) /*DQ使用PB2口*/
+(0052) #define DDRx DDRB
+(0053) #define PORTx PORTB 
+(0054) #define PINx PINB
+(0055) #define ds18b20_dq 2
+(0056) #include "D:\ICC_H\DS18B20_DVK501.H"
+(0057) //----端口初始化----
+(0058) void port_init(void)
+(0059) {
+(0060)     PORTA = 0x00;
+_port_init:
+    0031E 2422      CLR	R2
+    0031F BA2B      OUT	0x1B,R2
+(0061)     DDRA  = 0xFF;
+    00320 EF8F      LDI	R24,0xFF
+    00321 BB8A      OUT	0x1A,R24
+(0062)     PORTB = 0xFF;
+    00322 BB88      OUT	0x18,R24
+(0063)     DDRB  = 0xFF;
+    00323 BB87      OUT	0x17,R24
+(0064)     PORTC = 0xFF; //m103 output only
+    00324 BB85      OUT	0x15,R24
+(0065)     DDRC  = 0xFF;
+    00325 BB84      OUT	0x14,R24
+(0066)     PORTD = 0xFF;
+    00326 BB82      OUT	0x12,R24
+(0067)     DDRD  = 0xFF;
+    00327 BB81      OUT	0x11,R24
+    00328 9508      RET
+_main:
+  tmp                  --> R10
+    00329 9725      SBIW	R28,5
+(0068) }
+(0069) void main(void)
+(0070) {	
+(0071) 	uchar tmp=0;
+    0032A 24AA      CLR	R10
+(0072) 	port_init();
+    0032B DFF2      RCALL	_port_init
+(0073) 	
+(0074) 	lcd_init();
+    0032C DF67      RCALL	_lcd_init
+(0075) 	lcd_clr();
+    0032D DF60      RCALL	_lcd_clr
+(0076) 	lcd_puts(1,1,"DS18B20-LCD12864");
+    0032E E188      LDI	R24,0x18
+    0032F E091      LDI	R25,1
+    00330 8399      STD	Y+1,R25
+    00331 8388      ST	Y,R24
+    00332 E021      LDI	R18,1
+    00333 E001      LDI	R16,1
+    00334 DF14      RCALL	_lcd_puts
+(0077) 	lcd_puts(2,1,"液晶显示温度");
+    00335 E08B      LDI	R24,0xB
+    00336 E091      LDI	R25,1
+    00337 8399      STD	Y+1,R25
+    00338 8388      ST	Y,R24
+    00339 E021      LDI	R18,1
+    0033A E002      LDI	R16,2
+    0033B DF0D      RCALL	_lcd_puts
+(0078) 	lcd_puts(3,1,"温度:   ℃");
+    0033C E080      LDI	R24,0
+    0033D E091      LDI	R25,1
+    0033E 8399      STD	Y+1,R25
+    0033F 8388      ST	Y,R24
+    00340 E021      LDI	R18,1
+    00341 E003      LDI	R16,3
+    00342 DF06      RCALL	_lcd_puts
+    00343 C012      RJMP	0x0356
+(0079) 	
+(0080) 	while(1)
+(0081) 	{
+(0082) 		delay50ms(5);
+    00344 E005      LDI	R16,5
+    00345 E010      LDI	R17,0
+    00346 DD92      RCALL	_delay50ms
+(0083) 		tmp=read_temperature();
+    00347 DFB9      RCALL	_read_temperature
+    00348 2EA0      MOV	R10,R16
+(0084) 		lcd_putd(3,4,tmp,1);	//把转换出来温度通过lcd显示
+FILE: <library>
+    00349 E081      LDI	R24,1
+    0034A 838C      STD	Y+4,R24
+    0034B 2C2A      MOV	R2,R10
+    0034C 2433      CLR	R3
+    0034D 2444      CLR	R4
+    0034E 2455      CLR	R5
+    0034F 8228      ST	Y,R2
+    00350 8239      STD	Y+1,R3
+    00351 824A      STD	Y+2,R4
+    00352 825B      STD	Y+3,R5
+    00353 E024      LDI	R18,4
+    00354 E003      LDI	R16,3
+    00355 DE4A      RCALL	_lcd_putd
+    00356 CFED      RJMP	0x0344
+    00357 9625      ADIW	R28,5
+    00358 9508      RET
+push_arg4:
+    00359 933A      ST	-Y,R19
+    0035A 932A      ST	-Y,R18
+push_arg2:
+    0035B 931A      ST	-Y,R17
+    0035C 930A      ST	-Y,R16
+    0035D 9508      RET
+div32u:
+    0035E 94E8      BCLR	6
+    0035F C001      RJMP	0x0361
+mod32u:
+    00360 9468      BSET	6
+    00361 D030      RCALL	long_div_prolog
+    00362 24CC      CLR	R12
+    00363 C009      RJMP	0x036D
+div32s:
+    00364 94E8      BCLR	6
+    00365 C001      RJMP	0x0367
+mod32s:
+    00366 9468      BSET	6
+    00367 D02A      RCALL	long_div_prolog
+    00368 FD37      SBRC	R19,7
+    00369 940E 0449 CALL	neg32
+    0036B FDB7      SBRC	R27,7
+    0036C D052      RCALL	neg_R24_R27
+    0036D 2477      CLR	R7
+    0036E 2488      CLR	R8
+    0036F 2499      CLR	R9
+    00370 24AA      CLR	R10
+    00371 24BB      CLR	R11
+    00372 D042      RCALL	tst_R16_R19
+    00373 F0C1      BEQ	0x038C
+    00374 D045      RCALL	tst_R24_R27
+    00375 F0B1      BEQ	0x038C
+    00376 E2E8      LDI	R30,0x28
+    00377 0F00      LSL	R16
+    00378 1F11      ROL	R17
+    00379 1F22      ROL	R18
+    0037A 1F33      ROL	R19
+    0037B 1C77      ROL	R7
+    0037C 1C88      ROL	R8
+    0037D 1C99      ROL	R9
+    0037E 1CAA      ROL	R10
+    0037F 1CBB      ROL	R11
+    00380 1688      CP	R8,R24
+    00381 0699      CPC	R9,R25
+    00382 06AA      CPC	R10,R26
+    00383 06BB      CPC	R11,R27
+    00384 F028      BCS	0x038A
+    00385 1A88      SUB	R8,R24
+    00386 0A99      SBC	R9,R25
+    00387 0AAA      SBC	R10,R26
+    00388 0ABB      SBC	R11,R27
+    00389 9503      INC	R16
+    0038A 95EA      DEC	R30
+    0038B F759      BNE	0x0377
+    0038C F426      BRTC	0x0391
+    0038D 2D08      MOV	R16,R8
+    0038E 2D19      MOV	R17,R9
+    0038F 2D2A      MOV	R18,R10
+    00390 2D3B      MOV	R19,R11
+    00391 C013      RJMP	long_div_epilog
+long_div_prolog:
+    00392 927A      ST	-Y,R7
+    00393 928A      ST	-Y,R8
+    00394 929A      ST	-Y,R9
+    00395 92AA      ST	-Y,R10
+    00396 92BA      ST	-Y,R11
+    00397 92CA      ST	-Y,R12
+    00398 93EA      ST	-Y,R30
+    00399 938A      ST	-Y,R24
+    0039A 939A      ST	-Y,R25
+    0039B 93AA      ST	-Y,R26
+    0039C 93BA      ST	-Y,R27
+    0039D 858B      LDD	R24,Y+11
+    0039E 859C      LDD	R25,Y+12
+    0039F 85AD      LDD	R26,Y+13
+    003A0 85BE      LDD	R27,Y+14
+    003A1 2EC3      MOV	R12,R19
+    003A2 F00E      BRTS	0x03A4
+    003A3 26CB      EOR	R12,R27
+    003A4 9508      RET
+long_div_epilog:
+    003A5 FCC7      SBRC	R12,7
+    003A6 940E 0449 CALL	neg32
+    003A8 91B9      LD	R27,Y+
+    003A9 91A9      LD	R26,Y+
+    003AA 9199      LD	R25,Y+
+    003AB 9189      LD	R24,Y+
+    003AC 91E9      LD	R30,Y+
+    003AD 90C9      LD	R12,Y+
+    003AE 90B9      LD	R11,Y+
+    003AF 90A9      LD	R10,Y+
+    003B0 9099      LD	R9,Y+
+    003B1 9089      LD	R8,Y+
+    003B2 9079      LD	R7,Y+
+    003B3 9624      ADIW	R28,4
+    003B4 9508      RET
+tst_R16_R19:
+    003B5 2FE0      MOV	R30,R16
+    003B6 2BE1      OR	R30,R17
+    003B7 2BE2      OR	R30,R18
+    003B8 2BE3      OR	R30,R19
+    003B9 9508      RET
+tst_R24_R27:
+    003BA 2FE8      MOV	R30,R24
+    003BB 2BE9      OR	R30,R25
+    003BC 2BEA      OR	R30,R26
+    003BD 2BEB      OR	R30,R27
+    003BE 9508      RET
+neg_R24_R27:
+    003BF 9580      COM	R24
+    003C0 9590      COM	R25
+    003C1 95A0      COM	R26
+    003C2 95B0      COM	R27
+    003C3 5F8F      SUBI	R24,0xFF
+    003C4 4F9F      SBCI	R25,0xFF
+    003C5 4FAF      SBCI	R26,0xFF
+    003C6 4FBF      SBCI	R27,0xFF
+    003C7 9508      RET
+empy32u|empy32s:
+    003C8 940E 0452 CALL	long_prolog
+    003CA 927A      ST	-Y,R7
+    003CB 940E 046B CALL	tstzero1
+    003CD F159      BEQ	0x03F9
+    003CE 2477      CLR	R7
+    003CF 940E 0471 CALL	tstzero2
+    003D1 F419      BNE	0x03D5
+    003D2 018C      MOVW	R16,R24
+    003D3 019D      MOVW	R18,R26
+    003D4 C024      RJMP	0x03F9
+    003D5 920A      ST	-Y,R0
+    003D6 921A      ST	-Y,R1
+    003D7 9F08      MUL	R16,R24
+    003D8 2CB0      MOV	R11,R0
+    003D9 2CA1      MOV	R10,R1
+    003DA 9F28      MUL	R18,R24
+    003DB 2C90      MOV	R9,R0
+    003DC 2C81      MOV	R8,R1
+    003DD 9F18      MUL	R17,R24
+    003DE 0CA0      ADD	R10,R0
+    003DF 1C91      ADC	R9,R1
+    003E0 1C87      ADC	R8,R7
+    003E1 9F09      MUL	R16,R25
+    003E2 0CA0      ADD	R10,R0
+    003E3 1C91      ADC	R9,R1
+    003E4 1C87      ADC	R8,R7
+    003E5 9F19      MUL	R17,R25
+    003E6 0C90      ADD	R9,R0
+    003E7 1C81      ADC	R8,R1
+    003E8 9F0A      MUL	R16,R26
+    003E9 0C90      ADD	R9,R0
+    003EA 1C81      ADC	R8,R1
+    003EB 9F38      MUL	R19,R24
+    003EC 0C80      ADD	R8,R0
+    003ED 9F29      MUL	R18,R25
+    003EE 0C80      ADD	R8,R0
+    003EF 9F1A      MUL	R17,R26
+    003F0 0C80      ADD	R8,R0
+    003F1 9F0B      MUL	R16,R27
+    003F2 0C80      ADD	R8,R0
+    003F3 9019      LD	R1,Y+
+    003F4 9009      LD	R0,Y+
+    003F5 2D0B      MOV	R16,R11
+    003F6 2D1A      MOV	R17,R10
+    003F7 2D29      MOV	R18,R9
+    003F8 2D38      MOV	R19,R8
+    003F9 9079      LD	R7,Y+
+    003FA 940C 0460 JMP	long_epilog
+pop_xgset30FC:
+    003FC 90A9      LD	R10,Y+
+    003FD 90B9      LD	R11,Y+
+    003FE 90C9      LD	R12,Y+
+    003FF 90D9      LD	R13,Y+
+    00400 90E9      LD	R14,Y+
+    00401 90F9      LD	R15,Y+
+    00402 9149      LD	R20,Y+
+    00403 9159      LD	R21,Y+
+    00404 9508      RET
+pop_xgsetF0FC:
+    00405 90A9      LD	R10,Y+
+    00406 90B9      LD	R11,Y+
+    00407 90C9      LD	R12,Y+
+    00408 90D9      LD	R13,Y+
+    00409 90E9      LD	R14,Y+
+    0040A 90F9      LD	R15,Y+
+    0040B 9149      LD	R20,Y+
+    0040C 9159      LD	R21,Y+
+    0040D 9169      LD	R22,Y+
+    0040E 9179      LD	R23,Y+
+    0040F 9508      RET
+push_xgsetF0FC:
+    00410 937A      ST	-Y,R23
+    00411 936A      ST	-Y,R22
+push_xgset30FC:
+    00412 935A      ST	-Y,R21
+    00413 934A      ST	-Y,R20
+push_xgset00FC:
+    00414 92FA      ST	-Y,R15
+    00415 92EA      ST	-Y,R14
+push_xgset003C:
+    00416 92DA      ST	-Y,R13
+    00417 92CA      ST	-Y,R12
+    00418 92BA      ST	-Y,R11
+    00419 92AA      ST	-Y,R10
+    0041A 9508      RET
+push_xgsetF00C:
+    0041B 937A      ST	-Y,R23
+    0041C 936A      ST	-Y,R22
+    0041D 935A      ST	-Y,R21
+    0041E 934A      ST	-Y,R20
+    0041F 92BA      ST	-Y,R11
+    00420 92AA      ST	-Y,R10
+    00421 9508      RET
+pop_xgsetF00C:
+    00422 90A9      LD	R10,Y+
+    00423 90B9      LD	R11,Y+
+    00424 9149      LD	R20,Y+
+    00425 9159      LD	R21,Y+
+    00426 9169      LD	R22,Y+
+    00427 9179      LD	R23,Y+
+    00428 9508      RET
+push_xgset303C:
+    00429 935A      ST	-Y,R21
+    0042A 934A      ST	-Y,R20
+    0042B 92DA      ST	-Y,R13
+    0042C 92CA      ST	-Y,R12
+    0042D 92BA      ST	-Y,R11
+    0042E 92AA      ST	-Y,R10
+    0042F 9508      RET
+pop_xgset303C:
+    00430 90A9      LD	R10,Y+
+    00431 90B9      LD	R11,Y+
+    00432 90C9      LD	R12,Y+
+    00433 90D9      LD	R13,Y+
+    00434 9149      LD	R20,Y+
+    00435 9159      LD	R21,Y+
+    00436 9508      RET
+push_xgsetF03C:
+    00437 937A      ST	-Y,R23
+    00438 936A      ST	-Y,R22
+    00439 935A      ST	-Y,R21
+    0043A 934A      ST	-Y,R20
+    0043B 92DA      ST	-Y,R13
+    0043C 92CA      ST	-Y,R12
+    0043D 92BA      ST	-Y,R11
+    0043E 92AA      ST	-Y,R10
+    0043F 9508      RET
+pop_xgsetF03C:
+    00440 90A9      LD	R10,Y+
+    00441 90B9      LD	R11,Y+
+    00442 90C9      LD	R12,Y+
+    00443 90D9      LD	R13,Y+
+    00444 9149      LD	R20,Y+
+    00445 9159      LD	R21,Y+
+    00446 9169      LD	R22,Y+
+    00447 9179      LD	R23,Y+
+    00448 9508      RET
+neg32:
+    00449 9500      COM	R16
+    0044A 9510      COM	R17
+    0044B 9520      COM	R18
+    0044C 9530      COM	R19
+    0044D 5F0F      SUBI	R16,0xFF
+    0044E 4F1F      SBCI	R17,0xFF
+    0044F 4F2F      SBCI	R18,0xFF
+    00450 4F3F      SBCI	R19,0xFF
+    00451 9508      RET
+long_prolog:
+    00452 928A      ST	-Y,R8
+    00453 929A      ST	-Y,R9
+    00454 92AA      ST	-Y,R10
+    00455 92BA      ST	-Y,R11
+    00456 93EA      ST	-Y,R30
+    00457 938A      ST	-Y,R24
+    00458 939A      ST	-Y,R25
+    00459 93AA      ST	-Y,R26
+    0045A 93BA      ST	-Y,R27
+    0045B 8589      LDD	R24,Y+9
+    0045C 859A      LDD	R25,Y+10
+    0045D 85AB      LDD	R26,Y+11
+    0045E 85BC      LDD	R27,Y+12
+    0045F 9508      RET
+long_epilog:
+    00460 91B9      LD	R27,Y+
+    00461 91A9      LD	R26,Y+
+    00462 9199      LD	R25,Y+
+    00463 9189      LD	R24,Y+
+    00464 91E9      LD	R30,Y+
+    00465 90B9      LD	R11,Y+
+    00466 90A9      LD	R10,Y+
+    00467 9099      LD	R9,Y+
+    00468 9089      LD	R8,Y+
+    00469 9624      ADIW	R28,4
+    0046A 9508      RET
+tstzero1:
+    0046B 27EE      CLR	R30
+    0046C 2BE0      OR	R30,R16
+    0046D 2BE1      OR	R30,R17
+    0046E 2BE2      OR	R30,R18
+    0046F 2BE3      OR	R30,R19
+    00470 9508      RET
+tstzero2:
+    00471 27EE      CLR	R30
+    00472 2BE8      OR	R30,R24
+    00473 2BE9      OR	R30,R25
+    00474 2BEA      OR	R30,R26
+    00475 2BEB      OR	R30,R27
+    00476 9508      RET

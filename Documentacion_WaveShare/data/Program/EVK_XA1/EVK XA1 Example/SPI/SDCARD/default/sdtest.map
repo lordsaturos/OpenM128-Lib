@@ -1,0 +1,628 @@
+Archive member included because of file (symbol)
+
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+                              d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o (exit)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_clear_bss.o)
+                              main.o (__do_clear_bss)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(iob.o)
+                              main.o (__iob)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(printf.o)
+                              main.o (printf)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(puts.o)
+                              main.o (puts)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o)
+                              d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(printf.o) (vfprintf)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen_P.o)
+                              d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o) (strnlen_P)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen.o)
+                              d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o) (strnlen)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(fputc.o)
+                              d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o) (fputc)
+d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(ultoa_invert.o)
+                              d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o) (__ultoa_invert)
+
+Allocating common symbols
+Common symbol       size              file
+
+sdSpiPort           0x7               main.o
+__iob               0x6               d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(iob.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00100000         xr
+data             0x00802000         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+LOAD spi_driver.o
+LOAD main.o
+LOAD sdcard_driver.o
+LOAD clksys_driver.o
+LOAD usart_driver.o
+LOAD d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a
+LOAD d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a
+LOAD d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x11da
+ *(.vectors)
+ .vectors       0x00000000      0x1f4 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+                0x000001f4                . = ALIGN (0x2)
+                0x000001f4                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000001f4        0x0 linker stubs
+ *(.trampolines*)
+                0x000001f4                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000001f4                __ctors_start = .
+ *(.ctors)
+                0x000001f4                __ctors_end = .
+                0x000001f4                __dtors_start = .
+ *(.dtors)
+                0x000001f4                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000001f4        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+                0x000001f4                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000001f4       0x18 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x0000020c       0x1c d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+                0x0000020c                __do_copy_data
+ .init4         0x00000228       0x10 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_clear_bss.o)
+                0x00000228                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000238        0x8 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+ *(.init9)
+ *(.text)
+ .text          0x00000240        0x4 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+                0x00000240                __vector_38
+                0x00000240                __vector_104
+                0x00000240                __vector_22
+                0x00000240                __vector_63
+                0x00000240                __vector_28
+                0x00000240                __vector_67
+                0x00000240                __vector_1
+                0x00000240                __vector_119
+                0x00000240                __vector_32
+                0x00000240                __vector_75
+                0x00000240                __vector_71
+                0x00000240                __vector_91
+                0x00000240                __vector_34
+                0x00000240                __vector_62
+                0x00000240                __vector_77
+                0x00000240                __vector_102
+                0x00000240                __vector_24
+                0x00000240                __vector_12
+                0x00000240                __vector_55
+                0x00000240                __vector_69
+                0x00000240                __vector_81
+                0x00000240                __vector_90
+                0x00000240                __vector_46
+                0x00000240                __bad_interrupt
+                0x00000240                __vector_122
+                0x00000240                __vector_72
+                0x00000240                __vector_114
+                0x00000240                __vector_6
+                0x00000240                __vector_110
+                0x00000240                __vector_31
+                0x00000240                __vector_92
+                0x00000240                __vector_35
+                0x00000240                __vector_78
+                0x00000240                __vector_74
+                0x00000240                __vector_117
+                0x00000240                __vector_39
+                0x00000240                __vector_107
+                0x00000240                __vector_3
+                0x00000240                __vector_105
+                0x00000240                __vector_98
+                0x00000240                __vector_23
+                0x00000240                __vector_68
+                0x00000240                __vector_30
+                0x00000240                __vector_73
+                0x00000240                __vector_45
+                0x00000240                __vector_25
+                0x00000240                __vector_93
+                0x00000240                __vector_61
+                0x00000240                __vector_11
+                0x00000240                __vector_54
+                0x00000240                __vector_99
+                0x00000240                __vector_13
+                0x00000240                __vector_17
+                0x00000240                __vector_19
+                0x00000240                __vector_56
+                0x00000240                __vector_7
+                0x00000240                __vector_49
+                0x00000240                __vector_123
+                0x00000240                __vector_41
+                0x00000240                __vector_86
+                0x00000240                __vector_100
+                0x00000240                __vector_101
+                0x00000240                __vector_64
+                0x00000240                __vector_88
+                0x00000240                __vector_109
+                0x00000240                __vector_43
+                0x00000240                __vector_27
+                0x00000240                __vector_5
+                0x00000240                __vector_113
+                0x00000240                __vector_33
+                0x00000240                __vector_76
+                0x00000240                __vector_115
+                0x00000240                __vector_47
+                0x00000240                __vector_52
+                0x00000240                __vector_37
+                0x00000240                __vector_95
+                0x00000240                __vector_103
+                0x00000240                __vector_96
+                0x00000240                __vector_89
+                0x00000240                __vector_108
+                0x00000240                __vector_4
+                0x00000240                __vector_44
+                0x00000240                __vector_82
+                0x00000240                __vector_106
+                0x00000240                __vector_118
+                0x00000240                __vector_51
+                0x00000240                __vector_9
+                0x00000240                __vector_2
+                0x00000240                __vector_21
+                0x00000240                __vector_15
+                0x00000240                __vector_66
+                0x00000240                __vector_36
+                0x00000240                __vector_79
+                0x00000240                __vector_58
+                0x00000240                __vector_70
+                0x00000240                __vector_83
+                0x00000240                __vector_29
+                0x00000240                __vector_60
+                0x00000240                __vector_121
+                0x00000240                __vector_40
+                0x00000240                __vector_85
+                0x00000240                __vector_94
+                0x00000240                __vector_8
+                0x00000240                __vector_26
+                0x00000240                __vector_48
+                0x00000240                __vector_124
+                0x00000240                __vector_116
+                0x00000240                __vector_112
+                0x00000240                __vector_111
+                0x00000240                __vector_80
+                0x00000240                __vector_14
+                0x00000240                __vector_84
+                0x00000240                __vector_57
+                0x00000240                __vector_53
+                0x00000240                __vector_10
+                0x00000240                __vector_50
+                0x00000240                __vector_16
+                0x00000240                __vector_59
+                0x00000240                __vector_18
+                0x00000240                __vector_97
+                0x00000240                __vector_20
+                0x00000240                __vector_42
+                0x00000240                __vector_87
+                0x00000240                __vector_65
+                0x00000240                __vector_120
+ .text          0x00000244      0x268 spi_driver.o
+                0x00000426                SPI_MasterTransceivePacket
+                0x00000388                SPI_MasterInterruptTransceivePacket
+                0x0000030a                SPI_MasterInterruptHandler
+                0x000002e6                SPI_MasterCreateDataPacket
+                0x00000244                SPI_MasterInit
+                0x0000040c                SPI_MasterTransceiveByte
+                0x000002a8                SPI_SlaveInit
+ .text          0x000004ac      0x1ba main.o
+                0x000004ce                sdSpiInit
+                0x0000050a                main
+ .text          0x00000666      0x2d4 sdcard_driver.o
+                0x00000666                sdDeselect
+                0x000006be                sdSelect
+                0x000006de                sdSendCmd
+                0x000007b0                sdInit
+                0x000008a2                sdReadBlock
+                0x0000081c                sdWriteBlock
+                0x0000067e                sdWaitReady
+ .text          0x0000093a      0x178 clksys_driver.o
+                0x00000a52                CLKSYS_XOSC_FailureDetection_Enable
+                0x00000964                CLKSYS_XOSC_Config
+                0x0000093a                CCPWrite
+                0x000009ca                CLKSYS_Main_ClockSource_Select
+                0x00000a14                CLKSYS_AutoCalibration_Enable
+                0x0000099a                CLKSYS_Prescalers_Config
+                0x00000986                CLKSYS_Disable
+                0x0000097a                CLKSYS_PLL_Config
+                0x00000a04                CLKSYS_RTC_ClockSource_Enable
+                0x00000a82                CLKSYS_Configuration_Lock
+ .text          0x00000ab2      0x156 usart_driver.o
+                0x00000bec                USART_NineBits_GetChar
+                0x00000ade                USART_TXBuffer_PutByte
+                0x00000b56                USART_RXComplete
+                0x00000b8e                USART_DataRegEmpty
+                0x00000bd6                USART_NineBits_PutChar
+                0x00000aca                USART_TXBuffer_FreeSpace
+                0x00000b26                USART_RXBufferData_Available
+                0x00000b36                USART_RXBuffer_GetByte
+                0x00000ac4                USART_InterruptDriver_DreInterruptLevel_Set
+                0x00000ab2                USART_InterruptDriver_Initialize
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_clear_bss.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(iob.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(printf.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(puts.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen_P.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(fputc.o)
+ .text          0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(ultoa_invert.o)
+                0x00000c08                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+ .text.libgcc   0x00000c08        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x00000c08       0x24 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(printf.o)
+                0x00000c08                printf
+ .text.avr-libc
+                0x00000c2c       0x6a d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(puts.o)
+                0x00000c2c                puts
+ .text.avr-libc
+                0x00000c96      0x400 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o)
+                0x00000c96                vfprintf
+ .text.avr-libc
+                0x00001096       0x16 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen_P.o)
+                0x00001096                strnlen_P
+ .text.avr-libc
+                0x000010ac       0x16 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen.o)
+                0x000010ac                strnlen
+ .text.avr-libc
+                0x000010c2       0x58 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(fputc.o)
+                0x000010c2                fputc
+ .text.avr-libc
+                0x0000111a       0xbc d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(ultoa_invert.o)
+                0x0000111a                __ultoa_invert
+                0x000011d6                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x000011d6        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+                0x000011d6                exit
+                0x000011d6                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x000011d6        0x4 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+ *(.fini0)
+                0x000011da                _etext = .
+
+.data           0x00802000       0xac load address 0x000011da
+                0x00802000                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00802000        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+ .data          0x00802000        0x0 spi_driver.o
+ .data          0x00802000       0xab main.o
+                0x0080209b                sdCsPort
+ .data          0x008020ab        0x0 sdcard_driver.o
+ .data          0x008020ab        0x0 clksys_driver.o
+ .data          0x008020ab        0x0 usart_driver.o
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_clear_bss.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(iob.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(printf.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(puts.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen_P.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(fputc.o)
+ .data          0x008020ab        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(ultoa_invert.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x008020ac                . = ALIGN (0x2)
+ *fill*         0x008020ab        0x1 00
+                0x008020ac                _edata = .
+                0x008020ac                PROVIDE (__data_end, .)
+
+.bss            0x008020ac        0xd
+                0x008020ac                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7/crtx128a1.o
+ .bss           0x008020ac        0x0 spi_driver.o
+ .bss           0x008020ac        0x0 main.o
+ .bss           0x008020ac        0x0 sdcard_driver.o
+ .bss           0x008020ac        0x0 clksys_driver.o
+ .bss           0x008020ac        0x0 usart_driver.o
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_exit.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/avrxmega7\libgcc.a(_clear_bss.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(iob.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(printf.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(puts.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(vfprintf_std.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen_P.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(strnlen.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(fputc.o)
+ .bss           0x008020ac        0x0 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(ultoa_invert.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x008020ac        0x7 main.o
+                0x008020ac                sdSpiPort
+ COMMON         0x008020b3        0x6 d:/program files/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avrxmega7\libc.a(iob.o)
+                0x008020b3                __iob
+                0x008020b9                PROVIDE (__bss_end, .)
+                0x000011da                __data_load_start = LOADADDR (.data)
+                0x00001286                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x008020b9        0x0
+                0x008020b9                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x008020b9                PROVIDE (__noinit_end, .)
+                0x008020b9                _end = .
+                0x008020b9                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0xa0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 spi_driver.o
+ .debug_aranges
+                0x00000020       0x20 main.o
+ .debug_aranges
+                0x00000040       0x20 sdcard_driver.o
+ .debug_aranges
+                0x00000060       0x20 clksys_driver.o
+ .debug_aranges
+                0x00000080       0x20 usart_driver.o
+
+.debug_pubnames
+                0x00000000      0x3fb
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0xd9 spi_driver.o
+ .debug_pubnames
+                0x000000d9       0x44 main.o
+ .debug_pubnames
+                0x0000011d       0x78 sdcard_driver.o
+ .debug_pubnames
+                0x00000195      0x129 clksys_driver.o
+ .debug_pubnames
+                0x000002be      0x13d usart_driver.o
+
+.debug_info     0x00000000     0x2080
+ *(.debug_info)
+ .debug_info    0x00000000      0x73d spi_driver.o
+ .debug_info    0x0000073d      0x758 main.o
+ .debug_info    0x00000e95      0x61e sdcard_driver.o
+ .debug_info    0x000014b3      0x64a clksys_driver.o
+ .debug_info    0x00001afd      0x583 usart_driver.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000      0x970
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x1ad spi_driver.o
+ .debug_abbrev  0x000001ad      0x1ec main.o
+ .debug_abbrev  0x00000399      0x1a5 sdcard_driver.o
+ .debug_abbrev  0x0000053e      0x1e4 clksys_driver.o
+ .debug_abbrev  0x00000722      0x24e usart_driver.o
+
+.debug_line     0x00000000      0xf0b
+ *(.debug_line)
+ .debug_line    0x00000000      0x369 spi_driver.o
+ .debug_line    0x00000369      0x232 main.o
+ .debug_line    0x0000059b      0x40d sdcard_driver.o
+ .debug_line    0x000009a8      0x27e clksys_driver.o
+ .debug_line    0x00000c26      0x2e5 usart_driver.o
+
+.debug_frame    0x00000000      0x2a0
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x80 spi_driver.o
+ .debug_frame   0x00000080       0x40 main.o
+ .debug_frame   0x000000c0       0x80 sdcard_driver.o
+ .debug_frame   0x00000140       0xb0 clksys_driver.o
+ .debug_frame   0x000001f0       0xb0 usart_driver.o
+
+.debug_str      0x00000000      0xfa3
+ *(.debug_str)
+ .debug_str     0x00000000      0x45e spi_driver.o
+                                0x49c (size before relaxing)
+ .debug_str     0x0000045e      0x2f8 main.o
+                                0x66e (size before relaxing)
+ .debug_str     0x00000756       0xc3 sdcard_driver.o
+                                0x33d (size before relaxing)
+ .debug_str     0x00000819      0x540 clksys_driver.o
+                                0x6b5 (size before relaxing)
+ .debug_str     0x00000d59      0x24a usart_driver.o
+                                0x39b (size before relaxing)
+
+.debug_loc      0x00000000      0x8bb
+ *(.debug_loc)
+ .debug_loc     0x00000000      0x2ed spi_driver.o
+ .debug_loc     0x000002ed       0x46 main.o
+ .debug_loc     0x00000333      0x302 sdcard_driver.o
+ .debug_loc     0x00000635       0x6f clksys_driver.o
+ .debug_loc     0x000006a4      0x217 usart_driver.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(sdtest.elf elf32-avr)
+LOAD linker stubs
+
+.debug_ranges   0x00000000       0xd8
+ .debug_ranges  0x00000000       0xd8 sdcard_driver.o

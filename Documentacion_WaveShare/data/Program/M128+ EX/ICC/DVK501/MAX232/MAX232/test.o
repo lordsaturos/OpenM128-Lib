@@ -1,0 +1,97 @@
+XL
+H 1 areas 6 global symbols
+M test.c
+A text size 76 flags 0
+dbfile ..\..\..\M128_E~1\MAX232~1\MAX232\test.c
+dbfile E:\吴泽备份\DVK501光盘内容\M128_E~1\MAX232~1\MAX232\test.c
+dbfunc e UART_init 0 fV
+dbline FFFFFFFF 0
+dbline 2C 0
+dbline 33 0
+dbline 34 4
+dbline 35 8
+dbline 36 E
+dbline 37 12
+dbline FFFFFFFE 16
+dbline 0 16
+dbfunc e uart_putchar0 18 fV
+dbsym r c 10 c
+dbline FFFFFFFF 18
+dbline 3D 18
+dbline 3E 18
+dbline 3E 18
+dbline 3F 1C
+dbline FFFFFFFE 1E
+dbline 0 1E
+dbfunc e uart_getchar0 20 fi
+dbsym r res 10 c
+dbsym r status 12 c
+dbline FFFFFFFF 20
+dbline 43 20
+dbline 45 20
+dbline 45 24
+dbline 46 2A
+dbline 47 2C
+dbline 48 2E
+dbline 48 34
+dbline 49 3A
+dbline FFFFFFFE 3C
+dbline 0 3C
+dbfunc e uart_waitchar0 3E fc
+dbsym r c A i
+dbline FFFFFFFF 42
+dbline 4D 42
+dbline 4F 42
+dbline 4F 42
+dbline 50 4E
+dbline FFFFFFFE 4E
+dbline 0 4E
+dbfunc e delay 54 fV
+dbsym r n 10 c
+dbline FFFFFFFF 54
+dbline 54 54
+dbline 55 54
+dbline 56 56
+dbline 56 56
+dbline FFFFFFFE 60
+dbline 0 60
+dbfunc e main 62 fV
+dbline FFFFFFFF 62
+dbline 5A 62
+dbline 5B 62
+dbline 5C 66
+dbline 5D 68
+dbline 5E 6C
+dbline 5F 6E
+dbline 60 72
+dbline 60 72
+dbline FFFFFFFE 74
+dbline 0 74
+S _main Def0062
+S _delay Def0054
+S _uart_getchar0 Def0020
+S _uart_putchar0 Def0018
+S _UART_init Def0000
+S _uart_waitchar0 Def003E
+T 00 00 22 24 2B B8 88 E1 8A B9 86 E0 80 93 95 00
+R 00 00 00 00
+T 0E 00 20 92 90 00 8F E2 89 B9 08 95
+R 00 00 00 00
+T 18 00 5D 9B FE CF 0C B9 08 95
+R 00 00 00 00
+T 20 00 5F 99 03 C0 0F EF 1F EF 09 C0 2B B1 0C B1
+R 00 00 00 00
+T 2E 00 82 2F 8C 71 19 F0 0F EF 1F EF 01 C0 11 27
+R 00 00 00 00
+T 3C 00 08 95
+R 00 00 00 00
+T 3E 00 AA 92 BA 92 EE DF 58 01 0F 3F EF EF 1E 07
+R 00 00 00 00
+T 4C 00 D1 F3 B9 90 A9 90 08 95
+R 00 00 00 00
+T 54 00 0F EF 20 2E 33 24 01 50 22 20 D9 F7 08 95
+R 00 00 00 00
+T 62 00 8F EF 8A BB CC DF 05 E5 D6 DF F3 DF E7 DF
+R 00 00 00 00
+T 70 00 0B BB FF CF 08 95
+R 00 00 00 00

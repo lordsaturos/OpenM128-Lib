@@ -1,0 +1,1094 @@
+                        .module DS18B20.C
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ..\..\..\STK162~1.0\DS18B20_温度测量\DS18B20\DS18B20.C
+ 0000                   .dbfile D:\ICC_H\Software.H
+ 0000                   .dbfunc e speaData _speaData fV
+ 0000           ;              y -> y+4
+ 0000           ;              j -> y+0
+ 0000           ;              i -> R10
+ 0000           ;            len -> R12
+ 0000           ;            dat -> y+16
+                        .even
+ 0000           _speaData::
+ 0000 0E940000          xcall push_arg4
+ 0004 0E940000          xcall push_xgsetF03C
+ 0008 2897              sbiw R28,8
+ 000A CC88              ldd R12,y+20
+ 000C                   .dbline -1
+ 000C                   .dbline 116
+ 000C           ; /*********************************************************************
+ 000C           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 000C           ;                                                                       
+ 000C           ; 目    的:   建立AVR的软件提取库，增加各类补丁，方便系统程序移植
+ 000C           ;       
+ 000C           ; 目标系统:   基于AVR单片机
+ 000C           ;                                                                               
+ 000C           ; 应用软件:   ICCAVR
+ 000C           ;                                                                               
+ 000C           ; 版    本:   Version 1.0                                                       
+ 000C           ;                                                                               
+ 000C           ; 圆版时间:   2005-06-25
+ 000C           ;       
+ 000C           ; 开发人员:   SEE
+ 000C           ; 
+ 000C           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 000C           ;       
+ 000C           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 000C           ; *********************************************************************/
+ 000C           ; 
+ 000C           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 版本更新记录：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 入口参数说明：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 待定参数说明：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------        
+ 000C           ; 对外变量说明：
+ 000C           ;     
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 对外函数说明：
+ 000C           ;    
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 000C           ; 
+ 000C           ; #ifndef Software_H
+ 000C           ; #define Software_H
+ 000C           ; 
+ 000C           ; #include <math.h>
+ 000C           ; #include <string.h>
+ 000C           ; 
+ 000C           ; /* 兼容一般程序员的常用写法 */
+ 000C           ; typedef unsigned char uchar;
+ 000C           ; typedef unsigned int  uint;
+ 000C           ; typedef unsigned long ulong;
+ 000C           ; typedef signed char           schar;
+ 000C           ; typedef signed int            sint;
+ 000C           ; typedef signed long           slong;
+ 000C           ; 
+ 000C           ; /* 为方便移植，建议使用下面写法 */
+ 000C           ; typedef unsigned char bool;
+ 000C           ; typedef unsigned char uint8;
+ 000C           ; typedef unsigned int  uint16;
+ 000C           ; typedef unsigned long   uint32;
+ 000C           ; typedef signed  char  sint8;
+ 000C           ; typedef signed        int             sint16;
+ 000C           ; typedef signed        long    sint32;
+ 000C           ; typedef signed  char  int8;
+ 000C           ; typedef signed  int           int16;
+ 000C           ; typedef signed  long  int32;
+ 000C           ; 
+ 000C           ; /* 下面写法一般不推荐 */
+ 000C           ; //typedef unsigned char ubyte;
+ 000C           ; //typedef unsigned int        uword;
+ 000C           ; //typedef unsigned long udword;
+ 000C           ; //typedef signed   char       sbyte;
+ 000C           ; //typedef signed   int        sword;
+ 000C           ; //typedef signed   long       sdword;
+ 000C           ; 
+ 000C           ; /* 一般程序定义的默认值 */
+ 000C           ; //#define NULL                        0
+ 000C           ; //#define EOF                 -1
+ 000C           ; //#define TRUE                1
+ 000C           ; //#define FALSE               0
+ 000C           ; //#define YES                 1
+ 000C           ; //#define NO                          0
+ 000C           ; //#define ON                  1
+ 000C           ; //#define OFF                 0
+ 000C           ; //#define ENABLE              1
+ 000C           ; //#define DISABLE             0
+ 000C           ; //#define CRR                 1
+ 000C           ; //#define ERR                 0
+ 000C           ; //#define RIGHT                       1
+ 000C           ; //#define WRONG                       0
+ 000C           ; //#define SUCCESS             1
+ 000C           ; //#define FAILURE             0
+ 000C           ; //#define PI                  3.1415926       //3.1415926535897932
+ 000C           ; 
+ 000C           ; /* 如果你手头上的RAM实在很紧，不如尝试下面的define～ */
+ 000C           ; //#define _CALLOC(a)          ( (a *)calloc(n,sizeof(a)) )
+ 000C           ; //#define _MALLOC(a)          ( (a *)malloc(sizeof(a)) )
+ 000C           ; //#define _MIN(a,b)                   ( (a) < (b) ? (a) : (b) )
+ 000C           ; //#define _MAX(a,b)                   ( (a) > (b) ? (a) : (b) )
+ 000C           ; //#define _EXCHANGE(a,b)      { int t; t=a; a=b; b=t; }
+ 000C           ; //#define _TOLOWER(c)         ( (c)+32 )
+ 000C           ; //#define _TOUPPER(c)         ( (c)-32 )
+ 000C           ; 
+ 000C           ; //#ifndef BIT
+ 000C           ; //#define BIT(x)      ( 1<<(x) )
+ 000C           ; //#endif
+ 000C           ; 
+ 000C           ; /*--------------------------------------------------------------------
+ 000C           ; 函数全称：数据拆字
+ 000C           ; 函数功能：
+ 000C           ; 注意事项：D<=999999,C<=6
+ 000C           ; 提示说明：调用speaData(12,2)，得到dataElem[0]=2，dataElem[1]=1
+ 000C           ; 输    入：
+ 000C           ; 返    回：无
+ 000C           ; --------------------------------------------------------------------*/
+ 000C           ; uint8 dataElem[6];
+ 000C           ; void speaData(uint32 dat,sint8 len)
+ 000C           ; {
+ 000C                   .dbline 119
+ 000C           ;     uint8 i;
+ 000C           ;     uint32 j,y;
+ 000C           ;     for(i=0,j=1;i<len;i++)
+ 000C AA24              clr R10
+ 000E 81E0              ldi R24,1
+ 0010 8883              std y+0,R24
+ 0012 80E0              ldi R24,0
+ 0014 8983              std y+1,R24
+ 0016 8A83              std y+2,R24
+ 0018 8B83              std y+3,R24
+ 001A 3CC0              xjmp L5
+ 001C           L2:
+ 001C                   .dbline 120
+ 001C           ;     {
+ 001C                   .dbline 121
+ 001C           ;         y=dat/j;
+ 001C 2880              ldd R2,y+0
+ 001E 3980              ldd R3,y+1
+ 0020 4A80              ldd R4,y+2
+ 0022 5B80              ldd R5,y+3
+ 0024 0889              ldd R16,y+16
+ 0026 1989              ldd R17,y+17
+ 0028 2A89              ldd R18,y+18
+ 002A 3B89              ldd R19,y+19
+ 002C 5A92              st -y,R5
+ 002E 4A92              st -y,R4
+ 0030 3A92              st -y,R3
+ 0032 2A92              st -y,R2
+ 0034 0E940000          xcall div32u
+ 0038 0C83              std y+4,R16
+ 003A 1D83              std y+5,R17
+ 003C 2E83              std y+6,R18
+ 003E 3F83              std y+7,R19
+ 0040                   .dbline 122
+ 0040           ;         dataElem[i]=y%10;
+ 0040 4AE0              ldi R20,10
+ 0042 50E0              ldi R21,0
+ 0044 60E0              ldi R22,0
+ 0046 70E0              ldi R23,0
+ 0048 0C81              ldd R16,y+4
+ 004A 1D81              ldd R17,y+5
+ 004C 2E81              ldd R18,y+6
+ 004E 3F81              ldd R19,y+7
+ 0050 7A93              st -y,R23
+ 0052 6A93              st -y,R22
+ 0054 5A93              st -y,R21
+ 0056 4A93              st -y,R20
+ 0058 0E940000          xcall mod32u
+ 005C 80E0              ldi R24,<_dataElem
+ 005E 90E0              ldi R25,>_dataElem
+ 0060 EA2D              mov R30,R10
+ 0062 FF27              clr R31
+ 0064 E80F              add R30,R24
+ 0066 F91F              adc R31,R25
+ 0068 0083              std z+0,R16
+ 006A                   .dbline 123
+ 006A           ;         j*=10;
+ 006A 2880              ldd R2,y+0
+ 006C 3980              ldd R3,y+1
+ 006E 4A80              ldd R4,y+2
+ 0070 5B80              ldd R5,y+3
+ 0072 4AE0              ldi R20,10
+ 0074 50E0              ldi R21,0
+ 0076 60E0              ldi R22,0
+ 0078 70E0              ldi R23,0
+ 007A 5A92              st -y,R5
+ 007C 4A92              st -y,R4
+ 007E 3A92              st -y,R3
+ 0080 2A92              st -y,R2
+ 0082 8A01              movw R16,R20
+ 0084 9B01              movw R18,R22
+ 0086 0E940000          xcall empy32u
+ 008A 0883              std y+0,R16
+ 008C 1983              std y+1,R17
+ 008E 2A83              std y+2,R18
+ 0090 3B83              std y+3,R19
+ 0092                   .dbline 124
+ 0092           ;     }
+ 0092           L3:
+ 0092                   .dbline 119
+ 0092 A394              inc R10
+ 0094           L5:
+ 0094                   .dbline 119
+ 0094 2C2C              mov R2,R12
+ 0096 3324              clr R3
+ 0098 27FC              sbrc R2,7
+ 009A 3094              com R3
+ 009C 4A2C              mov R4,R10
+ 009E 5524              clr R5
+ 00A0 4214              cp R4,R2
+ 00A2 5304              cpc R5,R3
+ 00A4 0CF4              brge X1
+ 00A6 BACF              xjmp L2
+ 00A8           X1:
+ 00A8           X0:
+ 00A8                   .dbline -2
+ 00A8           L1:
+ 00A8                   .dbline 0 ; func end
+ 00A8 2896              adiw R28,8
+ 00AA 0E940000          xcall pop_xgsetF03C
+ 00AE 2496              adiw R28,4
+ 00B0 0895              ret
+ 00B2                   .dbsym l y 4 l
+ 00B2                   .dbsym l j 0 l
+ 00B2                   .dbsym r i 10 c
+ 00B2                   .dbsym r len 12 C
+ 00B2                   .dbsym l dat 16 l
+ 00B2                   .dbend
+ 00B2                   .dbfile D:\ICC_H\Hardware.H
+ 00B2                   .dbfunc e delay50us _delay50us fV
+ 00B2           ;              j -> R20
+ 00B2           ;              t -> R16,R17
+                        .even
+ 00B2           _delay50us::
+ 00B2 4A93              st -y,R20
+ 00B4                   .dbline -1
+ 00B4                   .dbline 105
+ 00B4           ; /*********************************************************************
+ 00B4           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 00B4           ;                                                                       
+ 00B4           ; 目    的:   建立AVR的硬件提取库，增加各类补丁，方便移植
+ 00B4           ;                                       
+ 00B4           ; 目标系统:   基于AVR单片机
+ 00B4           ;                                                                               
+ 00B4           ; 应用软件:   ICCAVR
+ 00B4           ;                                                                               
+ 00B4           ; 版    本:   Version 1.0                                                          
+ 00B4           ;                                                                               
+ 00B4           ; 圆版时间:   2005-06-25
+ 00B4           ;       
+ 00B4           ; 开发人员:   SEE
+ 00B4           ; 
+ 00B4           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 00B4           ;       
+ 00B4           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 00B4           ; *********************************************************************/
+ 00B4           ; 
+ 00B4           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 版本更新记录：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 入口参数说明：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 待定参数说明：
+ 00B4           ; 
+ 00B4           ; ----------------------------------------------------------------------        
+ 00B4           ; 对外变量说明：
+ 00B4           ;     
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 对外函数说明：
+ 00B4           ;    
+ 00B4           ; ----------------------------------------------------------------------
+ 00B4           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 00B4           ; 
+ 00B4           ; #ifndef Hardware_H
+ 00B4           ; #define Hardware_H
+ 00B4           ; 
+ 00B4           ; #include <math.h>
+ 00B4           ; #include <string.h>
+ 00B4           ; #include <stdio.h>
+ 00B4           ; #include <macros.h>
+ 00B4           ; #include <eeprom.h>
+ 00B4           ; //#include <wdt.h>
+ 00B4           ; 
+ 00B4           ; /* TWI configs */
+ 00B4           ; //如使用ATMEGA162(没有TWI接口)之类的MCU，在加载Hardware.H前，务必加“#define NO_INCLUDE_I2C_H 1”语句
+ 00B4           ; #if NO_INCLUDE_I2C_H
+ 00B4           ; ;
+ 00B4           ; #else
+ 00B4           ; #include "D:\ICC_H\I2C.H"     //i2c即AVR的"twi"
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; /* hard configs */
+ 00B4           ; #ifndef flash
+ 00B4           ;       #define flash   const
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; #ifndef code
+ 00B4           ;       #define code    const
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; #ifndef NOP
+ 00B4           ;       #define NOP()   asm("nop")
+ 00B4           ; #endif
+ 00B4           ; 
+ 00B4           ; /* io configs */
+ 00B4           ; #define sbi(io,bit)           (  io |=  (1<<bit) )    //example: sbi(PORTA,0);sbi(DDRA,0);
+ 00B4           ; #define cbi(io,bit)           (  io &= ~(1<<bit) )    //example: cbi(PORTA,0);cbi(DDRA,0);
+ 00B4           ; #define gbi(pin ,bit) ( pin &   (1<<bit) )    //example: gbi(PINA,0);
+ 00B4           ; 
+ 00B4           ; /* interrupt configs */
+ 00B4           ; #define DIS_INT  asm("sei")
+ 00B4           ; #define EN_INT   asm("cli")
+ 00B4           ; 
+ 00B4           ; /* wdt configs */
+ 00B4           ; #define WDT()    asm("wdr")
+ 00B4           ; 
+ 00B4           ; /* bit operation */
+ 00B4           ; //#ifndef BIT
+ 00B4           ; //#define BIT(x)      ( 1<<(x) )
+ 00B4           ; //#endif
+ 00B4           ; 
+ 00B4           ; /* USART configs for 4 Mhz crystal */
+ 00B4           ; //#define BAUD9600                    25
+ 00B4           ; //#define BAUD19000                   12
+ 00B4           ; //#define UART_TRAN_ON()      UCR |=  0x08
+ 00B4           ; //#define UART_TRAN_OFF()     UCR &= ~0x08
+ 00B4           ; //#define UART_RCV_ON()               UCR |=  0x10
+ 00B4           ; //#define UART_RCV_OFF()      UCR &= ~0x10
+ 00B4           ; 
+ 00B4           ; /*--------------------------------------------------------------------
+ 00B4           ; 函数全称：50us 延时
+ 00B4           ; 函数功能：当然是 50us延时 啦
+ 00B4           ; 注意事项：基于7.3728M晶振，稍微有点误差
+ 00B4           ; 提示说明：调用delay50us（20），得到1ms延时
+ 00B4           ; 输    入：    
+ 00B4           ; 返    回：无 
+ 00B4           ; --------------------------------------------------------------------*/
+ 00B4           ; void delay50us(sint16 t)
+ 00B4           ; {
+ 00B4                   .dbline 107
+ 00B4           ;     uint8 j;          
+ 00B4           ;     for(;t>0;t--)                     
+ 00B4 07C0              xjmp L10
+ 00B6           L7:
+ 00B6                   .dbline 108
+ 00B6           ;         for(j=0;j<70;j++)     
+ 00B6 4427              clr R20
+ 00B8 01C0              xjmp L14
+ 00BA           L11:
+ 00BA                   .dbline 109
+ 00BA           ;             ;
+ 00BA           L12:
+ 00BA                   .dbline 108
+ 00BA 4395              inc R20
+ 00BC           L14:
+ 00BC                   .dbline 108
+ 00BC 4634              cpi R20,70
+ 00BE E8F3              brlo L11
+ 00C0           X2:
+ 00C0           L8:
+ 00C0                   .dbline 107
+ 00C0 0150              subi R16,1
+ 00C2 1040              sbci R17,0
+ 00C4           L10:
+ 00C4                   .dbline 107
+ 00C4 2224              clr R2
+ 00C6 3324              clr R3
+ 00C8 2016              cp R2,R16
+ 00CA 3106              cpc R3,R17
+ 00CC A4F3              brlt L7
+ 00CE           X3:
+ 00CE                   .dbline -2
+ 00CE           L6:
+ 00CE                   .dbline 0 ; func end
+ 00CE 4991              ld R20,y+
+ 00D0 0895              ret
+ 00D2                   .dbsym r j 20 c
+ 00D2                   .dbsym r t 16 I
+ 00D2                   .dbend
+ 00D2                   .dbfunc e delay50ms _delay50ms fV
+ 00D2           ;              i -> R20,R21
+ 00D2           ;              t -> R16,R17
+                        .even
+ 00D2           _delay50ms::
+ 00D2 4A93              st -y,R20
+ 00D4 5A93              st -y,R21
+ 00D6                   .dbline -1
+ 00D6                   .dbline 120
+ 00D6           ; }
+ 00D6           ; /*--------------------------------------------------------------------
+ 00D6           ; 函数全称：50ms 延时
+ 00D6           ; 函数功能：当然是 50ms延时 啦
+ 00D6           ; 注意事项：基于7.3728M晶振，稍微有点误差
+ 00D6           ; 提示说明：调用delay50ms（20），得到1s延时 
+ 00D6           ; 输    入：
+ 00D6           ; 返    回：无
+ 00D6           ; --------------------------------------------------------------------*/
+ 00D6           ; void delay50ms(sint16 t)
+ 00D6           ; {
+ 00D6                   .dbline 122
+ 00D6           ;       uint16 i; 
+ 00D6           ;       for(;t>0;t--)
+ 00D6 13C0              xjmp L19
+ 00D8           L16:
+ 00D8                   .dbline 123
+ 00D8           ;               for(i=0;i<52642;i++)
+ 00D8 4427              clr R20
+ 00DA 5527              clr R21
+ 00DC 02C0              xjmp L23
+ 00DE           L20:
+ 00DE                   .dbline 124
+ 00DE           ;                       ; 
+ 00DE           L21:
+ 00DE                   .dbline 123
+ 00DE 4F5F              subi R20,255  ; offset = 1
+ 00E0 5F4F              sbci R21,255
+ 00E2           L23:
+ 00E2                   .dbline 123
+ 00E2 82EA              ldi R24,162
+ 00E4 9DEC              ldi R25,205
+ 00E6 A0E0              ldi R26,0
+ 00E8 B0E0              ldi R27,0
+ 00EA 1A01              movw R2,R20
+ 00EC 4424              clr R4
+ 00EE 5524              clr R5
+ 00F0 2816              cp R2,R24
+ 00F2 3906              cpc R3,R25
+ 00F4 4A06              cpc R4,R26
+ 00F6 5B06              cpc R5,R27
+ 00F8 94F3              brlt L20
+ 00FA           X4:
+ 00FA           L17:
+ 00FA                   .dbline 122
+ 00FA 0150              subi R16,1
+ 00FC 1040              sbci R17,0
+ 00FE           L19:
+ 00FE                   .dbline 122
+ 00FE 2224              clr R2
+ 0100 3324              clr R3
+ 0102 2016              cp R2,R16
+ 0104 3106              cpc R3,R17
+ 0106 44F3              brlt L16
+ 0108           X5:
+ 0108                   .dbline -2
+ 0108           L15:
+ 0108                   .dbline 0 ; func end
+ 0108 5991              ld R21,y+
+ 010A 4991              ld R20,y+
+ 010C 0895              ret
+ 010E                   .dbsym r i 20 i
+ 010E                   .dbsym r t 16 I
+ 010E                   .dbend
+ 010E                   .dbfunc e delayus _delayus fV
+ 010E           ;              i -> R20,R21
+ 010E           ;              t -> R16,R17
+                        .even
+ 010E           _delayus::
+ 010E 4A93              st -y,R20
+ 0110 5A93              st -y,R21
+ 0112                   .dbline -1
+ 0112                   .dbline 129
+ 0112           ; }
+ 0112           ; 
+ 0112           ; 
+ 0112           ; void delayus(uint16 t)
+ 0112           ; {
+ 0112                   .dbline 131
+ 0112           ;       uint16 i;
+ 0112           ;       for(i=0;i<t;i++)
+ 0112 4427              clr R20
+ 0114 5527              clr R21
+ 0116 02C0              xjmp L28
+ 0118           L25:
+ 0118                   .dbline 132
+ 0118           ;               {
+ 0118                   .dbline 135
+ 0118           ;                       //asm("NOP\n");
+ 0118           ;                       //asm("NOP\n");
+ 0118           ;               }
+ 0118           L26:
+ 0118                   .dbline 131
+ 0118 4F5F              subi R20,255  ; offset = 1
+ 011A 5F4F              sbci R21,255
+ 011C           L28:
+ 011C                   .dbline 131
+ 011C 4017              cp R20,R16
+ 011E 5107              cpc R21,R17
+ 0120 D8F3              brlo L25
+ 0122           X6:
+ 0122                   .dbline -2
+ 0122           L24:
+ 0122                   .dbline 0 ; func end
+ 0122 5991              ld R21,y+
+ 0124 4991              ld R20,y+
+ 0126 0895              ret
+ 0128                   .dbsym r i 20 i
+ 0128                   .dbsym r t 16 i
+ 0128                   .dbend
+ 0128                   .dbfile D:\ICC_H\onewirefords18b20.H
+ 0128                   .dbfunc e reset_onewire _reset_onewire fV
+                        .even
+ 0128           _reset_onewire::
+ 0128                   .dbline -1
+ 0128                   .dbline 43
+ 0128           ; /*********************************************************************
+ 0128           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 0128           ;                                                                       
+ 0128           ; 目    的:   建立onewire操作库
+ 0128           ;       
+ 0128           ; 目标系统:   基于AVR单片机
+ 0128           ;                                                                               
+ 0128           ; 应用软件:   ICCAVR
+ 0128           ;                                                                               
+ 0128           ; 版    本:   Version 1.0                                                          
+ 0128           ;                                                                               
+ 0128           ; 圆版时间:   2005-06-25
+ 0128           ;       
+ 0128           ; 开发人员:   SEE
+ 0128           ; 
+ 0128           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 0128           ;       
+ 0128           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 0128           ; *********************************************************************/
+ 0128           ; 
+ 0128           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 版本更新记录：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 入口参数说明：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 待定参数说明：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------        
+ 0128           ; 对外变量说明：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 对外函数说明：
+ 0128           ; 
+ 0128           ; ----------------------------------------------------------------------
+ 0128           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 0128           ; #ifndef _onewire_H_
+ 0128           ; #define _onewire_H_
+ 0128           ; //-----复位-----
+ 0128           ; void reset_onewire(void) 
+ 0128           ; { 
+ 0128                   .dbline 44
+ 0128           ;       set_onewire_dq_ddr();
+ 0128 BA9A              sbi 0x17,2
+ 012A                   .dbline 45
+ 012A           ;     clr_onewire_dq(); 
+ 012A C298              cbi 0x18,2
+ 012C                   .dbline 46
+ 012C           ;     delayus(500);
+ 012C 04EF              ldi R16,500
+ 012E 11E0              ldi R17,1
+ 0130 EEDF              xcall _delayus
+ 0132                   .dbline 47
+ 0132           ;     set_onewire_dq(); 
+ 0132 C29A              sbi 0x18,2
+ 0134                   .dbline 48
+ 0134           ;     delayus(60);
+ 0134 0CE3              ldi R16,60
+ 0136 10E0              ldi R17,0
+ 0138 EADF              xcall _delayus
+ 013A                   .dbline 49
+ 013A           ;       clr_onewire_dq_ddr();
+ 013A BA98              cbi 0x17,2
+ 013C                   .dbline -2
+ 013C           L29:
+ 013C                   .dbline 0 ; func end
+ 013C 0895              ret
+ 013E                   .dbend
+ 013E                   .dbfunc e ack_onewire _ack_onewire fV
+                        .even
+ 013E           _ack_onewire::
+ 013E                   .dbline -1
+ 013E                   .dbline 53
+ 013E           ; } 
+ 013E           ; //-----应答-----
+ 013E           ; void ack_onewire(void) 
+ 013E           ; {     
+ 013E           L31:
+ 013E                   .dbline 54
+ 013E           ;     while(in_onewire_dq());
+ 013E           L32:
+ 013E                   .dbline 54
+ 013E B299              sbic 0x16,2
+ 0140 FECF              rjmp L31
+ 0142           X7:
+ 0142           L34:
+ 0142                   .dbline 55
+ 0142           ;     while(!(in_onewire_dq())); 
+ 0142           L35:
+ 0142                   .dbline 55
+ 0142 B29B              sbis 0x16,2
+ 0144 FECF              rjmp L34
+ 0146           X8:
+ 0146                   .dbline 56
+ 0146           ;     delayus(38);
+ 0146 06E2              ldi R16,38
+ 0148 10E0              ldi R17,0
+ 014A E1DF              xcall _delayus
+ 014C                   .dbline 57
+ 014C           ;       set_onewire_dq_ddr();
+ 014C BA9A              sbi 0x17,2
+ 014E                   .dbline -2
+ 014E           L30:
+ 014E                   .dbline 0 ; func end
+ 014E 0895              ret
+ 0150                   .dbend
+ 0150                   .dbfunc e read_onewire _read_onewire fc
+ 0150           ;              i -> R22
+ 0150           ;           data -> R20
+                        .even
+ 0150           _read_onewire::
+ 0150 4A93              st -y,R20
+ 0152 6A93              st -y,R22
+ 0154                   .dbline -1
+ 0154                   .dbline 61
+ 0154           ; } 
+ 0154           ; //-----读数据-----
+ 0154           ; unsigned char read_onewire(void) 
+ 0154           ; { 
+ 0154                   .dbline 62
+ 0154           ;     unsigned char data=0,i=0; 
+ 0154 4427              clr R20
+ 0156                   .dbline 62
+ 0156                   .dbline 63
+ 0156           ;     for(i=0;i<8;i++) 
+ 0156 6627              clr R22
+ 0158 12C0              xjmp L41
+ 015A           L38:
+ 015A                   .dbline 64
+ 015A           ;     { 
+ 015A                   .dbline 65
+ 015A           ;               set_onewire_dq_ddr();
+ 015A BA9A              sbi 0x17,2
+ 015C                   .dbline 67
+ 015C           ; 
+ 015C           ;         data=data>>1; 
+ 015C 4695              lsr R20
+ 015E                   .dbline 68
+ 015E           ;         clr_onewire_dq(); 
+ 015E C298              cbi 0x18,2
+ 0160                   .dbline 69
+ 0160           ;         delayus(1);
+ 0160 01E0              ldi R16,1
+ 0162 10E0              ldi R17,0
+ 0164 D4DF              xcall _delayus
+ 0166                   .dbline 70
+ 0166           ;         set_onewire_dq(); 
+ 0166 C29A              sbi 0x18,2
+ 0168                   .dbline 71
+ 0168           ;         delayus(2);
+ 0168 02E0              ldi R16,2
+ 016A 10E0              ldi R17,0
+ 016C D0DF              xcall _delayus
+ 016E                   .dbline 73
+ 016E           ; 
+ 016E           ;               clr_onewire_dq_ddr();
+ 016E BA98              cbi 0x17,2
+ 0170                   .dbline 74
+ 0170           ;         if(in_onewire_dq()) data|=0x80; 
+ 0170 B29B              sbis 0x16,2
+ 0172 01C0              rjmp L42
+ 0174           X9:
+ 0174                   .dbline 74
+ 0174 4068              ori R20,128
+ 0176           L42:
+ 0176                   .dbline 75
+ 0176           ;         delayus(118);
+ 0176 06E7              ldi R16,118
+ 0178 10E0              ldi R17,0
+ 017A C9DF              xcall _delayus
+ 017C                   .dbline 76
+ 017C           ;       } 
+ 017C           L39:
+ 017C                   .dbline 63
+ 017C 6395              inc R22
+ 017E           L41:
+ 017E                   .dbline 63
+ 017E 6830              cpi R22,8
+ 0180 60F3              brlo L38
+ 0182           X10:
+ 0182                   .dbline 77
+ 0182           ;       return(data); 
+ 0182 042F              mov R16,R20
+ 0184                   .dbline -2
+ 0184           L37:
+ 0184                   .dbline 0 ; func end
+ 0184 6991              ld R22,y+
+ 0186 4991              ld R20,y+
+ 0188 0895              ret
+ 018A                   .dbsym r i 22 c
+ 018A                   .dbsym r data 20 c
+ 018A                   .dbend
+ 018A                   .dbfunc e write_onewire _write_onewire fV
+ 018A           ;              i -> R20
+ 018A           ;           data -> R10
+                        .even
+ 018A           _write_onewire::
+ 018A AA92              st -y,R10
+ 018C 4A93              st -y,R20
+ 018E A02E              mov R10,R16
+ 0190                   .dbline -1
+ 0190                   .dbline 81
+ 0190           ; } 
+ 0190           ; //-----写数据-----
+ 0190           ; void write_onewire(unsigned char data) 
+ 0190           ; { 
+ 0190                   .dbline 82
+ 0190           ;     unsigned char i=0; 
+ 0190                   .dbline 83
+ 0190           ;       set_onewire_dq_ddr();
+ 0190 BA9A              sbi 0x17,2
+ 0192                   .dbline 84
+ 0192           ;     for(i=0;i<8;i++) 
+ 0192 4427              clr R20
+ 0194 15C0              xjmp L48
+ 0196           L45:
+ 0196                   .dbline 85
+ 0196           ;     { 
+ 0196                   .dbline 86
+ 0196           ;         if(data&0x01)
+ 0196 A0FE              sbrs R10,0
+ 0198 09C0              rjmp L49
+ 019A           X11:
+ 019A                   .dbline 87
+ 019A           ;               { 
+ 019A                   .dbline 88
+ 019A           ;             clr_onewire_dq(); 
+ 019A C298              cbi 0x18,2
+ 019C                   .dbline 89
+ 019C           ;             delayus(14);
+ 019C 0EE0              ldi R16,14
+ 019E 10E0              ldi R17,0
+ 01A0 B6DF              xcall _delayus
+ 01A2                   .dbline 90
+ 01A2           ;             set_onewire_dq(); 
+ 01A2 C29A              sbi 0x18,2
+ 01A4                   .dbline 91
+ 01A4           ;             delayus(108);
+ 01A4 0CE6              ldi R16,108
+ 01A6 10E0              ldi R17,0
+ 01A8 B2DF              xcall _delayus
+ 01AA                   .dbline 92
+ 01AA           ;               }        
+ 01AA 08C0              xjmp L50
+ 01AC           L49:
+ 01AC                   .dbline 94
+ 01AC           ;               else 
+ 01AC           ;               { 
+ 01AC                   .dbline 95
+ 01AC           ;                        clr_onewire_dq(); 
+ 01AC C298              cbi 0x18,2
+ 01AE                   .dbline 96
+ 01AE           ;               delayus(108);
+ 01AE 0CE6              ldi R16,108
+ 01B0 10E0              ldi R17,0
+ 01B2 ADDF              xcall _delayus
+ 01B4                   .dbline 97
+ 01B4           ;               set_onewire_dq(); 
+ 01B4 C29A              sbi 0x18,2
+ 01B6                   .dbline 98
+ 01B6           ;               delayus(14);
+ 01B6 0EE0              ldi R16,14
+ 01B8 10E0              ldi R17,0
+ 01BA A9DF              xcall _delayus
+ 01BC                   .dbline 99
+ 01BC           ;       } 
+ 01BC           L50:
+ 01BC                   .dbline 100
+ 01BC           ;       data=data>>1; 
+ 01BC A694              lsr R10
+ 01BE                   .dbline 101
+ 01BE           ;     } 
+ 01BE           L46:
+ 01BE                   .dbline 84
+ 01BE 4395              inc R20
+ 01C0           L48:
+ 01C0                   .dbline 84
+ 01C0 4830              cpi R20,8
+ 01C2 48F3              brlo L45
+ 01C4           X12:
+ 01C4                   .dbline -2
+ 01C4           L44:
+ 01C4                   .dbline 0 ; func end
+ 01C4 4991              ld R20,y+
+ 01C6 A990              ld R10,y+
+ 01C8 0895              ret
+ 01CA                   .dbsym r i 20 c
+ 01CA                   .dbsym r data 10 c
+ 01CA                   .dbend
+ 01CA                   .dbfile D:\ICC_H\DS18B20_DVK501.H
+ 01CA                   .dbfunc e convert_ds18b20 _convert_ds18b20 fV
+                        .even
+ 01CA           _convert_ds18b20::
+ 01CA                   .dbline -1
+ 01CA                   .dbline 48
+ 01CA           ; /*********************************************************************
+ 01CA           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 01CA           ;                                                                       
+ 01CA           ; 目    的:   建立DS18B20_DVK501操作库
+ 01CA           ;       
+ 01CA           ; 目标系统:   基于AVR单片机
+ 01CA           ;                                                                               
+ 01CA           ; 应用软件:   ICCAVR 6.3A
+ 01CA           ;                                                                               
+ 01CA           ; 版    本:   Version 1.0                                                          
+ 01CA           ; 
+ 01CA           ; 圆版时间:   2009-07-01
+ 01CA           ;       
+ 01CA           ; 开发人员:   zz
+ 01CA           ; 
+ 01CA           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 01CA           ;       
+ 01CA           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 01CA           ; *********************************************************************/
+ 01CA           ; 
+ 01CA           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 01CA           ; ----------------------------------------------------------------------
+ 01CA           ; 版本更新记录：
+ 01CA           ; 
+ 01CA           ; ----------------------------------------------------------------------
+ 01CA           ; 入口参数说明：
+ 01CA           ; 
+ 01CA           ; ----------------------------------------------------------------------
+ 01CA           ; 待定参数说明：
+ 01CA           ; 
+ 01CA           ; ----------------------------------------------------------------------        
+ 01CA           ; 对外变量说明：
+ 01CA           ; 
+ 01CA           ; ----------------------------------------------------------------------
+ 01CA           ; 对外函数说明：
+ 01CA           ; 
+ 01CA           ; ----------------------------------------------------------------------
+ 01CA           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 01CA           ; 
+ 01CA           ; #define set_onewire_dq_ddr() sbi(DDRx,ds18b20_dq)
+ 01CA           ; #define set_onewire_dq() sbi(PORTx,ds18b20_dq)
+ 01CA           ; #define clr_onewire_dq() cbi(PORTx,ds18b20_dq)
+ 01CA           ; #define clr_onewire_dq_ddr() cbi(DDRx,ds18b20_dq)
+ 01CA           ; #define in_onewire_dq() gbi(PINx,ds18b20_dq)
+ 01CA           ; #include "D:\ICC_H\onewirefords18b20.H"
+ 01CA           ; //-----DS18B20转换温度-----
+ 01CA           ; void convert_ds18b20(void) 
+ 01CA           ; { 
+ 01CA                   .dbline 49
+ 01CA           ;     reset_onewire(); 
+ 01CA AEDF              xcall _reset_onewire
+ 01CC                   .dbline 50
+ 01CC           ;     ack_onewire(); 
+ 01CC B8DF              xcall _ack_onewire
+ 01CE                   .dbline 51
+ 01CE           ;     delay50us(200); 
+ 01CE 08EC              ldi R16,200
+ 01D0 10E0              ldi R17,0
+ 01D2 6FDF              xcall _delay50us
+ 01D4                   .dbline 52
+ 01D4           ;     write_onewire(0xcc); 
+ 01D4 0CEC              ldi R16,204
+ 01D6 D9DF              xcall _write_onewire
+ 01D8                   .dbline 53
+ 01D8           ;     write_onewire(0x44); 
+ 01D8 04E4              ldi R16,68
+ 01DA                   .dbline -2
+ 01DA           L51:
+ 01DA                   .dbline 0 ; func end
+ 01DA D7CF              xjmp _write_onewire
+ 01DC                   .dbend
+ 01DC                   .dbfunc e read_temperature _read_temperature fc
+ 01DC           ;          temp1 -> R22
+ 01DC           ;          temp2 -> R20
+                        .even
+ 01DC           _read_temperature::
+ 01DC 4A93              st -y,R20
+ 01DE 6A93              st -y,R22
+ 01E0                   .dbline -1
+ 01E0                   .dbline 57
+ 01E0           ; } 
+ 01E0           ; //------------DS18BB0读温度----------
+ 01E0           ; unsigned char read_temperature(void) 
+ 01E0           ; { 
+ 01E0                   .dbline 59
+ 01E0           ;       unsigned char temp1,temp2;
+ 01E0           ;       convert_ds18b20();
+ 01E0 F4DF              xcall _convert_ds18b20
+ 01E2                   .dbline 60
+ 01E2           ;     reset_onewire(); 
+ 01E2 A2DF              xcall _reset_onewire
+ 01E4                   .dbline 61
+ 01E4           ;     ack_onewire(); 
+ 01E4 ACDF              xcall _ack_onewire
+ 01E6                   .dbline 62
+ 01E6           ;     delay50us(200); 
+ 01E6 08EC              ldi R16,200
+ 01E8 10E0              ldi R17,0
+ 01EA 63DF              xcall _delay50us
+ 01EC                   .dbline 63
+ 01EC           ;     write_onewire(0xcc); 
+ 01EC 0CEC              ldi R16,204
+ 01EE CDDF              xcall _write_onewire
+ 01F0                   .dbline 64
+ 01F0           ;     write_onewire(0xbe);      
+ 01F0 0EEB              ldi R16,190
+ 01F2 CBDF              xcall _write_onewire
+ 01F4                   .dbline 65
+ 01F4           ;     temp1=read_onewire(); 
+ 01F4 ADDF              xcall _read_onewire
+ 01F6 602F              mov R22,R16
+ 01F8                   .dbline 66
+ 01F8           ;     temp2=read_onewire(); 
+ 01F8 ABDF              xcall _read_onewire
+ 01FA 402F              mov R20,R16
+ 01FC                   .dbline 67
+ 01FC           ;       temp2=temp2<<4;
+ 01FC 842F              mov R24,R20
+ 01FE 8F70              andi R24,#0x0F
+ 0200 8295              swap R24
+ 0202 482F              mov R20,R24
+ 0204                   .dbline 68
+ 0204           ;       temp1=temp1>>4;
+ 0204 862F              mov R24,R22
+ 0206 8295              swap R24
+ 0208 8F70              andi R24,#0x0F
+ 020A 682F              mov R22,R24
+ 020C                   .dbline 69
+ 020C           ;       temp2|=temp1;
+ 020C 482B              or R20,R24
+ 020E                   .dbline 71
+ 020E           ; 
+ 020E           ;       return temp2;
+ 020E 042F              mov R16,R20
+ 0210                   .dbline -2
+ 0210           L52:
+ 0210                   .dbline 0 ; func end
+ 0210 6991              ld R22,y+
+ 0212 4991              ld R20,y+
+ 0214 0895              ret
+ 0216                   .dbsym r temp1 22 c
+ 0216                   .dbsym r temp2 20 c
+ 0216                   .dbend
+ 0216                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\DS18B20_温度测量\DS18B20\DS18B20.C
+ 0216                   .dbfunc e port_init _port_init fV
+                        .even
+ 0216           _port_init::
+ 0216                   .dbline -1
+ 0216                   .dbline 52
+ 0216           ; /*********************************************************************
+ 0216           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 0216           ;                                                                       
+ 0216           ; 目    的:   建立使用DS18B20的示例程序
+ 0216           ;       
+ 0216           ; 目标系统:   基于AVR单片机
+ 0216           ;                                                                               
+ 0216           ; 应用软件:   ICCAVR
+ 0216           ;                                                                               
+ 0216           ; 版    本:   Version 1.0                                                          
+ 0216           ;                                                                               
+ 0216           ; 圆版时间:   2005-06-25
+ 0216           ;       
+ 0216           ; 开发人员:   SEE
+ 0216           ; 
+ 0216           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 0216           ;       
+ 0216           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 0216           ; *********************************************************************/
+ 0216           ; 
+ 0216           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 0216           ; ----------------------------------------------------------------------
+ 0216           ; 版本更新记录：
+ 0216           ; 
+ 0216           ; ----------------------------------------------------------------------
+ 0216           ; 实验内容：
+ 0216           ; ----------------------------------------------------------------------
+ 0216           ; 硬件连接：将DS18B20与DVK501正确连接，并保证其接触良好
+ 0216           ;                 将M162+ EX的PA口与八个LED相连
+ 0216           ;                         DVK501                                 M162+ EX
+ 0216           ;                               VCC             ---------         VCC
+ 0216           ;                               GND             ---------         GND
+ 0216           ;                               DQ              ---------         PB2
+ 0216           ; ----------------------------------------------------------------------
+ 0216           ; 注意事项： 
+ 0216           ; （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+ 0216           ; （2）请详细阅读“使用必读”及相关资料。
+ 0216           ; ----------------------------------------------------------------------
+ 0216           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 0216           ; #include <iom162v.h>
+ 0216           ; #define NO_INCLUDE_I2C_H 1
+ 0216           ; #include "D:\ICC_H\CmmICC.H"
+ 0216           ; 
+ 0216           ; /*DQ使用PB2口*/
+ 0216           ; #define DDRx DDRB
+ 0216           ; #define PORTx PORTB 
+ 0216           ; #define PINx PINB
+ 0216           ; #define ds18b20_dq 2
+ 0216           ; #include "D:\ICC_H\DS18B20_DVK501.H"
+ 0216           ; //----端口初始化----
+ 0216           ; void port_init(void)
+ 0216           ; {
+ 0216                   .dbline 53
+ 0216           ;     PORTA = 0x00;
+ 0216 2224              clr R2
+ 0218 2BBA              out 0x1b,R2
+ 021A                   .dbline 54
+ 021A           ;     DDRA  = 0xFF;
+ 021A 8FEF              ldi R24,255
+ 021C 8ABB              out 0x1a,R24
+ 021E                   .dbline 55
+ 021E           ;     PORTB = 0xFF;
+ 021E 88BB              out 0x18,R24
+ 0220                   .dbline 56
+ 0220           ;     DDRB  = 0xFF;
+ 0220 87BB              out 0x17,R24
+ 0222                   .dbline 57
+ 0222           ;     PORTC = 0xFF; //m103 output only
+ 0222 85BB              out 0x15,R24
+ 0224                   .dbline 58
+ 0224           ;     DDRC  = 0xFF;
+ 0224 84BB              out 0x14,R24
+ 0226                   .dbline 59
+ 0226           ;     PORTD = 0xFF;
+ 0226 82BB              out 0x12,R24
+ 0228                   .dbline 60
+ 0228           ;     DDRD  = 0xFF;
+ 0228 81BB              out 0x11,R24
+ 022A                   .dbline -2
+ 022A           L53:
+ 022A                   .dbline 0 ; func end
+ 022A 0895              ret
+ 022C                   .dbend
+ 022C                   .dbfunc e main _main fV
+                        .even
+ 022C           _main::
+ 022C                   .dbline -1
+ 022C                   .dbline 63
+ 022C           ; }
+ 022C           ; void main(void)
+ 022C           ; {     
+ 022C                   .dbline 64
+ 022C           ;       port_init();
+ 022C F4DF              xcall _port_init
+ 022E 05C0              xjmp L56
+ 0230           L55:
+ 0230                   .dbline 66
+ 0230           ;       while(1)
+ 0230           ;       {
+ 0230                   .dbline 67
+ 0230           ;               delay50ms(1);
+ 0230 01E0              ldi R16,1
+ 0232 10E0              ldi R17,0
+ 0234 4EDF              xcall _delay50ms
+ 0236                   .dbline 68
+ 0236           ;               PORTA=read_temperature();       //把转换出来温度通过PA口显示
+ 0236 D2DF              xcall _read_temperature
+ 0238 0BBB              out 0x1b,R16
+ 023A                   .dbline 69
+ 023A           ;       }
+ 023A           L56:
+ 023A                   .dbline 65
+ 023A FACF              xjmp L55
+ 023C           X13:
+ 023C                   .dbline -2
+ 023C           L54:
+ 023C                   .dbline 0 ; func end
+ 023C 0895              ret
+ 023E                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\DS18B20_温度测量\DS18B20\DS18B20.C
+ 0000           _dataElem::
+ 0000                   .blkb 6
+ 0006                   .dbfile D:\ICC_H\Software.H
+ 0006                   .dbsym e dataElem _dataElem A[6:6]c
+ 0006           ; }

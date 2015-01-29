@@ -1,0 +1,205 @@
+/*********************************************************************
+	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+		                                                        
+目    的:   建立操作PC键盘的示例程序（硬件中断读取PS/2接收到的数据）
+	
+目标系统:   基于AVR单片机
+		                                                                
+应用软件:   ICCAVR
+		                                                                
+版    本:   Version 1.0                                                          
+		                                                                
+圆版时间:   2005-06-25
+	
+开发人员:   SEE
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+	
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+
+----------------------------------------------------------------------
+实验内容：
+按PC键盘，观察单片机读到的数据，使用PA/PB口的LED做指示。
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+硬件连接：
+将PB口的与LED指示灯相连接，若要查看按住shift时的变化将PD口的与LED指示灯相连接
+
+              DVK500 				 STK128+
+				VCC		---------	  VCC
+				GND		---------	  GND
+				DATA			      PD4		
+			    CLK			    	  PD3					
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+注意事项： 
+（1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+（2）请详细阅读：光盘根目录下的“产品资料\开发板实验板\SMK系列\SMK1632\说明资料”
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+#include <iom128v.h>
+#include "D:\ICC_H\CmmICC.H"
+#include "D:\ICC_H\PS2.H"
+
+#define PRESS_DATA_DDR	DDRA
+#define PRESS_DATA_PORT PORTA
+#define SHIFT_DATA_DDR	DDRB
+#define SHIFT_DATA_PORT PORTB
+
+#define SET_SDA		sbi(PORTD,4)
+#define CLR_SDA		cbi(PORTD,4)
+#define GET_SDA		gbi(PIND,4)
+#define OUT_SDA	 	sbi(DDRD,4)
+#define IN_SDA 		cbi(DDRD,4)
+
+#define SET_SCK		sbi(PORTD,3)
+#define CLR_SCK		cbi(PORTD,3)
+#define GET_SCK		gbi(PIND,3)
+#define OUT_SCK 	sbi(DDRD,3)
+#define IN_SCK 		cbi(DDRD,3)
+
+bool rcvF = 0; 		//是否收到字符标志
+uint8 keyVal; 		//键值
+
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+#pragma interrupt_handler int1_isr:3
+void int1_isr(void)
+{
+    static uint8 rcvBits = 0;	//接收次数，中断次数
+	if((rcvBits>0) && (rcvBits<9))
+	{ 
+		keyVal=keyVal>>1; 	//数据是LSB格式
+		//IN_SDA;			//当有对键盘有属性设置时，注意输入输出切换
+		//DELAY();
+		if(GET_SDA) 
+	 		keyVal=keyVal|0x80; 
+	}
+	rcvBits++;
+	while(!GET_SCK); 		//等待PS/2CLK拉高
+
+	if(rcvBits>10)
+	{
+		rcvBits=0; 			//接收11次表示接收完一帧数据
+		rcvF=1; 			//标识有字符已经输入
+	}
+}
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void keyHandle(uint8 val) 
+{
+	uint8 i;
+	static bool isUp=0;			//按键释放动作标志
+	static bool shift=0;		//shift键按下标志
+	rcvF = 0; 
+	PRESS_DATA_PORT = val;		//状态指示
+	if(!isUp)
+	{
+		switch(val)
+		{
+			case 0xF0 :			// a relase action
+				isUp = 1;
+				break;
+			case 0x12 :			// Left shift
+				shift = 1;
+				break;
+			case 0x59 :			// Right shift
+				shift = 1;
+				break;
+			default:
+				if(!shift)		// If shift not pressed
+				{ 
+/*
+					for(i=0; unshifted[i][0]!=val && unshifted[i][0]; i++)
+						;
+					上述写法较为灵活，但KEIL非UNIXC标准，不能采用该写法
+*/
+					for(i=0; unshifted[i][0]!=val && i<59; i++)
+						;
+					if(unshifted[i][0] == val) 
+						;		//状态指示
+					
+				} 
+				else			// If shift pressed
+				{			
+/*
+					for(i=0; unshifted[i][0]!=val && unshifted[i][0]; i++)
+						;
+					上述写法较为灵活，但KEIL非UNIXC标准，不能采用该写法
+*/
+					for(i=0; shifted[i][0]!=val && i<59; i++)
+						;
+					if(shifted[i][0] == val) 
+						SHIFT_DATA_PORT = val;//状态指示
+				}
+		}
+	}
+	else 
+	{
+		isUp=0;					
+		switch(val)
+		{
+			case 0x12 :			// Left SHIFT
+				shift = 0;
+				break;
+			case 0x59 :			// Right SHIFT
+				shift = 0;
+				break;
+		}
+	}
+}
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void int1_init()
+{
+ 	IN_SCK;						// set SCK_DDR (PD3/INT1) as input
+	SET_SCK;   					// set SCK_PORT as high level,avoid triggering
+	MCUCR |= 0b11110011;		// set PD3/INT1 as low level active
+	GICR  |= 0b10000000;		// enable global interrupt
+	SEI();	 	  				// enable external interrupt
+}
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void main(void)
+{
+    PRESS_DATA_DDR = 0XFF;
+	SHIFT_DATA_DDR = 0XFF;
+	IN_SDA;
+	int1_init();
+	while(1)
+	{
+		if(rcvF)
+			keyHandle(keyVal);
+	}
+}
+

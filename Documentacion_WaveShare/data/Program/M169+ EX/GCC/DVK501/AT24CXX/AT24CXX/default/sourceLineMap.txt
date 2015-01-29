@@ -1,0 +1,138 @@
+Address = 0x000000a4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_at24cxx_port.h:30:0:-1
+Address = 0x000000aa  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_at24cxx_port.h:31:0:-1
+Address = 0x000000b4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_at24cxx_port.h:41:0:-1
+Address = 0x000000b6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:104:0:-1
+Address = 0x000000bc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:105:0:-1
+Address = 0x000000c4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:106:0:-1
+Address = 0x000000d2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:109:0:-1
+Address = 0x000000d6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:120:0:-1
+Address = 0x000000dc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:121:0:-1
+Address = 0x000000e4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:122:0:-1
+Address = 0x000000f2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:125:0:-1
+Address = 0x000000f6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:136:0:-1
+Address = 0x00000100  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:137:0:-1
+Address = 0x00000108  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:138:0:-1
+Address = 0x00000116  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:141:0:-1
+Address = 0x0000011a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:151:0:-1
+Address = 0x0000011c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:152:0:-1
+Address = 0x00000126  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:136:0:-1
+Address = 0x00000130  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:137:0:-1
+Address = 0x00000138  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:138:0:-1
+Address = 0x00000146  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:136:0:-1
+Address = 0x00000150  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:137:0:-1
+Address = 0x00000158  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:138:0:-1
+Address = 0x00000166  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:158:0:-1
+Address = 0x0000016a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:169:0:-1
+Address = 0x00000174  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:170:0:-1
+Address = 0x0000017c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:171:0:-1
+Address = 0x0000018a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:174:0:-1
+Address = 0x0000018e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:184:0:-1
+Address = 0x0000018e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:136:0:-1
+Address = 0x00000198  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:137:0:-1
+Address = 0x000001a0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:138:0:-1
+Address = 0x000001ae  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:191:0:-1
+Address = 0x000001b2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:202:0:-1
+Address = 0x000001bc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:203:0:-1
+Address = 0x000001c4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:204:0:-1
+Address = 0x000001d2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:207:0:-1
+Address = 0x000001d6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:217:0:-1
+Address = 0x000001d8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:218:0:-1
+Address = 0x000001de  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:219:0:-1
+Address = 0x000001e6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:220:0:-1
+Address = 0x000001f4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:222:0:-1
+Address = 0x000001fc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:224:0:-1
+Address = 0x000001fe  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:234:0:-1
+Address = 0x00000200  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:235:0:-1
+Address = 0x00000206  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:236:0:-1
+Address = 0x0000020e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:237:0:-1
+Address = 0x0000021c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:239:0:-1
+Address = 0x00000224  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:241:0:-1
+Address = 0x00000226  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:253:0:-1
+Address = 0x00000230  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:104:0:-1
+Address = 0x00000236  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:105:0:-1
+Address = 0x0000023e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:106:0:-1
+Address = 0x0000024a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:202:0:-1
+Address = 0x00000254  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:203:0:-1
+Address = 0x0000025c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:204:0:-1
+Address = 0x00000268  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:203:0:-1
+Address = 0x00000270  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:204:0:-1
+Address = 0x0000027c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:269:0:-1
+Address = 0x00000282  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:257:0:-1
+Address = 0x0000028e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:202:0:-1
+Address = 0x0000029a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:266:0:-1
+Address = 0x000002a4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:299:0:-1
+Address = 0x000002b4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:104:0:-1
+Address = 0x000002ba  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:105:0:-1
+Address = 0x000002c2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:106:0:-1
+Address = 0x000002ce  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:202:0:-1
+Address = 0x000002d8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:203:0:-1
+Address = 0x000002e0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:204:0:-1
+Address = 0x000002ec  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:121:0:-1
+Address = 0x000002f4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:122:0:-1
+Address = 0x00000300  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:170:0:-1
+Address = 0x00000308  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:171:0:-1
+Address = 0x00000314  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:219:0:-1
+Address = 0x0000031c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:220:0:-1
+Address = 0x00000326  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:222:0:-1
+Address = 0x0000032c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:318:0:-1
+Address = 0x00000336  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:320:0:-1
+Address = 0x00000338  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:321:0:-1
+Address = 0x00000342  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:303:0:-1
+Address = 0x0000034e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:120:0:-1
+Address = 0x00000356  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:169:0:-1
+Address = 0x00000362  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:218:0:-1
+Address = 0x0000036a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:336:0:-1
+Address = 0x0000037c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:104:0:-1
+Address = 0x00000382  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:105:0:-1
+Address = 0x0000038a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:106:0:-1
+Address = 0x00000398  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:202:0:-1
+Address = 0x000003a2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:203:0:-1
+Address = 0x000003aa  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:204:0:-1
+Address = 0x000003b8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:121:0:-1
+Address = 0x000003c0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:122:0:-1
+Address = 0x000003cc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:170:0:-1
+Address = 0x000003d4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:171:0:-1
+Address = 0x000003e0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:354:0:-1
+Address = 0x000003e8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:235:0:-1
+Address = 0x000003f0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:236:0:-1
+Address = 0x000003f8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:237:0:-1
+Address = 0x00000402  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:239:0:-1
+Address = 0x0000040e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:354:0:-1
+Address = 0x0000041a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:218:0:-1
+Address = 0x00000420  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:219:0:-1
+Address = 0x00000428  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:220:0:-1
+Address = 0x00000432  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:222:0:-1
+Address = 0x0000043c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:361:0:-1
+Address = 0x00000446  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:363:0:-1
+Address = 0x00000448  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:364:0:-1
+Address = 0x00000454  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:342:0:-1
+Address = 0x00000462  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:120:0:-1
+Address = 0x0000046a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_iic.h:169:0:-1
+Address = 0x00000476  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:27:0:-1
+Address = 0x0000047e  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x00000488  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:124:0:-1
+Address = 0x0000048a  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1
+Address = 0x0000048c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:29:0:-1
+Address = 0x00000492  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x0000049c  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:124:0:-1
+Address = 0x0000049e  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1
+Address = 0x000004a0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:31:0:-1
+Address = 0x000004a8  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x000004b2  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:124:0:-1
+Address = 0x000004b4  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1
+Address = 0x000004b6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:33:0:-1
+Address = 0x000004bc  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x000004c6  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:124:0:-1
+Address = 0x000004c8  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1
+Address = 0x000004ca  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:35:0:-1
+Address = 0x000004cc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:38:0:-1
+Address = 0x000004d6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:42:0:-1
+Address = 0x000004da  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_at24cxx_port.h:30:0:-1
+Address = 0x000004e0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\..\..\..\..\ws_lib/ws_at24cxx_port.h:31:0:-1
+Address = 0x000004ea  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:47:0:-1
+Address = 0x000004fa  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x00000502  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:50:0:-1
+Address = 0x00000518  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:51:0:-1
+Address = 0x0000051e  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:53:0:-1
+Address = 0x00000524  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:56:0:-1
+Address = 0x0000052a  File:line:col:begin = D:\DVK501_GCC\M128+ EX\AT24CXX\AT24CXX\default/../AT24CXX.c:56:0:-1

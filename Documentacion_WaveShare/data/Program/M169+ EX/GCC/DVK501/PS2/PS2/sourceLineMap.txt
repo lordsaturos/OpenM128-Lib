@@ -1,0 +1,55 @@
+Address = 0x000000b4  File:line:col:begin = D:\ws_lib/ws_ps2.h:42:0:-1
+Address = 0x000000c4  File:line:col:begin = D:\ws_lib/ws_ps2.h:43:0:-1
+Address = 0x000000ce  File:line:col:begin = D:\ws_lib/ws_ps2.h:44:0:-1
+Address = 0x000000d6  File:line:col:begin = D:\ws_lib/ws_ps2.h:46:0:-1
+Address = 0x000000da  File:line:col:begin = D:\ws_lib/ws_ps2.h:47:0:-1
+Address = 0x000000e0  File:line:col:begin = D:\ws_lib/ws_ps2.h:49:0:-1
+Address = 0x000000f0  File:line:col:begin = D:\ws_lib/ws_ps2.h:51:0:-1
+Address = 0x000000fa  File:line:col:begin = D:\ws_lib/ws_ps2.h:52:0:-1
+Address = 0x0000010a  File:line:col:begin = D:\ws_lib/ws_ps2.h:53:0:-1
+Address = 0x00000116  File:line:col:begin = D:\ws_lib/ws_ps2.h:55:0:-1
+Address = 0x0000011e  File:line:col:begin = D:\ws_lib/ws_ps2.h:57:0:-1
+Address = 0x00000122  File:line:col:begin = D:\ws_lib/ws_ps2.h:58:0:-1
+Address = 0x0000012e  File:line:col:begin = D:\ws_lib/ws_ps2.h:60:0:-1
+Address = 0x00000136  File:line:col:begin = D:\ws_lib/ws_ps2.h:62:0:-1
+Address = 0x0000013e  File:line:col:begin = D:\ws_lib/ws_ps2.h:64:0:-1
+Address = 0x0000014e  File:line:col:begin = D:\ws_lib/ws_ps2.h:65:0:-1
+Address = 0x00000164  File:line:col:begin = D:\ws_lib/ws_ps2.h:66:0:-1
+Address = 0x0000017a  File:line:col:begin = D:\ws_lib/ws_ps2.h:73:0:-1
+Address = 0x0000017e  File:line:col:begin = D:\ws_lib/ws_ps2.h:74:0:-1
+Address = 0x00000182  File:line:col:begin = D:\ws_lib/ws_ps2.h:76:0:-1
+Address = 0x00000192  File:line:col:begin = D:\ws_lib/ws_ps2.h:91:0:-1
+Address = 0x0000019a  File:line:col:begin = D:\ws_lib/ws_ps2.h:92:0:-1
+Address = 0x000001a6  File:line:col:begin = D:\ws_lib/ws_ps2.h:93:0:-1
+Address = 0x000001bc  File:line:col:begin = D:\ws_lib/ws_ps2.h:94:0:-1
+Address = 0x000001be  File:line:col:begin = D:\ws_lib/ws_ps2.h:95:0:-1
+Address = 0x000001c8  File:line:col:begin = D:\ws_lib/ws_ps2.h:96:0:-1
+Address = 0x000001ca  File:line:col:begin = D:\ws_lib/ws_ps2.h:98:0:-1
+Address = 0x000001ce  File:line:col:begin = D:\ws_lib/ws_ps2.h:101:0:-1
+Address = 0x000001ce  File:line:col:begin = D:\ws_lib/ws_ps2.h:102:0:-1
+Address = 0x000001d2  File:line:col:begin = D:\ws_lib/ws_ps2.h:103:0:-1
+Address = 0x000001d6  File:line:col:begin = D:\ws_lib/ws_ps2.h:104:0:-1
+Address = 0x000001da  File:line:col:begin = D:\ws_lib/ws_ps2.h:106:0:-1
+Address = 0x000001de  File:line:col:begin = D:\ws_lib/ws_ps2.h:107:0:-1
+Address = 0x000001e2  File:line:col:begin = D:\ws_lib/ws_ps2.h:108:0:-1
+Address = 0x000001e6  File:line:col:begin = D:\ws_lib/ws_ps2.h:110:0:-1
+Address = 0x000001e8  File:line:col:begin = D:\ws_lib/ws_ps2.h:111:0:-1
+Address = 0x000001ea  File:line:col:begin = D:\ws_lib/ws_ps2.h:112:0:-1
+Address = 0x000001ec  File:line:col:begin = D:\ws_lib/ws_ps2.h:113:0:-1
+Address = 0x000001ee  File:line:col:begin = D:\ws_lib/ws_ps2.h:114:0:-1
+Address = 0x000001f0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:28:0:-1
+Address = 0x000001f4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:29:0:-1
+Address = 0x000001f6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:33:0:-1
+Address = 0x000001fc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:34:0:-1
+Address = 0x000001fe  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:35:0:-1
+Address = 0x00000202  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:36:0:-1
+Address = 0x00000204  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:39:0:-1
+Address = 0x00000208  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:41:0:-1
+Address = 0x0000020a  File:line:col:begin = D:\ws_lib/ws_ps2.h:91:0:-1
+Address = 0x00000212  File:line:col:begin = D:\ws_lib/ws_ps2.h:92:0:-1
+Address = 0x0000021e  File:line:col:begin = D:\ws_lib/ws_ps2.h:93:0:-1
+Address = 0x00000234  File:line:col:begin = D:\ws_lib/ws_ps2.h:94:0:-1
+Address = 0x00000236  File:line:col:begin = D:\ws_lib/ws_ps2.h:95:0:-1
+Address = 0x00000240  File:line:col:begin = D:\ws_lib/ws_ps2.h:96:0:-1
+Address = 0x00000242  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:44:0:-1
+Address = 0x00000246  File:line:col:begin = D:\DVK501_GCC\M128+ EX\PS2\default/../PS2.c:44:0:-1

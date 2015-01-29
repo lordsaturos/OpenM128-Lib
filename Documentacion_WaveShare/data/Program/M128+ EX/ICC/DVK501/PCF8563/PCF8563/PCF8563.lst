@@ -1,0 +1,2114 @@
+Interrupt Vectors
+    00000 940C 0048 JMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    00048 EFCF      LDI	R28,0xFF
+    00049 E1D0      LDI	R29,0x10
+    0004A BFCD      OUT	0x3D,R28
+    0004B BFDE      OUT	0x3E,R29
+    0004C 51C0      SUBI	R28,0x10
+    0004D 40D0      SBCI	R29,0
+    0004E EA0A      LDI	R16,0xAA
+    0004F 8308      ST	Y,R16
+    00050 2400      CLR	R0
+    00051 E0E3      LDI	R30,3
+    00052 E0F1      LDI	R31,1
+    00053 E011      LDI	R17,1
+    00054 30E9      CPI	R30,0x9
+    00055 07F1      CPC	R31,R17
+    00056 F011      BEQ	0x0059
+    00057 9201      ST	Z+,R0
+    00058 CFFB      RJMP	0x0054
+    00059 8300      ST	Z,R16
+    0005A E8EC      LDI	R30,0x8C
+    0005B E0F0      LDI	R31,0
+    0005C E0A0      LDI	R26,0
+    0005D E0B1      LDI	R27,1
+    0005E E010      LDI	R17,0
+    0005F E000      LDI	R16,0
+    00060 BF0B      OUT	0x3B,R16
+    00061 38EF      CPI	R30,0x8F
+    00062 07F1      CPC	R31,R17
+    00063 F021      BEQ	0x0068
+    00064 95C8      LPM
+    00065 9631      ADIW	R30,1
+    00066 920D      ST	X+,R0
+    00067 CFF9      RJMP	0x0061
+    00068 940E 0333 CALL	_main
+_exit:
+    0006A CFFF      RJMP	_exit
+_speaData:
+  y                    --> Y,+4
+  j                    --> Y,+0
+  i                    --> R10
+  len                  --> R12
+  dat                  --> Y,+16
+    0006B 940E 0353 CALL	push_arg4
+    0006D 940E 0442 CALL	push_xgsetF03C
+    0006F 9728      SBIW	R28,0x8
+    00070 88CC      LDD	R12,Y+20
+FILE: D:\ICC_H\Software.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立AVR的软件提取库，增加各类补丁，方便系统程序移植
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                       
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033)     
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036)    
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) 
+(0040) #ifndef Software_H
+(0041) #define Software_H
+(0042) 
+(0043) #include <math.h>
+(0044) #include <string.h>
+(0045) 
+(0046) /* 兼容一般程序员的常用写法 */
+(0047) typedef unsigned char	uchar;
+(0048) typedef unsigned int	uint;
+(0049) typedef unsigned long	ulong;
+(0050) typedef signed char		schar;
+(0051) typedef signed int		sint;
+(0052) typedef signed long		slong;
+(0053) 
+(0054) /* 为方便移植，建议使用下面写法 */
+(0055) typedef unsigned char	bool;
+(0056) typedef unsigned char	uint8;
+(0057) typedef unsigned int	uint16;
+(0058) typedef unsigned long   uint32;
+(0059) typedef signed  char	sint8;
+(0060) typedef signed	int		sint16;
+(0061) typedef signed	long	sint32;
+(0062) typedef signed  char	int8;
+(0063) typedef signed  int		int16;
+(0064) typedef signed  long	int32;
+(0065) 
+(0066) /* 下面写法一般不推荐 */
+(0067) //typedef unsigned char ubyte;
+(0068) //typedef unsigned int	uword;
+(0069) //typedef unsigned long udword;
+(0070) //typedef signed   char	sbyte;
+(0071) //typedef signed   int	sword;
+(0072) //typedef signed   long	sdword;
+(0073) 
+(0074) /* 一般程序定义的默认值 */
+(0075) //#define NULL			0
+(0076) //#define EOF			-1
+(0077) //#define TRUE   		1
+(0078) //#define FALSE  		0
+(0079) //#define YES   		1
+(0080) //#define NO  			0
+(0081) //#define ON			1
+(0082) //#define OFF			0
+(0083) //#define ENABLE   		1
+(0084) //#define DISABLE		0
+(0085) //#define CRR			1
+(0086) //#define ERR			0
+(0087) //#define RIGHT			1
+(0088) //#define WRONG			0
+(0089) //#define SUCCESS		1
+(0090) //#define FAILURE		0
+(0091) //#define PI			3.1415926	//3.1415926535897932
+(0092) 
+(0093) /* 如果你手头上的RAM实在很紧，不如尝试下面的define～ */
+(0094) //#define _CALLOC(a)		( (a *)calloc(n,sizeof(a)) )
+(0095) //#define _MALLOC(a)		( (a *)malloc(sizeof(a)) )
+(0096) //#define _MIN(a,b)			( (a) < (b) ? (a) : (b) )
+(0097) //#define _MAX(a,b)			( (a) > (b) ? (a) : (b) )
+(0098) //#define _EXCHANGE(a,b)	{ int t; t=a; a=b; b=t; }
+(0099) //#define _TOLOWER(c)		( (c)+32 )
+(0100) //#define _TOUPPER(c)		( (c)-32 )
+(0101) 
+(0102) //#ifndef BIT
+(0103) //#define BIT(x)	( 1<<(x) )
+(0104) //#endif
+(0105) 
+(0106) /*--------------------------------------------------------------------
+(0107) 函数全称：数据拆字
+(0108) 函数功能：
+(0109) 注意事项：D<=999999,C<=6
+(0110) 提示说明：调用speaData(12,2)，得到dataElem[0]=2，dataElem[1]=1
+(0111) 输    入：
+(0112) 返    回：无
+(0113) --------------------------------------------------------------------*/
+(0114) uint8 dataElem[6];
+(0115) void speaData(uint32 dat,sint8 len)
+(0116) {
+(0117)     uint8 i;
+(0118)     uint32 j,y;
+(0119)     for(i=0,j=1;i<len;i++)
+    00071 24AA      CLR	R10
+    00072 E081      LDI	R24,1
+    00073 8388      ST	Y,R24
+    00074 E080      LDI	R24,0
+    00075 8389      STD	Y+1,R24
+    00076 838A      STD	Y+2,R24
+    00077 838B      STD	Y+3,R24
+    00078 C03C      RJMP	0x00B5
+(0120)     {
+(0121)         y=dat/j;
+    00079 8028      LD	R2,Y
+    0007A 8039      LDD	R3,Y+1
+    0007B 804A      LDD	R4,Y+2
+    0007C 805B      LDD	R5,Y+3
+    0007D 8908      LDD	R16,Y+16
+    0007E 8919      LDD	R17,Y+17
+    0007F 892A      LDD	R18,Y+18
+    00080 893B      LDD	R19,Y+19
+    00081 925A      ST	-Y,R5
+    00082 924A      ST	-Y,R4
+    00083 923A      ST	-Y,R3
+    00084 922A      ST	-Y,R2
+    00085 940E 0358 CALL	div32u
+    00087 830C      STD	Y+4,R16
+    00088 831D      STD	Y+5,R17
+    00089 832E      STD	Y+6,R18
+    0008A 833F      STD	Y+7,R19
+(0122)         dataElem[i]=y%10;
+    0008B E04A      LDI	R20,0xA
+    0008C E050      LDI	R21,0
+    0008D E060      LDI	R22,0
+    0008E E070      LDI	R23,0
+    0008F 810C      LDD	R16,Y+4
+    00090 811D      LDD	R17,Y+5
+    00091 812E      LDD	R18,Y+6
+    00092 813F      LDD	R19,Y+7
+    00093 937A      ST	-Y,R23
+    00094 936A      ST	-Y,R22
+    00095 935A      ST	-Y,R21
+    00096 934A      ST	-Y,R20
+    00097 940E 035A CALL	mod32u
+    00099 E083      LDI	R24,3
+    0009A E091      LDI	R25,1
+    0009B 2DEA      MOV	R30,R10
+    0009C 27FF      CLR	R31
+    0009D 0FE8      ADD	R30,R24
+    0009E 1FF9      ADC	R31,R25
+    0009F 8300      ST	Z,R16
+(0123)         j*=10;
+    000A0 8028      LD	R2,Y
+    000A1 8039      LDD	R3,Y+1
+    000A2 804A      LDD	R4,Y+2
+    000A3 805B      LDD	R5,Y+3
+    000A4 E04A      LDI	R20,0xA
+    000A5 E050      LDI	R21,0
+    000A6 E060      LDI	R22,0
+    000A7 E070      LDI	R23,0
+    000A8 925A      ST	-Y,R5
+    000A9 924A      ST	-Y,R4
+    000AA 923A      ST	-Y,R3
+    000AB 922A      ST	-Y,R2
+    000AC 018A      MOVW	R16,R20
+    000AD 019B      MOVW	R18,R22
+    000AE 940E 03DA CALL	empy32u|empy32s
+    000B0 8308      ST	Y,R16
+    000B1 8319      STD	Y+1,R17
+    000B2 832A      STD	Y+2,R18
+    000B3 833B      STD	Y+3,R19
+    000B4 94A3      INC	R10
+    000B5 2C2C      MOV	R2,R12
+    000B6 2433      CLR	R3
+    000B7 FC27      SBRC	R2,7
+    000B8 9430      COM	R3
+    000B9 2C4A      MOV	R4,R10
+    000BA 2455      CLR	R5
+    000BB 1442      CP	R4,R2
+    000BC 0453      CPC	R5,R3
+    000BD F40C      BGE	0x00BF
+    000BE CFBA      RJMP	0x0079
+    000BF 9628      ADIW	R28,0x8
+    000C0 940E 044B CALL	pop_xgsetF03C
+    000C2 9624      ADIW	R28,4
+    000C3 9508      RET
+FILE: D:\ICC_H\I2C.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立I2C操作库
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033) 
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036) 
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) 
+(0040) #ifndef I2C_H
+(0041) #define I2C_H
+(0042) 
+(0043) /* TWSR values (not bits) */
+(0044) /* Master */
+(0045) #define I2C_START			0x08
+(0046) #define I2C_RESTART			0x10
+(0047) 
+(0048) /* Master Transmitter */
+(0049) #define I2C_MT_SLA_ACK		0x18
+(0050) #define I2C_MT_SLA_NACK		0x20
+(0051) #define I2C_MT_DATA_ACK		0x28
+(0052) #define I2C_MT_DATA_NACK	0x30
+(0053) #define I2C_MT_ARB_LOST		0x38
+(0054) 
+(0055) /* Master Receiver */
+(0056) #define I2C_MR_ARB_LOST		0x38
+(0057) #define I2C_MR_SLA_ACK		0x40
+(0058) #define I2C_MR_SLA_NACK		0x48
+(0059) #define I2C_MR_DATA_ACK		0x50
+(0060) #define I2C_MR_DATA_NACK	0x58
+(0061) 
+(0062) /* Slave Transmitter */
+(0063) #define I2C_ST_SLA_ACK			0xA8
+(0064) #define I2C_ST_ARB_LOST_SLA_ACK 0xB0
+(0065) #define I2C_ST_DATA_ACK			0xB8
+(0066) #define I2C_ST_DATA_NACK		0xC0
+(0067) #define I2C_ST_LAST_DATA		0xC8
+(0068) 
+(0069) /* Slave Receiver */
+(0070) #define I2C_SR_SLA_ACK				0x60
+(0071) #define I2C_SR_ARB_LOST_SLA_ACK		0x68
+(0072) #define I2C_SR_GCALL_ACK			0x70
+(0073) #define I2C_SR_ARB_LOST_GCALL_ACK	0x78
+(0074) #define I2C_SR_DATA_ACK				0x80
+(0075) #define I2C_SR_DATA_NACK			0x88
+(0076) #define I2C_SR_GCALL_DATA_ACK		0x90
+(0077) #define I2C_SR_GCALL_DATA_NACK		0x98
+(0078) #define I2C_SR_STOP					0xA0
+(0079) 
+(0080) /* Misc */
+(0081) #define I2C_NO_INFO			0xF8
+(0082) #define I2C_BUS_ERROR		0x00
+(0083) 
+(0084) /*
+(0085)  * The lower 3 bits of TWSR are reserved on the ATmega163.
+(0086)  * The 2 LSB carry the prescaler bits on the newer ATmegas.
+(0087)  */
+(0088) #define I2C_STATUS_MASK	(_BV(TWS7)|_BV(TWS6)|_BV(TWS5)|_BV(TWS4)|_BV(TWS3))
+(0089) #define I2C_STATUS		(TWSR & I2C_STATUS_MASK)
+(0090) 
+(0091) /*
+(0092)  * R/~W bit in SLA+R/W address field.
+(0093)  */
+(0094) #define I2C_READ		1
+(0095) #define I2C_WRITE		0
+(0096) 
+(0097) #define I2CStart()    	(TWCR=(1<<TWINT)|(1<<TWSTA)|(1<<TWEN))
+(0098) #define I2CStop()     	(TWCR=(1<<TWINT)|(1<<TWSTO)|(1<<TWEN))
+(0099) #define I2CWaitAck()	{while(!(TWCR&(1<<TWINT)));}
+(0100) #define I2CChkAck() 	(TWSR&0xf8)					//check ack
+(0101) #define I2CSendAck()	(TWCR|=(1<<TWEA))
+(0102) #define I2CSendNoAck()	(TWCR&=~(1<<TWEA))
+(0103) #define I2CSendByte(x)	{TWDR=(x);TWCR=(1<<TWINT)|(1<<TWEN);} 
+(0104) #define I2CRcvNckByte()	(TWCR=(1<<TWINT)|(1<<TWEN))
+(0105) #define I2CRcvAckByte()	(TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWEA))
+(0106) 
+(0107) /* For Program */
+(0108) #define I2C_Stop()		I2CStop()
+(0109) #define I2C_SendAck()	I2CSendAck()
+(0110) #define I2C_SendNoAck() I2CSendNoAck()
+(0111) #define I2C_WaitAck()	I2CWaitAck()
+(0112) 
+(0113) /* I2C Config */
+(0114) #define I2C_ERR			0
+(0115) #define I2C_CRR			1
+(0116) 
+(0117) /*--------------------------------------------------------------------
+(0118) 函数名称：I2C Start
+(0119) 函数功能：
+(0120) 注意事项：
+(0121) 提示说明：
+(0122) 输    入：
+(0123) 返    回：
+(0124) --------------------------------------------------------------------*/
+(0125) bool I2C_Start()					
+(0126) {
+(0127) 	I2CStart();						
+_I2C_Start:
+    000C4 EA84      LDI	R24,0xA4
+    000C5 9380 0074 STS	0x74,R24
+(0128) 	I2CWaitAck();
+    000C7 9020 0074 LDS	R2,0x74
+    000C9 FE27      SBRS	R2,7
+    000CA CFFC      RJMP	0x00C7
+(0129) 	if( I2CChkAck()!=I2C_START ) 
+    000CB 9180 0071 LDS	R24,0x71
+    000CD 7F88      ANDI	R24,0xF8
+    000CE 3088      CPI	R24,0x8
+    000CF F011      BEQ	0x00D2
+(0130) 		return I2C_ERR;
+    000D0 2700      CLR	R16
+    000D1 C001      RJMP	0x00D3
+(0131) 	return I2C_CRR;
+    000D2 E001      LDI	R16,1
+    000D3 9508      RET
+(0132) }
+(0133) /*--------------------------------------------------------------------
+(0134) 函数名称：I2C ReStart
+(0135) 函数功能：
+(0136) 注意事项：
+(0137) 提示说明：
+(0138) 输    入：
+(0139) 返    回：
+(0140) --------------------------------------------------------------------*/
+(0141) bool I2C_Restart()					
+(0142) {
+(0143) 	I2CStart();						
+_I2C_Restart:
+    000D4 EA84      LDI	R24,0xA4
+    000D5 9380 0074 STS	0x74,R24
+(0144) 	I2CWaitAck();
+    000D7 9020 0074 LDS	R2,0x74
+    000D9 FE27      SBRS	R2,7
+    000DA CFFC      RJMP	0x00D7
+(0145) 	if( I2CChkAck()!=I2C_RESTART ) 
+    000DB 9180 0071 LDS	R24,0x71
+    000DD 7F88      ANDI	R24,0xF8
+    000DE 3180      CPI	R24,0x10
+    000DF F011      BEQ	0x00E2
+(0146) 		return I2C_ERR;
+    000E0 2700      CLR	R16
+    000E1 C001      RJMP	0x00E3
+(0147) 	return I2C_CRR;
+    000E2 E001      LDI	R16,1
+    000E3 9508      RET
+(0148) }
+(0149) /*--------------------------------------------------------------------
+(0150) 函数名称：发送 7位 器件写地址: XXXX XXX0
+(0151) 函数功能：
+(0152) 注意事项：
+(0153) 提示说明：
+(0154) 输    入：
+(0155) 返    回：
+(0156) --------------------------------------------------------------------*/
+(0157) bool I2C_SendWrDAdr(uint8 wrDAdr)	
+(0158) {
+(0159) 	I2CSendByte(wrDAdr);			//设置 器件写地址
+_I2C_SendWrDAdr:
+  wrDAdr               --> R16
+    000E4 9300 0073 STS	0x73,R16
+    000E6 E884      LDI	R24,0x84
+    000E7 9380 0074 STS	0x74,R24
+(0160) 	I2CWaitAck();
+    000E9 9020 0074 LDS	R2,0x74
+    000EB FE27      SBRS	R2,7
+    000EC CFFC      RJMP	0x00E9
+(0161) 	if( I2CChkAck()!=I2C_MT_SLA_ACK )  
+    000ED 9180 0071 LDS	R24,0x71
+    000EF 7F88      ANDI	R24,0xF8
+    000F0 3188      CPI	R24,0x18
+    000F1 F011      BEQ	0x00F4
+(0162) 		return I2C_ERR;
+    000F2 2700      CLR	R16
+    000F3 C001      RJMP	0x00F5
+(0163) 	return I2C_CRR;		
+    000F4 E001      LDI	R16,1
+    000F5 9508      RET
+_I2C_SendWrDAdr_:
+  wrDAdr               --> R10
+    000F6 92AA      ST	-Y,R10
+    000F7 92BA      ST	-Y,R11
+    000F8 0158      MOVW	R10,R16
+(0164) }
+(0165) /*--------------------------------------------------------------------
+(0166) 函数名称：发送 10位 器件写地址: 1111 0XX0, XXXX XXXX
+(0167) 函数功能：
+(0168) 注意事项：
+(0169) 提示说明：兼容 发送 7位 器件写地址: XXXX XXX0
+(0170) 输    入：
+(0171) 返    回：
+(0172) --------------------------------------------------------------------*/
+(0173) bool I2C_SendWrDAdr_(uint16 wrDAdr)	
+(0174) {
+(0175) 	if( wrDAdr&0xF000 == 0xF000 )	//判断是否为 10位 器件地址
+    000F9 FEA0      SBRS	R10,0
+    000FA C00E      RJMP	0x0109
+(0176) 		if( I2C_SendWrDAdr( (uint8)wrDAdr>>8 )==I2C_ERR )	//设置 （高位）器件写地址
+    000FB 2D0A      MOV	R16,R10
+    000FC 9506      LSR	R16
+    000FD 9506      LSR	R16
+    000FE 9506      LSR	R16
+    000FF 9506      LSR	R16
+    00100 9506      LSR	R16
+    00101 9506      LSR	R16
+    00102 9506      LSR	R16
+    00103 9506      LSR	R16
+    00104 DFDF      RCALL	_I2C_SendWrDAdr
+    00105 2300      TST	R16
+    00106 F411      BNE	0x0109
+(0177) 			return I2C_ERR;
+    00107 2700      CLR	R16
+    00108 C007      RJMP	0x0110
+(0178) 	if( I2C_SendWrDAdr( (uint8)wrDAdr )==I2C_ERR )	//设置 （低位）器件写地址
+    00109 2D0A      MOV	R16,R10
+    0010A DFD9      RCALL	_I2C_SendWrDAdr
+    0010B 2300      TST	R16
+    0010C F411      BNE	0x010F
+(0179) 		return I2C_ERR;
+    0010D 2700      CLR	R16
+    0010E C001      RJMP	0x0110
+(0180) 	return I2C_CRR;
+    0010F E001      LDI	R16,1
+    00110 90B9      LD	R11,Y+
+    00111 90A9      LD	R10,Y+
+    00112 9508      RET
+(0181) }
+(0182) /*--------------------------------------------------------------------
+(0183) 函数名称：发送 7位 器件读地址: XXXX XXX1
+(0184) 函数功能：
+(0185) 注意事项：
+(0186) 提示说明：
+(0187) 输    入：
+(0188) 返    回：
+(0189) --------------------------------------------------------------------*/
+(0190) bool I2C_SendRdDAdr(uint8 rdDAdr)	
+(0191) {
+(0192) 	I2CSendByte(rdDAdr);			//设置 器件读地址
+_I2C_SendRdDAdr:
+  rdDAdr               --> R16
+    00113 9300 0073 STS	0x73,R16
+    00115 E884      LDI	R24,0x84
+    00116 9380 0074 STS	0x74,R24
+(0193) 	I2CWaitAck();
+    00118 9020 0074 LDS	R2,0x74
+    0011A FE27      SBRS	R2,7
+    0011B CFFC      RJMP	0x0118
+(0194) 	if( I2CChkAck()!=I2C_MR_SLA_ACK )  
+    0011C 9180 0071 LDS	R24,0x71
+    0011E 7F88      ANDI	R24,0xF8
+    0011F 3480      CPI	R24,0x40
+    00120 F011      BEQ	0x0123
+(0195) 		return I2C_ERR;
+    00121 2700      CLR	R16
+    00122 C001      RJMP	0x0124
+(0196) 	return I2C_CRR;	
+    00123 E001      LDI	R16,1
+    00124 9508      RET
+_I2C_SendRdDAdr_:
+  rdDAdr               --> R10
+    00125 92AA      ST	-Y,R10
+    00126 2EA0      MOV	R10,R16
+(0197) }
+(0198) /*--------------------------------------------------------------------
+(0199) 函数名称：发送 10位 器件读地址: 1111 0XX0, XXXX XXXX
+(0200) 函数功能：
+(0201) 注意事项：
+(0202) 提示说明：
+(0203) 输    入：
+(0204) 返    回：
+(0205) --------------------------------------------------------------------*/
+(0206) bool I2C_SendRdDAdr_(uint8 rdDAdr)	
+(0207) {
+(0208) 	if( rdDAdr&0xF000 == 0xF000 )	//判断是否为 10位 器件地址
+    00127 FEA0      SBRS	R10,0
+    00128 C00E      RJMP	0x0137
+(0209) 		if( I2C_SendWrDAdr( (uint8)rdDAdr>>8 )==I2C_ERR )	//设置 （高位）器件读地址
+    00129 2D0A      MOV	R16,R10
+    0012A 9506      LSR	R16
+    0012B 9506      LSR	R16
+    0012C 9506      LSR	R16
+    0012D 9506      LSR	R16
+    0012E 9506      LSR	R16
+    0012F 9506      LSR	R16
+    00130 9506      LSR	R16
+    00131 9506      LSR	R16
+    00132 DFB1      RCALL	_I2C_SendWrDAdr
+    00133 2300      TST	R16
+    00134 F411      BNE	0x0137
+(0210) 			return I2C_ERR;
+    00135 2700      CLR	R16
+    00136 C007      RJMP	0x013E
+(0211) 	if( I2C_SendWrDAdr( (uint8)rdDAdr )==I2C_ERR )	//设置 （低位）器件读地址
+    00137 2D0A      MOV	R16,R10
+    00138 DFAB      RCALL	_I2C_SendWrDAdr
+    00139 2300      TST	R16
+    0013A F411      BNE	0x013D
+(0212) 		return I2C_ERR;
+    0013B 2700      CLR	R16
+    0013C C001      RJMP	0x013E
+(0213) 	return I2C_CRR;
+    0013D E001      LDI	R16,1
+    0013E 90A9      LD	R10,Y+
+    0013F 9508      RET
+(0214) }
+(0215) /*--------------------------------------------------------------------
+(0216) 函数名称：I2C发送数据
+(0217) 函数功能：
+(0218) 注意事项：
+(0219) 提示说明：
+(0220) 输    入：
+(0221) 返    回：
+(0222) --------------------------------------------------------------------*/
+(0223) bool I2C_SendDat(uint8 configDat)	
+(0224) {
+(0225) 	I2CSendByte(configDat);			
+_I2C_SendDat:
+  configDat            --> R16
+    00140 9300 0073 STS	0x73,R16
+    00142 E884      LDI	R24,0x84
+    00143 9380 0074 STS	0x74,R24
+(0226) 	I2CWaitAck();
+    00145 9020 0074 LDS	R2,0x74
+    00147 FE27      SBRS	R2,7
+    00148 CFFC      RJMP	0x0145
+(0227) 	if( I2CChkAck()!=I2C_MT_DATA_ACK ) 
+    00149 9180 0071 LDS	R24,0x71
+    0014B 7F88      ANDI	R24,0xF8
+    0014C 3288      CPI	R24,0x28
+    0014D F011      BEQ	0x0150
+(0228) 		return I2C_ERR;
+    0014E 2700      CLR	R16
+    0014F C001      RJMP	0x0151
+(0229) 	return I2C_CRR;	
+    00150 E001      LDI	R16,1
+    00151 9508      RET
+(0230) }
+(0231) /*--------------------------------------------------------------------
+(0232) 函数名称：I2C接收数据且不产生应答
+(0233) 函数功能：
+(0234) 注意事项：
+(0235) 提示说明：
+(0236) 输    入：
+(0237) 返    回：
+(0238) --------------------------------------------------------------------*/
+(0239) bool I2C_RcvNAckDat(uint8 *pRdDat)	
+(0240) {
+(0241) 	I2CRcvNckByte();
+_I2C_RcvNAckDat:
+  pRdDat               --> R16
+    00152 E884      LDI	R24,0x84
+    00153 9380 0074 STS	0x74,R24
+(0242) 	I2CWaitAck();
+    00155 9020 0074 LDS	R2,0x74
+    00157 FE27      SBRS	R2,7
+    00158 CFFC      RJMP	0x0155
+(0243) 	if( I2CChkAck()!=I2C_MR_DATA_NACK )
+    00159 9180 0071 LDS	R24,0x71
+    0015B 7F88      ANDI	R24,0xF8
+    0015C 3588      CPI	R24,0x58
+    0015D F011      BEQ	0x0160
+(0244) 		return I2C_ERR;
+    0015E 2700      CLR	R16
+    0015F C005      RJMP	0x0165
+(0245) 	*pRdDat=TWDR;
+    00160 9020 0073 LDS	R2,0x73
+    00162 01F8      MOVW	R30,R16
+    00163 8220      ST	Z,R2
+(0246) 	return I2C_CRR;
+    00164 E001      LDI	R16,1
+    00165 9508      RET
+(0247) }
+(0248) /*--------------------------------------------------------------------
+(0249) 函数名称：I2C接收数据且产生应答
+(0250) 函数功能：
+(0251) 注意事项：
+(0252) 提示说明：
+(0253) 输    入：
+(0254) 返    回：
+(0255) --------------------------------------------------------------------*/
+(0256) bool I2C_RcvAckDat(uint8 *pRdDat)	
+(0257) {
+(0258) 	I2CRcvAckByte();					
+_I2C_RcvAckDat:
+  pRdDat               --> R16
+    00166 EC84      LDI	R24,0xC4
+    00167 9380 0074 STS	0x74,R24
+(0259) 	I2CWaitAck();
+    00169 9020 0074 LDS	R2,0x74
+    0016B FE27      SBRS	R2,7
+    0016C CFFC      RJMP	0x0169
+(0260) 	if( I2CChkAck()!=I2C_MR_DATA_ACK )
+    0016D 9180 0071 LDS	R24,0x71
+    0016F 7F88      ANDI	R24,0xF8
+    00170 3580      CPI	R24,0x50
+    00171 F011      BEQ	0x0174
+(0261) 		return I2C_ERR;
+    00172 2700      CLR	R16
+    00173 C005      RJMP	0x0179
+(0262) 	*pRdDat=TWDR;
+    00174 9020 0073 LDS	R2,0x73
+    00176 01F8      MOVW	R30,R16
+    00177 8220      ST	Z,R2
+(0263) 	return I2C_CRR;
+    00178 E001      LDI	R16,1
+    00179 9508      RET
+_I2C_Write:
+  dat                  --> R10
+  wordAdr              --> R12
+  wrDAdr               --> R14
+    0017A 940E 042D CALL	push_xgset00FC
+    0017C 2EC2      MOV	R12,R18
+    0017D 0178      MOVW	R14,R16
+    0017E 80AE      LDD	R10,Y+6
+(0264) }
+(0265) /*--------------------------------------------------------------------
+(0266) 函数名称：I2C写器件，写一个数据
+(0267) 函数功能：
+(0268) 注意事项：
+(0269) 提示说明：
+(0270) 输    入：wrDAdr: write device-address 写器件地址
+(0271) 		 wordAdr: word address 字地址
+(0272) 		 dat: data 数据
+(0273) 返    回：
+(0274) --------------------------------------------------------------------*/
+(0275) bool I2C_Write(uint16 wrDAdr,uint8 wordAdr,uint8 dat)
+(0276) {
+(0277) 	if( I2C_Start()==I2C_ERR )
+    0017F DF44      RCALL	_I2C_Start
+    00180 2300      TST	R16
+    00181 F411      BNE	0x0184
+(0278) 		return I2C_ERR;
+    00182 2700      CLR	R16
+    00183 C018      RJMP	0x019C
+(0279) 
+(0280) 	if( I2C_SendWrDAdr_(wrDAdr)==I2C_ERR )
+    00184 0187      MOVW	R16,R14
+    00185 DF70      RCALL	_I2C_SendWrDAdr_
+    00186 2300      TST	R16
+    00187 F411      BNE	0x018A
+(0281) 		return I2C_ERR;
+    00188 2700      CLR	R16
+    00189 C012      RJMP	0x019C
+(0282) 
+(0283) 	if( I2C_SendDat(wordAdr)==I2C_ERR )
+    0018A 2D0C      MOV	R16,R12
+    0018B DFB4      RCALL	_I2C_SendDat
+    0018C 2EC0      MOV	R12,R16
+    0018D 2300      TST	R16
+    0018E F411      BNE	0x0191
+(0284) 		return I2C_ERR;
+    0018F 2700      CLR	R16
+    00190 C00B      RJMP	0x019C
+(0285) 
+(0286) 	if( I2C_SendDat(dat)==I2C_ERR )
+    00191 2D0A      MOV	R16,R10
+    00192 DFAD      RCALL	_I2C_SendDat
+    00193 2EA0      MOV	R10,R16
+    00194 2300      TST	R16
+    00195 F411      BNE	0x0198
+(0287) 		return I2C_ERR;
+    00196 2700      CLR	R16
+    00197 C004      RJMP	0x019C
+(0288) 
+(0289) 	I2C_Stop();
+    00198 E984      LDI	R24,0x94
+    00199 9380 0074 STS	0x74,R24
+(0290) 
+(0291) 	return I2C_CRR;
+    0019B E001      LDI	R16,1
+    0019C 940C 040E JMP	pop_xgset00FC
+_I2C_Read:
+  pRdDat               --> R10
+  rdDAdr               --> R12
+  wordAdr              --> R14
+  wrDAdr               --> R20
+    0019E 940E 042B CALL	push_xgset30FC
+    001A0 2EE2      MOV	R14,R18
+    001A1 01A8      MOVW	R20,R16
+    001A2 84C8      LDD	R12,Y+8
+    001A3 84AA      LDD	R10,Y+10
+    001A4 84BB      LDD	R11,Y+11
+(0292) }
+(0293) /*--------------------------------------------------------------------
+(0294) 函数名称：I2C写器件，写N个数据
+(0295) 函数功能：
+(0296) 注意事项：
+(0297) 提示说明：
+(0298) 输    入：wrDAdr: write device-address 写器件地址
+(0299) 		 wordAdr: word address 字地址
+(0300) 		 *pWrDat: p->write data 写入数据指针
+(0301) 		 num: number 写入数据个数
+(0302) 返    回：
+(0303) --------------------------------------------------------------------*/
+(0304) //bool I2C_Write_(uint16 wrDAdr,uint8 wordAdr,
+(0305) //				  uint8 *pWrDat,uint8 num)
+(0306) //{
+(0307) //
+(0308) //} 
+(0309) /*--------------------------------------------------------------------
+(0310) 函数名称：I2C读器件，读一个数据
+(0311) 函数功能：
+(0312) 注意事项：
+(0313) 提示说明：
+(0314) 输    入：wrDAdr: write device-address 写器件地址
+(0315) 		 wordAdr: word address 字地址
+(0316) 		 rdDAdr: read device-address 读器件地址
+(0317) 		 *pRdDat: p->read data 读取数据指针
+(0318) 返    回：
+(0319) --------------------------------------------------------------------*/
+(0320) bool I2C_Read(uint16 wrDAdr,uint8 wordAdr,
+(0321) 			  uint8 rdDAdr,uint8 *pRdDat)
+(0322) {
+(0323) 	if( I2C_Start()==I2C_ERR )
+    001A5 DF1E      RCALL	_I2C_Start
+    001A6 2300      TST	R16
+    001A7 F411      BNE	0x01AA
+(0324) 		return I2C_ERR;
+    001A8 2700      CLR	R16
+    001A9 C025      RJMP	0x01CF
+(0325) 
+(0326) 	if( I2C_SendWrDAdr_(wrDAdr)==I2C_ERR )
+    001AA 018A      MOVW	R16,R20
+    001AB DF4A      RCALL	_I2C_SendWrDAdr_
+    001AC 2300      TST	R16
+    001AD F411      BNE	0x01B0
+(0327) 		return I2C_ERR;
+    001AE 2700      CLR	R16
+    001AF C01F      RJMP	0x01CF
+(0328) 
+(0329) 	if( I2C_SendDat(wordAdr)==I2C_ERR )
+    001B0 2D0E      MOV	R16,R14
+    001B1 DF8E      RCALL	_I2C_SendDat
+    001B2 2EE0      MOV	R14,R16
+    001B3 2300      TST	R16
+    001B4 F411      BNE	0x01B7
+(0330) 		return I2C_ERR;
+    001B5 2700      CLR	R16
+    001B6 C018      RJMP	0x01CF
+(0331) 
+(0332) 	if( I2C_Restart()==I2C_ERR )
+    001B7 DF1C      RCALL	_I2C_Restart
+    001B8 2EE0      MOV	R14,R16
+    001B9 2300      TST	R16
+    001BA F411      BNE	0x01BD
+(0333) 		return I2C_ERR;
+    001BB 2700      CLR	R16
+    001BC C012      RJMP	0x01CF
+(0334) 
+(0335) 	if( I2C_SendRdDAdr(rdDAdr)==I2C_ERR )
+    001BD 2D0C      MOV	R16,R12
+    001BE DF54      RCALL	_I2C_SendRdDAdr
+    001BF 2EC0      MOV	R12,R16
+    001C0 2300      TST	R16
+    001C1 F411      BNE	0x01C4
+(0336) 		return I2C_ERR;
+    001C2 2700      CLR	R16
+    001C3 C00B      RJMP	0x01CF
+(0337) 
+(0338) 	if( I2C_RcvNAckDat(pRdDat)==I2C_ERR )
+    001C4 0185      MOVW	R16,R10
+    001C5 DF8C      RCALL	_I2C_RcvNAckDat
+    001C6 2EA0      MOV	R10,R16
+    001C7 2300      TST	R16
+    001C8 F411      BNE	0x01CB
+(0339) 		return I2C_ERR;
+    001C9 2700      CLR	R16
+    001CA C004      RJMP	0x01CF
+(0340) 
+(0341) 	I2C_Stop();
+    001CB E984      LDI	R24,0x94
+    001CC 9380 0074 STS	0x74,R24
+(0342) 
+(0343) 	return I2C_CRR;
+    001CE E001      LDI	R16,1
+    001CF 940C 0415 JMP	pop_xgset30FC
+_I2C_Read_:
+  i                    --> R12
+  num                  --> R20
+  pRdDat               --> R10
+  rdDAdr               --> R12
+  wordAdr              --> R14
+  wrDAdr               --> R22
+    001D1 940E 0429 CALL	push_xgsetF0FC
+    001D3 2EE2      MOV	R14,R18
+    001D4 01B8      MOVW	R22,R16
+    001D5 84CA      LDD	R12,Y+10
+    001D6 84AC      LDD	R10,Y+12
+    001D7 84BD      LDD	R11,Y+13
+    001D8 854E      LDD	R20,Y+14
+(0344) }
+(0345) /*--------------------------------------------------------------------
+(0346) 函数名称：I2C读器件，读N个数据
+(0347) 函数功能：
+(0348) 注意事项：
+(0349) 提示说明：
+(0350) 输    入：wrDAdr: write device-address 写器件地址
+(0351) 		 wordAdr: word address 字地址
+(0352) 		 rdDAdr: read device-address 读器件地址
+(0353) 		 *pRdDat: p->read data 读取数据指针
+(0354) 		 num: number 读取数据个数
+(0355) 返    回：
+(0356) --------------------------------------------------------------------*/
+(0357) bool I2C_Read_(uint16 wrDAdr,uint8 wordAdr,
+(0358) 			   uint8 rdDAdr,uint8 *pRdDat,uint8 num)
+(0359) {
+(0360)  	uint8 i;
+(0361) 	
+(0362) 	if( I2C_Start()==I2C_ERR )
+    001D9 DEEA      RCALL	_I2C_Start
+    001DA 2300      TST	R16
+    001DB F411      BNE	0x01DE
+(0363) 		return I2C_ERR;
+    001DC 2700      CLR	R16
+    001DD C039      RJMP	0x0217
+(0364) 
+(0365) 	if( I2C_SendWrDAdr_(wrDAdr)==I2C_ERR )
+    001DE 018B      MOVW	R16,R22
+    001DF DF16      RCALL	_I2C_SendWrDAdr_
+    001E0 2300      TST	R16
+    001E1 F411      BNE	0x01E4
+(0366) 		return I2C_ERR;
+    001E2 2700      CLR	R16
+    001E3 C033      RJMP	0x0217
+(0367) 
+(0368) 	if( I2C_SendDat(wordAdr)==I2C_ERR )
+    001E4 2D0E      MOV	R16,R14
+    001E5 DF5A      RCALL	_I2C_SendDat
+    001E6 2EE0      MOV	R14,R16
+    001E7 2300      TST	R16
+    001E8 F411      BNE	0x01EB
+(0369) 		return I2C_ERR;
+    001E9 2700      CLR	R16
+    001EA C02C      RJMP	0x0217
+(0370) 
+(0371) 	if( I2C_Restart()==I2C_ERR )
+    001EB DEE8      RCALL	_I2C_Restart
+    001EC 2EE0      MOV	R14,R16
+    001ED 2300      TST	R16
+    001EE F411      BNE	0x01F1
+(0372) 		return I2C_ERR;
+    001EF 2700      CLR	R16
+    001F0 C026      RJMP	0x0217
+(0373) 
+(0374) 	if( I2C_SendRdDAdr(rdDAdr)==I2C_ERR )
+    001F1 2D0C      MOV	R16,R12
+    001F2 DF20      RCALL	_I2C_SendRdDAdr
+    001F3 2EC0      MOV	R12,R16
+    001F4 2300      TST	R16
+    001F5 F411      BNE	0x01F8
+(0375) 		return I2C_ERR;
+    001F6 2700      CLR	R16
+    001F7 C01F      RJMP	0x0217
+(0376) 
+(0377) 	for(i=0;i<num-1;i++)
+    001F8 24CC      CLR	R12
+    001F9 C00B      RJMP	0x0205
+(0378) 		if( I2C_RcvAckDat(pRdDat+i)==I2C_ERR )
+    001FA 2D0C      MOV	R16,R12
+    001FB 2711      CLR	R17
+    001FC 0D0A      ADD	R16,R10
+    001FD 1D1B      ADC	R17,R11
+    001FE DF67      RCALL	_I2C_RcvAckDat
+    001FF 2EE0      MOV	R14,R16
+    00200 2300      TST	R16
+    00201 F411      BNE	0x0204
+(0379) 			return I2C_ERR;
+    00202 2700      CLR	R16
+    00203 C013      RJMP	0x0217
+    00204 94C3      INC	R12
+    00205 2F84      MOV	R24,R20
+    00206 5081      SUBI	R24,1
+    00207 16C8      CP	R12,R24
+    00208 F388      BCS	0x01FA
+(0380) 	
+(0381) 	if( I2C_RcvNAckDat(pRdDat+i)==I2C_ERR )
+    00209 2D0C      MOV	R16,R12
+    0020A 2711      CLR	R17
+    0020B 0D0A      ADD	R16,R10
+    0020C 1D1B      ADC	R17,R11
+    0020D DF44      RCALL	_I2C_RcvNAckDat
+    0020E 2EA0      MOV	R10,R16
+    0020F 2300      TST	R16
+    00210 F411      BNE	0x0213
+(0382) 			return I2C_ERR;
+    00211 2700      CLR	R16
+    00212 C004      RJMP	0x0217
+(0383) 
+(0384) 	I2C_Stop();
+    00213 E984      LDI	R24,0x94
+    00214 9380 0074 STS	0x74,R24
+(0385) 	
+(0386) 	return I2C_CRR;
+    00216 E001      LDI	R16,1
+    00217 940C 041E JMP	pop_xgsetF0FC
+_delay50us:
+  j                    --> R20
+  t                    --> R16
+    00219 934A      ST	-Y,R20
+FILE: D:\ICC_H\Hardware.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立AVR的硬件提取库，增加各类补丁，方便移植
+(0005) 					
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                          
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 
+(0028) ----------------------------------------------------------------------
+(0029) 待定参数说明：
+(0030) 
+(0031) ----------------------------------------------------------------------	
+(0032) 对外变量说明：
+(0033)     
+(0034) ----------------------------------------------------------------------
+(0035) 对外函数说明：
+(0036)    
+(0037) ----------------------------------------------------------------------
+(0038) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0039) 
+(0040) #ifndef Hardware_H
+(0041) #define Hardware_H
+(0042) 
+(0043) #include <math.h>
+(0044) #include <string.h>
+(0045) #include <stdio.h>
+(0046) #include <macros.h>
+(0047) #include <eeprom.h>
+(0048) //#include <wdt.h>
+(0049) 
+(0050) /* TWI configs */
+(0051) //如使用ATMEGA162(没有TWI接口)之类的MCU，在加载Hardware.H前，务必加“#define NO_INCLUDE_I2C_H 1”语句
+(0052) #if NO_INCLUDE_I2C_H
+(0053) ;
+(0054) #else
+(0055) #include "D:\ICC_H\I2C.H"	//i2c即AVR的"twi"
+(0056) #endif
+(0057) 
+(0058) /* hard configs */
+(0059) #ifndef flash
+(0060) 	#define flash	const
+(0061) #endif
+(0062) 
+(0063) #ifndef code
+(0064) 	#define code	const
+(0065) #endif
+(0066) 
+(0067) #ifndef NOP
+(0068) 	#define NOP()	asm("nop")
+(0069) #endif
+(0070) 
+(0071) /* io configs */
+(0072) #define sbi(io,bit)		(  io |=  (1<<bit) )	//example: sbi(PORTA,0);sbi(DDRA,0);
+(0073) #define cbi(io,bit)		(  io &= ~(1<<bit) )	//example: cbi(PORTA,0);cbi(DDRA,0);
+(0074) #define gbi(pin ,bit)	( pin &   (1<<bit) )	//example: gbi(PINA,0);
+(0075) 
+(0076) /* interrupt configs */
+(0077) #define DIS_INT  asm("sei")
+(0078) #define EN_INT   asm("cli")
+(0079) 
+(0080) /* wdt configs */
+(0081) #define WDT()    asm("wdr")
+(0082) 
+(0083) /* bit operation */
+(0084) //#ifndef BIT
+(0085) //#define BIT(x)	( 1<<(x) )
+(0086) //#endif
+(0087) 
+(0088) /* USART configs for 4 Mhz crystal */
+(0089) //#define BAUD9600			25
+(0090) //#define BAUD19000			12
+(0091) //#define UART_TRAN_ON()	UCR |=  0x08
+(0092) //#define UART_TRAN_OFF()	UCR &= ~0x08
+(0093) //#define UART_RCV_ON()		UCR |=  0x10
+(0094) //#define UART_RCV_OFF()	UCR &= ~0x10
+(0095) 
+(0096) /*--------------------------------------------------------------------
+(0097) 函数全称：50us 延时
+(0098) 函数功能：当然是 50us延时 啦
+(0099) 注意事项：基于7.3728M晶振，稍微有点误差
+(0100) 提示说明：调用delay50us（20），得到1ms延时
+(0101) 输    入：	
+(0102) 返    回：无 
+(0103) --------------------------------------------------------------------*/
+(0104) void delay50us(sint16 t)
+(0105) {
+(0106)     uint8 j;		
+(0107)     for(;t>0;t--)			
+    0021A C007      RJMP	0x0222
+(0108)         for(j=0;j<70;j++)	
+    0021B 2744      CLR	R20
+    0021C C001      RJMP	0x021E
+    0021D 9543      INC	R20
+    0021E 3446      CPI	R20,0x46
+    0021F F3E8      BCS	0x021D
+    00220 5001      SUBI	R16,1
+    00221 4010      SBCI	R17,0
+    00222 2422      CLR	R2
+    00223 2433      CLR	R3
+    00224 1620      CP	R2,R16
+    00225 0631      CPC	R3,R17
+    00226 F3A4      BLT	0x021B
+    00227 9149      LD	R20,Y+
+    00228 9508      RET
+_delay50ms:
+  i                    --> R20
+  t                    --> R16
+    00229 934A      ST	-Y,R20
+    0022A 935A      ST	-Y,R21
+(0109)             ;
+(0110) }
+(0111) /*--------------------------------------------------------------------
+(0112) 函数全称：50ms 延时
+(0113) 函数功能：当然是 50ms延时 啦
+(0114) 注意事项：基于7.3728M晶振，稍微有点误差
+(0115) 提示说明：调用delay50ms（20），得到1s延时 
+(0116) 输    入：
+(0117) 返    回：无
+(0118) --------------------------------------------------------------------*/
+(0119) void delay50ms(sint16 t)
+(0120) {
+(0121) 	uint16 i; 
+(0122) 	for(;t>0;t--)
+    0022B C013      RJMP	0x023F
+(0123) 		for(i=0;i<52642;i++)
+    0022C 2744      CLR	R20
+    0022D 2755      CLR	R21
+    0022E C002      RJMP	0x0231
+    0022F 5F4F      SUBI	R20,0xFF
+    00230 4F5F      SBCI	R21,0xFF
+    00231 EA82      LDI	R24,0xA2
+    00232 EC9D      LDI	R25,0xCD
+    00233 E0A0      LDI	R26,0
+    00234 E0B0      LDI	R27,0
+    00235 011A      MOVW	R2,R20
+    00236 2444      CLR	R4
+    00237 2455      CLR	R5
+    00238 1628      CP	R2,R24
+    00239 0639      CPC	R3,R25
+    0023A 064A      CPC	R4,R26
+    0023B 065B      CPC	R5,R27
+    0023C F394      BLT	0x022F
+    0023D 5001      SUBI	R16,1
+    0023E 4010      SBCI	R17,0
+    0023F 2422      CLR	R2
+    00240 2433      CLR	R3
+    00241 1620      CP	R2,R16
+    00242 0631      CPC	R3,R17
+    00243 F344      BLT	0x022C
+    00244 9159      LD	R21,Y+
+    00245 9149      LD	R20,Y+
+    00246 9508      RET
+_delayus:
+  i                    --> R20
+  t                    --> R16
+    00247 934A      ST	-Y,R20
+    00248 935A      ST	-Y,R21
+(0124) 			; 
+(0125) }
+(0126) 
+(0127) 
+(0128) void delayus(uint16 t)
+(0129) {
+(0130) 	uint16 i;
+(0131) 	for(i=0;i<t;i++)
+    00249 2744      CLR	R20
+    0024A 2755      CLR	R21
+    0024B C002      RJMP	0x024E
+    0024C 5F4F      SUBI	R20,0xFF
+    0024D 4F5F      SBCI	R21,0xFF
+    0024E 1740      CP	R20,R16
+    0024F 0751      CPC	R21,R17
+    00250 F3D8      BCS	0x024C
+    00251 9159      LD	R21,Y+
+    00252 9149      LD	R20,Y+
+    00253 9508      RET
+_WriteAByte:
+  dat                  --> R12
+  wordAdr              --> R10
+    00254 92AA      ST	-Y,R10
+    00255 92CA      ST	-Y,R12
+    00256 2EC2      MOV	R12,R18
+    00257 2EA0      MOV	R10,R16
+    00258 9721      SBIW	R28,1
+FILE: D:\ICC_H\PCF8563.H
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                        
+(0004) 目    的:   建立PCF8563操作库
+(0005) 	
+(0006) 目标系统:   基于AVR单片机
+(0007) 		                                                                
+(0008) 应用软件:   ICCAVR
+(0009) 		                                                                
+(0010) 版    本:   Version 1.0                                                
+(0011) 		                                                                
+(0012) 圆版时间:   2005-06-25
+(0013) 	
+(0014) 开发人员:   SEE
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 	
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 入口参数说明：
+(0027) 	//#define WR_DADR	0xA2	//器件地址：A2 A1 A0 = 0 0 0
+(0028) 	//#define RD_DADR	0xA3	//器件地址：A2 A1 A0 = 0 0 0
+(0029) 
+(0030) ----------------------------------------------------------------------
+(0031) 待定参数说明：
+(0032) 
+(0033) ----------------------------------------------------------------------	
+(0034) 对外变量说明：
+(0035) 
+(0036) ----------------------------------------------------------------------
+(0037) 对外函数说明：
+(0038) 
+(0039) ----------------------------------------------------------------------
+(0040) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0041) 
+(0042) #ifndef PCF8563_H
+(0043) #define PCF8563_H
+(0044) 
+(0045) #include "D:\ICC_H\CmmICC.H"
+(0046) #include "D:\ICC_H\I2C.H"
+(0047) 
+(0048) //器件地址：A0 A1 A2 = 0 0 0
+(0049) #ifndef WR_DADR 
+(0050) 	#define WR_DADR		0xA2	//write device-address 
+(0051) #endif
+(0052) #ifndef RD_DADR 
+(0053) 	#define RD_DADR		0xA3	//read device-address
+(0054) #endif
+(0055) 
+(0056) #define CTRL_BUF1		0x00
+(0057) #define CTRL_BUF2		0x01
+(0058) 
+(0059) #define SECOND_DATA_BUF	0x02
+(0060) #define MINUTE_DATA_BUF	0x03
+(0061) #define HOUR_DATA_BUF	0x04
+(0062) 
+(0063) #define DAY_DATA_BUF	0x05
+(0064) #define WEEK_DATA_BUF	0x06
+(0065) #define MONTH_DATA_BUF	0x07
+(0066) #define YEAR_DATA_BUF	0x08
+(0067) 
+(0068) #define MINUTE_AE_BUF	0x09
+(0069) #define HOUR_AE_BUF		0x0A
+(0070) #define DAY_AE_BUF		0x0B
+(0071) #define WEEK_AE_BUF		0x0C
+(0072) 
+(0073) #define CLK_FRQ_BUF		0x0D
+(0074) #define TIMER_CTRL_BUF	0x0E
+(0075) #define COUNT_VAL_BUF	0x0F
+(0076) 
+(0077) #define PCF8563_ERR		0
+(0078) #define PCF8563_CRR		1
+(0079) 
+(0080) /*--------------------------------------------------------------------
+(0081) 函数名称：
+(0082) 函数功能：写 1个 Byte 到相应的寄存器
+(0083) 注意事项：
+(0084) 提示说明：
+(0085) 输    入：
+(0086) 返    回：
+(0087) --------------------------------------------------------------------*/
+(0088) bool WriteAByte(uint8 wordAdr,uint8 dat)
+(0089) {
+(0090) 	if( I2C_Write(WR_DADR,wordAdr,dat)==I2C_ERR )
+    00259 82C8      ST	Y,R12
+    0025A 2D2A      MOV	R18,R10
+    0025B EA02      LDI	R16,0xA2
+    0025C E010      LDI	R17,0
+    0025D DF1C      RCALL	_I2C_Write
+    0025E 2300      TST	R16
+    0025F F411      BNE	0x0262
+(0091) 		return I2C_ERR;
+    00260 2700      CLR	R16
+    00261 C001      RJMP	0x0263
+(0092) 	return I2C_CRR;
+    00262 E001      LDI	R16,1
+    00263 9621      ADIW	R28,1
+    00264 90C9      LD	R12,Y+
+    00265 90A9      LD	R10,Y+
+    00266 9508      RET
+_ReadNByte:
+  num                  --> R14
+  pRdDat               --> R12
+  wordAdr              --> R10
+    00267 940E 042D CALL	push_xgset00FC
+    00269 0169      MOVW	R12,R18
+    0026A 2EA0      MOV	R10,R16
+    0026B 9725      SBIW	R28,5
+    0026C 84EB      LDD	R14,Y+11
+(0093) }
+(0094) /*--------------------------------------------------------------------
+(0095) 函数名称：
+(0096) 函数功能：写 N个 Byte 到相应的寄存器
+(0097) 注意事项：
+(0098) 提示说明：
+(0099) 输    入：
+(0100) 返    回：
+(0101) --------------------------------------------------------------------*/
+(0102) //void WriteNByte(uint8 wordAdr,uint8 num,uint8 *pWrDat)
+(0103) //{
+(0104) //
+(0105) //}
+(0106) /*--------------------------------------------------------------------
+(0107) 函数名称：
+(0108) 函数功能：读 1个 Byte 到相应的寄存器
+(0109) 注意事项：
+(0110) 提示说明：
+(0111) 输    入：
+(0112) 返    回：
+(0113) --------------------------------------------------------------------*/
+(0114) //void ReadAByte(uint8 wordAdr,uint8 *pRdDat) 
+(0115) //{  
+(0116) //	I2C_Start();
+(0117) //
+(0118) //	I2C_SendByte(WR_DADR); 			
+(0119) //	I2C_WaitAck();
+(0120) //
+(0121) //	I2C_SendByte(wordAdr); 			
+(0122) //	I2C_WaitAck();
+(0123) //
+(0124) //	I2C_Start();
+(0125) //
+(0126) //	I2C_SendByte(RD_DADR);			
+(0127) //	I2C_WaitAck();
+(0128) //
+(0129) //	I2C_RcvByte(pRdDat);
+(0130) //	I2C_SendNoAck();
+(0131) //
+(0132) //	I2C_Stop();
+(0133) //}
+(0134) /*--------------------------------------------------------------------
+(0135) 函数名称：
+(0136) 函数功能：读 N个 Byte 到相应的寄存器
+(0137) 注意事项：
+(0138) 提示说明：
+(0139) 输    入：
+(0140) 返    回：
+(0141) --------------------------------------------------------------------*/
+(0142) bool ReadNByte(uint8 wordAdr,uint8 *pRdDat,uint8 num)
+(0143) {  
+(0144) 	if( I2C_Read_(WR_DADR,wordAdr,RD_DADR,pRdDat,num)==I2C_ERR )
+    0026D 82EC      STD	Y+4,R14
+    0026E 82DB      STD	Y+3,R13
+    0026F 82CA      STD	Y+2,R12
+    00270 EA83      LDI	R24,0xA3
+    00271 8388      ST	Y,R24
+    00272 2D2A      MOV	R18,R10
+    00273 EA02      LDI	R16,0xA2
+    00274 E010      LDI	R17,0
+    00275 DF5B      RCALL	_I2C_Read_
+    00276 2300      TST	R16
+    00277 F411      BNE	0x027A
+(0145) 		return I2C_ERR;
+    00278 2700      CLR	R16
+    00279 C001      RJMP	0x027B
+(0146) 	return I2C_CRR;
+    0027A E001      LDI	R16,1
+    0027B 9625      ADIW	R28,5
+    0027C 940C 040E JMP	pop_xgset00FC
+_PCF8563_getTime:
+  buf                  --> R20
+    0027E 940E 0434 CALL	push_xgsetF00C
+    00280 01A8      MOVW	R20,R16
+    00281 9721      SBIW	R28,1
+(0147) }
+(0148) /*--------------------------------------------------------------------
+(0149) 函数名称：
+(0150) 函数功能：获取PCF8563的时间
+(0151) 注意事项：
+(0152) 提示说明：
+(0153) 输    入：
+(0154) 返    回：
+(0155) --------------------------------------------------------------------*/
+(0156) void PCF8563_getTime(uint8 *buf)
+(0157) {
+(0158) ReadAgain:    
+(0159) 	ReadNByte(SECOND_DATA_BUF,buf,3);
+    00282 E083      LDI	R24,3
+    00283 8388      ST	Y,R24
+    00284 019A      MOVW	R18,R20
+    00285 E002      LDI	R16,2
+    00286 DFE0      RCALL	_ReadNByte
+(0160) 	buf[0]=buf[0]&0x7f;		//get second data
+    00287 01FA      MOVW	R30,R20
+    00288 8180      LD	R24,Z
+    00289 778F      ANDI	R24,0x7F
+    0028A 8380      ST	Z,R24
+(0161) 	if(buf[0]==0)
+    0028B 8020      LD	R2,Z
+    0028C 2022      TST	R2
+    0028D F409      BNE	0x028F
+(0162) 		goto ReadAgain;		//if "second==0"，read again for avoid mistake
+    0028E CFF3      RJMP	0x0282
+(0163) 	buf[1]=buf[1]&0x7f;		//get minute data
+    0028F 01CA      MOVW	R24,R20
+    00290 9601      ADIW	R24,1
+    00291 01FC      MOVW	R30,R24
+    00292 8180      LD	R24,Z
+    00293 778F      ANDI	R24,0x7F
+    00294 8380      ST	Z,R24
+(0164) 	buf[2]=buf[2]&0x3f;		//get hour data
+    00295 01CA      MOVW	R24,R20
+    00296 9602      ADIW	R24,2
+    00297 01FC      MOVW	R30,R24
+    00298 8180      LD	R24,Z
+    00299 738F      ANDI	R24,0x3F
+    0029A 8380      ST	Z,R24
+(0165) 
+(0166) 	buf[0]=changeHexToInt(buf[0]);
+    0029B 01FA      MOVW	R30,R20
+    0029C 80A0      LD	R10,Z
+    0029D 24BB      CLR	R11
+    0029E E110      LDI	R17,0x10
+    0029F 2D0A      MOV	R16,R10
+    002A0 940E 03C2 CALL	mod8u
+    002A2 2E20      MOV	R2,R16
+    002A3 2D1A      MOV	R17,R10
+    002A4 9512      SWAP	R17
+    002A5 701F      ANDI	R17,0xF
+    002A6 E00A      LDI	R16,0xA
+    002A7 0301      MULSU	R16,R17
+    002A8 2C30      MOV	R3,R0
+    002A9 0C32      ADD	R3,R2
+    002AA 01FA      MOVW	R30,R20
+    002AB 8230      ST	Z,R3
+(0167) 	buf[1]=changeHexToInt(buf[1]);
+    002AC 01BF      MOVW	R22,R30
+    002AD 5F6F      SUBI	R22,0xFF
+    002AE 4F7F      SBCI	R23,0xFF
+    002AF 01FB      MOVW	R30,R22
+    002B0 80A0      LD	R10,Z
+    002B1 24BB      CLR	R11
+    002B2 E110      LDI	R17,0x10
+    002B3 2D0A      MOV	R16,R10
+    002B4 940E 03C2 CALL	mod8u
+    002B6 2E20      MOV	R2,R16
+    002B7 2D1A      MOV	R17,R10
+    002B8 9512      SWAP	R17
+    002B9 701F      ANDI	R17,0xF
+    002BA E00A      LDI	R16,0xA
+    002BB 0301      MULSU	R16,R17
+    002BC 2C30      MOV	R3,R0
+    002BD 0C32      ADD	R3,R2
+    002BE 01FB      MOVW	R30,R22
+    002BF 8230      ST	Z,R3
+(0168) 	buf[2]=changeHexToInt(buf[2]);
+    002C0 5F4E      SUBI	R20,0xFE
+    002C1 4F5F      SBCI	R21,0xFF
+    002C2 01FA      MOVW	R30,R20
+    002C3 80A0      LD	R10,Z
+    002C4 24BB      CLR	R11
+    002C5 E110      LDI	R17,0x10
+    002C6 2D0A      MOV	R16,R10
+    002C7 940E 03C2 CALL	mod8u
+    002C9 2E20      MOV	R2,R16
+    002CA 2D1A      MOV	R17,R10
+    002CB 9512      SWAP	R17
+    002CC 701F      ANDI	R17,0xF
+    002CD E00A      LDI	R16,0xA
+    002CE 0301      MULSU	R16,R17
+    002CF 2C30      MOV	R3,R0
+    002D0 0C32      ADD	R3,R2
+    002D1 01FA      MOVW	R30,R20
+    002D2 8230      ST	Z,R3
+    002D3 9621      ADIW	R28,1
+    002D4 940C 043B JMP	pop_xgsetF00C
+_PCF8563_setTime:
+  second               --> R10
+  minute               --> R12
+  hour                 --> R14
+    002D6 940E 042D CALL	push_xgset00FC
+    002D8 2EC2      MOV	R12,R18
+    002D9 2EE0      MOV	R14,R16
+    002DA 80AE      LDD	R10,Y+6
+(0169) }
+(0170) /*--------------------------------------------------------------------
+(0171) 函数名称：
+(0172) 函数功能：设置PCF8563的时间
+(0173) 注意事项：
+(0174) 提示说明：
+(0175) 输    入：
+(0176) 返    回：
+(0177) --------------------------------------------------------------------*/
+(0178) void PCF8563_setTime(uint8 hour,uint8 minute,uint8 second)
+(0179) {
+(0180) 	hour=changeIntToHex(hour);		//将数据的Dex格式转换为Hex格式
+    002DB E01A      LDI	R17,0xA
+    002DC 2D0E      MOV	R16,R14
+    002DD 940E 03C2 CALL	mod8u
+    002DF 2E20      MOV	R2,R16
+    002E0 E01A      LDI	R17,0xA
+    002E1 2D0E      MOV	R16,R14
+    002E2 940E 03C4 CALL	div8u
+    002E4 2F80      MOV	R24,R16
+    002E5 708F      ANDI	R24,0xF
+    002E6 9582      SWAP	R24
+    002E7 2EE8      MOV	R14,R24
+    002E8 0CE2      ADD	R14,R2
+(0181) 	minute=changeIntToHex(minute);
+    002E9 E01A      LDI	R17,0xA
+    002EA 2D0C      MOV	R16,R12
+    002EB 940E 03C2 CALL	mod8u
+    002ED 2E20      MOV	R2,R16
+    002EE E01A      LDI	R17,0xA
+    002EF 2D0C      MOV	R16,R12
+    002F0 940E 03C4 CALL	div8u
+    002F2 2F80      MOV	R24,R16
+    002F3 708F      ANDI	R24,0xF
+    002F4 9582      SWAP	R24
+    002F5 2EC8      MOV	R12,R24
+    002F6 0CC2      ADD	R12,R2
+(0182) 	second=changeIntToHex(second);
+    002F7 E01A      LDI	R17,0xA
+    002F8 2D0A      MOV	R16,R10
+    002F9 940E 03C2 CALL	mod8u
+    002FB 2E20      MOV	R2,R16
+    002FC E01A      LDI	R17,0xA
+    002FD 2D0A      MOV	R16,R10
+    002FE 940E 03C4 CALL	div8u
+    00300 2F80      MOV	R24,R16
+    00301 708F      ANDI	R24,0xF
+    00302 9582      SWAP	R24
+    00303 2EA8      MOV	R10,R24
+    00304 0CA2      ADD	R10,R2
+(0183) 
+(0184) 	WriteAByte(HOUR_DATA_BUF,hour);
+    00305 2D2E      MOV	R18,R14
+    00306 E004      LDI	R16,4
+    00307 DF4C      RCALL	_WriteAByte
+(0185) 	WriteAByte(MINUTE_DATA_BUF,minute);
+    00308 2D2C      MOV	R18,R12
+    00309 E003      LDI	R16,3
+    0030A DF49      RCALL	_WriteAByte
+(0186) 	WriteAByte(SECOND_DATA_BUF,second);
+    0030B 2D2A      MOV	R18,R10
+    0030C E002      LDI	R16,2
+    0030D DF46      RCALL	_WriteAByte
+    0030E 940C 040E JMP	pop_xgset00FC
+(0187) }
+(0188) /*--------------------------------------------------------------------
+(0189) 函数名称：
+(0190) 函数功能：获取PCF8563的日期
+(0191) 注意事项：
+(0192) 提示说明：
+(0193) 输    入：
+(0194) 返    回：
+(0195) --------------------------------------------------------------------*/
+(0196) //void PCF8563_getDate()
+(0197) //{
+(0198) //
+(0199) //}
+(0200) /*--------------------------------------------------------------------
+(0201) 函数名称：
+(0202) 函数功能：设置PCF8563的日期
+(0203) 注意事项：
+(0204) 提示说明：
+(0205) 输    入：
+(0206) 返    回：
+(0207) --------------------------------------------------------------------*/
+(0208) //void PCF8563_setDate()
+(0209) //{
+(0210) //
+(0211) //}
+(0212) /*--------------------------------------------------------------------
+(0213) 函数名称：
+(0214) 函数功能：初始化PCF8563
+(0215) 注意事项：
+(0216) 提示说明：
+(0217) 输    入：
+(0218) 返    回：
+(0219) --------------------------------------------------------------------*/
+(0220) void PCF8563_init()
+(0221) {
+(0222) 	WriteAByte(CTRL_BUF1,0x00);			//basic setting
+_PCF8563_init:
+    00310 2722      CLR	R18
+    00311 2700      CLR	R16
+    00312 DF41      RCALL	_WriteAByte
+(0223) 	WriteAByte(CTRL_BUF2,0x12);			//alarm enable
+    00313 E122      LDI	R18,0x12
+    00314 E001      LDI	R16,1
+    00315 CF3E      RJMP	_WriteAByte
+FILE: E:\吴泽备份\DVK501光盘内容\M128_E~1\PCF856~1\PCF8563\PCF8563.C
+(0001) /*********************************************************************
+(0002) 	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+(0003) 		                                                            
+(0004) 项目名称:   PCF8563示例程序
+(0005) 		
+(0006) 目标系统:   “DVK501” && “M128 EX+”
+(0007) 
+(0008) 应用软件:   ICCAVR 6.31A                                             
+(0009) 		                                                                
+(0010) 版    本:   V1.0 
+(0011)                                                         
+(0012) 圆版时间:   2009-7-1
+(0013) 
+(0014) 开发人员:   zz
+(0015) 
+(0016) 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+(0017) 		
+(0018) 	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+(0019) *********************************************************************/
+(0020) 
+(0021) /*01010101010101010101010101010101010101010101010101010101010101010101
+(0022) ----------------------------------------------------------------------
+(0023) 版本更新记录：
+(0024) 
+(0025) ----------------------------------------------------------------------
+(0026) 实验内容：
+(0027) 使用DVK501上的LED，观察PCF8563反馈的时间
+(0028) ----------------------------------------------------------------------
+(0029) 硬件连接： 
+(0030) 		 	  DVK501				 M128 EX+
+(0031) 				PA7:0	---------	  LED7:0
+(0032) 				B1		---------	  SDA
+(0033) 				B2	    ---------	  SCL
+(0034) 
+(0035) ----------------------------------------------------------------------
+(0036) 注意事项：
+(0037) （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+(0038) （2）请详细阅读“使用必读”及相关资料。
+(0039) ----------------------------------------------------------------------
+(0040) 10101010101010101010101010101010101010101010101010101010101010101010*/
+(0041) 
+(0042) #include <iom128v.h>
+(0043) 
+(0044) #define WR_DADR		0xA2
+(0045) #define RD_DADR		0xA3
+(0046) #include "D:\ICC_H\PCF8563.H"
+(0047) 
+(0048) #define DISP_DDR	DDRA
+(0049) #define DISP_PORT	PORTA
+(0050) 
+(0051) /*--------------------------------------------------------------------
+(0052) 函数全称：
+(0053) 函数功能：
+(0054) 注意事项：
+(0055) 提示说明：
+(0056) 输    入：
+(0057) 返    回：
+(0058) --------------------------------------------------------------------*/
+(0059) void errDisp()	  	   	//错误显示
+(0060) {
+(0061)  	DISP_PORT = 0XAA;
+_errDisp:
+    00316 EA8A      LDI	R24,0xAA
+    00317 BB8B      OUT	0x1B,R24
+(0062) 	delay50ms(2);
+    00318 E002      LDI	R16,2
+    00319 E010      LDI	R17,0
+    0031A DF0E      RCALL	_delay50ms
+(0063) 	DISP_PORT = 0X00;
+    0031B 2422      CLR	R2
+    0031C BA2B      OUT	0x1B,R2
+(0064) 	delay50ms(2);
+    0031D E002      LDI	R16,2
+    0031E E010      LDI	R17,0
+    0031F DF09      RCALL	_delay50ms
+(0065)  	DISP_PORT = 0X55;
+    00320 E585      LDI	R24,0x55
+    00321 BB8B      OUT	0x1B,R24
+(0066) 	delay50ms(2);
+    00322 E002      LDI	R16,2
+    00323 E010      LDI	R17,0
+    00324 DF04      RCALL	_delay50ms
+(0067) 	DISP_PORT = 0X00;
+    00325 2422      CLR	R2
+    00326 BA2B      OUT	0x1B,R2
+(0068) 	delay50ms(2);
+    00327 E002      LDI	R16,2
+    00328 E010      LDI	R17,0
+    00329 CEFF      RJMP	_delay50ms
+(0069) }
+(0070) /*--------------------------------------------------------------------
+(0071) 函数全称：
+(0072) 函数功能：
+(0073) 注意事项：
+(0074) 提示说明：假设系统时钟为16M，则TWI波特率=CLK/(16+2*(TWBR)*4)=400K
+(0075) 输    入：
+(0076) 返    回：
+(0077) --------------------------------------------------------------------*/
+(0078) void twi_init()	 	 	//TWI(I2C)初始化
+(0079) {
+(0080) 	TWBR = 0X03;		//设置TWI波特率  
+_twi_init:
+    0032A E083      LDI	R24,3
+    0032B 9380 0070 STS	0x70,R24
+(0081) 	TWSR &= 0XFC;		//设置TWI预分频 为 1
+    0032D 9180 0071 LDS	R24,0x71
+    0032F 7F8C      ANDI	R24,0xFC
+    00330 9380 0071 STS	0x71,R24
+    00332 9508      RET
+_main:
+  time                 --> Y,+1
+    00333 9724      SBIW	R28,4
+(0082) }
+(0083) /*--------------------------------------------------------------------
+(0084) 函数全称：
+(0085) 函数功能：
+(0086) 注意事项：
+(0087) 提示说明：
+(0088) 输    入：
+(0089) 返    回：
+(0090) --------------------------------------------------------------------*/
+(0091) void main()
+(0092) {
+(0093) 	uint8 time[3]={0,1,2};
+    00334 E080      LDI	R24,0
+    00335 E091      LDI	R25,1
+    00336 01FE      MOVW	R30,R28
+    00337 9631      ADIW	R30,1
+    00338 E003      LDI	R16,3
+    00339 E010      LDI	R17,0
+    0033A 93FA      ST	-Y,R31
+    0033B 93EA      ST	-Y,R30
+    0033C 939A      ST	-Y,R25
+    0033D 938A      ST	-Y,R24
+    0033E 940E 0482 CALL	asgnblk
+(0094) 	
+(0095) 	DISP_DDR = 0XFF;
+    00340 EF8F      LDI	R24,0xFF
+    00341 BB8A      OUT	0x1A,R24
+(0096) 	twi_init();	
+    00342 DFE7      RCALL	_twi_init
+(0097) 	PCF8563_init();	
+    00343 DFCC      RCALL	_PCF8563_init
+(0098) 	PCF8563_setTime(9,32,7); 
+    00344 E087      LDI	R24,7
+    00345 8388      ST	Y,R24
+    00346 E220      LDI	R18,0x20
+    00347 E009      LDI	R16,0x9
+    00348 DF8D      RCALL	_PCF8563_setTime
+    00349 C006      RJMP	0x0350
+(0099) 	
+(0100) 	while(1)
+(0101) 	{	
+(0102) 		PCF8563_getTime(time);
+    0034A 018E      MOVW	R16,R28
+    0034B 5F0F      SUBI	R16,0xFF
+    0034C 4F1F      SBCI	R17,0xFF
+    0034D DF30      RCALL	_PCF8563_getTime
+(0103) 		DISP_PORT = time[0];
+FILE: <library>
+    0034E 8029      LDD	R2,Y+1
+    0034F BA2B      OUT	0x1B,R2
+    00350 CFF9      RJMP	0x034A
+    00351 9624      ADIW	R28,4
+    00352 9508      RET
+push_arg4:
+    00353 933A      ST	-Y,R19
+    00354 932A      ST	-Y,R18
+push_arg2:
+    00355 931A      ST	-Y,R17
+    00356 930A      ST	-Y,R16
+    00357 9508      RET
+div32u:
+    00358 94E8      BCLR	6
+    00359 C001      RJMP	0x035B
+mod32u:
+    0035A 9468      BSET	6
+    0035B D030      RCALL	long_div_prolog
+    0035C 24CC      CLR	R12
+    0035D C009      RJMP	0x0367
+div32s:
+    0035E 94E8      BCLR	6
+    0035F C001      RJMP	0x0361
+mod32s:
+    00360 9468      BSET	6
+    00361 D02A      RCALL	long_div_prolog
+    00362 FD37      SBRC	R19,7
+    00363 940E 0454 CALL	neg32
+    00365 FDB7      SBRC	R27,7
+    00366 D052      RCALL	neg_R24_R27
+    00367 2477      CLR	R7
+    00368 2488      CLR	R8
+    00369 2499      CLR	R9
+    0036A 24AA      CLR	R10
+    0036B 24BB      CLR	R11
+    0036C D042      RCALL	tst_R16_R19
+    0036D F0C1      BEQ	0x0386
+    0036E D045      RCALL	tst_R24_R27
+    0036F F0B1      BEQ	0x0386
+    00370 E2E8      LDI	R30,0x28
+    00371 0F00      LSL	R16
+    00372 1F11      ROL	R17
+    00373 1F22      ROL	R18
+    00374 1F33      ROL	R19
+    00375 1C77      ROL	R7
+    00376 1C88      ROL	R8
+    00377 1C99      ROL	R9
+    00378 1CAA      ROL	R10
+    00379 1CBB      ROL	R11
+    0037A 1688      CP	R8,R24
+    0037B 0699      CPC	R9,R25
+    0037C 06AA      CPC	R10,R26
+    0037D 06BB      CPC	R11,R27
+    0037E F028      BCS	0x0384
+    0037F 1A88      SUB	R8,R24
+    00380 0A99      SBC	R9,R25
+    00381 0AAA      SBC	R10,R26
+    00382 0ABB      SBC	R11,R27
+    00383 9503      INC	R16
+    00384 95EA      DEC	R30
+    00385 F759      BNE	0x0371
+    00386 F426      BRTC	0x038B
+    00387 2D08      MOV	R16,R8
+    00388 2D19      MOV	R17,R9
+    00389 2D2A      MOV	R18,R10
+    0038A 2D3B      MOV	R19,R11
+    0038B C013      RJMP	long_div_epilog
+long_div_prolog:
+    0038C 927A      ST	-Y,R7
+    0038D 928A      ST	-Y,R8
+    0038E 929A      ST	-Y,R9
+    0038F 92AA      ST	-Y,R10
+    00390 92BA      ST	-Y,R11
+    00391 92CA      ST	-Y,R12
+    00392 93EA      ST	-Y,R30
+    00393 938A      ST	-Y,R24
+    00394 939A      ST	-Y,R25
+    00395 93AA      ST	-Y,R26
+    00396 93BA      ST	-Y,R27
+    00397 858B      LDD	R24,Y+11
+    00398 859C      LDD	R25,Y+12
+    00399 85AD      LDD	R26,Y+13
+    0039A 85BE      LDD	R27,Y+14
+    0039B 2EC3      MOV	R12,R19
+    0039C F00E      BRTS	0x039E
+    0039D 26CB      EOR	R12,R27
+    0039E 9508      RET
+long_div_epilog:
+    0039F FCC7      SBRC	R12,7
+    003A0 940E 0454 CALL	neg32
+    003A2 91B9      LD	R27,Y+
+    003A3 91A9      LD	R26,Y+
+    003A4 9199      LD	R25,Y+
+    003A5 9189      LD	R24,Y+
+    003A6 91E9      LD	R30,Y+
+    003A7 90C9      LD	R12,Y+
+    003A8 90B9      LD	R11,Y+
+    003A9 90A9      LD	R10,Y+
+    003AA 9099      LD	R9,Y+
+    003AB 9089      LD	R8,Y+
+    003AC 9079      LD	R7,Y+
+    003AD 9624      ADIW	R28,4
+    003AE 9508      RET
+tst_R16_R19:
+    003AF 2FE0      MOV	R30,R16
+    003B0 2BE1      OR	R30,R17
+    003B1 2BE2      OR	R30,R18
+    003B2 2BE3      OR	R30,R19
+    003B3 9508      RET
+tst_R24_R27:
+    003B4 2FE8      MOV	R30,R24
+    003B5 2BE9      OR	R30,R25
+    003B6 2BEA      OR	R30,R26
+    003B7 2BEB      OR	R30,R27
+    003B8 9508      RET
+neg_R24_R27:
+    003B9 9580      COM	R24
+    003BA 9590      COM	R25
+    003BB 95A0      COM	R26
+    003BC 95B0      COM	R27
+    003BD 5F8F      SUBI	R24,0xFF
+    003BE 4F9F      SBCI	R25,0xFF
+    003BF 4FAF      SBCI	R26,0xFF
+    003C0 4FBF      SBCI	R27,0xFF
+    003C1 9508      RET
+mod8u:
+    003C2 9468      BSET	6
+    003C3 C001      RJMP	xdiv8u
+div8u:
+    003C4 94E8      BCLR	6
+xdiv8u:
+    003C5 932A      ST	-Y,R18
+    003C6 92FA      ST	-Y,R15
+    003C7 92EA      ST	-Y,R14
+    003C8 24FF      CLR	R15
+    003C9 24EE      CLR	R14
+    003CA E120      LDI	R18,0x10
+    003CB 0F00      LSL	R16
+    003CC 1CFF      ROL	R15
+    003CD 1CEE      ROL	R14
+    003CE 16E1      CP	R14,R17
+    003CF F010      BCS	0x03D2
+    003D0 1AE1      SUB	R14,R17
+    003D1 9503      INC	R16
+    003D2 952A      DEC	R18
+    003D3 F7B9      BNE	0x03CB
+    003D4 F40E      BRTC	0x03D6
+    003D5 2D0E      MOV	R16,R14
+    003D6 90E9      LD	R14,Y+
+    003D7 90F9      LD	R15,Y+
+    003D8 9129      LD	R18,Y+
+    003D9 9508      RET
+empy32u|empy32s:
+    003DA 940E 045D CALL	long_prolog
+    003DC 927A      ST	-Y,R7
+    003DD 940E 0476 CALL	tstzero1
+    003DF F159      BEQ	0x040B
+    003E0 2477      CLR	R7
+    003E1 940E 047C CALL	tstzero2
+    003E3 F419      BNE	0x03E7
+    003E4 018C      MOVW	R16,R24
+    003E5 019D      MOVW	R18,R26
+    003E6 C024      RJMP	0x040B
+    003E7 920A      ST	-Y,R0
+    003E8 921A      ST	-Y,R1
+    003E9 9F08      MUL	R16,R24
+    003EA 2CB0      MOV	R11,R0
+    003EB 2CA1      MOV	R10,R1
+    003EC 9F28      MUL	R18,R24
+    003ED 2C90      MOV	R9,R0
+    003EE 2C81      MOV	R8,R1
+    003EF 9F18      MUL	R17,R24
+    003F0 0CA0      ADD	R10,R0
+    003F1 1C91      ADC	R9,R1
+    003F2 1C87      ADC	R8,R7
+    003F3 9F09      MUL	R16,R25
+    003F4 0CA0      ADD	R10,R0
+    003F5 1C91      ADC	R9,R1
+    003F6 1C87      ADC	R8,R7
+    003F7 9F19      MUL	R17,R25
+    003F8 0C90      ADD	R9,R0
+    003F9 1C81      ADC	R8,R1
+    003FA 9F0A      MUL	R16,R26
+    003FB 0C90      ADD	R9,R0
+    003FC 1C81      ADC	R8,R1
+    003FD 9F38      MUL	R19,R24
+    003FE 0C80      ADD	R8,R0
+    003FF 9F29      MUL	R18,R25
+    00400 0C80      ADD	R8,R0
+    00401 9F1A      MUL	R17,R26
+    00402 0C80      ADD	R8,R0
+    00403 9F0B      MUL	R16,R27
+    00404 0C80      ADD	R8,R0
+    00405 9019      LD	R1,Y+
+    00406 9009      LD	R0,Y+
+    00407 2D0B      MOV	R16,R11
+    00408 2D1A      MOV	R17,R10
+    00409 2D29      MOV	R18,R9
+    0040A 2D38      MOV	R19,R8
+    0040B 9079      LD	R7,Y+
+    0040C 940C 046B JMP	long_epilog
+pop_xgset00FC:
+    0040E 90A9      LD	R10,Y+
+    0040F 90B9      LD	R11,Y+
+    00410 90C9      LD	R12,Y+
+    00411 90D9      LD	R13,Y+
+    00412 90E9      LD	R14,Y+
+    00413 90F9      LD	R15,Y+
+    00414 9508      RET
+pop_xgset30FC:
+    00415 90A9      LD	R10,Y+
+    00416 90B9      LD	R11,Y+
+    00417 90C9      LD	R12,Y+
+    00418 90D9      LD	R13,Y+
+    00419 90E9      LD	R14,Y+
+    0041A 90F9      LD	R15,Y+
+    0041B 9149      LD	R20,Y+
+    0041C 9159      LD	R21,Y+
+    0041D 9508      RET
+pop_xgsetF0FC:
+    0041E 90A9      LD	R10,Y+
+    0041F 90B9      LD	R11,Y+
+    00420 90C9      LD	R12,Y+
+    00421 90D9      LD	R13,Y+
+    00422 90E9      LD	R14,Y+
+    00423 90F9      LD	R15,Y+
+    00424 9149      LD	R20,Y+
+    00425 9159      LD	R21,Y+
+    00426 9169      LD	R22,Y+
+    00427 9179      LD	R23,Y+
+    00428 9508      RET
+push_xgsetF0FC:
+    00429 937A      ST	-Y,R23
+    0042A 936A      ST	-Y,R22
+push_xgset30FC:
+    0042B 935A      ST	-Y,R21
+    0042C 934A      ST	-Y,R20
+push_xgset00FC:
+    0042D 92FA      ST	-Y,R15
+    0042E 92EA      ST	-Y,R14
+push_xgset003C:
+    0042F 92DA      ST	-Y,R13
+    00430 92CA      ST	-Y,R12
+    00431 92BA      ST	-Y,R11
+    00432 92AA      ST	-Y,R10
+    00433 9508      RET
+push_xgsetF00C:
+    00434 937A      ST	-Y,R23
+    00435 936A      ST	-Y,R22
+    00436 935A      ST	-Y,R21
+    00437 934A      ST	-Y,R20
+    00438 92BA      ST	-Y,R11
+    00439 92AA      ST	-Y,R10
+    0043A 9508      RET
+pop_xgsetF00C:
+    0043B 90A9      LD	R10,Y+
+    0043C 90B9      LD	R11,Y+
+    0043D 9149      LD	R20,Y+
+    0043E 9159      LD	R21,Y+
+    0043F 9169      LD	R22,Y+
+    00440 9179      LD	R23,Y+
+    00441 9508      RET
+push_xgsetF03C:
+    00442 937A      ST	-Y,R23
+    00443 936A      ST	-Y,R22
+    00444 935A      ST	-Y,R21
+    00445 934A      ST	-Y,R20
+    00446 92DA      ST	-Y,R13
+    00447 92CA      ST	-Y,R12
+    00448 92BA      ST	-Y,R11
+    00449 92AA      ST	-Y,R10
+    0044A 9508      RET
+pop_xgsetF03C:
+    0044B 90A9      LD	R10,Y+
+    0044C 90B9      LD	R11,Y+
+    0044D 90C9      LD	R12,Y+
+    0044E 90D9      LD	R13,Y+
+    0044F 9149      LD	R20,Y+
+    00450 9159      LD	R21,Y+
+    00451 9169      LD	R22,Y+
+    00452 9179      LD	R23,Y+
+    00453 9508      RET
+neg32:
+    00454 9500      COM	R16
+    00455 9510      COM	R17
+    00456 9520      COM	R18
+    00457 9530      COM	R19
+    00458 5F0F      SUBI	R16,0xFF
+    00459 4F1F      SBCI	R17,0xFF
+    0045A 4F2F      SBCI	R18,0xFF
+    0045B 4F3F      SBCI	R19,0xFF
+    0045C 9508      RET
+long_prolog:
+    0045D 928A      ST	-Y,R8
+    0045E 929A      ST	-Y,R9
+    0045F 92AA      ST	-Y,R10
+    00460 92BA      ST	-Y,R11
+    00461 93EA      ST	-Y,R30
+    00462 938A      ST	-Y,R24
+    00463 939A      ST	-Y,R25
+    00464 93AA      ST	-Y,R26
+    00465 93BA      ST	-Y,R27
+    00466 8589      LDD	R24,Y+9
+    00467 859A      LDD	R25,Y+10
+    00468 85AB      LDD	R26,Y+11
+    00469 85BC      LDD	R27,Y+12
+    0046A 9508      RET
+long_epilog:
+    0046B 91B9      LD	R27,Y+
+    0046C 91A9      LD	R26,Y+
+    0046D 9199      LD	R25,Y+
+    0046E 9189      LD	R24,Y+
+    0046F 91E9      LD	R30,Y+
+    00470 90B9      LD	R11,Y+
+    00471 90A9      LD	R10,Y+
+    00472 9099      LD	R9,Y+
+    00473 9089      LD	R8,Y+
+    00474 9624      ADIW	R28,4
+    00475 9508      RET
+tstzero1:
+    00476 27EE      CLR	R30
+    00477 2BE0      OR	R30,R16
+    00478 2BE1      OR	R30,R17
+    00479 2BE2      OR	R30,R18
+    0047A 2BE3      OR	R30,R19
+    0047B 9508      RET
+tstzero2:
+    0047C 27EE      CLR	R30
+    0047D 2BE8      OR	R30,R24
+    0047E 2BE9      OR	R30,R25
+    0047F 2BEA      OR	R30,R26
+    00480 2BEB      OR	R30,R27
+    00481 9508      RET
+asgnblk:
+    00482 93AA      ST	-Y,R26
+    00483 93BA      ST	-Y,R27
+    00484 93EA      ST	-Y,R30
+    00485 93FA      ST	-Y,R31
+    00486 920A      ST	-Y,R0
+    00487 81AF      LDD	R26,Y+7
+    00488 85B8      LDD	R27,Y+8
+    00489 81ED      LDD	R30,Y+5
+    0048A 81FE      LDD	R31,Y+6
+    0048B 3000      CPI	R16,0
+    0048C 0701      CPC	R16,R17
+    0048D F029      BEQ	0x0493
+    0048E 9001      LD	R0,Z+
+    0048F 920D      ST	X+,R0
+    00490 5001      SUBI	R16,1
+    00491 4010      SBCI	R17,0
+    00492 CFF8      RJMP	0x048B
+    00493 9009      LD	R0,Y+
+    00494 91F9      LD	R31,Y+
+    00495 91E9      LD	R30,Y+
+    00496 91B9      LD	R27,Y+
+    00497 91A9      LD	R26,Y+
+    00498 9624      ADIW	R28,4
+    00499 9508      RET

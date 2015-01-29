@@ -1,0 +1,99 @@
+/*********************************************************************
+	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+		                                                        
+目    的:   建立使用PCF8574的示例程序
+	
+目标系统:   基于AVR单片机
+		                                                                
+应用软件:   ICCAVR
+		                                                                
+版    本:   Version 1.0                                                          
+		                                                                
+圆版时间:   2009-03-31
+	
+开发人员:   zz
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+	
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+
+----------------------------------------------------------------------
+实验内容：
+先把写数据并显示在MAX232自发自收试验
+----------------------------------------------------------------------
+硬件连接：
+
+	
+           M162+ EX     		  DVK501
+			   PA	---------  		  LED0~7
+			   
+			   DVK501				  M162+ EX
+				VCC		---------	  VCC
+				GND		---------	  GND
+				RXD1   ---------	  PE1(TXD0)
+				TXD1	---------	  PE0(RXD0)
+				
+				并将DB9接口的2脚和3脚短接
+				
+----------------------------------------------------------------------
+注意事项： 
+（1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+（2）请详细阅读“使用必读”及相关资料。
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+#include <iom162v.h>
+void UART_init(void)
+{
+// USART0 initialization
+// Communication Parameters: 8 Data, 1 Stop, No Parity
+// USART0 Receiver: On
+// USART0 Transmitter: On
+// USART0 Mode: Asynchronous
+// USART0 Baud Rate: 9600
+UCSR0A=0x00;
+UCSR0B=0x18;
+UCSR0C=0x06;
+UBRR0H=0x00;
+UBRR0L=0x2F;
+}
+
+
+//从RS232发送一个字节 
+void uart_putchar0(char c) 
+{ 
+    while(!(UCSR0A & 0x20));
+    UDR0 = c; 
+} 
+//从RS232接收一个字节 
+unsigned int uart_getchar0(void) 
+{ 
+    unsigned char status,res; 
+    if(!(UCSR0A & 0x80)) return -1;        //no data to be received 
+    status = UCSR0A; 
+    res = UDR0; 
+    if (status & 0x1c) return -1;        // If error, return -1 
+    return res; 
+} 
+//等待从RS232接收一个有效的字节 
+unsigned char uart_waitchar0(void) 
+{ 
+    unsigned int c; 
+    while((c=uart_getchar0())==-1); 
+    return (unsigned char)c; 
+} 
+
+void main(void)
+{
+ 	DDRA=0xFF;
+ 	UART_init();
+	uart_putchar0(0x55);
+	
+	PORTA=uart_waitchar0();
+	while(1);
+}

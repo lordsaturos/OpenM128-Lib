@@ -1,0 +1,266 @@
+                        .module test.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ..\..\..\M128_E~1\MAX232~1\MAX232\test.c
+ 0000                   .dbfile E:\吴泽备份\DVK501光盘内容\M128_E~1\MAX232~1\MAX232\test.c
+ 0000                   .dbfunc e UART_init _UART_init fV
+                        .even
+ 0000           _UART_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 44
+ 0000           ; /*********************************************************************
+ 0000           ;       微 雪 电 子   WaveShare   http://www.waveShare.net              
+ 0000           ;                                                                           
+ 0000           ; 项目名称:   MAX232示例程序
+ 0000           ;               
+ 0000           ; 目标系统:   “DVK501” && “M128 EX+”
+ 0000           ; 
+ 0000           ; 应用软件:   ICCAVR 6.31A                                             
+ 0000           ;                                                                               
+ 0000           ; 版    本:   V1.0 
+ 0000           ;                                                         
+ 0000           ; 圆版时间:   2009-7-1
+ 0000           ; 
+ 0000           ; 开发人员:   zz
+ 0000           ; 
+ 0000           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 0000           ;               
+ 0000           ;       深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 0000           ; *********************************************************************/
+ 0000           ; 
+ 0000           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 0000           ; ----------------------------------------------------------------------
+ 0000           ; 版本更新记录：
+ 0000           ; 
+ 0000           ; ----------------------------------------------------------------------
+ 0000           ; 实验内容：
+ 0000           ; 使用DVK501上的LED观察单片机发送的数据
+ 0000           ; ----------------------------------------------------------------------
+ 0000           ; 硬件连接： 
+ 0000           ;                           DVK501                               M128 EX+
+ 0000           ;                               RXD1   ---------          PE1(TXD0)
+ 0000           ;                               TXD1    ---------         PE0(RXD0)
+ 0000           ;                               将DB9接口的2脚和3脚短接
+ 0000           ; ----------------------------------------------------------------------
+ 0000           ; 注意事项：
+ 0000           ; （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+ 0000           ; （2）请详细阅读“使用必读”及相关资料。
+ 0000           ; ----------------------------------------------------------------------
+ 0000           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 0000           ; 
+ 0000           ; #include <iom128v.h>
+ 0000           ; 
+ 0000           ; void UART_init(void)
+ 0000           ; {
+ 0000                   .dbline 51
+ 0000           ; // USART0 initialization
+ 0000           ; // Communication Parameters: 8 Data, 1 Stop, No Parity
+ 0000           ; // USART0 Receiver: On
+ 0000           ; // USART0 Transmitter: On
+ 0000           ; // USART0 Mode: Asynchronous
+ 0000           ; // USART0 Baud Rate: 9600
+ 0000           ; UCSR0A=0x00;
+ 0000 2224              clr R2
+ 0002 2BB8              out 0xb,R2
+ 0004                   .dbline 52
+ 0004           ; UCSR0B=0x18;
+ 0004 88E1              ldi R24,24
+ 0006 8AB9              out 0xa,R24
+ 0008                   .dbline 53
+ 0008           ; UCSR0C=0x06;
+ 0008 86E0              ldi R24,6
+ 000A 80939500          sts 149,R24
+ 000E                   .dbline 54
+ 000E           ; UBRR0H=0x00;
+ 000E 20929000          sts 144,R2
+ 0012                   .dbline 55
+ 0012           ; UBRR0L=0x2F;
+ 0012 8FE2              ldi R24,47
+ 0014 89B9              out 0x9,R24
+ 0016                   .dbline -2
+ 0016           L1:
+ 0016                   .dbline 0 ; func end
+ 0016 0895              ret
+ 0018                   .dbend
+ 0018                   .dbfunc e uart_putchar0 _uart_putchar0 fV
+ 0018           ;              c -> R16
+                        .even
+ 0018           _uart_putchar0::
+ 0018                   .dbline -1
+ 0018                   .dbline 61
+ 0018           ; }
+ 0018           ; 
+ 0018           ; 
+ 0018           ; //从RS232发送一个字节 
+ 0018           ; void uart_putchar0(char c) 
+ 0018           ; { 
+ 0018           L3:
+ 0018                   .dbline 62
+ 0018           ;     while(!(UCSR0A & 0x20));
+ 0018           L4:
+ 0018                   .dbline 62
+ 0018 5D9B              sbis 0xb,5
+ 001A FECF              rjmp L3
+ 001C           X0:
+ 001C                   .dbline 63
+ 001C           ;     UDR0 = c; 
+ 001C 0CB9              out 0xc,R16
+ 001E                   .dbline -2
+ 001E           L2:
+ 001E                   .dbline 0 ; func end
+ 001E 0895              ret
+ 0020                   .dbsym r c 16 c
+ 0020                   .dbend
+ 0020                   .dbfunc e uart_getchar0 _uart_getchar0 fi
+ 0020           ;            res -> R16
+ 0020           ;         status -> R18
+                        .even
+ 0020           _uart_getchar0::
+ 0020                   .dbline -1
+ 0020                   .dbline 67
+ 0020           ; } 
+ 0020           ; //从RS232接收一个字节 
+ 0020           ; unsigned int uart_getchar0(void) 
+ 0020           ; { 
+ 0020                   .dbline 69
+ 0020           ;     unsigned char status,res; 
+ 0020           ;     if(!(UCSR0A & 0x80)) return -1;        //no data to be received 
+ 0020 5F99              sbic 0xb,7
+ 0022 03C0              rjmp L7
+ 0024           X1:
+ 0024                   .dbline 69
+ 0024 0FEF              ldi R16,65535
+ 0026 1FEF              ldi R17,255
+ 0028 09C0              rjmp L6
+ 002A           L7:
+ 002A                   .dbline 70
+ 002A           ;     status = UCSR0A; 
+ 002A 2BB1              in R18,0xb
+ 002C                   .dbline 71
+ 002C           ;     res = UDR0; 
+ 002C 0CB1              in R16,0xc
+ 002E                   .dbline 72
+ 002E           ;     if (status & 0x1c) return -1;        // If error, return -1 
+ 002E 822F              mov R24,R18
+ 0030 8C71              andi R24,28
+ 0032 19F0              breq L9
+ 0034           X2:
+ 0034                   .dbline 72
+ 0034 0FEF              ldi R16,65535
+ 0036 1FEF              ldi R17,255
+ 0038 01C0              rjmp L6
+ 003A           L9:
+ 003A                   .dbline 73
+ 003A           ;     return res; 
+ 003A 1127              clr R17
+ 003C                   .dbline -2
+ 003C           L6:
+ 003C                   .dbline 0 ; func end
+ 003C 0895              ret
+ 003E                   .dbsym r res 16 c
+ 003E                   .dbsym r status 18 c
+ 003E                   .dbend
+ 003E                   .dbfunc e uart_waitchar0 _uart_waitchar0 fc
+ 003E           ;              c -> R10,R11
+                        .even
+ 003E           _uart_waitchar0::
+ 003E AA92              st -y,R10
+ 0040 BA92              st -y,R11
+ 0042                   .dbline -1
+ 0042                   .dbline 77
+ 0042           ; } 
+ 0042           ; //等待从RS232接收一个有效的字节 
+ 0042           ; unsigned char uart_waitchar0(void) 
+ 0042           ; { 
+ 0042           L12:
+ 0042                   .dbline 79
+ 0042           ;     unsigned int c; 
+ 0042           ;     while((c=uart_getchar0())==-1); 
+ 0042           L13:
+ 0042                   .dbline 79
+ 0042 EEDF              rcall _uart_getchar0
+ 0044 5801              movw R10,R16
+ 0046 0F3F              cpi R16,255
+ 0048 EFEF              ldi R30,255
+ 004A 1E07              cpc R17,R30
+ 004C D1F3              breq L12
+ 004E           X3:
+ 004E                   .dbline 80
+ 004E           ;     return (unsigned char)c; 
+ 004E                   .dbline -2
+ 004E           L11:
+ 004E                   .dbline 0 ; func end
+ 004E B990              ld R11,y+
+ 0050 A990              ld R10,y+
+ 0052 0895              ret
+ 0054                   .dbsym r c 10 i
+ 0054                   .dbend
+ 0054                   .dbfunc e delay _delay fV
+ 0054           ;              n -> R16
+                        .even
+ 0054           _delay::
+ 0054                   .dbline -1
+ 0054                   .dbline 84
+ 0054           ; } 
+ 0054           ; 
+ 0054           ; void delay(void)
+ 0054           ; {
+ 0054                   .dbline 85
+ 0054           ;        unsigned char n=0xff;
+ 0054 0FEF              ldi R16,255
+ 0056           L16:
+ 0056                   .dbline 86
+ 0056           ;        while(n--);
+ 0056           L17:
+ 0056                   .dbline 86
+ 0056 202E              mov R2,R16
+ 0058 3324              clr R3
+ 005A 0150              subi R16,1
+ 005C 2220              tst R2
+ 005E D9F7              brne L16
+ 0060           X4:
+ 0060                   .dbline -2
+ 0060           L15:
+ 0060                   .dbline 0 ; func end
+ 0060 0895              ret
+ 0062                   .dbsym r n 16 c
+ 0062                   .dbend
+ 0062                   .dbfunc e main _main fV
+                        .even
+ 0062           _main::
+ 0062                   .dbline -1
+ 0062                   .dbline 90
+ 0062           ; }
+ 0062           ; 
+ 0062           ; void main(void)
+ 0062           ; {
+ 0062                   .dbline 91
+ 0062           ;       DDRA=0xFF;
+ 0062 8FEF              ldi R24,255
+ 0064 8ABB              out 0x1a,R24
+ 0066                   .dbline 92
+ 0066           ;       UART_init();
+ 0066 CCDF              rcall _UART_init
+ 0068                   .dbline 93
+ 0068           ;       uart_putchar0(0x55);
+ 0068 05E5              ldi R16,85
+ 006A D6DF              rcall _uart_putchar0
+ 006C                   .dbline 94
+ 006C           ;       delay();
+ 006C F3DF              rcall _delay
+ 006E                   .dbline 95
+ 006E           ;       PORTA=uart_waitchar0();
+ 006E E7DF              rcall _uart_waitchar0
+ 0070 0BBB              out 0x1b,R16
+ 0072           L20:
+ 0072                   .dbline 96
+ 0072           ;       while(1);
+ 0072           L21:
+ 0072                   .dbline 96
+ 0072 FFCF              rjmp L20
+ 0074           X5:
+ 0074                   .dbline -2
+ 0074           L19:
+ 0074                   .dbline 0 ; func end
+ 0074 0895              ret
+ 0076                   .dbend
+ 0076           ; }

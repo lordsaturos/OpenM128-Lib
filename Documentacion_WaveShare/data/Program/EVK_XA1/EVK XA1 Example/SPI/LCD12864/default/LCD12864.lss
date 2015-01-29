@@ -1,0 +1,1672 @@
+
+LCD12864.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000090e  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000014  00802000  0000090e  000009a2  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000047  00802014  00802014  000009b6  2**0
+                  ALLOC
+  3 .debug_aranges 00000040  00000000  00000000  000009b6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 00000182  00000000  00000000  000009f6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000ef6  00000000  00000000  00000b78  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000003a5  00000000  00000000  00001a6e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000008ab  00000000  00000000  00001e13  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000110  00000000  00000000  000026c0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000656  00000000  00000000  000027d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000060b  00000000  00000000  00002e26  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 fa 00 	jmp	0x1f4	; 0x1f4 <__ctors_end>
+   4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+   8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+   c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  10:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  14:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  18:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  1c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  20:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  24:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  28:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  2c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  30:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  34:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  38:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  3c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  40:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  44:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  48:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  4c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  50:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  54:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  58:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  5c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  60:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  64:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  68:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  6c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  70:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  74:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  78:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  7c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  80:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  84:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  88:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  8c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  90:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  94:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  98:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  9c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  a8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  ac:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  b8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  bc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  c8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  cc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  d8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  dc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  e8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  ec:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  f8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+  fc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 100:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 104:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 108:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 10c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 110:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 114:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 118:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 11c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 120:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 124:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 128:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 12c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 130:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 134:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 138:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 13c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 140:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 144:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 148:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 14c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 150:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 154:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 158:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 15c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 160:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 164:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 168:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 16c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 170:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 174:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 178:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 17c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 180:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 184:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 188:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 18c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 190:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 194:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 198:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 19c:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1a8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1ac:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1b8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1bc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1c8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1cc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1d8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1dc:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e4:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1e8:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1ec:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+ 1f0:	0c 94 20 01 	jmp	0x240	; 0x240 <__bad_interrupt>
+
+000001f4 <__ctors_end>:
+ 1f4:	11 24       	eor	r1, r1
+ 1f6:	1f be       	out	0x3f, r1	; 63
+ 1f8:	cf ef       	ldi	r28, 0xFF	; 255
+ 1fa:	df e3       	ldi	r29, 0x3F	; 63
+ 1fc:	de bf       	out	0x3e, r29	; 62
+ 1fe:	cd bf       	out	0x3d, r28	; 61
+ 200:	00 e0       	ldi	r16, 0x00	; 0
+ 202:	0c bf       	out	0x3c, r16	; 60
+ 204:	18 be       	out	0x38, r1	; 56
+ 206:	19 be       	out	0x39, r1	; 57
+ 208:	1a be       	out	0x3a, r1	; 58
+ 20a:	1b be       	out	0x3b, r1	; 59
+
+0000020c <__do_copy_data>:
+ 20c:	10 e2       	ldi	r17, 0x20	; 32
+ 20e:	a0 e0       	ldi	r26, 0x00	; 0
+ 210:	b0 e2       	ldi	r27, 0x20	; 32
+ 212:	ee e0       	ldi	r30, 0x0E	; 14
+ 214:	f9 e0       	ldi	r31, 0x09	; 9
+ 216:	00 e0       	ldi	r16, 0x00	; 0
+ 218:	0b bf       	out	0x3b, r16	; 59
+ 21a:	02 c0       	rjmp	.+4      	; 0x220 <__do_copy_data+0x14>
+ 21c:	07 90       	elpm	r0, Z+
+ 21e:	0d 92       	st	X+, r0
+ 220:	a4 31       	cpi	r26, 0x14	; 20
+ 222:	b1 07       	cpc	r27, r17
+ 224:	d9 f7       	brne	.-10     	; 0x21c <__do_copy_data+0x10>
+ 226:	1b be       	out	0x3b, r1	; 59
+
+00000228 <__do_clear_bss>:
+ 228:	10 e2       	ldi	r17, 0x20	; 32
+ 22a:	a4 e1       	ldi	r26, 0x14	; 20
+ 22c:	b0 e2       	ldi	r27, 0x20	; 32
+ 22e:	01 c0       	rjmp	.+2      	; 0x232 <.do_clear_bss_start>
+
+00000230 <.do_clear_bss_loop>:
+ 230:	1d 92       	st	X+, r1
+
+00000232 <.do_clear_bss_start>:
+ 232:	ab 35       	cpi	r26, 0x5B	; 91
+ 234:	b1 07       	cpc	r27, r17
+ 236:	e1 f7       	brne	.-8      	; 0x230 <.do_clear_bss_loop>
+ 238:	0e 94 fb 03 	call	0x7f6	; 0x7f6 <main>
+ 23c:	0c 94 85 04 	jmp	0x90a	; 0x90a <_exit>
+
+00000240 <__bad_interrupt>:
+ 240:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000244 <SPI_MasterInit>:
+                    bool lsbFirst,
+                    SPI_MODE_t mode,
+                    SPI_INTLVL_t intLevel,
+                    bool clk2x,
+                    SPI_PRESCALER_t clockDivision)
+{
+ 244:	af 92       	push	r10
+ 246:	cf 92       	push	r12
+ 248:	ef 92       	push	r14
+ 24a:	0f 93       	push	r16
+ 24c:	dc 01       	movw	r26, r24
+ 24e:	fb 01       	movw	r30, r22
+	spi->module         = module;
+ 250:	6d 93       	st	X+, r22
+ 252:	7c 93       	st	X, r23
+ 254:	11 97       	sbiw	r26, 0x01	; 1
+	spi->port           = port;
+ 256:	12 96       	adiw	r26, 0x02	; 2
+ 258:	4d 93       	st	X+, r20
+ 25a:	5c 93       	st	X, r21
+ 25c:	13 97       	sbiw	r26, 0x03	; 3
+	spi->interrupted    = false;
+ 25e:	14 96       	adiw	r26, 0x04	; 4
+ 260:	1c 92       	st	X, r1
+ 262:	14 97       	sbiw	r26, 0x04	; 4
+
+	spi->module->CTRL   = clockDivision |                  /* SPI prescaler. */
+ 264:	cc 20       	and	r12, r12
+ 266:	11 f4       	brne	.+4      	; 0x26c <SPI_MasterInit+0x28>
+ 268:	90 e0       	ldi	r25, 0x00	; 0
+ 26a:	01 c0       	rjmp	.+2      	; 0x26e <SPI_MasterInit+0x2a>
+ 26c:	90 e8       	ldi	r25, 0x80	; 128
+ 26e:	22 23       	and	r18, r18
+ 270:	11 f4       	brne	.+4      	; 0x276 <SPI_MasterInit+0x32>
+ 272:	80 e0       	ldi	r24, 0x00	; 0
+ 274:	01 c0       	rjmp	.+2      	; 0x278 <SPI_MasterInit+0x34>
+ 276:	80 e2       	ldi	r24, 0x20	; 32
+ 278:	00 65       	ori	r16, 0x50	; 80
+ 27a:	0a 29       	or	r16, r10
+ 27c:	90 2b       	or	r25, r16
+ 27e:	89 2b       	or	r24, r25
+ 280:	80 83       	st	Z, r24
+	                      (lsbFirst ? SPI_DORD_bm  : 0) |  /* Data order. */
+	                      SPI_MASTER_bm |                  /* SPI master. */
+	                      mode;                            /* SPI mode. */
+
+	/* Interrupt level. */
+	spi->module->INTCTRL = intLevel;
+ 282:	ed 91       	ld	r30, X+
+ 284:	fc 91       	ld	r31, X
+ 286:	11 97       	sbiw	r26, 0x01	; 1
+ 288:	e1 82       	std	Z+1, r14	; 0x01
+
+	/* No assigned data packet. */
+	spi->dataPacket = NULL;
+ 28a:	15 96       	adiw	r26, 0x05	; 5
+ 28c:	1d 92       	st	X+, r1
+ 28e:	1c 92       	st	X, r1
+ 290:	16 97       	sbiw	r26, 0x06	; 6
+
+ 	/* MOSI and SCK as output. */
+	spi->port->DIRSET  = SPI_MOSI_bm | SPI_SCK_bm;
+ 292:	12 96       	adiw	r26, 0x02	; 2
+ 294:	ed 91       	ld	r30, X+
+ 296:	fc 91       	ld	r31, X
+ 298:	13 97       	sbiw	r26, 0x03	; 3
+ 29a:	80 ea       	ldi	r24, 0xA0	; 160
+ 29c:	81 83       	std	Z+1, r24	; 0x01
+}
+ 29e:	0f 91       	pop	r16
+ 2a0:	ef 90       	pop	r14
+ 2a2:	cf 90       	pop	r12
+ 2a4:	af 90       	pop	r10
+ 2a6:	08 95       	ret
+
+000002a8 <SPI_SlaveInit>:
+                   SPI_t *module,
+                   PORT_t *port,
+                   bool lsbFirst,
+                   SPI_MODE_t mode,
+                   SPI_INTLVL_t intLevel)
+{
+ 2a8:	ef 92       	push	r14
+ 2aa:	0f 93       	push	r16
+ 2ac:	dc 01       	movw	r26, r24
+ 2ae:	fb 01       	movw	r30, r22
+	/* SPI module. */
+	spi->module       = module;
+ 2b0:	6d 93       	st	X+, r22
+ 2b2:	7c 93       	st	X, r23
+ 2b4:	11 97       	sbiw	r26, 0x01	; 1
+	spi->port         = port;
+ 2b6:	12 96       	adiw	r26, 0x02	; 2
+ 2b8:	4d 93       	st	X+, r20
+ 2ba:	5c 93       	st	X, r21
+ 2bc:	13 97       	sbiw	r26, 0x03	; 3
+
+	spi->module->CTRL = SPI_ENABLE_bm |                /* Enable SPI module. */
+ 2be:	22 23       	and	r18, r18
+ 2c0:	11 f4       	brne	.+4      	; 0x2c6 <SPI_SlaveInit+0x1e>
+ 2c2:	80 e4       	ldi	r24, 0x40	; 64
+ 2c4:	01 c0       	rjmp	.+2      	; 0x2c8 <SPI_SlaveInit+0x20>
+ 2c6:	80 e6       	ldi	r24, 0x60	; 96
+ 2c8:	80 2b       	or	r24, r16
+ 2ca:	80 83       	st	Z, r24
+	                    (lsbFirst ? SPI_DORD_bm : 0) | /* Data order. */
+	                    mode;                          /* SPI mode. */
+
+	/* Interrupt level. */
+	spi->module->INTCTRL = intLevel;
+ 2cc:	ed 91       	ld	r30, X+
+ 2ce:	fc 91       	ld	r31, X
+ 2d0:	11 97       	sbiw	r26, 0x01	; 1
+ 2d2:	e1 82       	std	Z+1, r14	; 0x01
+
+	/* MISO as output. */
+	spi->port->DIRSET = SPI_MISO_bm;
+ 2d4:	12 96       	adiw	r26, 0x02	; 2
+ 2d6:	ed 91       	ld	r30, X+
+ 2d8:	fc 91       	ld	r31, X
+ 2da:	13 97       	sbiw	r26, 0x03	; 3
+ 2dc:	80 e4       	ldi	r24, 0x40	; 64
+ 2de:	81 83       	std	Z+1, r24	; 0x01
+}
+ 2e0:	0f 91       	pop	r16
+ 2e2:	ef 90       	pop	r14
+ 2e4:	08 95       	ret
+
+000002e6 <SPI_MasterCreateDataPacket>:
+                                const uint8_t *transmitData,
+                                uint8_t *receiveData,
+                                uint8_t bytesToTransceive,
+                                PORT_t *ssPort,
+                                uint8_t ssPinMask)
+{
+ 2e6:	ef 92       	push	r14
+ 2e8:	0f 93       	push	r16
+ 2ea:	1f 93       	push	r17
+ 2ec:	fc 01       	movw	r30, r24
+	dataPacket->ssPort            = ssPort;
+ 2ee:	00 83       	st	Z, r16
+ 2f0:	11 83       	std	Z+1, r17	; 0x01
+	dataPacket->ssPinMask         = ssPinMask;
+ 2f2:	e2 82       	std	Z+2, r14	; 0x02
+	dataPacket->transmitData      = transmitData;
+ 2f4:	63 83       	std	Z+3, r22	; 0x03
+ 2f6:	74 83       	std	Z+4, r23	; 0x04
+	dataPacket->receiveData       = receiveData;
+ 2f8:	45 83       	std	Z+5, r20	; 0x05
+ 2fa:	56 83       	std	Z+6, r21	; 0x06
+	dataPacket->bytesToTransceive  = bytesToTransceive;
+ 2fc:	27 83       	std	Z+7, r18	; 0x07
+	dataPacket->bytesTransceived   = 0;
+ 2fe:	10 86       	std	Z+8, r1	; 0x08
+	dataPacket->complete          = false;
+ 300:	11 86       	std	Z+9, r1	; 0x09
+}
+ 302:	1f 91       	pop	r17
+ 304:	0f 91       	pop	r16
+ 306:	ef 90       	pop	r14
+ 308:	08 95       	ret
+
+0000030a <SPI_MasterInterruptHandler>:
+ *  a pointer to the related SPI_Master_t struct as argument.
+ *
+ *  \param spi        Pointer to the modules own SPI_Master_t struct.
+ */
+void SPI_MasterInterruptHandler(SPI_Master_t *spi)
+{
+ 30a:	cf 93       	push	r28
+ 30c:	df 93       	push	r29
+ 30e:	dc 01       	movw	r26, r24
+	uint8_t data;
+	uint8_t bytesTransceived = spi->dataPacket->bytesTransceived;
+ 310:	15 96       	adiw	r26, 0x05	; 5
+ 312:	cd 91       	ld	r28, X+
+ 314:	dc 91       	ld	r29, X
+ 316:	16 97       	sbiw	r26, 0x06	; 6
+ 318:	98 85       	ldd	r25, Y+8	; 0x08
+
+	/* If SS pin interrupt (SS used and pulled low).
+	*  No data received at this point. */
+	if ( !(spi->module->CTRL & SPI_MASTER_bm) ) {
+ 31a:	ed 91       	ld	r30, X+
+ 31c:	fc 91       	ld	r31, X
+ 31e:	11 97       	sbiw	r26, 0x01	; 1
+ 320:	80 81       	ld	r24, Z
+ 322:	84 fd       	sbrc	r24, 4
+ 324:	05 c0       	rjmp	.+10     	; 0x330 <SPI_MasterInterruptHandler+0x26>
+		spi->interrupted = true;
+ 326:	81 e0       	ldi	r24, 0x01	; 1
+ 328:	14 96       	adiw	r26, 0x04	; 4
+ 32a:	8c 93       	st	X, r24
+ 32c:	14 97       	sbiw	r26, 0x04	; 4
+ 32e:	24 c0       	rjmp	.+72     	; 0x378 <SPI_MasterInterruptHandler+0x6e>
+	}
+
+	else {  /* Data interrupt. */
+
+		/* Store received data. */
+		data = spi->module->DATA;
+ 330:	83 81       	ldd	r24, Z+3	; 0x03
+		spi->dataPacket->receiveData[bytesTransceived] = data;
+ 332:	ed 81       	ldd	r30, Y+5	; 0x05
+ 334:	fe 81       	ldd	r31, Y+6	; 0x06
+ 336:	e9 0f       	add	r30, r25
+ 338:	f1 1d       	adc	r31, r1
+ 33a:	80 83       	st	Z, r24
+
+		/* Next byte. */
+		bytesTransceived++;
+ 33c:	9f 5f       	subi	r25, 0xFF	; 255
+
+		/* If more data. */
+		if (bytesTransceived < spi->dataPacket->bytesToTransceive) {
+ 33e:	15 96       	adiw	r26, 0x05	; 5
+ 340:	ed 91       	ld	r30, X+
+ 342:	fc 91       	ld	r31, X
+ 344:	16 97       	sbiw	r26, 0x06	; 6
+ 346:	87 81       	ldd	r24, Z+7	; 0x07
+ 348:	98 17       	cp	r25, r24
+ 34a:	58 f4       	brcc	.+22     	; 0x362 <SPI_MasterInterruptHandler+0x58>
+			/* Put data byte in transmit data register. */
+			data = spi->dataPacket->transmitData[bytesTransceived];
+ 34c:	03 80       	ldd	r0, Z+3	; 0x03
+ 34e:	f4 81       	ldd	r31, Z+4	; 0x04
+ 350:	e0 2d       	mov	r30, r0
+ 352:	e9 0f       	add	r30, r25
+ 354:	f1 1d       	adc	r31, r1
+ 356:	80 81       	ld	r24, Z
+			spi->module->DATA = data;
+ 358:	ed 91       	ld	r30, X+
+ 35a:	fc 91       	ld	r31, X
+ 35c:	11 97       	sbiw	r26, 0x01	; 1
+ 35e:	83 83       	std	Z+3, r24	; 0x03
+ 360:	0b c0       	rjmp	.+22     	; 0x378 <SPI_MasterInterruptHandler+0x6e>
+
+		/* Transmission complete. */
+		else {
+
+			/* Release SS to slave(s). */
+			uint8_t ssPinMask = spi->dataPacket->ssPinMask;
+ 362:	82 81       	ldd	r24, Z+2	; 0x02
+			SPI_MasterSSHigh(spi->dataPacket->ssPort, ssPinMask);
+ 364:	01 90       	ld	r0, Z+
+ 366:	f0 81       	ld	r31, Z
+ 368:	e0 2d       	mov	r30, r0
+ 36a:	85 83       	std	Z+5, r24	; 0x05
+
+			spi->dataPacket->complete = true;
+ 36c:	15 96       	adiw	r26, 0x05	; 5
+ 36e:	ed 91       	ld	r30, X+
+ 370:	fc 91       	ld	r31, X
+ 372:	16 97       	sbiw	r26, 0x06	; 6
+ 374:	81 e0       	ldi	r24, 0x01	; 1
+ 376:	81 87       	std	Z+9, r24	; 0x09
+		}
+	}
+	/* Write back bytesTransceived to data packet. */
+	spi->dataPacket->bytesTransceived = bytesTransceived;
+ 378:	15 96       	adiw	r26, 0x05	; 5
+ 37a:	ed 91       	ld	r30, X+
+ 37c:	fc 91       	ld	r31, X
+ 37e:	16 97       	sbiw	r26, 0x06	; 6
+ 380:	90 87       	std	Z+8, r25	; 0x08
+}
+ 382:	df 91       	pop	r29
+ 384:	cf 91       	pop	r28
+ 386:	08 95       	ret
+
+00000388 <SPI_MasterInterruptTransceivePacket>:
+ *  \retval SPI_BUSY          The SPI module is busy.
+ *  \retval SPI_INTERRUPTED   The transmission was interrupted by another master.
+ */
+uint8_t SPI_MasterInterruptTransceivePacket(SPI_Master_t *spi,
+                                            SPI_DataPacket_t *dataPacket)
+{
+ 388:	cf 93       	push	r28
+ 38a:	df 93       	push	r29
+ 38c:	dc 01       	movw	r26, r24
+ 38e:	eb 01       	movw	r28, r22
+	uint8_t data;
+	bool interrupted = spi->interrupted;
+ 390:	14 96       	adiw	r26, 0x04	; 4
+ 392:	9c 91       	ld	r25, X
+ 394:	14 97       	sbiw	r26, 0x04	; 4
+
+	/* If no packets sent so far. */
+	if (spi->dataPacket == NULL) {
+ 396:	15 96       	adiw	r26, 0x05	; 5
+ 398:	ed 91       	ld	r30, X+
+ 39a:	fc 91       	ld	r31, X
+ 39c:	16 97       	sbiw	r26, 0x06	; 6
+ 39e:	30 97       	sbiw	r30, 0x00	; 0
+ 3a0:	29 f4       	brne	.+10     	; 0x3ac <SPI_MasterInterruptTransceivePacket+0x24>
+		spi->dataPacket = dataPacket;
+ 3a2:	15 96       	adiw	r26, 0x05	; 5
+ 3a4:	6d 93       	st	X+, r22
+ 3a6:	7c 93       	st	X, r23
+ 3a8:	16 97       	sbiw	r26, 0x06	; 6
+ 3aa:	10 c0       	rjmp	.+32     	; 0x3cc <SPI_MasterInterruptTransceivePacket+0x44>
+	}
+
+	/* If ongoing transmission. */
+	else if (spi->dataPacket->complete == false) {
+ 3ac:	81 85       	ldd	r24, Z+9	; 0x09
+ 3ae:	88 23       	and	r24, r24
+ 3b0:	11 f4       	brne	.+4      	; 0x3b6 <SPI_MasterInterruptTransceivePacket+0x2e>
+ 3b2:	82 e0       	ldi	r24, 0x02	; 2
+ 3b4:	28 c0       	rjmp	.+80     	; 0x406 <SPI_MasterInterruptTransceivePacket+0x7e>
+		return (SPI_BUSY);
+	}
+
+	/* If interrupted by other master. */
+	else if (interrupted) {
+ 3b6:	99 23       	and	r25, r25
+ 3b8:	49 f0       	breq	.+18     	; 0x3cc <SPI_MasterInterruptTransceivePacket+0x44>
+		/* If SS released. */
+		if (spi->port->OUT & SPI_SS_bm) {
+ 3ba:	12 96       	adiw	r26, 0x02	; 2
+ 3bc:	ed 91       	ld	r30, X+
+ 3be:	fc 91       	ld	r31, X
+ 3c0:	13 97       	sbiw	r26, 0x03	; 3
+ 3c2:	84 81       	ldd	r24, Z+4	; 0x04
+ 3c4:	84 fd       	sbrc	r24, 4
+ 3c6:	02 c0       	rjmp	.+4      	; 0x3cc <SPI_MasterInterruptTransceivePacket+0x44>
+ 3c8:	81 e0       	ldi	r24, 0x01	; 1
+ 3ca:	1d c0       	rjmp	.+58     	; 0x406 <SPI_MasterInterruptTransceivePacket+0x7e>
+		}
+	}
+
+	/* NOT interrupted by other master.
+	* Start transmission. */
+	spi->dataPacket = dataPacket;
+ 3cc:	15 96       	adiw	r26, 0x05	; 5
+ 3ce:	cd 93       	st	X+, r28
+ 3d0:	dc 93       	st	X, r29
+ 3d2:	16 97       	sbiw	r26, 0x06	; 6
+	spi->dataPacket->complete = false;
+ 3d4:	19 86       	std	Y+9, r1	; 0x09
+	spi->interrupted = false;
+ 3d6:	14 96       	adiw	r26, 0x04	; 4
+ 3d8:	1c 92       	st	X, r1
+ 3da:	14 97       	sbiw	r26, 0x04	; 4
+
+	/* SS to slave(s) low.*/
+	uint8_t ssPinMask = spi->dataPacket->ssPinMask;
+ 3dc:	8a 81       	ldd	r24, Y+2	; 0x02
+	SPI_MasterSSLow(spi->dataPacket->ssPort, ssPinMask);
+ 3de:	e8 81       	ld	r30, Y
+ 3e0:	f9 81       	ldd	r31, Y+1	; 0x01
+ 3e2:	86 83       	std	Z+6, r24	; 0x06
+
+	spi->dataPacket->bytesTransceived = 0;
+ 3e4:	15 96       	adiw	r26, 0x05	; 5
+ 3e6:	ed 91       	ld	r30, X+
+ 3e8:	fc 91       	ld	r31, X
+ 3ea:	16 97       	sbiw	r26, 0x06	; 6
+ 3ec:	10 86       	std	Z+8, r1	; 0x08
+
+	/* Start sending data. */
+	data = spi->dataPacket->transmitData[0];
+ 3ee:	15 96       	adiw	r26, 0x05	; 5
+ 3f0:	ed 91       	ld	r30, X+
+ 3f2:	fc 91       	ld	r31, X
+ 3f4:	16 97       	sbiw	r26, 0x06	; 6
+ 3f6:	03 80       	ldd	r0, Z+3	; 0x03
+ 3f8:	f4 81       	ldd	r31, Z+4	; 0x04
+ 3fa:	e0 2d       	mov	r30, r0
+ 3fc:	80 81       	ld	r24, Z
+	spi->module->DATA = data;
+ 3fe:	ed 91       	ld	r30, X+
+ 400:	fc 91       	ld	r31, X
+ 402:	83 83       	std	Z+3, r24	; 0x03
+ 404:	80 e0       	ldi	r24, 0x00	; 0
+
+	/* Successs */
+	return (SPI_OK);
+}
+ 406:	df 91       	pop	r29
+ 408:	cf 91       	pop	r28
+ 40a:	08 95       	ret
+
+0000040c <SPI_MasterTransceiveByte>:
+ *  \param TXdata     Data to transmit to slave.
+ *
+ *  \return           Data received from slave.
+ */
+uint8_t SPI_MasterTransceiveByte(SPI_Master_t *spi, uint8_t TXdata)
+{
+ 40c:	fc 01       	movw	r30, r24
+	/* Send pattern. */
+	spi->module->DATA = TXdata;
+ 40e:	a0 81       	ld	r26, Z
+ 410:	b1 81       	ldd	r27, Z+1	; 0x01
+ 412:	13 96       	adiw	r26, 0x03	; 3
+ 414:	6c 93       	st	X, r22
+
+	/* Wait for transmission complete. */
+	while(!(spi->module->STATUS & SPI_IF_bm)) {
+ 416:	01 90       	ld	r0, Z+
+ 418:	f0 81       	ld	r31, Z
+ 41a:	e0 2d       	mov	r30, r0
+ 41c:	82 81       	ldd	r24, Z+2	; 0x02
+ 41e:	87 ff       	sbrs	r24, 7
+ 420:	fd cf       	rjmp	.-6      	; 0x41c <SPI_MasterTransceiveByte+0x10>
+
+	}
+	/* Read received data. */
+	uint8_t result = spi->module->DATA;
+ 422:	83 81       	ldd	r24, Z+3	; 0x03
+
+	return(result);
+}
+ 424:	08 95       	ret
+
+00000426 <SPI_MasterTransceivePacket>:
+ *  \retval true	   Success
+ *  \retval false	   Failure
+ */
+bool SPI_MasterTransceivePacket(SPI_Master_t *spi,
+                                SPI_DataPacket_t *dataPacket)
+{
+ 426:	cf 93       	push	r28
+ 428:	df 93       	push	r29
+ 42a:	ec 01       	movw	r28, r24
+ 42c:	fb 01       	movw	r30, r22
+	/* Check if data packet has been created. */
+	if(dataPacket == NULL) {
+ 42e:	61 15       	cp	r22, r1
+ 430:	71 05       	cpc	r23, r1
+ 432:	11 f4       	brne	.+4      	; 0x438 <SPI_MasterTransceivePacket+0x12>
+ 434:	80 e0       	ldi	r24, 0x00	; 0
+ 436:	37 c0       	rjmp	.+110    	; 0x4a6 <SPI_MasterTransceivePacket+0x80>
+		return false;
+	}
+
+	/* Assign datapacket to SPI module. */
+	spi->dataPacket = dataPacket;
+ 438:	6d 83       	std	Y+5, r22	; 0x05
+ 43a:	7e 83       	std	Y+6, r23	; 0x06
+
+	uint8_t ssPinMask = spi->dataPacket->ssPinMask;
+ 43c:	42 81       	ldd	r20, Z+2	; 0x02
+
+	/* If SS signal to slave(s). */
+	if (spi->dataPacket->ssPort != NULL) {
+ 43e:	a0 81       	ld	r26, Z
+ 440:	b1 81       	ldd	r27, Z+1	; 0x01
+ 442:	10 97       	sbiw	r26, 0x00	; 0
+ 444:	11 f0       	breq	.+4      	; 0x44a <SPI_MasterTransceivePacket+0x24>
+		/* SS to slave(s) low. */
+		SPI_MasterSSLow(spi->dataPacket->ssPort, ssPinMask);
+ 446:	16 96       	adiw	r26, 0x06	; 6
+ 448:	4c 93       	st	X, r20
+	}
+
+	/* Transceive bytes. */
+	uint8_t bytesTransceived = 0;
+	uint8_t bytesToTransceive = dataPacket->bytesToTransceive;
+ 44a:	67 81       	ldd	r22, Z+7	; 0x07
+ 44c:	90 e0       	ldi	r25, 0x00	; 0
+ 44e:	1a c0       	rjmp	.+52     	; 0x484 <SPI_MasterTransceivePacket+0x5e>
+	while (bytesTransceived < bytesToTransceive) {
+
+		/* Send pattern. */
+		uint8_t data = spi->dataPacket->transmitData[bytesTransceived];
+ 450:	29 2f       	mov	r18, r25
+ 452:	30 e0       	ldi	r19, 0x00	; 0
+ 454:	03 80       	ldd	r0, Z+3	; 0x03
+ 456:	f4 81       	ldd	r31, Z+4	; 0x04
+ 458:	e0 2d       	mov	r30, r0
+ 45a:	e2 0f       	add	r30, r18
+ 45c:	f3 1f       	adc	r31, r19
+ 45e:	80 81       	ld	r24, Z
+		spi->module->DATA = data;
+ 460:	e8 81       	ld	r30, Y
+ 462:	f9 81       	ldd	r31, Y+1	; 0x01
+ 464:	83 83       	std	Z+3, r24	; 0x03
+
+		/* Wait for transmission complete. */
+		while(!(spi->module->STATUS & SPI_IF_bm)) {
+ 466:	e8 81       	ld	r30, Y
+ 468:	f9 81       	ldd	r31, Y+1	; 0x01
+ 46a:	82 81       	ldd	r24, Z+2	; 0x02
+ 46c:	87 ff       	sbrs	r24, 7
+ 46e:	fd cf       	rjmp	.-6      	; 0x46a <SPI_MasterTransceivePacket+0x44>
+
+		}
+		/* Read received data. */
+		data = spi->module->DATA;
+ 470:	83 81       	ldd	r24, Z+3	; 0x03
+		spi->dataPacket->receiveData[bytesTransceived] = data;
+ 472:	ed 81       	ldd	r30, Y+5	; 0x05
+ 474:	fe 81       	ldd	r31, Y+6	; 0x06
+ 476:	05 80       	ldd	r0, Z+5	; 0x05
+ 478:	f6 81       	ldd	r31, Z+6	; 0x06
+ 47a:	e0 2d       	mov	r30, r0
+ 47c:	e2 0f       	add	r30, r18
+ 47e:	f3 1f       	adc	r31, r19
+ 480:	80 83       	st	Z, r24
+
+		bytesTransceived++;
+ 482:	9f 5f       	subi	r25, 0xFF	; 255
+ 484:	ed 81       	ldd	r30, Y+5	; 0x05
+ 486:	fe 81       	ldd	r31, Y+6	; 0x06
+	}
+
+	/* Transceive bytes. */
+	uint8_t bytesTransceived = 0;
+	uint8_t bytesToTransceive = dataPacket->bytesToTransceive;
+	while (bytesTransceived < bytesToTransceive) {
+ 488:	96 17       	cp	r25, r22
+ 48a:	10 f3       	brcs	.-60     	; 0x450 <SPI_MasterTransceivePacket+0x2a>
+
+		bytesTransceived++;
+	}
+
+	/* If SS signal to slave(s). */
+	if (spi->dataPacket->ssPort != NULL) {
+ 48c:	01 90       	ld	r0, Z+
+ 48e:	f0 81       	ld	r31, Z
+ 490:	e0 2d       	mov	r30, r0
+ 492:	30 97       	sbiw	r30, 0x00	; 0
+ 494:	09 f0       	breq	.+2      	; 0x498 <SPI_MasterTransceivePacket+0x72>
+		/* Release SS to slave(s). */
+		SPI_MasterSSHigh(spi->dataPacket->ssPort, ssPinMask);
+ 496:	45 83       	std	Z+5, r20	; 0x05
+	}
+
+	/* Set variables to indicate that transmission is complete. */
+	spi->dataPacket->bytesTransceived = bytesTransceived;
+ 498:	ed 81       	ldd	r30, Y+5	; 0x05
+ 49a:	fe 81       	ldd	r31, Y+6	; 0x06
+ 49c:	60 87       	std	Z+8, r22	; 0x08
+	spi->dataPacket->complete = true;
+ 49e:	ed 81       	ldd	r30, Y+5	; 0x05
+ 4a0:	fe 81       	ldd	r31, Y+6	; 0x06
+ 4a2:	81 e0       	ldi	r24, 0x01	; 1
+ 4a4:	81 87       	std	Z+9, r24	; 0x09
+
+	/* Report success. */
+	return true;
+}
+ 4a6:	df 91       	pop	r29
+ 4a8:	cf 91       	pop	r28
+ 4aa:	08 95       	ret
+
+000004ac <decToAscii>:
+*	width是转换成ASCII后的宽度(高位填充'0')
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void decToAscii(uint8_t* str,uint16_t dec,uint8_t width)
+{
+ 4ac:	1f 93       	push	r17
+ 4ae:	fc 01       	movw	r30, r24
+ 4b0:	9b 01       	movw	r18, r22
+			case 1:
+			{
+				*str = (dec+'0');
+				break;
+			}
+			default: *str = '0';
+ 4b2:	10 e3       	ldi	r17, 0x30	; 48
+ 4b4:	43 c0       	rjmp	.+134    	; 0x53c <decToAscii+0x90>
+*/
+void decToAscii(uint8_t* str,uint16_t dec,uint8_t width)
+{
+	while(width)
+	{
+		switch(width)
+ 4b6:	43 30       	cpi	r20, 0x03	; 3
+ 4b8:	21 f1       	breq	.+72     	; 0x502 <decToAscii+0x56>
+ 4ba:	44 30       	cpi	r20, 0x04	; 4
+ 4bc:	28 f4       	brcc	.+10     	; 0x4c8 <decToAscii+0x1c>
+ 4be:	41 30       	cpi	r20, 0x01	; 1
+ 4c0:	b1 f1       	breq	.+108    	; 0x52e <decToAscii+0x82>
+ 4c2:	42 30       	cpi	r20, 0x02	; 2
+ 4c4:	c1 f5       	brne	.+112    	; 0x536 <decToAscii+0x8a>
+ 4c6:	28 c0       	rjmp	.+80     	; 0x518 <decToAscii+0x6c>
+ 4c8:	44 30       	cpi	r20, 0x04	; 4
+ 4ca:	69 f0       	breq	.+26     	; 0x4e6 <decToAscii+0x3a>
+ 4cc:	45 30       	cpi	r20, 0x05	; 5
+ 4ce:	99 f5       	brne	.+102    	; 0x536 <decToAscii+0x8a>
+		{
+			case 5:
+			{
+				*str = (dec/10000+'0');
+ 4d0:	c9 01       	movw	r24, r18
+ 4d2:	60 e1       	ldi	r22, 0x10	; 16
+ 4d4:	77 e2       	ldi	r23, 0x27	; 39
+ 4d6:	0e 94 6a 04 	call	0x8d4	; 0x8d4 <__udivmodhi4>
+ 4da:	60 5d       	subi	r22, 0xD0	; 208
+ 4dc:	60 83       	st	Z, r22
+				dec%=10000;
+ 4de:	c9 01       	movw	r24, r18
+ 4e0:	60 e1       	ldi	r22, 0x10	; 16
+ 4e2:	77 e2       	ldi	r23, 0x27	; 39
+ 4e4:	0a c0       	rjmp	.+20     	; 0x4fa <decToAscii+0x4e>
+				break;
+			}			
+			case 4:
+			{
+				*str = (dec/1000+'0');
+ 4e6:	c9 01       	movw	r24, r18
+ 4e8:	68 ee       	ldi	r22, 0xE8	; 232
+ 4ea:	73 e0       	ldi	r23, 0x03	; 3
+ 4ec:	0e 94 6a 04 	call	0x8d4	; 0x8d4 <__udivmodhi4>
+ 4f0:	60 5d       	subi	r22, 0xD0	; 208
+ 4f2:	60 83       	st	Z, r22
+				dec%=1000;
+ 4f4:	c9 01       	movw	r24, r18
+ 4f6:	68 ee       	ldi	r22, 0xE8	; 232
+ 4f8:	73 e0       	ldi	r23, 0x03	; 3
+ 4fa:	0e 94 6a 04 	call	0x8d4	; 0x8d4 <__udivmodhi4>
+ 4fe:	9c 01       	movw	r18, r24
+ 500:	1b c0       	rjmp	.+54     	; 0x538 <decToAscii+0x8c>
+				break;
+			}
+			case 3:
+			{
+				*str = (dec/100+'0');
+ 502:	c9 01       	movw	r24, r18
+ 504:	64 e6       	ldi	r22, 0x64	; 100
+ 506:	70 e0       	ldi	r23, 0x00	; 0
+ 508:	0e 94 6a 04 	call	0x8d4	; 0x8d4 <__udivmodhi4>
+ 50c:	60 5d       	subi	r22, 0xD0	; 208
+ 50e:	60 83       	st	Z, r22
+				dec%=100;
+ 510:	c9 01       	movw	r24, r18
+ 512:	64 e6       	ldi	r22, 0x64	; 100
+ 514:	70 e0       	ldi	r23, 0x00	; 0
+ 516:	f1 cf       	rjmp	.-30     	; 0x4fa <decToAscii+0x4e>
+				break;
+			}
+			case 2:
+			{
+				*str = (dec/10+'0');
+ 518:	c9 01       	movw	r24, r18
+ 51a:	6a e0       	ldi	r22, 0x0A	; 10
+ 51c:	70 e0       	ldi	r23, 0x00	; 0
+ 51e:	0e 94 6a 04 	call	0x8d4	; 0x8d4 <__udivmodhi4>
+ 522:	60 5d       	subi	r22, 0xD0	; 208
+ 524:	60 83       	st	Z, r22
+				dec%=10;
+ 526:	c9 01       	movw	r24, r18
+ 528:	6a e0       	ldi	r22, 0x0A	; 10
+ 52a:	70 e0       	ldi	r23, 0x00	; 0
+ 52c:	e6 cf       	rjmp	.-52     	; 0x4fa <decToAscii+0x4e>
+				break;
+			}
+			case 1:
+			{
+				*str = (dec+'0');
+ 52e:	20 5d       	subi	r18, 0xD0	; 208
+ 530:	20 83       	st	Z, r18
+ 532:	20 53       	subi	r18, 0x30	; 48
+ 534:	01 c0       	rjmp	.+2      	; 0x538 <decToAscii+0x8c>
+				break;
+			}
+			default: *str = '0';
+ 536:	10 83       	st	Z, r17
+		}
+		width--;
+ 538:	41 50       	subi	r20, 0x01	; 1
+		str++;
+ 53a:	31 96       	adiw	r30, 0x01	; 1
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void decToAscii(uint8_t* str,uint16_t dec,uint8_t width)
+{
+	while(width)
+ 53c:	44 23       	and	r20, r20
+ 53e:	09 f0       	breq	.+2      	; 0x542 <decToAscii+0x96>
+ 540:	ba cf       	rjmp	.-140    	; 0x4b6 <decToAscii+0xa>
+			default: *str = '0';
+		}
+		width--;
+		str++;
+	}
+}
+ 542:	1f 91       	pop	r17
+ 544:	08 95       	ret
+
+00000546 <hexToAscii>:
+*	width是转换成ASCII后的宽度(高位填充'0')
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void hexToAscii(uint8_t* str,uint16_t hex,uint8_t width)
+{
+ 546:	cf 92       	push	r12
+ 548:	df 92       	push	r13
+ 54a:	ef 92       	push	r14
+ 54c:	ff 92       	push	r15
+ 54e:	0f 93       	push	r16
+ 550:	1f 93       	push	r17
+ 552:	cf 93       	push	r28
+ 554:	df 93       	push	r29
+ 556:	fc 01       	movw	r30, r24
+	{
+		switch(width)
+		{		
+			case 4:
+			{
+				tmp=(hex>>12);
+ 558:	eb 01       	movw	r28, r22
+ 55a:	cd 2f       	mov	r28, r29
+ 55c:	dd 27       	eor	r29, r29
+ 55e:	c2 95       	swap	r28
+ 560:	cf 70       	andi	r28, 0x0F	; 15
+				if(tmp>9) *str = tmp+('A'-10);
+ 562:	27 e3       	ldi	r18, 0x37	; 55
+ 564:	d2 2e       	mov	r13, r18
+ 566:	dc 0e       	add	r13, r28
+				else *str = tmp+'0';
+ 568:	90 e3       	ldi	r25, 0x30	; 48
+ 56a:	e9 2e       	mov	r14, r25
+ 56c:	ec 0e       	add	r14, r28
+				break;
+			}
+			case 3:
+			{
+				tmp=(hex>>8)&0x000F;
+ 56e:	a7 2f       	mov	r26, r23
+ 570:	bb 27       	eor	r27, r27
+ 572:	af 70       	andi	r26, 0x0F	; 15
+ 574:	b0 70       	andi	r27, 0x00	; 0
+				if(tmp>9) *str = tmp+('A'-10);
+ 576:	17 e3       	ldi	r17, 0x37	; 55
+ 578:	f1 2e       	mov	r15, r17
+ 57a:	fa 0e       	add	r15, r26
+				else *str = tmp+'0';
+ 57c:	0a 2f       	mov	r16, r26
+ 57e:	00 5d       	subi	r16, 0xD0	; 208
+				break;
+			}
+			case 2:
+			{
+				tmp=(hex>>4)&0x000F;
+ 580:	9b 01       	movw	r18, r22
+ 582:	54 e0       	ldi	r21, 0x04	; 4
+ 584:	36 95       	lsr	r19
+ 586:	27 95       	ror	r18
+ 588:	5a 95       	dec	r21
+ 58a:	e1 f7       	brne	.-8      	; 0x584 <hexToAscii+0x3e>
+ 58c:	2f 70       	andi	r18, 0x0F	; 15
+ 58e:	30 70       	andi	r19, 0x00	; 0
+				if(tmp>9) *str = tmp+('A'-10);
+ 590:	82 2f       	mov	r24, r18
+ 592:	12 2f       	mov	r17, r18
+ 594:	19 5c       	subi	r17, 0xC9	; 201
+				else *str = tmp+'0';
+ 596:	80 5d       	subi	r24, 0xD0	; 208
+				tmp=hex&0x000F;
+				if(tmp>9) *str = tmp+('A'-10);
+				else *str = tmp+'0';
+				break;
+			}
+			default: *str = '0';
+ 598:	90 e3       	ldi	r25, 0x30	; 48
+ 59a:	c9 2e       	mov	r12, r25
+				else *str = tmp+'0';
+				break;
+			}
+			case 1:
+			{
+				tmp=hex&0x000F;
+ 59c:	6f 70       	andi	r22, 0x0F	; 15
+ 59e:	70 70       	andi	r23, 0x00	; 0
+				if(tmp>9) *str = tmp+('A'-10);
+				else *str = tmp+'0';
+ 5a0:	56 2f       	mov	r21, r22
+ 5a2:	50 5d       	subi	r21, 0xD0	; 208
+				break;
+			}
+			case 1:
+			{
+				tmp=hex&0x000F;
+				if(tmp>9) *str = tmp+('A'-10);
+ 5a4:	96 2f       	mov	r25, r22
+ 5a6:	99 5c       	subi	r25, 0xC9	; 201
+ 5a8:	2a c0       	rjmp	.+84     	; 0x5fe <hexToAscii+0xb8>
+void hexToAscii(uint8_t* str,uint16_t hex,uint8_t width)
+{
+	uint16_t tmp;
+	while(width)
+	{
+		switch(width)
+ 5aa:	42 30       	cpi	r20, 0x02	; 2
+ 5ac:	b9 f0       	breq	.+46     	; 0x5dc <hexToAscii+0x96>
+ 5ae:	43 30       	cpi	r20, 0x03	; 3
+ 5b0:	18 f4       	brcc	.+6      	; 0x5b8 <hexToAscii+0x72>
+ 5b2:	41 30       	cpi	r20, 0x01	; 1
+ 5b4:	09 f5       	brne	.+66     	; 0x5f8 <hexToAscii+0xb2>
+ 5b6:	19 c0       	rjmp	.+50     	; 0x5ea <hexToAscii+0xa4>
+ 5b8:	43 30       	cpi	r20, 0x03	; 3
+ 5ba:	49 f0       	breq	.+18     	; 0x5ce <hexToAscii+0x88>
+ 5bc:	44 30       	cpi	r20, 0x04	; 4
+ 5be:	e1 f4       	brne	.+56     	; 0x5f8 <hexToAscii+0xb2>
+		{		
+			case 4:
+			{
+				tmp=(hex>>12);
+				if(tmp>9) *str = tmp+('A'-10);
+ 5c0:	ca 30       	cpi	r28, 0x0A	; 10
+ 5c2:	d1 05       	cpc	r29, r1
+ 5c4:	10 f0       	brcs	.+4      	; 0x5ca <hexToAscii+0x84>
+ 5c6:	d0 82       	st	Z, r13
+ 5c8:	18 c0       	rjmp	.+48     	; 0x5fa <hexToAscii+0xb4>
+				else *str = tmp+'0';
+ 5ca:	e0 82       	st	Z, r14
+ 5cc:	16 c0       	rjmp	.+44     	; 0x5fa <hexToAscii+0xb4>
+				break;
+			}
+			case 3:
+			{
+				tmp=(hex>>8)&0x000F;
+				if(tmp>9) *str = tmp+('A'-10);
+ 5ce:	aa 30       	cpi	r26, 0x0A	; 10
+ 5d0:	b1 05       	cpc	r27, r1
+ 5d2:	10 f0       	brcs	.+4      	; 0x5d8 <hexToAscii+0x92>
+ 5d4:	f0 82       	st	Z, r15
+ 5d6:	11 c0       	rjmp	.+34     	; 0x5fa <hexToAscii+0xb4>
+				else *str = tmp+'0';
+ 5d8:	00 83       	st	Z, r16
+ 5da:	0f c0       	rjmp	.+30     	; 0x5fa <hexToAscii+0xb4>
+				break;
+			}
+			case 2:
+			{
+				tmp=(hex>>4)&0x000F;
+				if(tmp>9) *str = tmp+('A'-10);
+ 5dc:	2a 30       	cpi	r18, 0x0A	; 10
+ 5de:	31 05       	cpc	r19, r1
+ 5e0:	10 f0       	brcs	.+4      	; 0x5e6 <hexToAscii+0xa0>
+ 5e2:	10 83       	st	Z, r17
+ 5e4:	0a c0       	rjmp	.+20     	; 0x5fa <hexToAscii+0xb4>
+				else *str = tmp+'0';
+ 5e6:	80 83       	st	Z, r24
+ 5e8:	08 c0       	rjmp	.+16     	; 0x5fa <hexToAscii+0xb4>
+				break;
+			}
+			case 1:
+			{
+				tmp=hex&0x000F;
+				if(tmp>9) *str = tmp+('A'-10);
+ 5ea:	6a 30       	cpi	r22, 0x0A	; 10
+ 5ec:	71 05       	cpc	r23, r1
+ 5ee:	10 f0       	brcs	.+4      	; 0x5f4 <hexToAscii+0xae>
+ 5f0:	90 83       	st	Z, r25
+ 5f2:	03 c0       	rjmp	.+6      	; 0x5fa <hexToAscii+0xb4>
+				else *str = tmp+'0';
+ 5f4:	50 83       	st	Z, r21
+ 5f6:	01 c0       	rjmp	.+2      	; 0x5fa <hexToAscii+0xb4>
+				break;
+			}
+			default: *str = '0';
+ 5f8:	c0 82       	st	Z, r12
+		}
+		width--;
+ 5fa:	41 50       	subi	r20, 0x01	; 1
+		str++;
+ 5fc:	31 96       	adiw	r30, 0x01	; 1
+*-------------------------------------------------------------------------------------------------------
+*/
+void hexToAscii(uint8_t* str,uint16_t hex,uint8_t width)
+{
+	uint16_t tmp;
+	while(width)
+ 5fe:	44 23       	and	r20, r20
+ 600:	a1 f6       	brne	.-88     	; 0x5aa <hexToAscii+0x64>
+			default: *str = '0';
+		}
+		width--;
+		str++;
+	}
+}
+ 602:	df 91       	pop	r29
+ 604:	cf 91       	pop	r28
+ 606:	1f 91       	pop	r17
+ 608:	0f 91       	pop	r16
+ 60a:	ff 90       	pop	r15
+ 60c:	ef 90       	pop	r14
+ 60e:	df 90       	pop	r13
+ 610:	cf 90       	pop	r12
+ 612:	08 95       	ret
+
+00000614 <showLine>:
+*	*str指向用于将要显示的内容
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void showLine(const uint8_t x,const uint8_t y,uint8_t* lcd_stack,char * str,...)
+{
+ 614:	af 92       	push	r10
+ 616:	bf 92       	push	r11
+ 618:	cf 92       	push	r12
+ 61a:	df 92       	push	r13
+ 61c:	ef 92       	push	r14
+ 61e:	ff 92       	push	r15
+ 620:	0f 93       	push	r16
+ 622:	df 93       	push	r29
+ 624:	cf 93       	push	r28
+ 626:	cd b7       	in	r28, 0x3d	; 61
+ 628:	de b7       	in	r29, 0x3e	; 62
+ 62a:	0e 85       	ldd	r16, Y+14	; 0x0e
+ 62c:	af 84       	ldd	r10, Y+15	; 0x0f
+ 62e:	b8 88       	ldd	r11, Y+16	; 0x10
+ 630:	e9 88       	ldd	r14, Y+17	; 0x11
+ 632:	fa 88       	ldd	r15, Y+18	; 0x12
+	uint8_t coordinate = 16*y + x;
+ 634:	02 95       	swap	r16
+ 636:	00 7f       	andi	r16, 0xF0	; 240
+ 638:	8d 85       	ldd	r24, Y+13	; 0x0d
+ 63a:	08 0f       	add	r16, r24
+*	*str指向用于将要显示的内容
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void showLine(const uint8_t x,const uint8_t y,uint8_t* lcd_stack,char * str,...)
+{
+ 63c:	de 01       	movw	r26, r28
+ 63e:	53 96       	adiw	r26, 0x13	; 19
+ 640:	5d c0       	rjmp	.+186    	; 0x6fc <showLine+0xe8>
+	uint8_t coordinate = 16*y + x;
+	va_list marker;
+	va_start(marker,str); /* Initialize variable arguments. */ 
+	while(*str!='\0')
+	{
+		if(coordinate>64) break;	/*防止堆栈溢出*/
+ 642:	01 34       	cpi	r16, 0x41	; 65
+ 644:	08 f0       	brcs	.+2      	; 0x648 <showLine+0x34>
+ 646:	5f c0       	rjmp	.+190    	; 0x706 <showLine+0xf2>
+
+		if(*str == '\\')
+ 648:	8c 35       	cpi	r24, 0x5C	; 92
+ 64a:	51 f4       	brne	.+20     	; 0x660 <showLine+0x4c>
+		{
+			str++;
+ 64c:	08 94       	sec
+ 64e:	e1 1c       	adc	r14, r1
+ 650:	f1 1c       	adc	r15, r1
+			lcd_stack[coordinate] = *str;
+ 652:	95 01       	movw	r18, r10
+ 654:	20 0f       	add	r18, r16
+ 656:	31 1d       	adc	r19, r1
+ 658:	f7 01       	movw	r30, r14
+ 65a:	80 81       	ld	r24, Z
+ 65c:	f9 01       	movw	r30, r18
+ 65e:	49 c0       	rjmp	.+146    	; 0x6f2 <showLine+0xde>
+		}
+		else if(*str == '%')
+ 660:	85 32       	cpi	r24, 0x25	; 37
+ 662:	09 f0       	breq	.+2      	; 0x666 <showLine+0x52>
+ 664:	43 c0       	rjmp	.+134    	; 0x6ec <showLine+0xd8>
+		{
+			str++;
+ 666:	08 94       	sec
+ 668:	e1 1c       	adc	r14, r1
+ 66a:	f1 1c       	adc	r15, r1
+			if (*str=='d'||*str=='D')
+ 66c:	f7 01       	movw	r30, r14
+ 66e:	80 81       	ld	r24, Z
+ 670:	84 36       	cpi	r24, 0x64	; 100
+ 672:	11 f0       	breq	.+4      	; 0x678 <showLine+0x64>
+ 674:	84 34       	cpi	r24, 0x44	; 68
+ 676:	99 f4       	brne	.+38     	; 0x69e <showLine+0x8a>
+			{
+				str++;
+ 678:	08 94       	sec
+ 67a:	e1 1c       	adc	r14, r1
+ 67c:	f1 1c       	adc	r15, r1
+				decToAscii(&lcd_stack[coordinate],va_arg(marker,uint16_t),(*str-'0'));
+ 67e:	52 e0       	ldi	r21, 0x02	; 2
+ 680:	c5 2e       	mov	r12, r21
+ 682:	d1 2c       	mov	r13, r1
+ 684:	ca 0e       	add	r12, r26
+ 686:	db 1e       	adc	r13, r27
+ 688:	6d 91       	ld	r22, X+
+ 68a:	7c 91       	ld	r23, X
+ 68c:	f7 01       	movw	r30, r14
+ 68e:	40 81       	ld	r20, Z
+ 690:	40 53       	subi	r20, 0x30	; 48
+ 692:	c5 01       	movw	r24, r10
+ 694:	80 0f       	add	r24, r16
+ 696:	91 1d       	adc	r25, r1
+ 698:	0e 94 56 02 	call	0x4ac	; 0x4ac <decToAscii>
+ 69c:	21 c0       	rjmp	.+66     	; 0x6e0 <showLine+0xcc>
+				coordinate+=(*str-'0'-1);
+			}
+			else if(*str=='c'||*str=='C')
+ 69e:	83 36       	cpi	r24, 0x63	; 99
+ 6a0:	11 f0       	breq	.+4      	; 0x6a6 <showLine+0x92>
+ 6a2:	83 34       	cpi	r24, 0x43	; 67
+ 6a4:	39 f4       	brne	.+14     	; 0x6b4 <showLine+0xa0>
+			{
+				lcd_stack[coordinate] = va_arg(marker,uint16_t);
+ 6a6:	f5 01       	movw	r30, r10
+ 6a8:	e0 0f       	add	r30, r16
+ 6aa:	f1 1d       	adc	r31, r1
+ 6ac:	8c 91       	ld	r24, X
+ 6ae:	80 83       	st	Z, r24
+ 6b0:	12 96       	adiw	r26, 0x02	; 2
+ 6b2:	20 c0       	rjmp	.+64     	; 0x6f4 <showLine+0xe0>
+			}
+			else if(*str=='x'||*str=='X')
+ 6b4:	88 37       	cpi	r24, 0x78	; 120
+ 6b6:	11 f0       	breq	.+4      	; 0x6bc <showLine+0xa8>
+ 6b8:	88 35       	cpi	r24, 0x58	; 88
+ 6ba:	e1 f4       	brne	.+56     	; 0x6f4 <showLine+0xe0>
+			{
+				str++;
+ 6bc:	08 94       	sec
+ 6be:	e1 1c       	adc	r14, r1
+ 6c0:	f1 1c       	adc	r15, r1
+				hexToAscii(&lcd_stack[coordinate],va_arg(marker,uint16_t),(*str-'0'));
+ 6c2:	42 e0       	ldi	r20, 0x02	; 2
+ 6c4:	c4 2e       	mov	r12, r20
+ 6c6:	d1 2c       	mov	r13, r1
+ 6c8:	ca 0e       	add	r12, r26
+ 6ca:	db 1e       	adc	r13, r27
+ 6cc:	6d 91       	ld	r22, X+
+ 6ce:	7c 91       	ld	r23, X
+ 6d0:	f7 01       	movw	r30, r14
+ 6d2:	40 81       	ld	r20, Z
+ 6d4:	40 53       	subi	r20, 0x30	; 48
+ 6d6:	c5 01       	movw	r24, r10
+ 6d8:	80 0f       	add	r24, r16
+ 6da:	91 1d       	adc	r25, r1
+ 6dc:	0e 94 a3 02 	call	0x546	; 0x546 <hexToAscii>
+				coordinate+=(*str-'0'-1);
+ 6e0:	01 53       	subi	r16, 0x31	; 49
+ 6e2:	f7 01       	movw	r30, r14
+ 6e4:	80 81       	ld	r24, Z
+ 6e6:	08 0f       	add	r16, r24
+ 6e8:	d6 01       	movw	r26, r12
+ 6ea:	04 c0       	rjmp	.+8      	; 0x6f4 <showLine+0xe0>
+			}
+		}
+		/*如有新的转义符指令请添加在这里*/
+		else
+		{
+			lcd_stack[coordinate] = *str;
+ 6ec:	f5 01       	movw	r30, r10
+ 6ee:	e0 0f       	add	r30, r16
+ 6f0:	f1 1d       	adc	r31, r1
+ 6f2:	80 83       	st	Z, r24
+		}
+		str++;
+ 6f4:	08 94       	sec
+ 6f6:	e1 1c       	adc	r14, r1
+ 6f8:	f1 1c       	adc	r15, r1
+		coordinate++;
+ 6fa:	0f 5f       	subi	r16, 0xFF	; 255
+void showLine(const uint8_t x,const uint8_t y,uint8_t* lcd_stack,char * str,...)
+{
+	uint8_t coordinate = 16*y + x;
+	va_list marker;
+	va_start(marker,str); /* Initialize variable arguments. */ 
+	while(*str!='\0')
+ 6fc:	f7 01       	movw	r30, r14
+ 6fe:	80 81       	ld	r24, Z
+ 700:	88 23       	and	r24, r24
+ 702:	09 f0       	breq	.+2      	; 0x706 <showLine+0xf2>
+ 704:	9e cf       	rjmp	.-196    	; 0x642 <showLine+0x2e>
+		}
+		str++;
+		coordinate++;
+	}
+	va_end( marker ); /* Reset variable arguments. */ 
+}
+ 706:	cf 91       	pop	r28
+ 708:	df 91       	pop	r29
+ 70a:	0f 91       	pop	r16
+ 70c:	ff 90       	pop	r15
+ 70e:	ef 90       	pop	r14
+ 710:	df 90       	pop	r13
+ 712:	cf 90       	pop	r12
+ 714:	bf 90       	pop	r11
+ 716:	af 90       	pop	r10
+ 718:	08 95       	ret
+
+0000071a <spiSendByte>:
+*	从SPI接口发送1byte的数据
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void spiSendByte(uint8_t send_byte)
+{
+ 71a:	68 2f       	mov	r22, r24
+	SPI_MasterTransceiveByte(&spiMasterC,(send_byte));
+ 71c:	84 e5       	ldi	r24, 0x54	; 84
+ 71e:	90 e2       	ldi	r25, 0x20	; 32
+ 720:	0e 94 06 02 	call	0x40c	; 0x40c <SPI_MasterTransceiveByte>
+	while (SPIC.STATUS & SPI_WRCOL_bm);
+ 724:	80 91 c2 08 	lds	r24, 0x08C2
+ 728:	86 fd       	sbrc	r24, 6
+ 72a:	fc cf       	rjmp	.-8      	; 0x724 <spiSendByte+0xa>
+}
+ 72c:	08 95       	ret
+
+0000072e <sendDataST7920>:
+*	给LCD控制芯片ST7920发送数据的函数
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendDataST7920(uint8_t data)
+{
+ 72e:	1f 93       	push	r17
+ 730:	18 2f       	mov	r17, r24
+	spiSendByte(0xFA);
+ 732:	8a ef       	ldi	r24, 0xFA	; 250
+ 734:	0e 94 8d 03 	call	0x71a	; 0x71a <spiSendByte>
+	spiSendByte(data & 0xF0);
+ 738:	81 2f       	mov	r24, r17
+ 73a:	80 7f       	andi	r24, 0xF0	; 240
+ 73c:	0e 94 8d 03 	call	0x71a	; 0x71a <spiSendByte>
+	spiSendByte(data<<4);
+ 740:	81 2f       	mov	r24, r17
+ 742:	82 95       	swap	r24
+ 744:	80 7f       	andi	r24, 0xF0	; 240
+ 746:	0e 94 8d 03 	call	0x71a	; 0x71a <spiSendByte>
+    can be achieved.
+*/
+void
+_delay_loop_1(uint8_t __count)
+{
+	__asm__ volatile (
+ 74a:	80 e5       	ldi	r24, 0x50	; 80
+ 74c:	8a 95       	dec	r24
+ 74e:	f1 f7       	brne	.-4      	; 0x74c <sendDataST7920+0x1e>
+	LCD_DELAY();
+}
+ 750:	1f 91       	pop	r17
+ 752:	08 95       	ret
+
+00000754 <sendCodeST7920>:
+*	给LCD控制芯片ST7920发送指令的函数
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void sendCodeST7920(uint8_t code)
+{
+ 754:	1f 93       	push	r17
+ 756:	18 2f       	mov	r17, r24
+	spiSendByte(0xF8);
+ 758:	88 ef       	ldi	r24, 0xF8	; 248
+ 75a:	0e 94 8d 03 	call	0x71a	; 0x71a <spiSendByte>
+	spiSendByte(code & 0xF0);
+ 75e:	81 2f       	mov	r24, r17
+ 760:	80 7f       	andi	r24, 0xF0	; 240
+ 762:	0e 94 8d 03 	call	0x71a	; 0x71a <spiSendByte>
+	spiSendByte(code<<4);
+ 766:	81 2f       	mov	r24, r17
+ 768:	82 95       	swap	r24
+ 76a:	80 7f       	andi	r24, 0xF0	; 240
+ 76c:	0e 94 8d 03 	call	0x71a	; 0x71a <spiSendByte>
+ 770:	80 e5       	ldi	r24, 0x50	; 80
+ 772:	8a 95       	dec	r24
+ 774:	f1 f7       	brne	.-4      	; 0x772 <sendCodeST7920+0x1e>
+	LCD_DELAY();
+}
+ 776:	1f 91       	pop	r17
+ 778:	08 95       	ret
+
+0000077a <refreshLCD>:
+*	*lcd_stack指向用于刷新LCD的数据栈,需64byte容量
+*
+*-------------------------------------------------------------------------------------------------------
+*/
+void refreshLCD(const uint8_t *lcd_stack)
+{
+ 77a:	cf 92       	push	r12
+ 77c:	df 92       	push	r13
+ 77e:	ef 92       	push	r14
+ 780:	ff 92       	push	r15
+ 782:	0f 93       	push	r16
+ 784:	1f 93       	push	r17
+ 786:	cf 93       	push	r28
+ 788:	df 93       	push	r29
+ 78a:	6c 01       	movw	r12, r24
+	uint8_t addr;
+	sendCodeST7920(0x02);	/*地址归位*/
+ 78c:	82 e0       	ldi	r24, 0x02	; 2
+ 78e:	0e 94 aa 03 	call	0x754	; 0x754 <sendCodeST7920>
+ 792:	c0 e0       	ldi	r28, 0x00	; 0
+ 794:	d0 e0       	ldi	r29, 0x00	; 0
+	for(addr=0;addr < 16;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 796:	f6 01       	movw	r30, r12
+ 798:	ec 0f       	add	r30, r28
+ 79a:	fd 1f       	adc	r31, r29
+ 79c:	80 81       	ld	r24, Z
+ 79e:	0e 94 97 03 	call	0x72e	; 0x72e <sendDataST7920>
+ 7a2:	21 96       	adiw	r28, 0x01	; 1
+*/
+void refreshLCD(const uint8_t *lcd_stack)
+{
+	uint8_t addr;
+	sendCodeST7920(0x02);	/*地址归位*/
+	for(addr=0;addr < 16;addr++)
+ 7a4:	c0 31       	cpi	r28, 0x10	; 16
+ 7a6:	d1 05       	cpc	r29, r1
+ 7a8:	b1 f7       	brne	.-20     	; 0x796 <refreshLCD+0x1c>
+ 7aa:	76 01       	movw	r14, r12
+ 7ac:	e6 01       	movw	r28, r12
+ 7ae:	00 e2       	ldi	r16, 0x20	; 32
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=32;addr < 48;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 7b0:	88 a1       	ldd	r24, Y+32	; 0x20
+ 7b2:	0e 94 97 03 	call	0x72e	; 0x72e <sendDataST7920>
+	sendCodeST7920(0x02);	/*地址归位*/
+	for(addr=0;addr < 16;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=32;addr < 48;addr++)
+ 7b6:	0f 5f       	subi	r16, 0xFF	; 255
+ 7b8:	21 96       	adiw	r28, 0x01	; 1
+ 7ba:	00 33       	cpi	r16, 0x30	; 48
+ 7bc:	c9 f7       	brne	.-14     	; 0x7b0 <refreshLCD+0x36>
+ 7be:	10 e1       	ldi	r17, 0x10	; 16
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=16;addr < 32;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 7c0:	f7 01       	movw	r30, r14
+ 7c2:	80 89       	ldd	r24, Z+16	; 0x10
+ 7c4:	0e 94 97 03 	call	0x72e	; 0x72e <sendDataST7920>
+	}
+	for(addr=32;addr < 48;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	for(addr=16;addr < 32;addr++)
+ 7c8:	1f 5f       	subi	r17, 0xFF	; 255
+ 7ca:	08 94       	sec
+ 7cc:	e1 1c       	adc	r14, r1
+ 7ce:	f1 1c       	adc	r15, r1
+ 7d0:	10 32       	cpi	r17, 0x20	; 32
+ 7d2:	b1 f7       	brne	.-20     	; 0x7c0 <refreshLCD+0x46>
+ 7d4:	e6 01       	movw	r28, r12
+ 7d6:	e0 96       	adiw	r28, 0x30	; 48
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	
+	for(addr=48;addr < 64;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+ 7d8:	89 91       	ld	r24, Y+
+ 7da:	0e 94 97 03 	call	0x72e	; 0x72e <sendDataST7920>
+	for(addr=16;addr < 32;addr++)
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+	
+	for(addr=48;addr < 64;addr++)
+ 7de:	0f 5f       	subi	r16, 0xFF	; 255
+ 7e0:	00 34       	cpi	r16, 0x40	; 64
+ 7e2:	d1 f7       	brne	.-12     	; 0x7d8 <refreshLCD+0x5e>
+	{
+		sendDataST7920(*(lcd_stack + addr));
+	}
+}
+ 7e4:	df 91       	pop	r29
+ 7e6:	cf 91       	pop	r28
+ 7e8:	1f 91       	pop	r17
+ 7ea:	0f 91       	pop	r16
+ 7ec:	ff 90       	pop	r15
+ 7ee:	ef 90       	pop	r14
+ 7f0:	df 90       	pop	r13
+ 7f2:	cf 90       	pop	r12
+ 7f4:	08 95       	ret
+
+000007f6 <main>:
+
+#include "ws_lcd_st7920.h"
+
+
+int main(void)
+{
+ 7f6:	8f 92       	push	r8
+ 7f8:	9f 92       	push	r9
+ 7fa:	af 92       	push	r10
+ 7fc:	cf 92       	push	r12
+ 7fe:	ef 92       	push	r14
+ 800:	0f 93       	push	r16
+ 802:	1f 93       	push	r17
+	/* Init SS pin as output with wired AND and pull-up. */
+	PORTC.DIRSET = PIN4_bm;
+ 804:	60 e4       	ldi	r22, 0x40	; 64
+ 806:	86 2e       	mov	r8, r22
+ 808:	66 e0       	ldi	r22, 0x06	; 6
+ 80a:	96 2e       	mov	r9, r22
+ 80c:	90 e1       	ldi	r25, 0x10	; 16
+ 80e:	d4 01       	movw	r26, r8
+ 810:	11 96       	adiw	r26, 0x01	; 1
+ 812:	9c 93       	st	X, r25
+ 814:	11 97       	sbiw	r26, 0x01	; 1
+	PORTC.PIN4CTRL = PORT_OPC_WIREDANDPULL_gc;
+ 816:	88 e3       	ldi	r24, 0x38	; 56
+ 818:	54 96       	adiw	r26, 0x14	; 20
+ 81a:	8c 93       	st	X, r24
+ 81c:	54 97       	sbiw	r26, 0x14	; 20
+	
+	/* Set SS output to high. (No slave addressed). */
+	PORTC.OUTSET = PIN4_bm;
+ 81e:	15 96       	adiw	r26, 0x05	; 5
+ 820:	9c 93       	st	X, r25
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 822:	80 e5       	ldi	r24, 0x50	; 80
+ 824:	93 ec       	ldi	r25, 0xC3	; 195
+ 826:	01 97       	sbiw	r24, 0x01	; 1
+ 828:	f1 f7       	brne	.-4      	; 0x826 <main+0x30>
+
+	_delay_ms(100);
+	/* Initialize SPI master on port C. */
+	SPI_MasterInit(&spiMasterC,
+ 82a:	84 e5       	ldi	r24, 0x54	; 84
+ 82c:	90 e2       	ldi	r25, 0x20	; 32
+ 82e:	60 ec       	ldi	r22, 0xC0	; 192
+ 830:	78 e0       	ldi	r23, 0x08	; 8
+ 832:	40 e4       	ldi	r20, 0x40	; 64
+ 834:	56 e0       	ldi	r21, 0x06	; 6
+ 836:	20 e0       	ldi	r18, 0x00	; 0
+ 838:	00 e0       	ldi	r16, 0x00	; 0
+ 83a:	ee 24       	eor	r14, r14
+ 83c:	cc 24       	eor	r12, r12
+ 83e:	aa 24       	eor	r10, r10
+ 840:	0e 94 22 01 	call	0x244	; 0x244 <SPI_MasterInit>
+	               SPI_INTLVL_OFF_gc,
+	               false,
+	               SPI_PRESCALER_DIV4_gc);
+
+
+	sendCodeST7920(0x0C);//整体显示
+ 844:	8c e0       	ldi	r24, 0x0C	; 12
+ 846:	0e 94 aa 03 	call	0x754	; 0x754 <sendCodeST7920>
+	sendCodeST7920(0x01);//清屏
+ 84a:	81 e0       	ldi	r24, 0x01	; 1
+ 84c:	0e 94 aa 03 	call	0x754	; 0x754 <sendCodeST7920>
+ 850:	8c ed       	ldi	r24, 0xDC	; 220
+ 852:	95 e0       	ldi	r25, 0x05	; 5
+ 854:	01 97       	sbiw	r24, 0x01	; 1
+ 856:	f1 f7       	brne	.-4      	; 0x854 <main+0x5e>
+	_delay_ms(3);
+	memset(lcd_buffer,' ',sizeof(lcd_buffer));
+ 858:	04 e1       	ldi	r16, 0x14	; 20
+ 85a:	10 e2       	ldi	r17, 0x20	; 32
+ 85c:	c8 01       	movw	r24, r16
+ 85e:	60 e2       	ldi	r22, 0x20	; 32
+ 860:	70 e0       	ldi	r23, 0x00	; 0
+ 862:	40 e4       	ldi	r20, 0x40	; 64
+ 864:	50 e0       	ldi	r21, 0x00	; 0
+ 866:	0e 94 7e 04 	call	0x8fc	; 0x8fc <memset>
+	showLine(4,0,lcd_buffer,"微雪电子");
+ 86a:	00 d0       	rcall	.+0      	; 0x86c <main+0x76>
+ 86c:	00 d0       	rcall	.+0      	; 0x86e <main+0x78>
+ 86e:	ed b7       	in	r30, 0x3d	; 61
+ 870:	fe b7       	in	r31, 0x3e	; 62
+ 872:	31 96       	adiw	r30, 0x01	; 1
+ 874:	84 e0       	ldi	r24, 0x04	; 4
+ 876:	ad b7       	in	r26, 0x3d	; 61
+ 878:	be b7       	in	r27, 0x3e	; 62
+ 87a:	11 96       	adiw	r26, 0x01	; 1
+ 87c:	8c 93       	st	X, r24
+ 87e:	11 82       	std	Z+1, r1	; 0x01
+ 880:	02 83       	std	Z+2, r16	; 0x02
+ 882:	13 83       	std	Z+3, r17	; 0x03
+ 884:	80 e0       	ldi	r24, 0x00	; 0
+ 886:	90 e2       	ldi	r25, 0x20	; 32
+ 888:	84 83       	std	Z+4, r24	; 0x04
+ 88a:	95 83       	std	Z+5, r25	; 0x05
+ 88c:	0e 94 0a 03 	call	0x614	; 0x614 <showLine>
+	showLine(3,1,lcd_buffer,"Waveshare");
+ 890:	ed b7       	in	r30, 0x3d	; 61
+ 892:	fe b7       	in	r31, 0x3e	; 62
+ 894:	31 96       	adiw	r30, 0x01	; 1
+ 896:	83 e0       	ldi	r24, 0x03	; 3
+ 898:	ad b7       	in	r26, 0x3d	; 61
+ 89a:	be b7       	in	r27, 0x3e	; 62
+ 89c:	11 96       	adiw	r26, 0x01	; 1
+ 89e:	8c 93       	st	X, r24
+ 8a0:	81 e0       	ldi	r24, 0x01	; 1
+ 8a2:	81 83       	std	Z+1, r24	; 0x01
+ 8a4:	02 83       	std	Z+2, r16	; 0x02
+ 8a6:	13 83       	std	Z+3, r17	; 0x03
+ 8a8:	89 e0       	ldi	r24, 0x09	; 9
+ 8aa:	90 e2       	ldi	r25, 0x20	; 32
+ 8ac:	84 83       	std	Z+4, r24	; 0x04
+ 8ae:	95 83       	std	Z+5, r25	; 0x05
+ 8b0:	0e 94 0a 03 	call	0x614	; 0x614 <showLine>
+	refreshLCD(lcd_buffer);
+ 8b4:	ed b7       	in	r30, 0x3d	; 61
+ 8b6:	fe b7       	in	r31, 0x3e	; 62
+ 8b8:	36 96       	adiw	r30, 0x06	; 6
+ 8ba:	ed bf       	out	0x3d, r30	; 61
+ 8bc:	fe bf       	out	0x3e, r31	; 62
+ 8be:	c8 01       	movw	r24, r16
+ 8c0:	0e 94 bd 03 	call	0x77a	; 0x77a <refreshLCD>
+	PORTC.DIR=0xFF;
+ 8c4:	8f ef       	ldi	r24, 0xFF	; 255
+ 8c6:	80 93 40 06 	sts	0x0640, r24
+	PORTC.OUT = ~0xFD;
+ 8ca:	82 e0       	ldi	r24, 0x02	; 2
+ 8cc:	d4 01       	movw	r26, r8
+ 8ce:	14 96       	adiw	r26, 0x04	; 4
+ 8d0:	8c 93       	st	X, r24
+ 8d2:	ff cf       	rjmp	.-2      	; 0x8d2 <main+0xdc>
+
+000008d4 <__udivmodhi4>:
+ 8d4:	aa 1b       	sub	r26, r26
+ 8d6:	bb 1b       	sub	r27, r27
+ 8d8:	51 e1       	ldi	r21, 0x11	; 17
+ 8da:	07 c0       	rjmp	.+14     	; 0x8ea <__udivmodhi4_ep>
+
+000008dc <__udivmodhi4_loop>:
+ 8dc:	aa 1f       	adc	r26, r26
+ 8de:	bb 1f       	adc	r27, r27
+ 8e0:	a6 17       	cp	r26, r22
+ 8e2:	b7 07       	cpc	r27, r23
+ 8e4:	10 f0       	brcs	.+4      	; 0x8ea <__udivmodhi4_ep>
+ 8e6:	a6 1b       	sub	r26, r22
+ 8e8:	b7 0b       	sbc	r27, r23
+
+000008ea <__udivmodhi4_ep>:
+ 8ea:	88 1f       	adc	r24, r24
+ 8ec:	99 1f       	adc	r25, r25
+ 8ee:	5a 95       	dec	r21
+ 8f0:	a9 f7       	brne	.-22     	; 0x8dc <__udivmodhi4_loop>
+ 8f2:	80 95       	com	r24
+ 8f4:	90 95       	com	r25
+ 8f6:	bc 01       	movw	r22, r24
+ 8f8:	cd 01       	movw	r24, r26
+ 8fa:	08 95       	ret
+
+000008fc <memset>:
+ 8fc:	dc 01       	movw	r26, r24
+ 8fe:	01 c0       	rjmp	.+2      	; 0x902 <memset+0x6>
+ 900:	6d 93       	st	X+, r22
+ 902:	41 50       	subi	r20, 0x01	; 1
+ 904:	50 40       	sbci	r21, 0x00	; 0
+ 906:	e0 f7       	brcc	.-8      	; 0x900 <memset+0x4>
+ 908:	08 95       	ret
+
+0000090a <_exit>:
+ 90a:	f8 94       	cli
+
+0000090c <__stop_program>:
+ 90c:	ff cf       	rjmp	.-2      	; 0x90c <__stop_program>

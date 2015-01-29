@@ -1,0 +1,103 @@
+/*********************************************************************
+	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+		                                                        
+目    的:   建立使用PCF8591的示例程序
+	
+目标系统:   基于AVR单片机
+		                                                                
+应用软件:   ICCAVR
+		                                                                
+版    本:   Version 1.0                                                          
+		                                                                
+圆版时间:   2005-06-25
+	
+开发人员:   SEE
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+	
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+
+----------------------------------------------------------------------
+实验内容：
+初始化、读取AD、输出DA，使用PD口的LED指示获取的AD数据，使用万用表测量DA的输出电压。
+----------------------------------------------------------------------
+硬件连接：将PCF8591的A0、A1、A2使用短路帽短接至“－  ”。
+		  将PCF8591的IN0接可调电阻的AD1
+		  将PCF8591的OUT外接万用表的表笔(用电压档)
+          	   STK169P+     			STK162+
+			   PORTC	---------   LED0~7
+				
+		 	  DVK500				 STK162+
+				VCC		---------	  VCC
+				GND		---------	  GND
+				SDA	 	---------	  PA0
+				SCK		---------	  PA1
+----------------------------------------------------------------------
+注意事项： 
+（1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+（2）请详细阅读“使用必读”及相关资料。
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+#include <iom162v.h>
+#define NO_INCLUDE_I2C_H 1
+#include "D:\ICC_H\CmmICC.h"
+
+#define WR_DADR		0x90	//write device-address
+#define RD_DADR		0x91	//read device-address
+
+void sDelay()
+{
+   unsigned char n=0x07;
+   while(n--);
+}
+
+#define DELAY_NOP  sDelay()
+
+//SDA端口定义
+#define SDA_IN		{cbi(DDRD,4);DELAY_NOP;}
+#define SDA_OUT		{sbi(DDRD,4);DELAY_NOP;}
+#define SDA_SET		{sbi(PORTD,4);DELAY_NOP;}
+#define SDA_CLR		{cbi(PORTD,4);DELAY_NOP;}
+#define SDA_PIN		gbi(PIND,4)
+
+//SCL端口定义
+#define SCL_IN  	{cbi(DDRD,5);DELAY_NOP;}
+#define SCL_OUT		{sbi(DDRD,5);DELAY_NOP;}
+#define SCL_SET		{sbi(PORTD,5);DELAY_NOP;}
+#define SCL_CLR		{cbi(PORTD,5);DELAY_NOP;}
+#define SCL_PIN		gbi(PIND,5)
+
+
+#include "D:\ICC_H\DVK501_IIC_sim.h"
+#include "D:\ICC_H\PCF8591_sim.H"  
+
+#define DISP_DDR	DDRA
+#define DISP_PORT	PORTA
+
+
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void main()
+{
+	unsigned char DAval=0;
+	DISP_DDR = 0XFF;   	     	
+	while(1)
+	{
+		DISP_PORT = PCF8591_getAD(0x00);  //通道1,模式1
+		PCF8591_setDA(DAval++);
+		while(I2C_ReadBusy(WR_DADR)){};
+		delay50ms(1);
+	}
+}

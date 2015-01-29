@@ -1,0 +1,109 @@
+XL
+H 1 areas 7 global symbols
+M TEST_FT245.C
+S push_gset1 Ref0000
+S pop_gset1 Ref0000
+A text size 9A flags 0
+dbfile E:\USBTOOLS_CD\FT245E~1\目标MCU源程序\T2313TEST\TEST_FT245.C
+dbfunc e delay50us 0 fV
+dbsym r j 14 c
+dbsym r t 10 I
+dbline FFFFFFFF 2
+dbline 29 2
+dbline 2B 2
+dbline 2C 4
+dbline 2D 8
+dbline 2C 8
+dbline 2C A
+dbline 2B E
+dbline 2B 12
+dbline FFFFFFFE 1C
+dbline 0 1E
+dbfunc e delay50ms 20 fV
+dbsym r i 14 i
+dbsym r t 10 I
+dbline FFFFFFFF 22
+dbline 31 22
+dbline 33 22
+dbline 34 24
+dbline 35 2A
+dbline 34 2A
+dbline 34 2E
+dbline 33 36
+dbline 33 3A
+dbline FFFFFFFE 44
+dbline 0 46
+dbfunc e write_to_ft245 48 fV
+dbline FFFFFFFF 48
+dbline 39 48
+dbline 3A 48
+dbline 3B 4E
+dbline 3C 54
+dbline 3D 56
+dbline 3E 5C
+dbline 3F 5E
+dbline FFFFFFFE 64
+dbline 0 64
+dbfunc e read_from_ft245 66 fV
+dbline FFFFFFFF 66
+dbline 43 66
+dbline 44 66
+dbline 45 68
+dbline 46 6E
+dbline 47 70
+dbline FFFFFFFE 76
+dbline 0 76
+dbfunc e main 78 fV
+dbsym l j 1 c
+dbsym l i 1 c
+dbline FFFFFFFF 78
+dbline 4B 78
+dbline 4E 78
+dbline 4F 7C
+dbline 50 7E
+dbline 51 80
+dbline 52 82
+dbline 55 86
+dbline 56 86
+dbline 57 88
+dbline 58 8C
+dbline 5A 8E
+dbline 5B 90
+dbline 5C 94
+dbline 5D 96
+dbline 54 96
+dbline FFFFFFFE 98
+dbline 0 98
+S _main Def0078
+S _write_to_ft245 Def0048
+S _delay50ms Def0020
+S _delay50us Def0000
+S _read_from_ft245 Def0066
+T 00 00 00 D0 07 C0 44 27 01 C0 43 95 46 34 E8 F3
+R 00 00 00 00 82 02 00 00
+T 0E 00 01 50 10 40 22 24 33 24 20 16 31 06 A4 F3
+R 00 00 00 00
+T 1C 00 00 D0 08 95
+R 00 00 00 00 82 02 01 00
+T 20 00 00 D0 0B C0 44 27 55 27 02 C0 4F 5F 5F 4F
+R 00 00 00 00 82 02 00 00
+T 2E 00 42 3A ED EC 5E 07 D0 F3 01 50 10 40 22 24
+R 00 00 00 00
+T 3C 00 33 24 20 16 31 06 84 F3 00 D0 08 95
+R 00 00 00 00 82 0A 01 00
+T 48 00 88 B3 8F 5F 88 BB 0A E0 10 E0 E6 DF 95 98
+R 00 00 00 00
+T 56 00 0A E0 10 E0 D2 DF 95 9A 0A E0 10 E0 CE DF
+R 00 00 00 00
+T 64 00 08 95
+R 00 00 00 00
+T 66 00 94 98 0A E0 10 E0 C9 DF 94 9A 0A E0 10 E0
+R 00 00 00 00
+T 74 00 C5 DF 08 95
+R 00 00 00 00
+T 78 00 8F EF 87 BB 8D 9A 8C 9A 8A 98 8B 98 08 C0
+R 00 00 00 00
+T 86 00 92 9A 82 99 01 C0 DD DF 93 9A 83 99 01 C0
+R 00 00 00 00
+T 94 00 E8 DF F7 CF 08 95
+R 00 00 00 00

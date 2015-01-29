@@ -1,0 +1,227 @@
+/*********************************************************************
+	微 雪 电 子   WaveShare   http://www.waveShare.net            	
+		                                                        
+目    的:   建立PS/2的SimpleSoft测试程序（软件查询读取PS/2接收到的数据）
+	
+目标系统:   基于AVR单片机
+		                                                                
+应用软件:   ICCAVR
+		                                                                
+版    本:   Version 1.0                                                          
+		                                                                
+圆版时间:   2005-06-25
+	
+开发人员:   SEE
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+	
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+
+----------------------------------------------------------------------
+实验内容：
+按PC键盘，观察单片机读到的数据，使用PA/PD口的LED做指示。
+----------------------------------------------------------------------
+硬件连接：
+将PA/PD口的LED指示灯使用短路帽或线短接；
+将PC键盘插入PS2接口，
+使用短路帽短接PC0与DATA，
+使用短路帽短接PC1与CLK
+----------------------------------------------------------------------
+注意事项： 
+（1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+（2）请详细阅读“使用必读”及相关资料。
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+#include <iom162v.h>
+#define NO_INCLUDE_I2C_H 1
+#include "D:\ICC_H\CmmICC.H"
+#include "D:\ICC_H\LCD12864_ST7920_M48.H"
+
+#include "PS2.H"
+
+#define PRESS_DATA_DDR	DDRA
+#define PRESS_DATA_PORT PORTA
+#define SHIFT_DATA_DDR	DDRD
+#define SHIFT_DATA_PORT PORTD
+
+#define SET_SDA		sbi(PORTC,0)
+#define CLR_SDA		cbi(PORTC,0)
+#define GET_SDA		gbi(PINC,0)
+#define OUT_SDA 	sbi(DDRC,0)
+#define IN_SDA 		cbi(DDRC,0)
+
+#define SET_SCK		sbi(PORTC,1)
+#define CLR_SCK		cbi(PORTC,1)
+#define GET_SCK		gbi(PINC,1)
+#define OUT_SCK 	sbi(DDRC,1)
+#define IN_SCK 		cbi(DDRC,1)
+
+#define DELAY() {NOP();NOP();NOP();NOP();}
+
+bool rcvF		= 0; 	//是否收到字符标志
+uint8 keyVal; 			//键值
+uint8 tmp,tmp2;
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void check(void)
+{
+    static uint8 rcvBits = 0;	//接收次数，中断次数
+	
+	OUT_SCK; 		   			//设置"SCK_DDR"为输出
+	DELAY();
+	SET_SCK;					//"SCK_PORT"输出"1"
+	DELAY();
+	
+	IN_SCK;						//设置"SCK_DDR"为输入
+	DELAY();
+	if(!GET_SCK)
+	{
+		if((rcvBits>0) && (rcvBits<9))
+		{ 
+			keyVal=keyVal>>1; 	//数据是LSB格式
+			//IN_SDA;			//当有对键盘有属性设置时，注意输入输出切换
+			//DELAY();
+			if(GET_SDA) 
+	 			keyVal=keyVal|0x80; 
+		}
+		rcvBits++;
+		while(!GET_SCK); 		//等待PS/2CLK拉高
+	
+		if(rcvBits>10)
+		{
+			rcvBits=0; 			//接收11次表示接收完一帧数据
+			rcvF=1; 			//标识有字符已经输入
+		}
+	}
+}
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void keyHandle(uint8 val) 
+{
+	uint8 i;
+	static bool isUp=0;			//按键释放动作标志
+	static bool shift=0;		//shift键按下标志
+	rcvF = 0; 
+	//PRESS_DATA_PORT = val;		//状态指示
+	tmp= val;
+	if(!isUp)
+	{
+		switch(val)
+		{
+			case 0xF0 :			// a relase action
+				isUp = 1;
+				break;
+			case 0x12 :			// Left shift
+				shift = 1;
+				break;
+			case 0x59 :			// Right shift
+				shift = 1;
+				break;
+			default:
+				if(!shift)		// If shift not pressed
+				{ 
+/*
+					for(i=0; unshifted[i][0]!=val && unshifted[i][0]; i++)
+						;
+					上述写法较为灵活，但KEIL非UNIXC标准，不能采用该写法
+*/
+					for(i=0; unshifted[i][0]!=val && i<59; i++)
+						;
+					if(unshifted[i][0] == val) 
+						;		//状态指示
+					
+				} 
+				else			// If shift pressed
+				{			
+/*
+					for(i=0; unshifted[i][0]!=val && unshifted[i][0]; i++)
+						;
+					上述写法较为灵活，但KEIL非UNIXC标准，不能采用该写法
+*/
+					for(i=0; shifted[i][0]!=val && i<59; i++)
+						;
+					//if(shifted[i][0] == val) 
+						//SHIFT_DATA_PORT = val;//状态指示
+				}
+		}
+	}
+	else 
+	{
+		isUp=0;					
+		switch(val)
+		{
+			case 0x12 :			// Left SHIFT
+				shift = 0;
+				break;
+			case 0x59 :			// Right SHIFT
+				shift = 0;
+				break;
+		}
+	}
+}  
+/*--------------------------------------------------------------------
+函数名称：
+函数功能：
+注意事项：
+提示说明：
+输    入：
+返    回：
+--------------------------------------------------------------------*/
+void main(void)
+{
+   unsigned char i;
+
+	DDRA=0xFF;
+	PORTA|=0x01;
+	lcd_init();
+	lcd_clr();
+	lcd_puts(1,1,"PS2 键盘实验");
+	lcd_puts(2,1,"PS2 PORT");
+	lcd_puts(3,1,"读取键盘的值:");	
+	
+	PORTA=0x00;
+	
+	IN_SDA;
+	while(1)
+	{
+	 	
+		check();
+		if(rcvF)
+		{
+			keyHandle(keyVal);
+			PORTA=0x01;
+			lcd_clr();
+			
+			//lcd_puts(3,1,"写入并读取内容");	
+			for(i=0;i<59;i++)
+			{
+			  if(unshifted[i][0]==tmp) 
+			  {
+			   tmp2=unshifted[i][1];
+			  }
+			}
+			PRESS_DATA_PORT = tmp2;
+			lcd_putc(4,5,tmp2);
+			delay50us(2);
+			PORTA=0x00;
+		}	
+	}
+}

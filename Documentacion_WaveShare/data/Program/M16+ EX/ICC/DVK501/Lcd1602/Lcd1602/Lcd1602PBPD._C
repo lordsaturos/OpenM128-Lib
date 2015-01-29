@@ -1,0 +1,138 @@
+/*********************************************************************
+	微 雪 电 子   WaveShare   http://www.waveShare.net	
+
+功能目的:   建立使用LCD1602的示例程序
+
+目标系统:   基于AVR单片机
+
+应用软件:   ICCAVR                                               
+
+版    本:   Version 1.0
+
+圆版时间:   2005-03-01
+
+开发人员:   SEE
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+
+----------------------------------------------------------------------
+实验内容：
+初始化、读写Lcd1602。
+----------------------------------------------------------------------
+硬件连接：
+将Lcd1602插入主板的Lcd1602插槽,
+使用连接线将LCD1602的引针接口连接到MCU：
+//LCD1602，4位接口，即使用D4-D7数据口，D0-D3不接入MCU
+//PIN1 --- GND
+//PIN2 --- VCC
+//PIN3 --- V0
+//PIN4 --- RS --- PB0
+//PIN5 --- R/W --- PB6
+//PIN6 --- E --- PB7
+//PIN7 --- D0
+//PIN8 --- D1
+//PIN9 --- D2
+//PIN10 --- D3
+//PIN11 --- D4 --- PB1
+//PIN12 --- D5 --- PB2
+//PIN13 --- D6 --- PB3
+//PIN14 --- D7 --- PB4
+//PIN15 --- VCC
+//PIN16 --- GND
+----------------------------------------------------------------------
+注意事项： 
+（1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+（2）请详细阅读“使用必读”及相关资料。
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+#include <iom48v.h>
+#include "D:\ICC_H\CmmICC.H"
+/* control port */
+#define SET_RS  sbi(PORTC,0)
+#define CLR_RS  cbi(PORTC,0)
+#define OUT_RS  sbi(DDRC,0)
+
+#define SET_RW  sbi(PORTD,6)
+#define CLR_RW  cbi(PORTD,6)
+#define OUT_RW  sbi(DDRD,6)
+
+#define SET_E   sbi(PORTD,7)
+#define CLR_E   cbi(PORTD,7)
+#define OUT_E   sbi(DDRD,7)
+
+/* data port */
+#define SET_D4  sbi(PORTC,1)
+#define CLR_D4  cbi(PORTC,1)
+#define OUT_D4  sbi(DDRC,1)
+
+#define SET_D5  sbi(PORTC,2)
+#define CLR_D5  cbi(PORTC,2)
+#define OUT_D5  sbi(DDRC,2)
+
+#define SET_D6  sbi(PORTC,3)
+#define CLR_D6  cbi(PORTC,3)
+#define OUT_D6  sbi(DDRC,3)
+
+#define SET_D7  sbi(PORTC,4)
+#define CLR_D7  cbi(PORTC,4)
+#define OUT_D7  sbi(DDRC,4)
+
+/* busy port */
+#define GET_BF	gbi(PINC,4)
+#define OUT_BF	sbi(DDRC,4)
+#define IN_BF	cbi(DDRC,4)
+
+#include "D:\ICC_H\LCD1602_.H"
+
+const uint8  userCh0[8]={0x10,0x1f,0x01,0x02,0x04,0x08,0x10,0x1f};
+const uint8  userCh1[8]={0x00,0x08,0x0f,0x01,0x02,0x04,0x08,0x0f};
+const uint8  userCh2[8]={0x00,0x00,0x04,0x07,0x01,0x02,0x04,0x07};
+
+/*--------------------------------------------------------------------
+函数全称：
+函数功能：
+注意事项：
+提示说明：
+输    入：	
+返    回：
+--------------------------------------------------------------------*/
+void main()
+{
+
+	LCD1602_init();
+
+	while(1)
+	{
+		LCD1602_puts(0xC6,"Sleeping");
+		delay50ms(5);
+		LCD1602_setCmd("CLR_SCR");
+		delay50ms(5);
+		LCD1602_puts(0xC6,"Sleeping");
+		delay50ms(5);
+		LCD1602_setCmd("CLR_SCR");
+		delay50ms(5);
+		LCD1602_puts(0xC6,"Sleeping");
+		delay50ms(5);
+
+		LCD1602_setCGRAM(CGRAM0,userCh0);	//Set CGRAM0' data
+		LCD1602_setCGRAM(CGRAM1,userCh1);	//Set CGRAM1' data
+		LCD1602_setCGRAM(CGRAM2,userCh2);	//Set CGRAM2' data
+		
+		LCD1602_putc(0x84,CGRAM2);		//putc to 0x84 by CGRAM2' data
+		delay50ms(10);
+		LCD1602_putc(0x83,CGRAM1);		//putc to 0x83 by CGRAM1' data
+		delay50ms(12);
+		LCD1602_putc(0x82,CGRAM0);		//putc to 0x84 by CGRAM0' data
+		delay50ms(14);
+
+		LCD1602_setCmd("CLR_SCR");
+	}
+}

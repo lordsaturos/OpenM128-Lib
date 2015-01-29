@@ -1,0 +1,486 @@
+                        .module SingleKey.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\ICC_H\Software.H
+ 0000                   .dbfunc e speaData _speaData fV
+ 0000           ;              y -> y+4
+ 0000           ;              j -> y+0
+ 0000           ;              i -> R10
+ 0000           ;            len -> R12
+ 0000           ;            dat -> y+16
+                        .even
+ 0000           _speaData::
+ 0000 0E940000          xcall push_arg4
+ 0004 0E940000          xcall push_gset4
+ 0008 2897              sbiw R28,8
+ 000A CC88              ldd R12,y+20
+ 000C                   .dbline -1
+ 000C                   .dbline 116
+ 000C           ; /*********************************************************************
+ 000C           ;     微 雪 电 子   WaveShare   http://www.waveShare.net                
+ 000C           ;                                                                     
+ 000C           ; 目    的:   测试"SingleKeyBoard"模块
+ 000C           ; 
+ 000C           ; 目标系统:   基于任何AVR单片机
+ 000C           ;                                                                         
+ 000C           ; 应用软件:   ICCAVR
+ 000C           ;                                                                         
+ 000C           ; 版    本:   Version 1.0                                                          
+ 000C           ;                                                                         
+ 000C           ; 圆版时间:   2005-06-25
+ 000C           ;     
+ 000C           ; 开发人员:   SEE
+ 000C           ; 
+ 000C           ; 说    明:   若用于商业用途，请保留此段文字或注明代码来源
+ 000C           ;     
+ 000C           ;     深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+ 000C           ; *********************************************************************/
+ 000C           ; 
+ 000C           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 版本更新记录：
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 实验内容：
+ 000C           ; 循环扫描PA口接入的按键，并使用PB口的LED指示灯指示按键的码值。
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 硬件连接：
+ 000C           ; 将PB口的LED指示灯使能开关切换到"ON"状态，使其指示按键的码值。
+ 000C           ; SingleKeyBoard：K0----K7
+ 000C           ;                  |    |
+ 000C           ; SMK1632：       PA0--PA7
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 注意事项： 
+ 000C           ; （1）若有加载库函数，请将光盘根目录下的“库函数”下的“ICC_H”文件夹拷到D盘
+ 000C           ; （2）请详细阅读“使用必读”及相关资料。
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 000C           ; 
+ 000C           ; #include <iom162v.h>
+ 000C           ; #define NO_INCLUDE_I2C_H 1
+ 000C           ; #include "D:\ICC_H\CmmICC.H"
+ 000C           ; 
+ 000C           ; #define LED_DDR  DDRB
+ 000C           ; #define LED_P0RT PORTB
+ 000C           ; #define KEY_DDR  DDRA
+ 000C           ; #define KEY_PORT PORTA
+ 000C           ; #define KEY_PIN  PINA
+ 000C           ; 
+ 000C           ; /*--------------------------------------------------------------------
+ 000C           ; 函数名称：键盘扫描
+ 000C           ; 函数功能：
+ 000C           ; 注意事项：
+ 000C           ; 提示说明：
+ 000C           ; 输    入：
+ 000C           ; 返    回：
+ 000C           ; --------------------------------------------------------------------*/
+ 000C           ; void scanKey()
+ 000C           ; {
+ 000C           ;     KEY_DDR=0X00;
+ 000C           ;     KEY_PORT=0xFF;
+ 000C           ;     if(KEY_PIN==0xFE) 
+ 000C           ;         LED_P0RT=0x01;
+ 000C           ;     if(KEY_PIN==0xFD) 
+ 000C           ;         LED_P0RT=0x02;
+ 000C           ;     if(KEY_PIN==0xFB) 
+ 000C           ;         LED_P0RT=0x04;
+ 000C           ;     if(KEY_PIN==0xF7) 
+ 000C           ;         LED_P0RT=0x08;
+ 000C           ;     if(KEY_PIN==0xEF) 
+ 000C           ;         LED_P0RT=0x10;
+ 000C           ;     if(KEY_PIN==0xDF) 
+ 000C           ;         LED_P0RT=0x20;
+ 000C           ;     if(KEY_PIN==0xBF) 
+ 000C           ;         LED_P0RT=0x40;
+ 000C           ;     if(KEY_PIN==0x7F) 
+ 000C           ;         LED_P0RT=0x80;
+ 000C           ;  }
+ 000C           ; /*--------------------------------------------------------------------
+ 000C           ; 函数名称：
+ 000C           ; 函数功能：
+ 000C           ; 注意事项：
+ 000C           ; 提示说明：
+ 000C           ; 输    入：
+ 000C           ; 返    回：
+ 000C           ; --------------------------------------------------------------------*/
+ 000C           ; void main()
+ 000C           ; {
+ 000C           ;     LED_DDR=0XFF;
+ 000C           ;     while(1)
+ 000C           ;         scanKey();
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C                   .dbline 119
+ 000C           ; }
+ 000C           ; }
+ 000C           ; }
+ 000C AA24              clr R10
+ 000E 41E0              ldi R20,1
+ 0010 50E0              ldi R21,0
+ 0012 60E0              ldi R22,0
+ 0014 70E0              ldi R23,0
+ 0016 FE01              movw R30,R28
+ 0018 4083              std z+0,R20
+ 001A 5183              std z+1,R21
+ 001C 6283              std z+2,R22
+ 001E 7383              std z+3,R23
+ 0020 46C0              xjmp L5
+ 0022           L2:
+ 0022                   .dbline 120
+ 0022                   .dbline 121
+ 0022 FE01              movw R30,R28
+ 0024 2080              ldd R2,z+0
+ 0026 3180              ldd R3,z+1
+ 0028 4280              ldd R4,z+2
+ 002A 5380              ldd R5,z+3
+ 002C FE01              movw R30,R28
+ 002E 6088              ldd R6,z+16
+ 0030 7188              ldd R7,z+17
+ 0032 8288              ldd R8,z+18
+ 0034 9388              ldd R9,z+19
+ 0036 5A92              st -y,R5
+ 0038 4A92              st -y,R4
+ 003A 3A92              st -y,R3
+ 003C 2A92              st -y,R2
+ 003E 8301              movw R16,R6
+ 0040 9401              movw R18,R8
+ 0042 0E940000          xcall div32u
+ 0046 FE01              movw R30,R28
+ 0048 0483              std z+4,R16
+ 004A 1583              std z+5,R17
+ 004C 2683              std z+6,R18
+ 004E 3783              std z+7,R19
+ 0050                   .dbline 122
+ 0050 4AE0              ldi R20,10
+ 0052 50E0              ldi R21,0
+ 0054 60E0              ldi R22,0
+ 0056 70E0              ldi R23,0
+ 0058 FE01              movw R30,R28
+ 005A 2480              ldd R2,z+4
+ 005C 3580              ldd R3,z+5
+ 005E 4680              ldd R4,z+6
+ 0060 5780              ldd R5,z+7
+ 0062 7A93              st -y,R23
+ 0064 6A93              st -y,R22
+ 0066 5A93              st -y,R21
+ 0068 4A93              st -y,R20
+ 006A 8101              movw R16,R2
+ 006C 9201              movw R18,R4
+ 006E 0E940000          xcall mod32u
+ 0072 80E0              ldi R24,<_dataElem
+ 0074 90E0              ldi R25,>_dataElem
+ 0076 EA2D              mov R30,R10
+ 0078 FF27              clr R31
+ 007A E80F              add R30,R24
+ 007C F91F              adc R31,R25
+ 007E 0083              std z+0,R16
+ 0080                   .dbline 123
+ 0080 FE01              movw R30,R28
+ 0082 2080              ldd R2,z+0
+ 0084 3180              ldd R3,z+1
+ 0086 4280              ldd R4,z+2
+ 0088 5380              ldd R5,z+3
+ 008A 4AE0              ldi R20,10
+ 008C 50E0              ldi R21,0
+ 008E 60E0              ldi R22,0
+ 0090 70E0              ldi R23,0
+ 0092 5A92              st -y,R5
+ 0094 4A92              st -y,R4
+ 0096 3A92              st -y,R3
+ 0098 2A92              st -y,R2
+ 009A 8A01              movw R16,R20
+ 009C 9B01              movw R18,R22
+ 009E 0E940000          xcall empy32u
+ 00A2 FE01              movw R30,R28
+ 00A4 0083              std z+0,R16
+ 00A6 1183              std z+1,R17
+ 00A8 2283              std z+2,R18
+ 00AA 3383              std z+3,R19
+ 00AC                   .dbline 124
+ 00AC           L3:
+ 00AC                   .dbline 119
+ 00AC A394              inc R10
+ 00AE           L5:
+ 00AE                   .dbline 119
+ 00AE AC14              cp R10,R12
+ 00B0 08F4              brsh X0
+ 00B2 B7CF              xjmp L2
+ 00B4           X0:
+ 00B4                   .dbline -2
+ 00B4           L1:
+ 00B4 2896              adiw R28,8
+ 00B6 0E940000          xcall pop_gset4
+ 00BA 2496              adiw R28,4
+ 00BC                   .dbline 0 ; func end
+ 00BC 0895              ret
+ 00BE                   .dbsym l y 4 l
+ 00BE                   .dbsym l j 0 l
+ 00BE                   .dbsym r i 10 c
+ 00BE                   .dbsym r len 12 C
+ 00BE                   .dbsym l dat 16 l
+ 00BE                   .dbend
+ 00BE                   .dbfile D:\ICC_H\Hardware.H
+ 00BE                   .dbfunc e delay50us _delay50us fV
+ 00BE           ;              j -> R20
+ 00BE           ;              t -> R16,R17
+                        .even
+ 00BE           _delay50us::
+ 00BE 0E940000          xcall push_gset1
+ 00C2                   .dbline -1
+ 00C2                   .dbline 105
+ 00C2                   .dbline 107
+ 00C2 07C0              xjmp L10
+ 00C4           L7:
+ 00C4                   .dbline 108
+ 00C4 4427              clr R20
+ 00C6 01C0              xjmp L14
+ 00C8           L11:
+ 00C8                   .dbline 109
+ 00C8           L12:
+ 00C8                   .dbline 108
+ 00C8 4395              inc R20
+ 00CA           L14:
+ 00CA                   .dbline 108
+ 00CA 4634              cpi R20,70
+ 00CC E8F3              brlo L11
+ 00CE           L8:
+ 00CE                   .dbline 107
+ 00CE 0150              subi R16,1
+ 00D0 1040              sbci R17,0
+ 00D2           L10:
+ 00D2                   .dbline 107
+ 00D2 2224              clr R2
+ 00D4 3324              clr R3
+ 00D6 2016              cp R2,R16
+ 00D8 3106              cpc R3,R17
+ 00DA A4F3              brlt L7
+ 00DC                   .dbline -2
+ 00DC           L6:
+ 00DC 0E940000          xcall pop_gset1
+ 00E0                   .dbline 0 ; func end
+ 00E0 0895              ret
+ 00E2                   .dbsym r j 20 c
+ 00E2                   .dbsym r t 16 I
+ 00E2                   .dbend
+ 00E2                   .dbfunc e delay50ms _delay50ms fV
+ 00E2           ;              i -> R20,R21
+ 00E2           ;              t -> R16,R17
+                        .even
+ 00E2           _delay50ms::
+ 00E2 0E940000          xcall push_gset1
+ 00E6                   .dbline -1
+ 00E6                   .dbline 120
+ 00E6           ; }
+ 00E6                   .dbline 122
+ 00E6           ; }
+ 00E6           ; }
+ 00E6 0BC0              xjmp L19
+ 00E8           L16:
+ 00E8                   .dbline 123
+ 00E8           ; }
+ 00E8 4427              clr R20
+ 00EA 5527              clr R21
+ 00EC 02C0              xjmp L23
+ 00EE           L20:
+ 00EE                   .dbline 124
+ 00EE           L21:
+ 00EE                   .dbline 123
+ 00EE 4F5F              subi R20,255  ; offset = 1
+ 00F0 5F4F              sbci R21,255
+ 00F2           L23:
+ 00F2                   .dbline 123
+ 00F2 423A              cpi R20,162
+ 00F4 EDEC              ldi R30,205
+ 00F6 5E07              cpc R21,R30
+ 00F8 D0F3              brlo L20
+ 00FA           L17:
+ 00FA                   .dbline 122
+ 00FA 0150              subi R16,1
+ 00FC 1040              sbci R17,0
+ 00FE           L19:
+ 00FE                   .dbline 122
+ 00FE 2224              clr R2
+ 0100 3324              clr R3
+ 0102 2016              cp R2,R16
+ 0104 3106              cpc R3,R17
+ 0106 84F3              brlt L16
+ 0108                   .dbline -2
+ 0108           L15:
+ 0108 0E940000          xcall pop_gset1
+ 010C                   .dbline 0 ; func end
+ 010C 0895              ret
+ 010E                   .dbsym r i 20 i
+ 010E                   .dbsym r t 16 I
+ 010E                   .dbend
+ 010E                   .dbfunc e delayus _delayus fV
+ 010E           ;              i -> R20,R21
+ 010E           ;              t -> R16,R17
+                        .even
+ 010E           _delayus::
+ 010E 0E940000          xcall push_gset1
+ 0112                   .dbline -1
+ 0112                   .dbline 129
+ 0112           ; }
+ 0112           ; }
+ 0112           ; }
+ 0112           ; }
+ 0112           ; }
+ 0112           ; }
+ 0112                   .dbline 131
+ 0112 4427              clr R20
+ 0114 5527              clr R21
+ 0116 03C0              xjmp L28
+ 0118           L25:
+ 0118                   .dbline 131
+ 0118                   .dbline 131
+ 0118 0000              NOP
+ 011A                   
+ 011A                   .dbline 131
+ 011A           L26:
+ 011A                   .dbline 131
+ 011A 4F5F              subi R20,255  ; offset = 1
+ 011C 5F4F              sbci R21,255
+ 011E           L28:
+ 011E                   .dbline 131
+ 011E           ; }
+ 011E           ; }
+ 011E 0417              cp R16,R20
+ 0120 1507              cpc R17,R21
+ 0122 D0F7              brsh L25
+ 0124                   .dbline -2
+ 0124           L24:
+ 0124 0E940000          xcall pop_gset1
+ 0128                   .dbline 0 ; func end
+ 0128 0895              ret
+ 012A                   .dbsym r i 20 i
+ 012A                   .dbsym r t 16 i
+ 012A                   .dbend
+ 012A                   .dbfile E:\吴泽程序备份\DVK500\新建文件夹\STK162~1.0\SINGLE~1\SingleKeyBoard\SingleKey.c
+ 012A                   .dbfunc e scanKey _scanKey fV
+                        .even
+ 012A           _scanKey::
+ 012A                   .dbline -1
+ 012A                   .dbline 60
+ 012A                   .dbline 61
+ 012A 2224              clr R2
+ 012C 2ABA              out 0x1a,R2
+ 012E                   .dbline 62
+ 012E 8FEF              ldi R24,255
+ 0130 8BBB              out 0x1b,R24
+ 0132                   .dbline 63
+ 0132 89B3              in R24,0x19
+ 0134 8E3F              cpi R24,254
+ 0136 11F4              brne L30
+ 0138                   .dbline 64
+ 0138 81E0              ldi R24,1
+ 013A 88BB              out 0x18,R24
+ 013C           L30:
+ 013C                   .dbline 65
+ 013C 89B3              in R24,0x19
+ 013E 8D3F              cpi R24,253
+ 0140 11F4              brne L32
+ 0142                   .dbline 66
+ 0142 82E0              ldi R24,2
+ 0144 88BB              out 0x18,R24
+ 0146           L32:
+ 0146                   .dbline 67
+ 0146 89B3              in R24,0x19
+ 0148 8B3F              cpi R24,251
+ 014A 11F4              brne L34
+ 014C                   .dbline 68
+ 014C 84E0              ldi R24,4
+ 014E 88BB              out 0x18,R24
+ 0150           L34:
+ 0150                   .dbline 69
+ 0150 89B3              in R24,0x19
+ 0152 873F              cpi R24,247
+ 0154 11F4              brne L36
+ 0156                   .dbline 70
+ 0156 88E0              ldi R24,8
+ 0158 88BB              out 0x18,R24
+ 015A           L36:
+ 015A                   .dbline 71
+ 015A 89B3              in R24,0x19
+ 015C 8F3E              cpi R24,239
+ 015E 11F4              brne L38
+ 0160                   .dbline 72
+ 0160 80E1              ldi R24,16
+ 0162 88BB              out 0x18,R24
+ 0164           L38:
+ 0164                   .dbline 73
+ 0164 89B3              in R24,0x19
+ 0166 8F3D              cpi R24,223
+ 0168 11F4              brne L40
+ 016A                   .dbline 74
+ 016A 80E2              ldi R24,32
+ 016C 88BB              out 0x18,R24
+ 016E           L40:
+ 016E                   .dbline 75
+ 016E 89B3              in R24,0x19
+ 0170 8F3B              cpi R24,191
+ 0172 11F4              brne L42
+ 0174                   .dbline 76
+ 0174 80E4              ldi R24,64
+ 0176 88BB              out 0x18,R24
+ 0178           L42:
+ 0178                   .dbline 77
+ 0178 89B3              in R24,0x19
+ 017A 8F37              cpi R24,127
+ 017C 11F4              brne L44
+ 017E                   .dbline 78
+ 017E 80E8              ldi R24,128
+ 0180 88BB              out 0x18,R24
+ 0182           L44:
+ 0182                   .dbline -2
+ 0182           L29:
+ 0182                   .dbline 0 ; func end
+ 0182 0895              ret
+ 0184                   .dbend
+ 0184                   .dbfunc e main _main fV
+                        .even
+ 0184           _main::
+ 0184                   .dbline -1
+ 0184                   .dbline 89
+ 0184                   .dbline 90
+ 0184 8FEF              ldi R24,255
+ 0186 87BB              out 0x17,R24
+ 0188 01C0              xjmp L48
+ 018A           L47:
+ 018A                   .dbline 92
+ 018A CFDF              xcall _scanKey
+ 018C           L48:
+ 018C                   .dbline 91
+ 018C FECF              xjmp L47
+ 018E           X1:
+ 018E                   .dbline -2
+ 018E           L46:
+ 018E                   .dbline 0 ; func end
+ 018E 0895              ret
+ 0190                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile E:\吴泽程序备份\DVK500\新建文件夹\STK162~1.0\SINGLE~1\SingleKeyBoard\SingleKey.c
+ 0000           _dataElem::
+ 0000                   .blkb 6
+ 0006                   .dbfile D:\ICC_H\Software.H
+ 0006                   .dbsym e dataElem _dataElem A[6:6]c

@@ -1,0 +1,43 @@
+Address = 0x000000a4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:31:0:-1
+Address = 0x000000a6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:32:0:-1
+Address = 0x000000aa  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:33:0:-1
+Address = 0x000000b0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:34:0:-1
+Address = 0x000000b4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:35:0:-1
+Address = 0x000000b8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:36:0:-1
+Address = 0x000000ba  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:23:0:-1
+Address = 0x000000be  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:24:0:-1
+Address = 0x000000c0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:25:0:-1
+Address = 0x000000c2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:30:0:-1
+Address = 0x000000c6  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:31:0:-1
+Address = 0x000000c8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:32:0:-1
+Address = 0x000000ca  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:33:0:-1
+Address = 0x000000ce  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:34:0:-1
+Address = 0x000000d8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:35:0:-1
+Address = 0x000000dc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:38:0:-1
+Address = 0x000000dc  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:30:0:-1
+Address = 0x000000e0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:31:0:-1
+Address = 0x000000e2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:32:0:-1
+Address = 0x000000e4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:33:0:-1
+Address = 0x000000e8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:42:0:-1
+Address = 0x000000ec  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\default/../USART.c:25:0:-1
+Address = 0x000000f0  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\default/../USART.c:26:0:-1
+Address = 0x000000f2  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:31:0:-1
+Address = 0x000000f4  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:32:0:-1
+Address = 0x000000f8  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:33:0:-1
+Address = 0x000000fe  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:34:0:-1
+Address = 0x00000102  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart_port.h:35:0:-1
+Address = 0x00000108  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x00000110  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:23:0:-1
+Address = 0x00000114  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:24:0:-1
+Address = 0x00000116  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x0000011c  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:30:0:-1
+Address = 0x00000120  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:31:0:-1
+Address = 0x00000122  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:32:0:-1
+Address = 0x00000124  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:33:0:-1
+Address = 0x00000128  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\..\..\..\..\ws_lib/ws_usart.h:34:0:-1
+Address = 0x00000130  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\default/../USART.c:33:0:-1
+Address = 0x00000136  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay_basic.h:105:0:-1
+Address = 0x0000013c  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:124:0:-1
+Address = 0x0000013e  File:line:col:begin = d:/winavr-20090313/lib/gcc/../../avr/include/util/delay.h:120:0:-1
+Address = 0x00000140  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\default/../USART.c:34:0:-1
+Address = 0x00000144  File:line:col:begin = D:\DVK501_GCC\M128+ EX\MAX3232\USART\default/../USART.c:34:0:-1

@@ -1,0 +1,2883 @@
+                        .module Lcd1602PBPD.C
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\ICC_H\Software.H
+ 0000                   .dbfunc e speaData _speaData fV
+ 0000           ;              y -> y+4
+ 0000           ;              j -> y+0
+ 0000           ;              i -> R10
+ 0000           ;            len -> R12
+ 0000           ;            dat -> y+16
+                        .even
+ 0000           _speaData::
+ 0000 0E940000          xcall push_arg4
+ 0004 0E940000          xcall push_gset4
+ 0008 2897              sbiw R28,8
+ 000A CC88              ldd R12,y+20
+ 000C                   .dbline -1
+ 000C                   .dbline 116
+ 000C           ; /*********************************************************************
+ 000C           ;       Î¢ Ñ© µç ×Ó   WaveShare   http://www.waveShare.net      
+ 000C           ; 
+ 000C           ; ¹¦ÄÜÄ¿µÄ:   ½¨Á¢Ê¹ÓÃLCD1602µÄÊ¾Àý³ÌÐò
+ 000C           ; 
+ 000C           ; Ä¿±êÏµÍ³:   »ùÓÚAVRµ¥Æ¬»ú
+ 000C           ; 
+ 000C           ; Ó¦ÓÃÈí¼þ:   ICCAVR                                               
+ 000C           ; 
+ 000C           ; °æ    ±¾:   Version 1.0
+ 000C           ; 
+ 000C           ; Ô²°æÊ±¼ä:   2005-03-01
+ 000C           ; 
+ 000C           ; ¿ª·¢ÈËÔ±:   SEE
+ 000C           ; 
+ 000C           ; Ëµ    Ã÷:   ÈôÓÃÓÚÉÌÒµÓÃÍ¾£¬Çë±£Áô´Ë¶ÎÎÄ×Ö»ò×¢Ã÷´úÂëÀ´Ô´
+ 000C           ; 
+ 000C           ;       Éî ÛÚ ÊÐ Î¢ Ñ© µç ×Ó ÓÐ ÏÞ ¹« Ë¾ ±£ Áô Ëù ÓÐ µÄ °æ È¨
+ 000C           ; *********************************************************************/
+ 000C           ; 
+ 000C           ; /*01010101010101010101010101010101010101010101010101010101010101010101
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; °æ±¾¸üÐÂ¼ÇÂ¼£º
+ 000C           ; 
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; ÊµÑéÄÚÈÝ£º
+ 000C           ; ³õÊ¼»¯¡¢¶ÁÐ´Lcd1602¡£
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; Ó²¼þÁ¬½Ó£º
+ 000C           ; ½«Lcd1602²åÈëÖ÷°åµÄLcd1602²å²Û,
+ 000C           ; Ê¹ÓÃÁ¬½ÓÏß½«LCD1602µÄÒýÕë½Ó¿ÚÁ¬½Óµ½MCU£º
+ 000C           ; //LCD1602£¬4Î»½Ó¿Ú£¬¼´Ê¹ÓÃD4-D7Êý¾Ý¿Ú£¬D0-D3²»½ÓÈëMCU
+ 000C           ; //PIN1 --- GND
+ 000C           ; //PIN2 --- VCC
+ 000C           ; //PIN3 --- V0
+ 000C           ; //PIN4 --- RS --- PB5
+ 000C           ; //PIN5 --- R/W --- PB6
+ 000C           ; //PIN6 --- E --- PB7
+ 000C           ; //PIN7 --- D0
+ 000C           ; //PIN8 --- D1
+ 000C           ; //PIN9 --- D2
+ 000C           ; //PIN10 --- D3
+ 000C           ; //PIN11 --- D4 --- PD4
+ 000C           ; //PIN12 --- D5 --- PD5
+ 000C           ; //PIN13 --- D6 --- PD6
+ 000C           ; //PIN14 --- D7 --- PD7
+ 000C           ; //PIN15 --- VCC
+ 000C           ; //PIN16 --- GND
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; ×¢ÒâÊÂÏî£º 
+ 000C           ; £¨1£©ÈôÓÐ¼ÓÔØ¿âº¯Êý£¬Çë½«¹âÅÌ¸ùÄ¿Â¼ÏÂµÄ¡°¿âº¯Êý¡±ÏÂµÄ¡°ICC_H¡±ÎÄ¼þ¼Ð¿½µ½DÅÌ
+ 000C           ; £¨2£©ÇëÏêÏ¸ÔÄ¶Á¡°Ê¹ÓÃ±Ø¶Á¡±¼°Ïà¹Ø×ÊÁÏ¡£
+ 000C           ; ----------------------------------------------------------------------
+ 000C           ; 10101010101010101010101010101010101010101010101010101010101010101010*/
+ 000C           ; 
+ 000C           ; #include <iom162v.h>
+ 000C           ; #define NO_INCLUDE_I2C_H 1
+ 000C           ; #include "D:\ICC_H\CmmICC.H"
+ 000C           ; /* control port */
+ 000C           ; #define SET_RS  sbi(PORTB,5)
+ 000C           ; #define CLR_RS  cbi(PORTB,5)
+ 000C           ; #define OUT_RS  sbi(DDRB,5)
+ 000C           ; 
+ 000C           ; #define SET_RW  sbi(PORTB,6)
+ 000C           ; #define CLR_RW  cbi(PORTB,6)
+ 000C           ; #define OUT_RW  sbi(DDRB,6)
+ 000C           ; 
+ 000C           ; #define SET_E   sbi(PORTB,7)
+ 000C           ; #define CLR_E   cbi(PORTB,7)
+ 000C           ; #define OUT_E   sbi(DDRB,7)
+ 000C           ; 
+ 000C           ; /* data port */
+ 000C           ; #define SET_D4  sbi(PORTD,4)
+ 000C           ; #define CLR_D4  cbi(PORTD,4)
+ 000C           ; #define OUT_D4  sbi(DDRD,4)
+ 000C           ; 
+ 000C           ; #define SET_D5  sbi(PORTD,5)
+ 000C           ; #define CLR_D5  cbi(PORTD,5)
+ 000C           ; #define OUT_D5  sbi(DDRD,5)
+ 000C           ; 
+ 000C           ; #define SET_D6  sbi(PORTD,6)
+ 000C           ; #define CLR_D6  cbi(PORTD,6)
+ 000C           ; #define OUT_D6  sbi(DDRD,6)
+ 000C           ; 
+ 000C           ; #define SET_D7  sbi(PORTD,7)
+ 000C           ; #define CLR_D7  cbi(PORTD,7)
+ 000C           ; #define OUT_D7  sbi(DDRD,7)
+ 000C           ; 
+ 000C           ; /* busy port */
+ 000C           ; #define GET_BF        gbi(PIND,7)
+ 000C           ; #define OUT_BF        sbi(DDRD,7)
+ 000C           ; #define IN_BF cbi(DDRD,7)
+ 000C           ; 
+ 000C           ; #include "D:\ICC_H\LCD1602_.H"
+ 000C           ; 
+ 000C           ; const uint8  userCh0[8]={0x10,0x1f,0x01,0x02,0x04,0x08,0x10,0x1f};
+ 000C           ; const uint8  userCh1[8]={0x00,0x08,0x0f,0x01,0x02,0x04,0x08,0x0f};
+ 000C           ; const uint8  userCh2[8]={0x00,0x00,0x04,0x07,0x01,0x02,0x04,0x07};
+ 000C           ; 
+ 000C           ; /*--------------------------------------------------------------------
+ 000C           ; º¯ÊýÈ«³Æ£º
+ 000C           ; º¯Êý¹¦ÄÜ£º
+ 000C           ; ×¢ÒâÊÂÏî£º
+ 000C           ; ÌáÊ¾ËµÃ÷£º
+ 000C           ; Êä    Èë£º    
+ 000C           ; ·µ    »Ø£º
+ 000C           ; --------------------------------------------------------------------*/
+ 000C           ; void main()
+ 000C           ; {
+ 000C           ; 
+ 000C           ;       LCD1602_init();
+ 000C           ; 
+ 000C           ;       while(1)
+ 000C           ;       {
+ 000C           ;               LCD1602_puts(0xC6,"Sleeping");
+ 000C           ;               delay50ms(5);
+ 000C                   .dbline 119
+ 000C           ;               LCD1602_setCmd("CLR_SCR");
+ 000C           ;               delay50ms(5);
+ 000C           ;               LCD1602_puts(0xC6,"Sleeping");
+ 000C AA24              clr R10
+ 000E 41E0              ldi R20,1
+ 0010 50E0              ldi R21,0
+ 0012 60E0              ldi R22,0
+ 0014 70E0              ldi R23,0
+ 0016 FE01              movw R30,R28
+ 0018 4083              std z+0,R20
+ 001A 5183              std z+1,R21
+ 001C 6283              std z+2,R22
+ 001E 7383              std z+3,R23
+ 0020 46C0              xjmp L5
+ 0022           L2:
+ 0022                   .dbline 120
+ 0022                   .dbline 121
+ 0022 FE01              movw R30,R28
+ 0024 2080              ldd R2,z+0
+ 0026 3180              ldd R3,z+1
+ 0028 4280              ldd R4,z+2
+ 002A 5380              ldd R5,z+3
+ 002C FE01              movw R30,R28
+ 002E 6088              ldd R6,z+16
+ 0030 7188              ldd R7,z+17
+ 0032 8288              ldd R8,z+18
+ 0034 9388              ldd R9,z+19
+ 0036 5A92              st -y,R5
+ 0038 4A92              st -y,R4
+ 003A 3A92              st -y,R3
+ 003C 2A92              st -y,R2
+ 003E 8301              movw R16,R6
+ 0040 9401              movw R18,R8
+ 0042 0E940000          xcall div32u
+ 0046 FE01              movw R30,R28
+ 0048 0483              std z+4,R16
+ 004A 1583              std z+5,R17
+ 004C 2683              std z+6,R18
+ 004E 3783              std z+7,R19
+ 0050                   .dbline 122
+ 0050 4AE0              ldi R20,10
+ 0052 50E0              ldi R21,0
+ 0054 60E0              ldi R22,0
+ 0056 70E0              ldi R23,0
+ 0058 FE01              movw R30,R28
+ 005A 2480              ldd R2,z+4
+ 005C 3580              ldd R3,z+5
+ 005E 4680              ldd R4,z+6
+ 0060 5780              ldd R5,z+7
+ 0062 7A93              st -y,R23
+ 0064 6A93              st -y,R22
+ 0066 5A93              st -y,R21
+ 0068 4A93              st -y,R20
+ 006A 8101              movw R16,R2
+ 006C 9201              movw R18,R4
+ 006E 0E940000          xcall mod32u
+ 0072 80E0              ldi R24,<_dataElem
+ 0074 90E0              ldi R25,>_dataElem
+ 0076 EA2D              mov R30,R10
+ 0078 FF27              clr R31
+ 007A E80F              add R30,R24
+ 007C F91F              adc R31,R25
+ 007E 0083              std z+0,R16
+ 0080                   .dbline 123
+ 0080 FE01              movw R30,R28
+ 0082 2080              ldd R2,z+0
+ 0084 3180              ldd R3,z+1
+ 0086 4280              ldd R4,z+2
+ 0088 5380              ldd R5,z+3
+ 008A 4AE0              ldi R20,10
+ 008C 50E0              ldi R21,0
+ 008E 60E0              ldi R22,0
+ 0090 70E0              ldi R23,0
+ 0092 5A92              st -y,R5
+ 0094 4A92              st -y,R4
+ 0096 3A92              st -y,R3
+ 0098 2A92              st -y,R2
+ 009A 8A01              movw R16,R20
+ 009C 9B01              movw R18,R22
+ 009E 0E940000          xcall empy32u
+ 00A2 FE01              movw R30,R28
+ 00A4 0083              std z+0,R16
+ 00A6 1183              std z+1,R17
+ 00A8 2283              std z+2,R18
+ 00AA 3383              std z+3,R19
+ 00AC                   .dbline 124
+ 00AC           L3:
+ 00AC                   .dbline 119
+ 00AC A394              inc R10
+ 00AE           L5:
+ 00AE                   .dbline 119
+ 00AE AC14              cp R10,R12
+ 00B0 08F4              brsh X0
+ 00B2 B7CF              xjmp L2
+ 00B4           X0:
+ 00B4                   .dbline -2
+ 00B4           L1:
+ 00B4 2896              adiw R28,8
+ 00B6 0E940000          xcall pop_gset4
+ 00BA 2496              adiw R28,4
+ 00BC                   .dbline 0 ; func end
+ 00BC 0895              ret
+ 00BE                   .dbsym l y 4 l
+ 00BE                   .dbsym l j 0 l
+ 00BE                   .dbsym r i 10 c
+ 00BE                   .dbsym r len 12 C
+ 00BE                   .dbsym l dat 16 l
+ 00BE                   .dbend
+ 00BE                   .dbfile D:\ICC_H\Hardware.H
+ 00BE                   .dbfunc e delay50us _delay50us fV
+ 00BE           ;              j -> R20
+ 00BE           ;              t -> R16,R17
+                        .even
+ 00BE           _delay50us::
+ 00BE 0E940000          xcall push_gset1
+ 00C2                   .dbline -1
+ 00C2                   .dbline 105
+ 00C2                   .dbline 107
+ 00C2 07C0              xjmp L10
+ 00C4           L7:
+ 00C4                   .dbline 108
+ 00C4 4427              clr R20
+ 00C6 01C0              xjmp L14
+ 00C8           L11:
+ 00C8                   .dbline 109
+ 00C8           L12:
+ 00C8                   .dbline 108
+ 00C8 4395              inc R20
+ 00CA           L14:
+ 00CA                   .dbline 108
+ 00CA 4634              cpi R20,70
+ 00CC E8F3              brlo L11
+ 00CE           L8:
+ 00CE                   .dbline 107
+ 00CE 0150              subi R16,1
+ 00D0 1040              sbci R17,0
+ 00D2           L10:
+ 00D2                   .dbline 107
+ 00D2 2224              clr R2
+ 00D4 3324              clr R3
+ 00D6 2016              cp R2,R16
+ 00D8 3106              cpc R3,R17
+ 00DA A4F3              brlt L7
+ 00DC                   .dbline -2
+ 00DC           L6:
+ 00DC 0E940000          xcall pop_gset1
+ 00E0                   .dbline 0 ; func end
+ 00E0 0895              ret
+ 00E2                   .dbsym r j 20 c
+ 00E2                   .dbsym r t 16 I
+ 00E2                   .dbend
+ 00E2                   .dbfunc e delay50ms _delay50ms fV
+ 00E2           ;              i -> R20,R21
+ 00E2           ;              t -> R16,R17
+                        .even
+ 00E2           _delay50ms::
+ 00E2 0E940000          xcall push_gset1
+ 00E6                   .dbline -1
+ 00E6                   .dbline 120
+ 00E6           ;               delay50ms(5);
+ 00E6                   .dbline 122
+ 00E6           ;               LCD1602_setCmd("CLR_SCR");
+ 00E6           ;               delay50ms(5);
+ 00E6 0BC0              xjmp L19
+ 00E8           L16:
+ 00E8                   .dbline 123
+ 00E8           ;               LCD1602_puts(0xC6,"Sleeping");
+ 00E8 4427              clr R20
+ 00EA 5527              clr R21
+ 00EC 02C0              xjmp L23
+ 00EE           L20:
+ 00EE                   .dbline 124
+ 00EE           L21:
+ 00EE                   .dbline 123
+ 00EE 4F5F              subi R20,255  ; offset = 1
+ 00F0 5F4F              sbci R21,255
+ 00F2           L23:
+ 00F2                   .dbline 123
+ 00F2 423A              cpi R20,162
+ 00F4 EDEC              ldi R30,205
+ 00F6 5E07              cpc R21,R30
+ 00F8 D0F3              brlo L20
+ 00FA           L17:
+ 00FA                   .dbline 122
+ 00FA 0150              subi R16,1
+ 00FC 1040              sbci R17,0
+ 00FE           L19:
+ 00FE                   .dbline 122
+ 00FE 2224              clr R2
+ 0100 3324              clr R3
+ 0102 2016              cp R2,R16
+ 0104 3106              cpc R3,R17
+ 0106 84F3              brlt L16
+ 0108                   .dbline -2
+ 0108           L15:
+ 0108 0E940000          xcall pop_gset1
+ 010C                   .dbline 0 ; func end
+ 010C 0895              ret
+ 010E                   .dbsym r i 20 i
+ 010E                   .dbsym r t 16 I
+ 010E                   .dbend
+ 010E                   .dbfunc e delayus _delayus fV
+ 010E           ;              i -> R20,R21
+ 010E           ;              t -> R16,R17
+                        .even
+ 010E           _delayus::
+ 010E 0E940000          xcall push_gset1
+ 0112                   .dbline -1
+ 0112                   .dbline 129
+ 0112           ;               delay50ms(5);
+ 0112           ; 
+ 0112           ;               LCD1602_setCGRAM(CGRAM0,userCh0);       //Set CGRAM0' data
+ 0112           ;               LCD1602_setCGRAM(CGRAM1,userCh1);       //Set CGRAM1' data
+ 0112           ;               LCD1602_setCGRAM(CGRAM2,userCh2);       //Set CGRAM2' data
+ 0112           ;               
+ 0112                   .dbline 131
+ 0112 4427              clr R20
+ 0114 5527              clr R21
+ 0116 03C0              xjmp L28
+ 0118           L25:
+ 0118                   .dbline 131
+ 0118                   .dbline 131
+ 0118 0000              NOP
+ 011A                   
+ 011A                   .dbline 131
+ 011A           L26:
+ 011A                   .dbline 131
+ 011A 4F5F              subi R20,255  ; offset = 1
+ 011C 5F4F              sbci R21,255
+ 011E           L28:
+ 011E                   .dbline 131
+ 011E           ;               LCD1602_putc(0x84,CGRAM2);              //putc to 0x84 by CGRAM2' data
+ 011E           ;               delay50ms(10);
+ 011E 0417              cp R16,R20
+ 0120 1507              cpc R17,R21
+ 0122 D0F7              brsh L25
+ 0124                   .dbline -2
+ 0124           L24:
+ 0124 0E940000          xcall pop_gset1
+ 0128                   .dbline 0 ; func end
+ 0128 0895              ret
+ 012A                   .dbsym r i 20 i
+ 012A                   .dbsym r t 16 i
+ 012A                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile D:\ICC_H\Hardware.H
+ 0000           _LCD1602Err::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 00                .byte 0
+                        .area data(ram, con, rel)
+ 0001                   .dbfile D:\ICC_H\Hardware.H
+ 0001                   .dbfile D:\ICC_H\LCD1602_.H
+ 0001                   .dbsym e LCD1602Err _LCD1602Err c
+                        .area text(rom, con, rel)
+ 012A                   .dbfile D:\ICC_H\LCD1602_.H
+ 012A                   .dbfunc e busy _busy fV
+ 012A           ;        busySta -> R16
+ 012A           ;    busyCounter -> R18,R19
+                        .even
+ 012A           _busy::
+ 012A                   .dbline -1
+ 012A                   .dbline 153
+ 012A           ;               LCD1602_putc(0x83,CGRAM1);              //putc to 0x83 by CGRAM1' data
+ 012A           ;               delay50ms(12);
+ 012A           ;               LCD1602_putc(0x82,CGRAM0);              //putc to 0x84 by CGRAM0' data
+ 012A           ;               delay50ms(14);
+ 012A           ; 
+ 012A           ;               LCD1602_setCmd("CLR_SCR");
+ 012A           ;       }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A           ; }
+ 012A                   .dbline 154
+ 012A           ; }
+ 012A 2227              clr R18
+ 012C 3327              clr R19
+ 012E                   .dbline 156
+ 012E           ; }
+ 012E           ; }
+ 012E 8F98              cbi 0x11,7
+ 0130                   .dbline 157
+ 0130           ; }
+ 0130 949A              sbi 0x12,4
+ 0132                   .dbline 158
+ 0132           ; }
+ 0132 959A              sbi 0x12,5
+ 0134                   .dbline 159
+ 0134           ; }
+ 0134 969A              sbi 0x12,6
+ 0136                   .dbline 160
+ 0136           ; }
+ 0136 979A              sbi 0x12,7
+ 0138                   .dbline 161
+ 0138           ; }
+ 0138                   .dbline 161
+ 0138 0000              nop
+ 013A                   .dbline 161
+ 013A 0000              nop
+ 013C                   .dbline 161
+ 013C 0000              nop
+ 013E                   .dbline 161
+ 013E 0000              nop
+ 0140                   .dbline 161
+ 0140 0000              nop
+ 0142                   .dbline 161
+ 0142 0000              nop
+ 0144                   .dbline 161
+ 0144 0000              nop
+ 0146                   .dbline 161
+ 0146 0000              nop
+ 0148                   .dbline 161
+ 0148                   .dbline 161
+ 0148                   .dbline 162
+ 0148           ; }
+ 0148 C598              cbi 0x18,5
+ 014A                   .dbline 163
+ 014A           ; }
+ 014A                   .dbline 163
+ 014A 0000              nop
+ 014C                   .dbline 163
+ 014C 0000              nop
+ 014E                   .dbline 163
+ 014E 0000              nop
+ 0150                   .dbline 163
+ 0150 0000              nop
+ 0152                   .dbline 163
+ 0152 0000              nop
+ 0154                   .dbline 163
+ 0154 0000              nop
+ 0156                   .dbline 163
+ 0156 0000              nop
+ 0158                   .dbline 163
+ 0158 0000              nop
+ 015A                   .dbline 163
+ 015A                   .dbline 163
+ 015A                   .dbline 164
+ 015A           ; }
+ 015A C69A              sbi 0x18,6
+ 015C                   .dbline 165
+ 015C           ; }
+ 015C                   .dbline 165
+ 015C 0000              nop
+ 015E                   .dbline 165
+ 015E 0000              nop
+ 0160                   .dbline 165
+ 0160 0000              nop
+ 0162                   .dbline 165
+ 0162 0000              nop
+ 0164                   .dbline 165
+ 0164 0000              nop
+ 0166                   .dbline 165
+ 0166 0000              nop
+ 0168                   .dbline 165
+ 0168 0000              nop
+ 016A                   .dbline 165
+ 016A 0000              nop
+ 016C                   .dbline 165
+ 016C                   .dbline 165
+ 016C           L30:
+ 016C                   .dbline 168
+ 016C           ; }
+ 016C           ; }
+ 016C           ; }
+ 016C                   .dbline 169
+ 016C           ; }
+ 016C C79A              sbi 0x18,7
+ 016E                   .dbline 170
+ 016E           ; }
+ 016E                   .dbline 170
+ 016E 0000              nop
+ 0170                   .dbline 170
+ 0170 0000              nop
+ 0172                   .dbline 170
+ 0172 0000              nop
+ 0174                   .dbline 170
+ 0174 0000              nop
+ 0176                   .dbline 170
+ 0176 0000              nop
+ 0178                   .dbline 170
+ 0178 0000              nop
+ 017A                   .dbline 170
+ 017A 0000              nop
+ 017C                   .dbline 170
+ 017C 0000              nop
+ 017E                   .dbline 170
+ 017E                   .dbline 170
+ 017E                   .dbline 172
+ 017E           ; }
+ 017E           ; }
+ 017E 00B3              in R16,0x10
+ 0180 1127              clr R17
+ 0182 0078              andi R16,128
+ 0184 1070              andi R17,0
+ 0186                   .dbline 173
+ 0186           ; }
+ 0186 C798              cbi 0x18,7
+ 0188                   .dbline 174
+ 0188           ; }
+ 0188                   .dbline 174
+ 0188 0000              nop
+ 018A                   .dbline 174
+ 018A 0000              nop
+ 018C                   .dbline 174
+ 018C 0000              nop
+ 018E                   .dbline 174
+ 018E 0000              nop
+ 0190                   .dbline 174
+ 0190 0000              nop
+ 0192                   .dbline 174
+ 0192 0000              nop
+ 0194                   .dbline 174
+ 0194 0000              nop
+ 0196                   .dbline 174
+ 0196 0000              nop
+ 0198                   .dbline 174
+ 0198                   .dbline 174
+ 0198                   .dbline 176
+ 0198           ; }
+ 0198           ; }
+ 0198 949A              sbi 0x12,4
+ 019A                   .dbline 177
+ 019A           ; }
+ 019A 959A              sbi 0x12,5
+ 019C                   .dbline 178
+ 019C           ; }
+ 019C 969A              sbi 0x12,6
+ 019E                   .dbline 179
+ 019E           ; }
+ 019E 979A              sbi 0x12,7
+ 01A0                   .dbline 180
+ 01A0           ; }
+ 01A0                   .dbline 180
+ 01A0 0000              nop
+ 01A2                   .dbline 180
+ 01A2 0000              nop
+ 01A4                   .dbline 180
+ 01A4 0000              nop
+ 01A6                   .dbline 180
+ 01A6 0000              nop
+ 01A8                   .dbline 180
+ 01A8 0000              nop
+ 01AA                   .dbline 180
+ 01AA 0000              nop
+ 01AC                   .dbline 180
+ 01AC 0000              nop
+ 01AE                   .dbline 180
+ 01AE 0000              nop
+ 01B0                   .dbline 180
+ 01B0                   .dbline 180
+ 01B0                   .dbline 181
+ 01B0           ; }
+ 01B0 C79A              sbi 0x18,7
+ 01B2                   .dbline 182
+ 01B2           ; }
+ 01B2                   .dbline 182
+ 01B2 0000              nop
+ 01B4                   .dbline 182
+ 01B4 0000              nop
+ 01B6                   .dbline 182
+ 01B6 0000              nop
+ 01B8                   .dbline 182
+ 01B8 0000              nop
+ 01BA                   .dbline 182
+ 01BA 0000              nop
+ 01BC                   .dbline 182
+ 01BC 0000              nop
+ 01BE                   .dbline 182
+ 01BE 0000              nop
+ 01C0                   .dbline 182
+ 01C0 0000              nop
+ 01C2                   .dbline 182
+ 01C2                   .dbline 182
+ 01C2                   .dbline 184
+ 01C2           ; }
+ 01C2           ; }
+ 01C2 C798              cbi 0x18,7
+ 01C4                   .dbline 185
+ 01C4           ; }
+ 01C4                   .dbline 185
+ 01C4 0000              nop
+ 01C6                   .dbline 185
+ 01C6 0000              nop
+ 01C8                   .dbline 185
+ 01C8 0000              nop
+ 01CA                   .dbline 185
+ 01CA 0000              nop
+ 01CC                   .dbline 185
+ 01CC 0000              nop
+ 01CE                   .dbline 185
+ 01CE 0000              nop
+ 01D0                   .dbline 185
+ 01D0 0000              nop
+ 01D2                   .dbline 185
+ 01D2 0000              nop
+ 01D4                   .dbline 185
+ 01D4                   .dbline 185
+ 01D4                   .dbline 186
+ 01D4           ; }
+ 01D4 283E              cpi R18,232
+ 01D6 E3E0              ldi R30,3
+ 01D8 3E07              cpc R19,R30
+ 01DA 21F4              brne L33
+ 01DC                   .dbline 187
+ 01DC           ; }
+ 01DC                   .dbline 188
+ 01DC           ; }
+ 01DC 81E0              ldi R24,1
+ 01DE 80930000          sts _LCD1602Err,R24
+ 01E2                   .dbline 189
+ 01E2           ; }
+ 01E2 0AC0              xjmp L29
+ 01E4           L33:
+ 01E4                   .dbline 191
+ 01E4           ; }
+ 01E4           ; }
+ 01E4 2F5F              subi R18,255  ; offset = 1
+ 01E6 3F4F              sbci R19,255
+ 01E8                   .dbline 192
+ 01E8           ; }
+ 01E8           L31:
+ 01E8                   .dbline 193
+ 01E8           ; }
+ 01E8 0023              tst R16
+ 01EA 09F0              breq X1
+ 01EC BFCF              xjmp L30
+ 01EE           X1:
+ 01EE                   .dbline 195
+ 01EE           ; }
+ 01EE           ; }
+ 01EE 2224              clr R2
+ 01F0 20920000          sts _LCD1602Err,R2
+ 01F4                   .dbline 196
+ 01F4           ; }
+ 01F4 C798              cbi 0x18,7
+ 01F6                   .dbline 197
+ 01F6           ; }
+ 01F6 8F9A              sbi 0x11,7
+ 01F8                   .dbline -2
+ 01F8           L29:
+ 01F8                   .dbline 0 ; func end
+ 01F8 0895              ret
+ 01FA                   .dbsym r busySta 16 c
+ 01FA                   .dbsym r busyCounter 18 i
+ 01FA                   .dbend
+ 01FA                   .dbfunc e write _write fV
+ 01FA           ;            dat -> R22
+ 01FA           ;           flag -> R20
+                        .even
+ 01FA           _write::
+ 01FA 0E940000          xcall push_gset2
+ 01FE 622F              mov R22,R18
+ 0200 402F              mov R20,R16
+ 0202                   .dbline -1
+ 0202                   .dbline 208
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202           ; }
+ 0202                   .dbline 209
+ 0202           ; }
+ 0202 60930000          sts _bdat,R22
+ 0206                   .dbline 210
+ 0206           ; }
+ 0206 91DF              xcall _busy
+ 0208                   .dbline 211
+ 0208           ; }
+ 0208 4423              tst R20
+ 020A 11F0              breq L36
+ 020C                   .dbline 212
+ 020C           ; }
+ 020C C59A              sbi 0x18,5
+ 020E 01C0              xjmp L37
+ 0210           L36:
+ 0210                   .dbline 214
+ 0210           ; }
+ 0210           ; }
+ 0210 C598              cbi 0x18,5
+ 0212           L37:
+ 0212                   .dbline 215
+ 0212           ; }
+ 0212                   .dbline 215
+ 0212 0000              nop
+ 0214                   .dbline 215
+ 0214 0000              nop
+ 0216                   .dbline 215
+ 0216 0000              nop
+ 0218                   .dbline 215
+ 0218 0000              nop
+ 021A                   .dbline 215
+ 021A 0000              nop
+ 021C                   .dbline 215
+ 021C 0000              nop
+ 021E                   .dbline 215
+ 021E 0000              nop
+ 0220                   .dbline 215
+ 0220 0000              nop
+ 0222                   .dbline 215
+ 0222                   .dbline 215
+ 0222                   .dbline 216
+ 0222           ; }
+ 0222 C698              cbi 0x18,6
+ 0224                   .dbline 217
+ 0224           ; }
+ 0224                   .dbline 217
+ 0224 0000              nop
+ 0226                   .dbline 217
+ 0226 0000              nop
+ 0228                   .dbline 217
+ 0228 0000              nop
+ 022A                   .dbline 217
+ 022A 0000              nop
+ 022C                   .dbline 217
+ 022C 0000              nop
+ 022E                   .dbline 217
+ 022E 0000              nop
+ 0230                   .dbline 217
+ 0230 0000              nop
+ 0232                   .dbline 217
+ 0232 0000              nop
+ 0234                   .dbline 217
+ 0234                   .dbline 217
+ 0234                   .dbline 218
+ 0234           ; }
+ 0234 20900000          lds R2,_bdat
+ 0238 24FE              sbrs R2,4
+ 023A 02C0              rjmp L38
+ 023C                   .dbline 219
+ 023C           ; }
+ 023C 949A              sbi 0x12,4
+ 023E 01C0              xjmp L39
+ 0240           L38:
+ 0240                   .dbline 221
+ 0240           ; }
+ 0240           ; }
+ 0240 9498              cbi 0x12,4
+ 0242           L39:
+ 0242                   .dbline 222
+ 0242           ; }
+ 0242 20900000          lds R2,_bdat
+ 0246 25FE              sbrs R2,5
+ 0248 02C0              rjmp L40
+ 024A                   .dbline 223
+ 024A           ; }
+ 024A 959A              sbi 0x12,5
+ 024C 01C0              xjmp L41
+ 024E           L40:
+ 024E                   .dbline 225
+ 024E           ; }
+ 024E           ; }
+ 024E 9598              cbi 0x12,5
+ 0250           L41:
+ 0250                   .dbline 226
+ 0250           ; }
+ 0250 20900000          lds R2,_bdat
+ 0254 26FE              sbrs R2,6
+ 0256 02C0              rjmp L42
+ 0258                   .dbline 227
+ 0258           ; }
+ 0258 969A              sbi 0x12,6
+ 025A 01C0              xjmp L43
+ 025C           L42:
+ 025C                   .dbline 229
+ 025C           ; }
+ 025C           ; }
+ 025C 9698              cbi 0x12,6
+ 025E           L43:
+ 025E                   .dbline 230
+ 025E           ; }
+ 025E 20900000          lds R2,_bdat
+ 0262 27FE              sbrs R2,7
+ 0264 02C0              rjmp L44
+ 0266                   .dbline 231
+ 0266           ; }
+ 0266 979A              sbi 0x12,7
+ 0268 01C0              xjmp L45
+ 026A           L44:
+ 026A                   .dbline 233
+ 026A           ; }
+ 026A           ; }
+ 026A 9798              cbi 0x12,7
+ 026C           L45:
+ 026C                   .dbline 234
+ 026C           ; }
+ 026C                   .dbline 234
+ 026C 0000              nop
+ 026E                   .dbline 234
+ 026E 0000              nop
+ 0270                   .dbline 234
+ 0270 0000              nop
+ 0272                   .dbline 234
+ 0272 0000              nop
+ 0274                   .dbline 234
+ 0274 0000              nop
+ 0276                   .dbline 234
+ 0276 0000              nop
+ 0278                   .dbline 234
+ 0278 0000              nop
+ 027A                   .dbline 234
+ 027A 0000              nop
+ 027C                   .dbline 234
+ 027C                   .dbline 234
+ 027C                   .dbline 235
+ 027C           ; }
+ 027C C79A              sbi 0x18,7
+ 027E                   .dbline 236
+ 027E           ; }
+ 027E                   .dbline 236
+ 027E 0000              nop
+ 0280                   .dbline 236
+ 0280 0000              nop
+ 0282                   .dbline 236
+ 0282 0000              nop
+ 0284                   .dbline 236
+ 0284 0000              nop
+ 0286                   .dbline 236
+ 0286 0000              nop
+ 0288                   .dbline 236
+ 0288 0000              nop
+ 028A                   .dbline 236
+ 028A 0000              nop
+ 028C                   .dbline 236
+ 028C 0000              nop
+ 028E                   .dbline 236
+ 028E                   .dbline 236
+ 028E                   .dbline 237
+ 028E           ; }
+ 028E C798              cbi 0x18,7
+ 0290                   .dbline 238
+ 0290           ; }
+ 0290                   .dbline 238
+ 0290 0000              nop
+ 0292                   .dbline 238
+ 0292 0000              nop
+ 0294                   .dbline 238
+ 0294 0000              nop
+ 0296                   .dbline 238
+ 0296 0000              nop
+ 0298                   .dbline 238
+ 0298 0000              nop
+ 029A                   .dbline 238
+ 029A 0000              nop
+ 029C                   .dbline 238
+ 029C 0000              nop
+ 029E                   .dbline 238
+ 029E 0000              nop
+ 02A0                   .dbline 238
+ 02A0                   .dbline 238
+ 02A0                   .dbline 240
+ 02A0           ; }
+ 02A0           ; }
+ 02A0 20900000          lds R2,_bdat
+ 02A4 20FE              sbrs R2,0
+ 02A6 02C0              rjmp L46
+ 02A8                   .dbline 241
+ 02A8           ; }
+ 02A8 949A              sbi 0x12,4
+ 02AA 01C0              xjmp L47
+ 02AC           L46:
+ 02AC                   .dbline 243
+ 02AC           ; }
+ 02AC           ; }
+ 02AC 9498              cbi 0x12,4
+ 02AE           L47:
+ 02AE                   .dbline 244
+ 02AE           ; }
+ 02AE 20900000          lds R2,_bdat
+ 02B2 21FE              sbrs R2,1
+ 02B4 02C0              rjmp L48
+ 02B6                   .dbline 245
+ 02B6           ; }
+ 02B6 959A              sbi 0x12,5
+ 02B8 01C0              xjmp L49
+ 02BA           L48:
+ 02BA                   .dbline 247
+ 02BA           ; }
+ 02BA           ; }
+ 02BA 9598              cbi 0x12,5
+ 02BC           L49:
+ 02BC                   .dbline 248
+ 02BC           ; }
+ 02BC 20900000          lds R2,_bdat
+ 02C0 22FE              sbrs R2,2
+ 02C2 02C0              rjmp L50
+ 02C4                   .dbline 249
+ 02C4           ; }
+ 02C4 969A              sbi 0x12,6
+ 02C6 01C0              xjmp L51
+ 02C8           L50:
+ 02C8                   .dbline 251
+ 02C8           ; }
+ 02C8           ; }
+ 02C8 9698              cbi 0x12,6
+ 02CA           L51:
+ 02CA                   .dbline 252
+ 02CA           ; }
+ 02CA 20900000          lds R2,_bdat
+ 02CE 23FE              sbrs R2,3
+ 02D0 02C0              rjmp L52
+ 02D2                   .dbline 253
+ 02D2           ; }
+ 02D2 979A              sbi 0x12,7
+ 02D4 01C0              xjmp L53
+ 02D6           L52:
+ 02D6                   .dbline 255
+ 02D6           ; }
+ 02D6           ; }
+ 02D6 9798              cbi 0x12,7
+ 02D8           L53:
+ 02D8                   .dbline 256
+ 02D8           ; }
+ 02D8                   .dbline 256
+ 02D8 0000              nop
+ 02DA                   .dbline 256
+ 02DA 0000              nop
+ 02DC                   .dbline 256
+ 02DC 0000              nop
+ 02DE                   .dbline 256
+ 02DE 0000              nop
+ 02E0                   .dbline 256
+ 02E0 0000              nop
+ 02E2                   .dbline 256
+ 02E2 0000              nop
+ 02E4                   .dbline 256
+ 02E4 0000              nop
+ 02E6                   .dbline 256
+ 02E6 0000              nop
+ 02E8                   .dbline 256
+ 02E8                   .dbline 256
+ 02E8                   .dbline 257
+ 02E8           ; }
+ 02E8 C79A              sbi 0x18,7
+ 02EA                   .dbline 258
+ 02EA           ; }
+ 02EA                   .dbline 258
+ 02EA 0000              nop
+ 02EC                   .dbline 258
+ 02EC 0000              nop
+ 02EE                   .dbline 258
+ 02EE 0000              nop
+ 02F0                   .dbline 258
+ 02F0 0000              nop
+ 02F2                   .dbline 258
+ 02F2 0000              nop
+ 02F4                   .dbline 258
+ 02F4 0000              nop
+ 02F6                   .dbline 258
+ 02F6 0000              nop
+ 02F8                   .dbline 258
+ 02F8 0000              nop
+ 02FA                   .dbline 258
+ 02FA                   .dbline 258
+ 02FA                   .dbline 259
+ 02FA           ; }
+ 02FA C798              cbi 0x18,7
+ 02FC                   .dbline 260
+ 02FC           ; }
+ 02FC                   .dbline 260
+ 02FC 0000              nop
+ 02FE                   .dbline 260
+ 02FE 0000              nop
+ 0300                   .dbline 260
+ 0300 0000              nop
+ 0302                   .dbline 260
+ 0302 0000              nop
+ 0304                   .dbline 260
+ 0304 0000              nop
+ 0306                   .dbline 260
+ 0306 0000              nop
+ 0308                   .dbline 260
+ 0308 0000              nop
+ 030A                   .dbline 260
+ 030A 0000              nop
+ 030C                   .dbline 260
+ 030C                   .dbline 260
+ 030C                   .dbline -2
+ 030C           L35:
+ 030C 0E940000          xcall pop_gset2
+ 0310                   .dbline 0 ; func end
+ 0310 0895              ret
+ 0312                   .dbsym r dat 22 c
+ 0312                   .dbsym r flag 20 c
+ 0312                   .dbend
+ 0312                   .dbfunc e LCD1602_setCGRAM _LCD1602_setCGRAM fV
+ 0312           ;              i -> R20
+ 0312           ;            buf -> R22,R23
+ 0312           ;            adr -> R20
+                        .even
+ 0312           _LCD1602_setCGRAM::
+ 0312 0E940000          xcall push_gset2
+ 0316 B901              movw R22,R18
+ 0318 402F              mov R20,R16
+ 031A                   .dbline -1
+ 031A                   .dbline 282
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A           ; }
+ 031A                   .dbline 284
+ 031A           ; }
+ 031A           ; }
+ 031A 88E0              ldi R24,8
+ 031C 849F              mul R24,R20
+ 031E 202D              mov R18,R0
+ 0320 205C              subi R18,192    ; addi 64
+ 0322 0027              clr R16
+ 0324 6ADF              xcall _write
+ 0326                   .dbline 285
+ 0326           ; }
+ 0326 4427              clr R20
+ 0328 08C0              xjmp L58
+ 032A           L55:
+ 032A                   .dbline 286
+ 032A E42F              mov R30,R20
+ 032C FF27              clr R31
+ 032E E60F              add R30,R22
+ 0330 F71F              adc R31,R23
+ 0332 2491              lpm R18,Z
+ 0334 01E0              ldi R16,1
+ 0336 61DF              xcall _write
+ 0338           L56:
+ 0338                   .dbline 285
+ 0338 4395              inc R20
+ 033A           L58:
+ 033A                   .dbline 285
+ 033A 4830              cpi R20,8
+ 033C B0F3              brlo L55
+ 033E                   .dbline -2
+ 033E           L54:
+ 033E 0E940000          xcall pop_gset2
+ 0342                   .dbline 0 ; func end
+ 0342 0895              ret
+ 0344                   .dbsym r i 20 c
+ 0344                   .dbsym r buf 22 pkc
+ 0344                   .dbsym r adr 20 c
+ 0344                   .dbend
+                        .area data(ram, con, rel)
+ 0001                   .dbfile D:\ICC_H\LCD1602_.H
+ 0001           L60:
+ 0001                   .blkb 1
+                        .area idata
+ 0001 00                .byte 0
+                        .area data(ram, con, rel)
+ 0002                   .dbfile D:\ICC_H\LCD1602_.H
+ 0002           L61:
+ 0002                   .blkb 1
+                        .area idata
+ 0002 00                .byte 0
+                        .area data(ram, con, rel)
+ 0003                   .dbfile D:\ICC_H\LCD1602_.H
+ 0003           L62:
+ 0003                   .blkb 1
+                        .area idata
+ 0003 00                .byte 0
+                        .area data(ram, con, rel)
+ 0004                   .dbfile D:\ICC_H\LCD1602_.H
+ 0004           L63:
+ 0004                   .blkb 1
+                        .area idata
+ 0004 00                .byte 0
+                        .area data(ram, con, rel)
+ 0005                   .dbfile D:\ICC_H\LCD1602_.H
+ 0005           L64:
+ 0005                   .blkb 1
+                        .area idata
+ 0005 00                .byte 0
+                        .area data(ram, con, rel)
+ 0006                   .dbfile D:\ICC_H\LCD1602_.H
+                        .area text(rom, con, rel)
+ 0344                   .dbfile D:\ICC_H\LCD1602_.H
+ 0344                   .dbfunc e LCD1602_setCmd _LCD1602_setCmd fV
+ 0344                   .dbsym s isACinc L64 c
+ 0344                   .dbsym s shiftEn L63 c
+ 0344                   .dbsym s blinkEn L62 c
+ 0344                   .dbsym s cursorEn L61 c
+ 0344                   .dbsym s dispEn L60 c
+ 0344           ;            str -> R20,R21
+                        .even
+ 0344           _LCD1602_setCmd::
+ 0344 0E940000          xcall push_gset1
+ 0348 A801              movw R20,R16
+ 034A                   .dbline -1
+ 034A                   .dbline 308
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A                   .dbline 315
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A           ; è„Ü
+ 034A 20E0              ldi R18,<L67
+ 034C 30E0              ldi R19,>L67
+ 034E 8A01              movw R16,R20
+ 0350 0E940000          xcall _strcmp
+ 0354 0030              cpi R16,0
+ 0356 0107              cpc R16,R17
+ 0358 21F4              brne L65
+ 035A           X2:
+ 035A                   .dbline 316
+ 035A           ; è„Ü
+ 035A 21E0              ldi R18,1
+ 035C 0027              clr R16
+ 035E 4DDF              xcall _write
+ 0360 81C1              xjmp L66
+ 0362           L65:
+ 0362                   .dbline 318
+ 0362           ; è„Ü
+ 0362           ; è„Ü
+ 0362 20E0              ldi R18,<L70
+ 0364 30E0              ldi R19,>L70
+ 0366 8A01              movw R16,R20
+ 0368 0E940000          xcall _strcmp
+ 036C 0030              cpi R16,0
+ 036E 0107              cpc R16,R17
+ 0370 21F4              brne L68
+ 0372           X3:
+ 0372                   .dbline 319
+ 0372           ; è„Ü
+ 0372 22E0              ldi R18,2
+ 0374 0027              clr R16
+ 0376 41DF              xcall _write
+ 0378 75C1              xjmp L69
+ 037A           L68:
+ 037A                   .dbline 323
+ 037A           ; è„Ü
+ 037A           ; è„Ü
+ 037A           ; è„Ü
+ 037A           ; è„Ü
+ 037A 20E0              ldi R18,<L73
+ 037C 30E0              ldi R19,>L73
+ 037E 8A01              movw R16,R20
+ 0380 0E940000          xcall _strcmp
+ 0384 0030              cpi R16,0
+ 0386 0107              cpc R16,R17
+ 0388 79F4              brne L71
+ 038A           X4:
+ 038A                   .dbline 324
+ 038A           ; è„Ü
+ 038A                   .dbline 325
+ 038A           ; è„Ü
+ 038A 81E0              ldi R24,1
+ 038C 80930500          sts L64,R24
+ 0390                   .dbline 326
+ 0390           ; è„Ü
+ 0390 20900400          lds R2,L63
+ 0394 2220              tst R2
+ 0396 21F0              breq L74
+ 0398                   .dbline 327
+ 0398           ; è„Ü
+ 0398 27E0              ldi R18,7
+ 039A 0027              clr R16
+ 039C 2EDF              xcall _write
+ 039E 62C1              xjmp L72
+ 03A0           L74:
+ 03A0                   .dbline 329
+ 03A0           ; è„Ü
+ 03A0           ; è„Ü
+ 03A0 26E0              ldi R18,6
+ 03A2 0027              clr R16
+ 03A4 2ADF              xcall _write
+ 03A6                   .dbline 330
+ 03A6           ; è„Ü
+ 03A6 5EC1              xjmp L72
+ 03A8           L71:
+ 03A8                   .dbline 331
+ 03A8           ; è„Ü
+ 03A8 20E0              ldi R18,<L78
+ 03AA 30E0              ldi R19,>L78
+ 03AC 8A01              movw R16,R20
+ 03AE 0E940000          xcall _strcmp
+ 03B2 0030              cpi R16,0
+ 03B4 0107              cpc R16,R17
+ 03B6 79F4              brne L76
+ 03B8           X5:
+ 03B8                   .dbline 332
+ 03B8           ; è„Ü
+ 03B8                   .dbline 333
+ 03B8           ; è„Ü
+ 03B8 2224              clr R2
+ 03BA 20920500          sts L64,R2
+ 03BE                   .dbline 334
+ 03BE           ; è„Ü
+ 03BE 20900400          lds R2,L63
+ 03C2 2220              tst R2
+ 03C4 21F0              breq L79
+ 03C6                   .dbline 335
+ 03C6           ; è„Ü
+ 03C6 25E0              ldi R18,5
+ 03C8 0027              clr R16
+ 03CA 17DF              xcall _write
+ 03CC 4BC1              xjmp L77
+ 03CE           L79:
+ 03CE                   .dbline 337
+ 03CE           ; è„Ü
+ 03CE           ; è„Ü
+ 03CE 24E0              ldi R18,4
+ 03D0 0027              clr R16
+ 03D2 13DF              xcall _write
+ 03D4                   .dbline 338
+ 03D4           ; è„Ü
+ 03D4 47C1              xjmp L77
+ 03D6           L76:
+ 03D6                   .dbline 339
+ 03D6           ; è„Ü
+ 03D6 20E0              ldi R18,<L83
+ 03D8 30E0              ldi R19,>L83
+ 03DA 8A01              movw R16,R20
+ 03DC 0E940000          xcall _strcmp
+ 03E0 0030              cpi R16,0
+ 03E2 0107              cpc R16,R17
+ 03E4 79F4              brne L81
+ 03E6           X6:
+ 03E6                   .dbline 340
+ 03E6           ; è„Ü
+ 03E6                   .dbline 341
+ 03E6           ; è„Ü
+ 03E6 81E0              ldi R24,1
+ 03E8 80930400          sts L63,R24
+ 03EC                   .dbline 342
+ 03EC           ; è„Ü
+ 03EC 20900500          lds R2,L64
+ 03F0 2220              tst R2
+ 03F2 21F0              breq L84
+ 03F4                   .dbline 343
+ 03F4           ; è„Ü
+ 03F4 27E0              ldi R18,7
+ 03F6 0027              clr R16
+ 03F8 00DF              xcall _write
+ 03FA 34C1              xjmp L82
+ 03FC           L84:
+ 03FC                   .dbline 345
+ 03FC           ; è„Ü
+ 03FC           ; è„Ü
+ 03FC 26E0              ldi R18,6
+ 03FE 0027              clr R16
+ 0400 FCDE              xcall _write
+ 0402                   .dbline 346
+ 0402           ; è„Ü
+ 0402 30C1              xjmp L82
+ 0404           L81:
+ 0404                   .dbline 347
+ 0404           ; è„Ü
+ 0404 20E0              ldi R18,<L88
+ 0406 30E0              ldi R19,>L88
+ 0408 8A01              movw R16,R20
+ 040A 0E940000          xcall _strcmp
+ 040E 0030              cpi R16,0
+ 0410 0107              cpc R16,R17
+ 0412 79F4              brne L86
+ 0414           X7:
+ 0414                   .dbline 348
+ 0414           ; è„Ü
+ 0414                   .dbline 349
+ 0414           ; è„Ü
+ 0414 2224              clr R2
+ 0416 20920400          sts L63,R2
+ 041A                   .dbline 350
+ 041A           ; è„Ü
+ 041A 20900500          lds R2,L64
+ 041E 2220              tst R2
+ 0420 21F0              breq L89
+ 0422                   .dbline 351
+ 0422           ; è„Ü
+ 0422 25E0              ldi R18,5
+ 0424 0027              clr R16
+ 0426 E9DE              xcall _write
+ 0428 1DC1              xjmp L87
+ 042A           L89:
+ 042A                   .dbline 353
+ 042A           ; è„Ü
+ 042A           ; è„Ü
+ 042A 24E0              ldi R18,4
+ 042C 0027              clr R16
+ 042E E5DE              xcall _write
+ 0430                   .dbline 354
+ 0430           ; è„Ü
+ 0430 19C1              xjmp L87
+ 0432           L86:
+ 0432                   .dbline 358
+ 0432           ; è„Ü
+ 0432           ; è„Ü
+ 0432           ; è„Ü
+ 0432           ; è„Ü
+ 0432 20E0              ldi R18,<L93
+ 0434 30E0              ldi R19,>L93
+ 0436 8A01              movw R16,R20
+ 0438 0E940000          xcall _strcmp
+ 043C 0030              cpi R16,0
+ 043E 0107              cpc R16,R17
+ 0440 F9F4              brne L91
+ 0442           X8:
+ 0442                   .dbline 359
+ 0442           ; è„Ü
+ 0442                   .dbline 360
+ 0442           ; è„Ü
+ 0442 81E0              ldi R24,1
+ 0444 80930100          sts L60,R24
+ 0448                   .dbline 361
+ 0448           ; è„Ü
+ 0448 20900200          lds R2,L61
+ 044C 2220              tst R2
+ 044E 61F0              breq L94
+ 0450                   .dbline 362
+ 0450           ; è„Ü
+ 0450 20900300          lds R2,L62
+ 0454 2220              tst R2
+ 0456 21F0              breq L96
+ 0458                   .dbline 363
+ 0458           ; è„Ü
+ 0458 2FE0              ldi R18,15
+ 045A 0027              clr R16
+ 045C CEDE              xcall _write
+ 045E 02C1              xjmp L92
+ 0460           L96:
+ 0460                   .dbline 365
+ 0460           ; è„Ü
+ 0460           ; è„Ü
+ 0460 2EE0              ldi R18,14
+ 0462 0027              clr R16
+ 0464 CADE              xcall _write
+ 0466 FEC0              xjmp L92
+ 0468           L94:
+ 0468                   .dbline 367
+ 0468           ; è„Ü
+ 0468           ; è„Ü
+ 0468 20900300          lds R2,L62
+ 046C 2220              tst R2
+ 046E 21F0              breq L98
+ 0470                   .dbline 368
+ 0470           ; è„Ü
+ 0470 2DE0              ldi R18,13
+ 0472 0027              clr R16
+ 0474 C2DE              xcall _write
+ 0476 F6C0              xjmp L92
+ 0478           L98:
+ 0478                   .dbline 370
+ 0478           ; è„Ü
+ 0478           ; è„Ü
+ 0478 2CE0              ldi R18,12
+ 047A 0027              clr R16
+ 047C BEDE              xcall _write
+ 047E                   .dbline 371
+ 047E           ; è„Ü
+ 047E F2C0              xjmp L92
+ 0480           L91:
+ 0480                   .dbline 372
+ 0480           ; è„Ü
+ 0480 20E0              ldi R18,<L102
+ 0482 30E0              ldi R19,>L102
+ 0484 8A01              movw R16,R20
+ 0486 0E940000          xcall _strcmp
+ 048A 0030              cpi R16,0
+ 048C 0107              cpc R16,R17
+ 048E F9F4              brne L100
+ 0490           X9:
+ 0490                   .dbline 373
+ 0490           ; è„Ü
+ 0490                   .dbline 374
+ 0490           ; è„Ü
+ 0490 2224              clr R2
+ 0492 20920100          sts L60,R2
+ 0496                   .dbline 375
+ 0496           ; è„Ü
+ 0496 20900200          lds R2,L61
+ 049A 2220              tst R2
+ 049C 61F0              breq L103
+ 049E                   .dbline 376
+ 049E           ; è„Ü
+ 049E 20900300          lds R2,L62
+ 04A2 2220              tst R2
+ 04A4 21F0              breq L105
+ 04A6                   .dbline 377
+ 04A6           ; è„Ü
+ 04A6 2BE0              ldi R18,11
+ 04A8 0027              clr R16
+ 04AA A7DE              xcall _write
+ 04AC DBC0              xjmp L101
+ 04AE           L105:
+ 04AE                   .dbline 379
+ 04AE           ; è„Ü
+ 04AE           ; è„Ü
+ 04AE 2AE0              ldi R18,10
+ 04B0 0027              clr R16
+ 04B2 A3DE              xcall _write
+ 04B4 D7C0              xjmp L101
+ 04B6           L103:
+ 04B6                   .dbline 381
+ 04B6           ; è„Ü
+ 04B6           ; è„Ü
+ 04B6 20900300          lds R2,L62
+ 04BA 2220              tst R2
+ 04BC 21F0              breq L107
+ 04BE                   .dbline 382
+ 04BE           ; è„Ü
+ 04BE 29E0              ldi R18,9
+ 04C0 0027              clr R16
+ 04C2 9BDE              xcall _write
+ 04C4 CFC0              xjmp L101
+ 04C6           L107:
+ 04C6                   .dbline 384
+ 04C6           ; è„Ü
+ 04C6           ; è„Ü
+ 04C6 28E0              ldi R18,8
+ 04C8 0027              clr R16
+ 04CA 97DE              xcall _write
+ 04CC                   .dbline 385
+ 04CC           ; è„Ü
+ 04CC CBC0              xjmp L101
+ 04CE           L100:
+ 04CE                   .dbline 386
+ 04CE           ; è„Ü
+ 04CE 20E0              ldi R18,<L111
+ 04D0 30E0              ldi R19,>L111
+ 04D2 8A01              movw R16,R20
+ 04D4 0E940000          xcall _strcmp
+ 04D8 0030              cpi R16,0
+ 04DA 0107              cpc R16,R17
+ 04DC F9F4              brne L109
+ 04DE           X10:
+ 04DE                   .dbline 387
+ 04DE           ; è„Ü
+ 04DE                   .dbline 388
+ 04DE           ; è„Ü
+ 04DE 81E0              ldi R24,1
+ 04E0 80930200          sts L61,R24
+ 04E4                   .dbline 389
+ 04E4           ; è„Ü
+ 04E4 20900100          lds R2,L60
+ 04E8 2220              tst R2
+ 04EA 61F0              breq L112
+ 04EC                   .dbline 390
+ 04EC           ; è„Ü
+ 04EC 20900300          lds R2,L62
+ 04F0 2220              tst R2
+ 04F2 21F0              breq L114
+ 04F4                   .dbline 391
+ 04F4           ; è„Ü
+ 04F4 2FE0              ldi R18,15
+ 04F6 0027              clr R16
+ 04F8 80DE              xcall _write
+ 04FA B4C0              xjmp L110
+ 04FC           L114:
+ 04FC                   .dbline 393
+ 04FC           ; è„Ü
+ 04FC           ; è„Ü
+ 04FC 2EE0              ldi R18,14
+ 04FE 0027              clr R16
+ 0500 7CDE              xcall _write
+ 0502 B0C0              xjmp L110
+ 0504           L112:
+ 0504                   .dbline 395
+ 0504           ; è„Ü
+ 0504           ; è„Ü
+ 0504 20900300          lds R2,L62
+ 0508 2220              tst R2
+ 050A 21F0              breq L116
+ 050C                   .dbline 396
+ 050C           ; è„Ü
+ 050C 2BE0              ldi R18,11
+ 050E 0027              clr R16
+ 0510 74DE              xcall _write
+ 0512 A8C0              xjmp L110
+ 0514           L116:
+ 0514                   .dbline 398
+ 0514           ; è„Ü
+ 0514           ; è„Ü
+ 0514 2AE0              ldi R18,10
+ 0516 0027              clr R16
+ 0518 70DE              xcall _write
+ 051A                   .dbline 399
+ 051A           ; è„Ü
+ 051A A4C0              xjmp L110
+ 051C           L109:
+ 051C                   .dbline 400
+ 051C           ; è„Ü
+ 051C 20E0              ldi R18,<L120
+ 051E 30E0              ldi R19,>L120
+ 0520 8A01              movw R16,R20
+ 0522 0E940000          xcall _strcmp
+ 0526 0030              cpi R16,0
+ 0528 0107              cpc R16,R17
+ 052A F9F4              brne L118
+ 052C           X11:
+ 052C                   .dbline 401
+ 052C           ; è„Ü
+ 052C                   .dbline 402
+ 052C           ; è„Ü
+ 052C 2224              clr R2
+ 052E 20920200          sts L61,R2
+ 0532                   .dbline 403
+ 0532           ; è„Ü
+ 0532 20900100          lds R2,L60
+ 0536 2220              tst R2
+ 0538 61F0              breq L121
+ 053A                   .dbline 404
+ 053A           ; è„Ü
+ 053A 20900300          lds R2,L62
+ 053E 2220              tst R2
+ 0540 21F0              breq L123
+ 0542                   .dbline 405
+ 0542           ; è„Ü
+ 0542 2DE0              ldi R18,13
+ 0544 0027              clr R16
+ 0546 59DE              xcall _write
+ 0548 8DC0              xjmp L119
+ 054A           L123:
+ 054A                   .dbline 407
+ 054A           ; è„Ü
+ 054A           ; è„Ü
+ 054A 2CE0              ldi R18,12
+ 054C 0027              clr R16
+ 054E 55DE              xcall _write
+ 0550 89C0              xjmp L119
+ 0552           L121:
+ 0552                   .dbline 409
+ 0552           ; è„Ü
+ 0552           ; è„Ü
+ 0552 20900300          lds R2,L62
+ 0556 2220              tst R2
+ 0558 21F0              breq L125
+ 055A                   .dbline 410
+ 055A           ; è„Ü
+ 055A 29E0              ldi R18,9
+ 055C 0027              clr R16
+ 055E 4DDE              xcall _write
+ 0560 81C0              xjmp L119
+ 0562           L125:
+ 0562                   .dbline 412
+ 0562           ; è„Ü
+ 0562           ; è„Ü
+ 0562 28E0              ldi R18,8
+ 0564 0027              clr R16
+ 0566 49DE              xcall _write
+ 0568                   .dbline 413
+ 0568           ; è„Ü
+ 0568 7DC0              xjmp L119
+ 056A           L118:
+ 056A                   .dbline 414
+ 056A           ; è„Ü
+ 056A 20E0              ldi R18,<L129
+ 056C 30E0              ldi R19,>L129
+ 056E 8A01              movw R16,R20
+ 0570 0E940000          xcall _strcmp
+ 0574 0030              cpi R16,0
+ 0576 0107              cpc R16,R17
+ 0578 F9F4              brne L127
+ 057A           X12:
+ 057A                   .dbline 415
+ 057A           ; è„Ü
+ 057A                   .dbline 416
+ 057A           ; è„Ü
+ 057A 81E0              ldi R24,1
+ 057C 80930300          sts L62,R24
+ 0580                   .dbline 417
+ 0580           ; è„Ü
+ 0580 20900100          lds R2,L60
+ 0584 2220              tst R2
+ 0586 61F0              breq L130
+ 0588                   .dbline 418
+ 0588           ; è„Ü
+ 0588 20900200          lds R2,L61
+ 058C 2220              tst R2
+ 058E 21F0              breq L132
+ 0590                   .dbline 419
+ 0590           ; è„Ü
+ 0590 2FE0              ldi R18,15
+ 0592 0027              clr R16
+ 0594 32DE              xcall _write
+ 0596 66C0              xjmp L128
+ 0598           L132:
+ 0598                   .dbline 421
+ 0598           ; è„Ü
+ 0598           ; è„Ü
+ 0598 2DE0              ldi R18,13
+ 059A 0027              clr R16
+ 059C 2EDE              xcall _write
+ 059E 62C0              xjmp L128
+ 05A0           L130:
+ 05A0                   .dbline 423
+ 05A0           ; è„Ü
+ 05A0           ; è„Ü
+ 05A0 20900200          lds R2,L61
+ 05A4 2220              tst R2
+ 05A6 21F0              breq L134
+ 05A8                   .dbline 424
+ 05A8           ; è„Ü
+ 05A8 2BE0              ldi R18,11
+ 05AA 0027              clr R16
+ 05AC 26DE              xcall _write
+ 05AE 5AC0              xjmp L128
+ 05B0           L134:
+ 05B0                   .dbline 426
+ 05B0           ; è„Ü
+ 05B0           ; è„Ü
+ 05B0 29E0              ldi R18,9
+ 05B2 0027              clr R16
+ 05B4 22DE              xcall _write
+ 05B6                   .dbline 427
+ 05B6           ; è„Ü
+ 05B6 56C0              xjmp L128
+ 05B8           L127:
+ 05B8                   .dbline 428
+ 05B8           ; è„Ü
+ 05B8 20E0              ldi R18,<L138
+ 05BA 30E0              ldi R19,>L138
+ 05BC 8A01              movw R16,R20
+ 05BE 0E940000          xcall _strcmp
+ 05C2 0030              cpi R16,0
+ 05C4 0107              cpc R16,R17
+ 05C6 F9F4              brne L136
+ 05C8           X13:
+ 05C8                   .dbline 429
+ 05C8           ; è„Ü
+ 05C8                   .dbline 430
+ 05C8           ; è„Ü
+ 05C8 2224              clr R2
+ 05CA 20920300          sts L62,R2
+ 05CE                   .dbline 431
+ 05CE           ; è„Ü
+ 05CE 20900100          lds R2,L60
+ 05D2 2220              tst R2
+ 05D4 61F0              breq L139
+ 05D6                   .dbline 432
+ 05D6           ; è„Ü
+ 05D6 20900200          lds R2,L61
+ 05DA 2220              tst R2
+ 05DC 21F0              breq L141
+ 05DE                   .dbline 433
+ 05DE           ; è„Ü
+ 05DE 2EE0              ldi R18,14
+ 05E0 0027              clr R16
+ 05E2 0BDE              xcall _write
+ 05E4 3FC0              xjmp L137
+ 05E6           L141:
+ 05E6                   .dbline 435
+ 05E6           ; è„Ü
+ 05E6           ; è„Ü
+ 05E6 2CE0              ldi R18,12
+ 05E8 0027              clr R16
+ 05EA 07DE              xcall _write
+ 05EC 3BC0              xjmp L137
+ 05EE           L139:
+ 05EE                   .dbline 437
+ 05EE           ; è„Ü
+ 05EE           ; è„Ü
+ 05EE 20900200          lds R2,L61
+ 05F2 2220              tst R2
+ 05F4 21F0              breq L143
+ 05F6                   .dbline 438
+ 05F6           ; è„Ü
+ 05F6 2AE0              ldi R18,10
+ 05F8 0027              clr R16
+ 05FA FFDD              xcall _write
+ 05FC 33C0              xjmp L137
+ 05FE           L143:
+ 05FE                   .dbline 440
+ 05FE           ; è„Ü
+ 05FE           ; è„Ü
+ 05FE 28E0              ldi R18,8
+ 0600 0027              clr R16
+ 0602 FBDD              xcall _write
+ 0604                   .dbline 441
+ 0604           ; è„Ü
+ 0604 2FC0              xjmp L137
+ 0606           L136:
+ 0606                   .dbline 445
+ 0606           ; è„Ü
+ 0606           ; è„Ü
+ 0606           ; è„Ü
+ 0606           ; è„Ü
+ 0606 20E0              ldi R18,<L147
+ 0608 30E0              ldi R19,>L147
+ 060A 8A01              movw R16,R20
+ 060C 0E940000          xcall _strcmp
+ 0610 0030              cpi R16,0
+ 0612 0107              cpc R16,R17
+ 0614 21F4              brne L145
+ 0616           X14:
+ 0616                   .dbline 446
+ 0616           ; è„Ü
+ 0616 2CE1              ldi R18,28
+ 0618 0027              clr R16
+ 061A EFDD              xcall _write
+ 061C 23C0              xjmp L146
+ 061E           L145:
+ 061E                   .dbline 447
+ 061E           ; è„Ü
+ 061E 20E0              ldi R18,<L150
+ 0620 30E0              ldi R19,>L150
+ 0622 8A01              movw R16,R20
+ 0624 0E940000          xcall _strcmp
+ 0628 0030              cpi R16,0
+ 062A 0107              cpc R16,R17
+ 062C 21F4              brne L148
+ 062E           X15:
+ 062E                   .dbline 448
+ 062E           ; è„Ü
+ 062E 28E1              ldi R18,24
+ 0630 0027              clr R16
+ 0632 E3DD              xcall _write
+ 0634 17C0              xjmp L149
+ 0636           L148:
+ 0636                   .dbline 449
+ 0636           ; è„Ü
+ 0636 20E0              ldi R18,<L153
+ 0638 30E0              ldi R19,>L153
+ 063A 8A01              movw R16,R20
+ 063C 0E940000          xcall _strcmp
+ 0640 0030              cpi R16,0
+ 0642 0107              cpc R16,R17
+ 0644 21F4              brne L151
+ 0646           X16:
+ 0646                   .dbline 450
+ 0646           ; è„Ü
+ 0646 24E1              ldi R18,20
+ 0648 0027              clr R16
+ 064A D7DD              xcall _write
+ 064C 0BC0              xjmp L152
+ 064E           L151:
+ 064E                   .dbline 451
+ 064E           ; è„Ü
+ 064E 20E0              ldi R18,<L156
+ 0650 30E0              ldi R19,>L156
+ 0652 8A01              movw R16,R20
+ 0654 0E940000          xcall _strcmp
+ 0658 0030              cpi R16,0
+ 065A 0107              cpc R16,R17
+ 065C 19F4              brne L154
+ 065E           X17:
+ 065E                   .dbline 452
+ 065E           ; è„Ü
+ 065E 20E1              ldi R18,16
+ 0660 0027              clr R16
+ 0662 CBDD              xcall _write
+ 0664           L154:
+ 0664           L152:
+ 0664           L149:
+ 0664           L146:
+ 0664           L137:
+ 0664           L128:
+ 0664           L119:
+ 0664           L110:
+ 0664           L101:
+ 0664           L92:
+ 0664           L87:
+ 0664           L82:
+ 0664           L77:
+ 0664           L72:
+ 0664           L69:
+ 0664           L66:
+ 0664                   .dbline -2
+ 0664           L59:
+ 0664 0E940000          xcall pop_gset1
+ 0668                   .dbline 0 ; func end
+ 0668 0895              ret
+ 066A                   .dbsym r str 20 pc
+ 066A                   .dbend
+ 066A                   .dbfunc e LCD1602_init _LCD1602_init fV
+                        .even
+ 066A           _LCD1602_init::
+ 066A                   .dbline -1
+ 066A                   .dbline 463
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A           ; è„Ü
+ 066A                   .dbline 464
+ 066A           ; è„Ü
+ 066A BD9A              sbi 0x17,5
+ 066C                   .dbline 465
+ 066C           ; è„Ü
+ 066C BE9A              sbi 0x17,6
+ 066E                   .dbline 466
+ 066E           ; è„Ü
+ 066E BF9A              sbi 0x17,7
+ 0670                   .dbline 467
+ 0670           ; è„Ü
+ 0670 8C9A              sbi 0x11,4
+ 0672                   .dbline 468
+ 0672           ; è„Ü
+ 0672 8D9A              sbi 0x11,5
+ 0674                   .dbline 469
+ 0674           ; è„Ü
+ 0674 8E9A              sbi 0x11,6
+ 0676                   .dbline 470
+ 0676           ; è„Ü
+ 0676 8F9A              sbi 0x11,7
+ 0678                   .dbline 471
+ 0678           ; è„Ü
+ 0678 01E0              ldi R16,1
+ 067A 10E0              ldi R17,0
+ 067C 32DD              xcall _delay50ms
+ 067E                   .dbline 473
+ 067E           ; è„Ü
+ 067E           ; è„Ü
+ 067E 9798              cbi 0x12,7
+ 0680                   .dbline 474
+ 0680           ; è„Ü
+ 0680 9698              cbi 0x12,6
+ 0682                   .dbline 475
+ 0682           ; è„Ü
+ 0682 959A              sbi 0x12,5
+ 0684                   .dbline 476
+ 0684           ; è„Ü
+ 0684 949A              sbi 0x12,4
+ 0686                   .dbline 477
+ 0686           ; è„Ü
+ 0686                   .dbline 477
+ 0686 0000              nop
+ 0688                   .dbline 477
+ 0688 0000              nop
+ 068A                   .dbline 477
+ 068A 0000              nop
+ 068C                   .dbline 477
+ 068C 0000              nop
+ 068E                   .dbline 477
+ 068E 0000              nop
+ 0690                   .dbline 477
+ 0690 0000              nop
+ 0692                   .dbline 477
+ 0692 0000              nop
+ 0694                   .dbline 477
+ 0694 0000              nop
+ 0696                   .dbline 477
+ 0696                   .dbline 477
+ 0696                   .dbline 478
+ 0696           ; è„Ü
+ 0696 C598              cbi 0x18,5
+ 0698                   .dbline 479
+ 0698           ; è„Ü
+ 0698                   .dbline 479
+ 0698 0000              nop
+ 069A                   .dbline 479
+ 069A 0000              nop
+ 069C                   .dbline 479
+ 069C 0000              nop
+ 069E                   .dbline 479
+ 069E 0000              nop
+ 06A0                   .dbline 479
+ 06A0 0000              nop
+ 06A2                   .dbline 479
+ 06A2 0000              nop
+ 06A4                   .dbline 479
+ 06A4 0000              nop
+ 06A6                   .dbline 479
+ 06A6 0000              nop
+ 06A8                   .dbline 479
+ 06A8                   .dbline 479
+ 06A8                   .dbline 480
+ 06A8           ; è„Ü
+ 06A8 C698              cbi 0x18,6
+ 06AA                   .dbline 482
+ 06AA           ; è„Ü
+ 06AA           ; è„Ü
+ 06AA C79A              sbi 0x18,7
+ 06AC                   .dbline 483
+ 06AC           ; è„Ü
+ 06AC                   .dbline 483
+ 06AC 0000              nop
+ 06AE                   .dbline 483
+ 06AE 0000              nop
+ 06B0                   .dbline 483
+ 06B0 0000              nop
+ 06B2                   .dbline 483
+ 06B2 0000              nop
+ 06B4                   .dbline 483
+ 06B4 0000              nop
+ 06B6                   .dbline 483
+ 06B6 0000              nop
+ 06B8                   .dbline 483
+ 06B8 0000              nop
+ 06BA                   .dbline 483
+ 06BA 0000              nop
+ 06BC                   .dbline 483
+ 06BC                   .dbline 483
+ 06BC                   .dbline 484
+ 06BC           ; è„Ü
+ 06BC C798              cbi 0x18,7
+ 06BE                   .dbline 485
+ 06BE           ; è„Ü
+ 06BE 08EC              ldi R16,200
+ 06C0 10E0              ldi R17,0
+ 06C2 FDDC              xcall _delay50us
+ 06C4                   .dbline 486
+ 06C4           ; è„Ü
+ 06C4 C79A              sbi 0x18,7
+ 06C6                   .dbline 487
+ 06C6           ; è„Ü
+ 06C6                   .dbline 487
+ 06C6 0000              nop
+ 06C8                   .dbline 487
+ 06C8 0000              nop
+ 06CA                   .dbline 487
+ 06CA 0000              nop
+ 06CC                   .dbline 487
+ 06CC 0000              nop
+ 06CE                   .dbline 487
+ 06CE 0000              nop
+ 06D0                   .dbline 487
+ 06D0 0000              nop
+ 06D2                   .dbline 487
+ 06D2 0000              nop
+ 06D4                   .dbline 487
+ 06D4 0000              nop
+ 06D6                   .dbline 487
+ 06D6                   .dbline 487
+ 06D6                   .dbline 488
+ 06D6           ; è„Ü
+ 06D6 C798              cbi 0x18,7
+ 06D8                   .dbline 489
+ 06D8           ; è„Ü
+ 06D8 08EC              ldi R16,200
+ 06DA 10E0              ldi R17,0
+ 06DC F0DC              xcall _delay50us
+ 06DE                   .dbline 490
+ 06DE           ; è„Ü
+ 06DE C79A              sbi 0x18,7
+ 06E0                   .dbline 491
+ 06E0           ; è„Ü
+ 06E0                   .dbline 491
+ 06E0 0000              nop
+ 06E2                   .dbline 491
+ 06E2 0000              nop
+ 06E4                   .dbline 491
+ 06E4 0000              nop
+ 06E6                   .dbline 491
+ 06E6 0000              nop
+ 06E8                   .dbline 491
+ 06E8 0000              nop
+ 06EA                   .dbline 491
+ 06EA 0000              nop
+ 06EC                   .dbline 491
+ 06EC 0000              nop
+ 06EE                   .dbline 491
+ 06EE 0000              nop
+ 06F0                   .dbline 491
+ 06F0                   .dbline 491
+ 06F0                   .dbline 492
+ 06F0           ; è„Ü
+ 06F0 C798              cbi 0x18,7
+ 06F2                   .dbline 493
+ 06F2           ; è„Ü
+ 06F2 08EC              ldi R16,200
+ 06F4 10E0              ldi R17,0
+ 06F6 E3DC              xcall _delay50us
+ 06F8                   .dbline 495
+ 06F8           ; è„Ü
+ 06F8           ; è„Ü
+ 06F8 9798              cbi 0x12,7
+ 06FA                   .dbline 496
+ 06FA           ; è„Ü
+ 06FA 9698              cbi 0x12,6
+ 06FC                   .dbline 497
+ 06FC           ; è„Ü
+ 06FC 959A              sbi 0x12,5
+ 06FE                   .dbline 498
+ 06FE           ; è„Ü
+ 06FE 9498              cbi 0x12,4
+ 0700                   .dbline 499
+ 0700           ; è„Ü
+ 0700                   .dbline 499
+ 0700 0000              nop
+ 0702                   .dbline 499
+ 0702 0000              nop
+ 0704                   .dbline 499
+ 0704 0000              nop
+ 0706                   .dbline 499
+ 0706 0000              nop
+ 0708                   .dbline 499
+ 0708 0000              nop
+ 070A                   .dbline 499
+ 070A 0000              nop
+ 070C                   .dbline 499
+ 070C 0000              nop
+ 070E                   .dbline 499
+ 070E 0000              nop
+ 0710                   .dbline 499
+ 0710                   .dbline 499
+ 0710                   .dbline 500
+ 0710           ; è„Ü
+ 0710 C79A              sbi 0x18,7
+ 0712                   .dbline 501
+ 0712           ; è„Ü
+ 0712                   .dbline 501
+ 0712 0000              nop
+ 0714                   .dbline 501
+ 0714 0000              nop
+ 0716                   .dbline 501
+ 0716 0000              nop
+ 0718                   .dbline 501
+ 0718 0000              nop
+ 071A                   .dbline 501
+ 071A 0000              nop
+ 071C                   .dbline 501
+ 071C 0000              nop
+ 071E                   .dbline 501
+ 071E 0000              nop
+ 0720                   .dbline 501
+ 0720 0000              nop
+ 0722                   .dbline 501
+ 0722                   .dbline 501
+ 0722                   .dbline 502
+ 0722           ; è„Ü
+ 0722 C798              cbi 0x18,7
+ 0724                   .dbline 503
+ 0724           ; è„Ü
+ 0724                   .dbline 503
+ 0724 0000              nop
+ 0726                   .dbline 503
+ 0726 0000              nop
+ 0728                   .dbline 503
+ 0728 0000              nop
+ 072A                   .dbline 503
+ 072A 0000              nop
+ 072C                   .dbline 503
+ 072C 0000              nop
+ 072E                   .dbline 503
+ 072E 0000              nop
+ 0730                   .dbline 503
+ 0730 0000              nop
+ 0732                   .dbline 503
+ 0732 0000              nop
+ 0734                   .dbline 503
+ 0734                   .dbline 503
+ 0734                   .dbline 504
+ 0734           ; è„Ü
+ 0734 00E0              ldi R16,<L93
+ 0736 10E0              ldi R17,>L93
+ 0738 05DE              xcall _LCD1602_setCmd
+ 073A                   .dbline 505
+ 073A           ; è„Ü
+ 073A 00E0              ldi R16,<L67
+ 073C 10E0              ldi R17,>L67
+ 073E 02DE              xcall _LCD1602_setCmd
+ 0740                   .dbline 506
+ 0740           ; è„Ü
+ 0740 00E0              ldi R16,<L73
+ 0742 10E0              ldi R17,>L73
+ 0744 FFDD              xcall _LCD1602_setCmd
+ 0746                   .dbline -2
+ 0746           L157:
+ 0746                   .dbline 0 ; func end
+ 0746 0895              ret
+ 0748                   .dbend
+ 0748                   .dbfunc e LCD1602_putc _LCD1602_putc fV
+ 0748           ;             ch -> R20
+ 0748           ;            adr -> R22
+                        .even
+ 0748           _LCD1602_putc::
+ 0748 0E940000          xcall push_gset2
+ 074C 422F              mov R20,R18
+ 074E 602F              mov R22,R16
+ 0750                   .dbline -1
+ 0750                   .dbline 528
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750           ; è„Ü
+ 0750                   .dbline 529
+ 0750           ; è„Ü
+ 0750 262F              mov R18,R22
+ 0752 0027              clr R16
+ 0754 52DD              xcall _write
+ 0756                   .dbline 530
+ 0756           ; è„Ü
+ 0756 242F              mov R18,R20
+ 0758 01E0              ldi R16,1
+ 075A 4FDD              xcall _write
+ 075C                   .dbline -2
+ 075C           L158:
+ 075C 0E940000          xcall pop_gset2
+ 0760                   .dbline 0 ; func end
+ 0760 0895              ret
+ 0762                   .dbsym r ch 20 c
+ 0762                   .dbsym r adr 22 c
+ 0762                   .dbend
+ 0762                   .dbfunc e LCD1602_puts _LCD1602_puts fV
+ 0762           ;            str -> R20,R21
+ 0762           ;       startAdr -> R22
+                        .even
+ 0762           _LCD1602_puts::
+ 0762 0E940000          xcall push_gset2
+ 0766 A901              movw R20,R18
+ 0768 602F              mov R22,R16
+ 076A                   .dbline -1
+ 076A                   .dbline 541
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A                   .dbline 549
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A           ; è„Ü
+ 076A 262F              mov R18,R22
+ 076C 0027              clr R16
+ 076E 45DD              xcall _write
+ 0770 05C0              xjmp L161
+ 0772           L160:
+ 0772                   .dbline 551
+ 0772 FA01              movw R30,R20
+ 0774 2191              ld R18,Z+
+ 0776 AF01              movw R20,R30
+ 0778 01E0              ldi R16,1
+ 077A 3FDD              xcall _write
+ 077C           L161:
+ 077C                   .dbline 550
+ 077C           ; è„Ü
+ 077C FA01              movw R30,R20
+ 077E 2080              ldd R2,z+0
+ 0780 2220              tst R2
+ 0782 B9F7              brne L160
+ 0784                   .dbline -2
+ 0784           L159:
+ 0784 0E940000          xcall pop_gset2
+ 0788                   .dbline 0 ; func end
+ 0788 0895              ret
+ 078A                   .dbsym r str 20 pc
+ 078A                   .dbsym r startAdr 22 c
+ 078A                   .dbend
+ 078A                   .dbfunc e LCD1602_putd0 _LCD1602_putd0 fV
+ 078A           ;              i -> R20
+ 078A           ;         length -> y+7
+ 078A           ;            dat -> y+3
+ 078A           ;         endAdr -> R20
+                        .even
+ 078A           _LCD1602_putd0::
+ 078A 3A93              st -y,r19
+ 078C 2A93              st -y,r18
+ 078E 0E940000          xcall push_gset1
+ 0792 402F              mov R20,R16
+ 0794 2197              sbiw R28,1
+ 0796                   .dbline -1
+ 0796                   .dbline 563
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796                   .dbline 565
+ 0796           ; ø}Ü
+ 0796           ; ø}Ü
+ 0796 0F80              ldd R0,y+7
+ 0798 0882              std y+0,R0
+ 079A FE01              movw R30,R28
+ 079C 0381              ldd R16,z+3
+ 079E 1481              ldd R17,z+4
+ 07A0 2581              ldd R18,z+5
+ 07A2 3681              ldd R19,z+6
+ 07A4 2DDC              xcall _speaData
+ 07A6                   .dbline 567
+ 07A6           ; ø}Ü
+ 07A6           ; ø}Ü
+ 07A6 242F              mov R18,R20
+ 07A8 0F80              ldd R0,y+7
+ 07AA 2019              sub R18,R0
+ 07AC 2F5F              subi R18,255    ; addi 1
+ 07AE 0027              clr R16
+ 07B0 24DD              xcall _write
+ 07B2                   .dbline 568
+ 07B2           ; ø}Ü
+ 07B2 4F81              ldd R20,y+7
+ 07B4 4150              subi R20,1
+ 07B6 0DC0              xjmp L167
+ 07B8           L164:
+ 07B8                   .dbline 569
+ 07B8 80E0              ldi R24,<_dataElem
+ 07BA 90E0              ldi R25,>_dataElem
+ 07BC E42F              mov R30,R20
+ 07BE FF27              clr R31
+ 07C0 E7FD              sbrc R30,7
+ 07C2 F095              com R31
+ 07C4 E80F              add R30,R24
+ 07C6 F91F              adc R31,R25
+ 07C8 2081              ldd R18,z+0
+ 07CA 205D              subi R18,208    ; addi 48
+ 07CC 01E0              ldi R16,1
+ 07CE 15DD              xcall _write
+ 07D0           L165:
+ 07D0                   .dbline 568
+ 07D0 4A95              dec R20
+ 07D2           L167:
+ 07D2                   .dbline 568
+ 07D2 4030              cpi R20,0
+ 07D4 8CF7              brge L164
+ 07D6                   .dbline -2
+ 07D6           L163:
+ 07D6 2196              adiw R28,1
+ 07D8 0E940000          xcall pop_gset1
+ 07DC 2296              adiw R28,2
+ 07DE                   .dbline 0 ; func end
+ 07DE 0895              ret
+ 07E0                   .dbsym r i 20 C
+ 07E0                   .dbsym l length 7 c
+ 07E0                   .dbsym l dat 3 l
+ 07E0                   .dbsym r endAdr 20 c
+ 07E0                   .dbend
+ 07E0                   .dbfunc e LCD1602_putd _LCD1602_putd fV
+ 07E0           ;      effectLen -> R14
+ 07E0           ;              i -> R12
+ 07E0           ;         length -> y+15
+ 07E0           ;            dat -> y+11
+ 07E0           ;         endAdr -> R10
+                        .even
+ 07E0           _LCD1602_putd::
+ 07E0 3A93              st -y,r19
+ 07E2 2A93              st -y,r18
+ 07E4 0E940000          xcall push_gset5
+ 07E8 A02E              mov R10,R16
+ 07EA 2197              sbiw R28,1
+ 07EC                   .dbline -1
+ 07EC                   .dbline 580
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC                   .dbline 583
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC           ; ø}Ü
+ 07EC 4FE3              ldi R20,63
+ 07EE 52E4              ldi R21,66
+ 07F0 6FE0              ldi R22,15
+ 07F2 70E0              ldi R23,0
+ 07F4 FE01              movw R30,R28
+ 07F6 2384              ldd R2,z+11
+ 07F8 3484              ldd R3,z+12
+ 07FA 4584              ldd R4,z+13
+ 07FC 5684              ldd R5,z+14
+ 07FE 4215              cp R20,R2
+ 0800 5305              cpc R21,R3
+ 0802 6405              cpc R22,R4
+ 0804 7505              cpc R23,R5
+ 0806 18F4              brsh L169
+ 0808                   .dbline 584
+ 0808           ; ø}Ü
+ 0808 87E0              ldi R24,7
+ 080A E82E              mov R14,R24
+ 080C 57C0              xjmp L170
+ 080E           L169:
+ 080E                   .dbline 585
+ 080E           ; ø}Ü
+ 080E 4FE9              ldi R20,159
+ 0810 56E8              ldi R21,134
+ 0812 61E0              ldi R22,1
+ 0814 70E0              ldi R23,0
+ 0816 FE01              movw R30,R28
+ 0818 2384              ldd R2,z+11
+ 081A 3484              ldd R3,z+12
+ 081C 4584              ldd R4,z+13
+ 081E 5684              ldd R5,z+14
+ 0820 4215              cp R20,R2
+ 0822 5305              cpc R21,R3
+ 0824 6405              cpc R22,R4
+ 0826 7505              cpc R23,R5
+ 0828 18F4              brsh L171
+ 082A                   .dbline 586
+ 082A           ; ø}Ü
+ 082A 86E0              ldi R24,6
+ 082C E82E              mov R14,R24
+ 082E 46C0              xjmp L172
+ 0830           L171:
+ 0830                   .dbline 587
+ 0830           ; ø}Ü
+ 0830 4FE0              ldi R20,15
+ 0832 57E2              ldi R21,39
+ 0834 60E0              ldi R22,0
+ 0836 70E0              ldi R23,0
+ 0838 FE01              movw R30,R28
+ 083A 2384              ldd R2,z+11
+ 083C 3484              ldd R3,z+12
+ 083E 4584              ldd R4,z+13
+ 0840 5684              ldd R5,z+14
+ 0842 4215              cp R20,R2
+ 0844 5305              cpc R21,R3
+ 0846 6405              cpc R22,R4
+ 0848 7505              cpc R23,R5
+ 084A 18F4              brsh L173
+ 084C                   .dbline 588
+ 084C           ; ø}Ü
+ 084C 85E0              ldi R24,5
+ 084E E82E              mov R14,R24
+ 0850 35C0              xjmp L174
+ 0852           L173:
+ 0852                   .dbline 589
+ 0852           ; ø}Ü
+ 0852 47EE              ldi R20,231
+ 0854 53E0              ldi R21,3
+ 0856 60E0              ldi R22,0
+ 0858 70E0              ldi R23,0
+ 085A FE01              movw R30,R28
+ 085C 2384              ldd R2,z+11
+ 085E 3484              ldd R3,z+12
+ 0860 4584              ldd R4,z+13
+ 0862 5684              ldd R5,z+14
+ 0864 4215              cp R20,R2
+ 0866 5305              cpc R21,R3
+ 0868 6405              cpc R22,R4
+ 086A 7505              cpc R23,R5
+ 086C 18F4              brsh L175
+ 086E                   .dbline 590
+ 086E           ; ø}Ü
+ 086E 84E0              ldi R24,4
+ 0870 E82E              mov R14,R24
+ 0872 24C0              xjmp L176
+ 0874           L175:
+ 0874                   .dbline 591
+ 0874           ; ø}Ü
+ 0874 43E6              ldi R20,99
+ 0876 50E0              ldi R21,0
+ 0878 60E0              ldi R22,0
+ 087A 70E0              ldi R23,0
+ 087C FE01              movw R30,R28
+ 087E 2384              ldd R2,z+11
+ 0880 3484              ldd R3,z+12
+ 0882 4584              ldd R4,z+13
+ 0884 5684              ldd R5,z+14
+ 0886 4215              cp R20,R2
+ 0888 5305              cpc R21,R3
+ 088A 6405              cpc R22,R4
+ 088C 7505              cpc R23,R5
+ 088E 18F4              brsh L177
+ 0890                   .dbline 592
+ 0890           ; ø}Ü
+ 0890 83E0              ldi R24,3
+ 0892 E82E              mov R14,R24
+ 0894 13C0              xjmp L178
+ 0896           L177:
+ 0896                   .dbline 593
+ 0896           ; ø}Ü
+ 0896 49E0              ldi R20,9
+ 0898 50E0              ldi R21,0
+ 089A 60E0              ldi R22,0
+ 089C 70E0              ldi R23,0
+ 089E FE01              movw R30,R28
+ 08A0 2384              ldd R2,z+11
+ 08A2 3484              ldd R3,z+12
+ 08A4 4584              ldd R4,z+13
+ 08A6 5684              ldd R5,z+14
+ 08A8 4215              cp R20,R2
+ 08AA 5305              cpc R21,R3
+ 08AC 6405              cpc R22,R4
+ 08AE 7505              cpc R23,R5
+ 08B0 18F4              brsh L179
+ 08B2                   .dbline 594
+ 08B2           ; ø}Ü
+ 08B2 82E0              ldi R24,2
+ 08B4 E82E              mov R14,R24
+ 08B6 02C0              xjmp L180
+ 08B8           L179:
+ 08B8                   .dbline 596
+ 08B8           ; ø}Ü
+ 08B8           ; ø}Ü
+ 08B8 EE24              clr R14
+ 08BA E394              inc R14
+ 08BC           L180:
+ 08BC           L178:
+ 08BC           L176:
+ 08BC           L174:
+ 08BC           L172:
+ 08BC           L170:
+ 08BC                   .dbline 597
+ 08BC           ; ø}Ü
+ 08BC E882              std y+0,R14
+ 08BE FE01              movw R30,R28
+ 08C0 0385              ldd R16,z+11
+ 08C2 1485              ldd R17,z+12
+ 08C4 2585              ldd R18,z+13
+ 08C6 3685              ldd R19,z+14
+ 08C8 9BDB              xcall _speaData
+ 08CA                   .dbline 599
+ 08CA           ; ø}Ü
+ 08CA           ; ø}Ü
+ 08CA 0F84              ldd R0,y+15
+ 08CC E014              cp R14,R0
+ 08CE 88F4              brsh L181
+ 08D0                   .dbline 600
+ 08D0           ; ø}Ü
+ 08D0                   .dbline 601
+ 08D0           ; ø}Ü
+ 08D0 2A2D              mov R18,R10
+ 08D2 2019              sub R18,R0
+ 08D4 2F5F              subi R18,255    ; addi 1
+ 08D6 0027              clr R16
+ 08D8 90DC              xcall _write
+ 08DA                   .dbline 602
+ 08DA           ; ø}Ü
+ 08DA 8F85              ldd R24,y+15
+ 08DC 8E19              sub R24,R14
+ 08DE 8150              subi R24,1
+ 08E0 C82E              mov R12,R24
+ 08E2 04C0              xjmp L186
+ 08E4           L183:
+ 08E4                   .dbline 603
+ 08E4 20E2              ldi R18,32
+ 08E6 01E0              ldi R16,1
+ 08E8 88DC              xcall _write
+ 08EA           L184:
+ 08EA                   .dbline 602
+ 08EA CA94              dec R12
+ 08EC           L186:
+ 08EC                   .dbline 602
+ 08EC 8C2D              mov R24,R12
+ 08EE 8030              cpi R24,0
+ 08F0 CCF7              brge L183
+ 08F2                   .dbline 604
+ 08F2           ; ø}Ü
+ 08F2           ; ø}Ü
+ 08F2           L181:
+ 08F2                   .dbline 605
+ 08F2           ; ø}Ü
+ 08F2 8E2D              mov R24,R14
+ 08F4 8150              subi R24,1
+ 08F6 C82E              mov R12,R24
+ 08F8 23C0              xjmp L190
+ 08FA           L187:
+ 08FA                   .dbline 606
+ 08FA           ; ø}Ü
+ 08FA                   .dbline 607
+ 08FA           ; ø}Ü
+ 08FA CC20              tst R12
+ 08FC 59F0              breq L193
+ 08FE 80E0              ldi R24,<_dataElem
+ 0900 90E0              ldi R25,>_dataElem
+ 0902 EC2D              mov R30,R12
+ 0904 FF27              clr R31
+ 0906 E7FD              sbrc R30,7
+ 0908 F095              com R31
+ 090A E80F              add R30,R24
+ 090C F91F              adc R31,R25
+ 090E 2080              ldd R2,z+0
+ 0910 2220              tst R2
+ 0912 A9F0              breq L191
+ 0914           L193:
+ 0914                   .dbline 608
+ 0914           ; ø}Ü
+ 0914                   .dbline 609
+ 0914           ; ø}Ü
+ 0914 2A2D              mov R18,R10
+ 0916 2C19              sub R18,R12
+ 0918 0027              clr R16
+ 091A 6FDC              xcall _write
+ 091C                   .dbline 610
+ 091C           ; ø}Ü
+ 091C 0DC0              xjmp L197
+ 091E           L194:
+ 091E                   .dbline 611
+ 091E 80E0              ldi R24,<_dataElem
+ 0920 90E0              ldi R25,>_dataElem
+ 0922 EC2D              mov R30,R12
+ 0924 FF27              clr R31
+ 0926 E7FD              sbrc R30,7
+ 0928 F095              com R31
+ 092A E80F              add R30,R24
+ 092C F91F              adc R31,R25
+ 092E 2081              ldd R18,z+0
+ 0930 205D              subi R18,208    ; addi 48
+ 0932 01E0              ldi R16,1
+ 0934 62DC              xcall _write
+ 0936           L195:
+ 0936                   .dbline 610
+ 0936 CA94              dec R12
+ 0938           L197:
+ 0938                   .dbline 610
+ 0938 8C2D              mov R24,R12
+ 093A 8030              cpi R24,0
+ 093C 84F7              brge L194
+ 093E                   .dbline 612
+ 093E           ; ø}Ü
+ 093E           ; ø}Ü
+ 093E           L191:
+ 093E                   .dbline 613
+ 093E           L188:
+ 093E                   .dbline 605
+ 093E CA94              dec R12
+ 0940           L190:
+ 0940                   .dbline 605
+ 0940 8C2D              mov R24,R12
+ 0942 8030              cpi R24,0
+ 0944 D4F6              brge L187
+ 0946                   .dbline -2
+ 0946           L168:
+ 0946 2196              adiw R28,1
+ 0948 0E940000          xcall pop_gset5
+ 094C 2296              adiw R28,2
+ 094E                   .dbline 0 ; func end
+ 094E 0895              ret
+ 0950                   .dbsym r effectLen 14 C
+ 0950                   .dbsym r i 12 C
+ 0950                   .dbsym l length 15 c
+ 0950                   .dbsym l dat 11 l
+ 0950                   .dbsym r endAdr 10 c
+ 0950                   .dbend
+                        .area lit(rom, con, rel)
+ 0000           _userCh0::
+ 0000 101F              .byte 16,31
+ 0002 0102              .byte 1,2
+ 0004 0408              .byte 4,8
+ 0006 101F              .byte 16,31
+ 0008                   .dbfile E:\ÎâÔó³ÌÐò±¸·Ý\ÒÆÖ²³ÌÐò\STK162~1.0\LCD160~1\Lcd1602\Lcd1602PBPD.C
+ 0008                   .dbsym e userCh0 _userCh0 A[8:8]kc
+ 0008           _userCh1::
+ 0008 0008              .byte 0,8
+ 000A 0F01              .byte 15,1
+ 000C 0204              .byte 2,4
+ 000E 080F              .byte 8,15
+ 0010                   .dbsym e userCh1 _userCh1 A[8:8]kc
+ 0010           _userCh2::
+ 0010 0000              .byte 0,0
+ 0012 0407              .byte 4,7
+ 0014 0102              .byte 1,2
+ 0016 0407              .byte 4,7
+ 0018                   .dbsym e userCh2 _userCh2 A[8:8]kc
+                        .area text(rom, con, rel)
+ 0950                   .dbfile E:\ÎâÔó³ÌÐò±¸·Ý\ÒÆÖ²³ÌÐò\STK162~1.0\LCD160~1\Lcd1602\Lcd1602PBPD.C
+ 0950                   .dbfunc e main _main fV
+                        .even
+ 0950           _main::
+ 0950                   .dbline -1
+ 0950                   .dbline 109
+ 0950                   .dbline 111
+ 0950 8CDE              xcall _LCD1602_init
+ 0952 42C0              xjmp L200
+ 0954           L199:
+ 0954                   .dbline 114
+ 0954                   .dbline 115
+ 0954 20E0              ldi R18,<L202
+ 0956 30E0              ldi R19,>L202
+ 0958 06EC              ldi R16,198
+ 095A 03DF              xcall _LCD1602_puts
+ 095C                   .dbline 116
+ 095C 05E0              ldi R16,5
+ 095E 10E0              ldi R17,0
+ 0960 C0DB              xcall _delay50ms
+ 0962                   .dbline 117
+ 0962 00E0              ldi R16,<L67
+ 0964 10E0              ldi R17,>L67
+ 0966 EEDC              xcall _LCD1602_setCmd
+ 0968                   .dbline 118
+ 0968 05E0              ldi R16,5
+ 096A 10E0              ldi R17,0
+ 096C BADB              xcall _delay50ms
+ 096E                   .dbline 119
+ 096E 20E0              ldi R18,<L202
+ 0970 30E0              ldi R19,>L202
+ 0972 06EC              ldi R16,198
+ 0974 F6DE              xcall _LCD1602_puts
+ 0976                   .dbline 120
+ 0976 05E0              ldi R16,5
+ 0978 10E0              ldi R17,0
+ 097A B3DB              xcall _delay50ms
+ 097C                   .dbline 121
+ 097C 00E0              ldi R16,<L67
+ 097E 10E0              ldi R17,>L67
+ 0980 E1DC              xcall _LCD1602_setCmd
+ 0982                   .dbline 122
+ 0982 05E0              ldi R16,5
+ 0984 10E0              ldi R17,0
+ 0986 ADDB              xcall _delay50ms
+ 0988                   .dbline 123
+ 0988 20E0              ldi R18,<L202
+ 098A 30E0              ldi R19,>L202
+ 098C 06EC              ldi R16,198
+ 098E E9DE              xcall _LCD1602_puts
+ 0990                   .dbline 124
+ 0990 05E0              ldi R16,5
+ 0992 10E0              ldi R17,0
+ 0994 A6DB              xcall _delay50ms
+ 0996                   .dbline 126
+ 0996 20E0              ldi R18,<_userCh0
+ 0998 30E0              ldi R19,>_userCh0
+ 099A 0027              clr R16
+ 099C BADC              xcall _LCD1602_setCGRAM
+ 099E                   .dbline 127
+ 099E 20E0              ldi R18,<_userCh1
+ 09A0 30E0              ldi R19,>_userCh1
+ 09A2 01E0              ldi R16,1
+ 09A4 B6DC              xcall _LCD1602_setCGRAM
+ 09A6                   .dbline 128
+ 09A6 20E0              ldi R18,<_userCh2
+ 09A8 30E0              ldi R19,>_userCh2
+ 09AA 02E0              ldi R16,2
+ 09AC B2DC              xcall _LCD1602_setCGRAM
+ 09AE                   .dbline 130
+ 09AE 22E0              ldi R18,2
+ 09B0 04E8              ldi R16,132
+ 09B2 CADE              xcall _LCD1602_putc
+ 09B4                   .dbline 131
+ 09B4 0AE0              ldi R16,10
+ 09B6 10E0              ldi R17,0
+ 09B8 94DB              xcall _delay50ms
+ 09BA                   .dbline 132
+ 09BA 21E0              ldi R18,1
+ 09BC 03E8              ldi R16,131
+ 09BE C4DE              xcall _LCD1602_putc
+ 09C0                   .dbline 133
+ 09C0 0CE0              ldi R16,12
+ 09C2 10E0              ldi R17,0
+ 09C4 8EDB              xcall _delay50ms
+ 09C6                   .dbline 134
+ 09C6 2227              clr R18
+ 09C8 02E8              ldi R16,130
+ 09CA BEDE              xcall _LCD1602_putc
+ 09CC                   .dbline 135
+ 09CC 0EE0              ldi R16,14
+ 09CE 10E0              ldi R17,0
+ 09D0 88DB              xcall _delay50ms
+ 09D2                   .dbline 137
+ 09D2 00E0              ldi R16,<L67
+ 09D4 10E0              ldi R17,>L67
+ 09D6 B6DC              xcall _LCD1602_setCmd
+ 09D8                   .dbline 138
+ 09D8           L200:
+ 09D8                   .dbline 113
+ 09D8 BDCF              xjmp L199
+ 09DA           X18:
+ 09DA                   .dbline -2
+ 09DA           L198:
+ 09DA                   .dbline 0 ; func end
+ 09DA 0895              ret
+ 09DC                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile E:\ÎâÔó³ÌÐò±¸·Ý\ÒÆÖ²³ÌÐò\STK162~1.0\LCD160~1\Lcd1602\Lcd1602PBPD.C
+ 0000           _bdat::
+ 0000                   .blkb 1
+ 0001                   .dbfile D:\ICC_H\LCD1602_.H
+ 0001                   .dbsym e bdat _bdat c
+ 0001           _dataElem::
+ 0001                   .blkb 6
+ 0007                   .dbfile D:\ICC_H\Software.H
+ 0007                   .dbsym e dataElem _dataElem A[6:6]c
+                        .area data(ram, con, rel)
+ 0006                   .dbfile D:\ICC_H\Software.H
+ 0006           L202:
+ 0006                   .blkb 9
+                        .area idata
+ 0006 536C656570696E6700        .byte 'S,'l,'e,'e,'p,'i,'n,'g,0
+                        .area data(ram, con, rel)
+ 000F                   .dbfile D:\ICC_H\Software.H
+ 000F           L156:
+ 000F                   .blkb 10
+                        .area idata
+ 000F 4C4546545F4355525300      .byte 'L,'E,'F,'T,95,'C,'U,'R,'S,0
+                        .area data(ram, con, rel)
+ 0019                   .dbfile D:\ICC_H\Software.H
+ 0019           L153:
+ 0019                   .blkb 11
+                        .area idata
+ 0019 52494748545F4355525300    .byte 'R,'I,'G,'H,'T,95,'C,'U,'R,'S,0
+                        .area data(ram, con, rel)
+ 0024                   .dbfile D:\ICC_H\Software.H
+ 0024           L150:
+ 0024                   .blkb 9
+                        .area idata
+ 0024 4C4546545F53435200        .byte 'L,'E,'F,'T,95,'S,'C,'R,0
+                        .area data(ram, con, rel)
+ 002D                   .dbfile D:\ICC_H\Software.H
+ 002D           L147:
+ 002D                   .blkb 10
+                        .area idata
+ 002D 52494748545F53435200      .byte 'R,'I,'G,'H,'T,95,'S,'C,'R,0
+                        .area data(ram, con, rel)
+ 0037                   .dbfile D:\ICC_H\Software.H
+ 0037           L138:
+ 0037                   .blkb 10
+                        .area idata
+ 0037 4449535F424C494E4B00      .byte 'D,'I,'S,95,'B,'L,'I,'N,'K,0
+                        .area data(ram, con, rel)
+ 0041                   .dbfile D:\ICC_H\Software.H
+ 0041           L129:
+ 0041                   .blkb 9
+                        .area idata
+ 0041 454E5F424C494E4B00        .byte 'E,'N,95,'B,'L,'I,'N,'K,0
+                        .area data(ram, con, rel)
+ 004A                   .dbfile D:\ICC_H\Software.H
+ 004A           L120:
+ 004A                   .blkb 11
+                        .area idata
+ 004A 434C4F53455F4355525300    .byte 'C,'L,'O,'S,'E,95,'C,'U,'R,'S,0
+                        .area data(ram, con, rel)
+ 0055                   .dbfile D:\ICC_H\Software.H
+ 0055           L111:
+ 0055                   .blkb 10
+                        .area idata
+ 0055 4F50454E5F4355525300      .byte 'O,'P,'E,'N,95,'C,'U,'R,'S,0
+                        .area data(ram, con, rel)
+ 005F                   .dbfile D:\ICC_H\Software.H
+ 005F           L102:
+ 005F                   .blkb 10
+                        .area idata
+ 005F 434C4F53455F4C434400      .byte 'C,'L,'O,'S,'E,95,'L,'C,'D,0
+                        .area data(ram, con, rel)
+ 0069                   .dbfile D:\ICC_H\Software.H
+ 0069           L93:
+ 0069                   .blkb 9
+                        .area idata
+ 0069 4F50454E5F4C434400        .byte 'O,'P,'E,'N,95,'L,'C,'D,0
+                        .area data(ram, con, rel)
+ 0072                   .dbfile D:\ICC_H\Software.H
+ 0072           L88:
+ 0072                   .blkb 10
+                        .area idata
+ 0072 4449535F534849465400      .byte 'D,'I,'S,95,'S,'H,'I,'F,'T,0
+                        .area data(ram, con, rel)
+ 007C                   .dbfile D:\ICC_H\Software.H
+ 007C           L83:
+ 007C                   .blkb 9
+                        .area idata
+ 007C 454E5F534849465400        .byte 'E,'N,95,'S,'H,'I,'F,'T,0
+                        .area data(ram, con, rel)
+ 0085                   .dbfile D:\ICC_H\Software.H
+ 0085           L78:
+ 0085                   .blkb 7
+                        .area idata
+ 0085 4445435F414300    .byte 'D,'E,'C,95,'A,'C,0
+                        .area data(ram, con, rel)
+ 008C                   .dbfile D:\ICC_H\Software.H
+ 008C           L73:
+ 008C                   .blkb 7
+                        .area idata
+ 008C 494E435F414300    .byte 'I,'N,'C,95,'A,'C,0
+                        .area data(ram, con, rel)
+ 0093                   .dbfile D:\ICC_H\Software.H
+ 0093           L70:
+ 0093                   .blkb 8
+                        .area idata
+ 0093 474F5F484F4D4500  .byte 'G,'O,95,'H,'O,'M,'E,0
+                        .area data(ram, con, rel)
+ 009B                   .dbfile D:\ICC_H\Software.H
+ 009B           L67:
+ 009B                   .blkb 8
+                        .area idata
+ 009B 434C525F53435200  .byte 'C,'L,'R,95,'S,'C,'R,0
+                        .area data(ram, con, rel)
+ 00A3                   .dbfile D:\ICC_H\Software.H

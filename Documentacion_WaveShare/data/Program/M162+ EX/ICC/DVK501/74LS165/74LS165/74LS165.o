@@ -1,0 +1,182 @@
+XL
+H 2 areas D global symbols
+M _74LS165.c
+S mod32u Ref0000
+S div32u Ref0000
+S push_xgsetF03C Ref0000
+S push_arg4 Ref0000
+S empy32u Ref0000
+S pop_xgsetF03C Ref0000
+A text size 16C flags 0
+dbfile ..\..\..\STK162~1.0\74LS16~1\74LS165\74LS165.c
+dbfile D:\ICC_H\Software.H
+dbfunc e speaData 0 fV
+dbsym l y 4 l
+dbsym l j 0 l
+dbsym r i A c
+dbsym r len C C
+dbsym l dat 10 l
+dbline FFFFFFFF C
+dbline 74 C
+dbline 77 C
+dbline 78 1C
+dbline 79 1C
+dbline 7A 40
+dbline 7B 6A
+dbline 7C 92
+dbline 77 92
+dbline 77 94
+dbline FFFFFFFE A8
+dbline 0 A8
+dbfile D:\ICC_H\Hardware.H
+dbfunc e delay50us B2 fV
+dbsym r j 14 c
+dbsym r t 10 I
+dbline FFFFFFFF B4
+dbline 69 B4
+dbline 6B B4
+dbline 6C B6
+dbline 6D BA
+dbline 6C BA
+dbline 6C BC
+dbline 6B C0
+dbline 6B C4
+dbline FFFFFFFE CE
+dbline 0 CE
+dbfunc e delay50ms D2 fV
+dbsym r i 14 i
+dbsym r t 10 I
+dbline FFFFFFFF D6
+dbline 78 D6
+dbline 7A D6
+dbline 7B D8
+dbline 7C DE
+dbline 7B DE
+dbline 7B E2
+dbline 7A FA
+dbline 7A FE
+dbline FFFFFFFE 108
+dbline 0 108
+dbfunc e delayus 10E fV
+dbsym r i 14 i
+dbsym r t 10 i
+dbline FFFFFFFF 112
+dbline 81 112
+dbline 83 112
+dbline 84 118
+dbline 87 118
+dbline 83 118
+dbline 83 11C
+dbline FFFFFFFE 122
+dbline 0 122
+dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\74LS16~1\74LS165\74LS165.c
+dbfunc e getDat 128 fc
+dbsym r i 12 c
+dbsym r dat 10 c
+dbline FFFFFFFF 128
+dbline 5B 128
+dbline 5D 128
+dbline 5E 12C
+dbline 5F 12C
+dbline 60 12E
+dbline 61 130
+dbline 62 134
+dbline 63 136
+dbline 64 138
+dbline 5D 138
+dbline 5D 13A
+dbline 65 13E
+dbline FFFFFFFE 13E
+dbline 0 13E
+dbfunc e main 140 fV
+dbsym l i 1 c
+dbline FFFFFFFF 140
+dbline 70 140
+dbline 72 140
+dbline 73 144
+dbline 74 146
+dbline 75 14A
+dbline 76 14C
+dbline 77 14E
+dbline 7A 152
+dbline 7B 152
+dbline 7C 158
+dbline 7D 15A
+dbline 7E 15C
+dbline 7F 15E
+dbline 80 162
+dbline 81 168
+dbline 79 168
+dbline FFFFFFFE 16A
+dbline 0 16A
+S _main Def0140
+S _delayus Def010E
+S _speaData Def0000
+S _delay50ms Def00D2
+S _getDat Def0128
+S _delay50us Def00B2
+A bss size 6 flags 20
+dbfile E:\吴泽备份\DVK501光盘内容\STK162~1.0\74LS16~1\74LS165\74LS165.c
+dbfile D:\ICC_H\Software.H
+dbsym e dataElem 0 A[6:6]c
+S _dataElem Def0000
+T 00 00 0E 94 00 00 0E 94 00 00 28 97 CC 88 AA 24
+R 00 00 00 00 12 04 03 00 12 08 02 00
+T 0E 00 81 E0 88 83 80 E0 89 83 8A 83 8B 83 3C C0
+R 00 00 00 00
+T 1C 00 28 80 39 80 4A 80 5B 80 08 89 19 89 2A 89
+R 00 00 00 00
+T 2A 00 3B 89 5A 92 4A 92 3A 92 2A 92 0E 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 38 00 0C 83 1D 83 2E 83 3F 83 4A E0 50 E0 60 E0
+R 00 00 00 00
+T 46 00 70 E0 0C 81 1D 81 2E 81 3F 81 7A 93 6A 93
+R 00 00 00 00
+T 54 00 5A 93 4A 93 0E 94 00 00 80 E0
+R 00 00 00 00 12 08 00 00 20 0A 01 00 00 00
+T 5E 00 90 E0 EA 2D FF 27 E8 0F F9 1F 00 83 28 80
+R 00 00 00 00 40 02 01 00 00 00
+T 6C 00 39 80 4A 80 5B 80 4A E0 50 E0 60 E0 70 E0
+R 00 00 00 00
+T 7A 00 5A 92 4A 92 3A 92 2A 92 8A 01 9B 01
+R 00 00 00 00
+T 86 00 0E 94 00 00 08 83 19 83 2A 83 3B 83 A3 94
+R 00 00 00 00 12 04 04 00
+T 94 00 2C 2C 33 24 27 FC 30 94 4A 2C 55 24 42 14
+R 00 00 00 00
+T A2 00 53 04 0C F4 BA CF 28 96 0E 94 00 00 24 96
+R 00 00 00 00 12 0C 05 00
+T B0 00 08 95
+R 00 00 00 00
+T B2 00 4A 93 07 C0 44 27 01 C0 43 95 46 34 E8 F3
+R 00 00 00 00
+T C0 00 01 50 10 40 22 24 33 24 20 16 31 06 A4 F3
+R 00 00 00 00
+T CE 00 49 91 08 95
+R 00 00 00 00
+T D2 00 4A 93 5A 93 13 C0 44 27 55 27 02 C0 4F 5F
+R 00 00 00 00
+T E0 00 5F 4F 82 EA 9D EC A0 E0 B0 E0 1A 01 44 24
+R 00 00 00 00
+T EE 00 55 24 28 16 39 06 4A 06 5B 06 94 F3 01 50
+R 00 00 00 00
+T FC 00 10 40 22 24 33 24 20 16 31 06 44 F3 59 91
+R 00 00 00 00
+T 0A 01 49 91 08 95
+R 00 00 00 00
+T 0E 01 4A 93 5A 93 44 27 55 27 02 C0 4F 5F 5F 4F
+R 00 00 00 00
+T 1C 01 40 17 51 07 D8 F3 59 91 49 91 08 95
+R 00 00 00 00
+T 28 01 22 27 07 C0 91 98 00 0F 80 9B 01 C0 01 60
+R 00 00 00 00
+T 36 01 91 9A 23 95 28 30 B8 F3 08 95
+R 00 00 00 00
+T 40 01 8F EF 87 BB 8A BB 22 24 2B BA 8C 9A 89 9A
+R 00 00 00 00
+T 4E 01 88 98 0B C0 8B B3 8F 5F 8B BB 94 9A 94 98
+R 00 00 00 00
+T 5C 01 94 9A E4 DF 08 BB 05 E0 10 E0 B5 DF F4 CF
+R 00 00 00 00
+T 6A 01 08 95
+R 00 00 00 00

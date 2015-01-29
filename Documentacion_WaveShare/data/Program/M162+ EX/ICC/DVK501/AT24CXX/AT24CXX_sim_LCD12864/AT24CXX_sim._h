@@ -1,0 +1,146 @@
+/*********************************************************************
+微 雪 电 子   WaveShare   http://www.waveShare.net            	
+		                                                        
+目    的:   建立AT24CXX的操作库
+	
+目标系统:   基于AVR单片机
+		                                                                
+应用软件:   ICCAVR 6.31A
+		                                                                
+版    本:   Version 1.0                                                          
+		                                                                
+圆版时间:   2009-03-6
+	
+开发人员:   zz
+
+说    明:   若用于商业用途，请保留此段文字或注明代码来源
+	
+	深 圳 市 微 雪 电 子 有 限 公 司 保 留 所 有 的 版 权     
+*********************************************************************/
+
+/*01010101010101010101010101010101010101010101010101010101010101010101
+----------------------------------------------------------------------
+版本更新记录：
+
+----------------------------------------------------------------------
+入口参数说明：
+
+----------------------------------------------------------------------
+待定参数说明：
+
+----------------------------------------------------------------------	
+对外变量说明：
+
+----------------------------------------------------------------------
+对外函数说明：
+
+----------------------------------------------------------------------
+10101010101010101010101010101010101010101010101010101010101010101010*/
+
+#ifndef AT24CXX_sim_h
+#define AT24CXX_sim_h
+#define uchar unsigned char
+#define uint unsigned int
+#include "IIC_sim.h"
+
+/*--------------------------------------------------------------------
+函数名称：字节写
+函数功能：
+注意事项：
+提示说明：
+输    入：AT24C_wrDAdr: write device-address 写器件地址
+		 wordAdr: word address 字地址
+		 dat: data 数据
+返    回：
+--------------------------------------------------------------------*/
+
+void AT24C_wByte(uchar AT24C_wrDAdr,uchar wordAdr,uchar dat)
+{
+	AT24C_wrDAdr=(((AT24C_wrDAdr<<1)&0x0E)|0xA0); //强制将器件地址转换为0b1010xxx0 写使能
+	I2C_Start(); 
+	I2C_Send_DataAddr(AT24C_wrDAdr); //发送器件地址
+	I2C_Send_DataAddr(wordAdr); //发送字地址
+	I2C_Send_DataAddr(dat); //发送数据
+	I2C_Stop();
+}
+
+/*--------------------------------------------------------------------
+函数名称：页写
+函数功能：
+注意事项：
+提示说明：
+输    入：AT24C_wrDAdr: write device-address 写器件地址
+		 wordAdr: word address 字地址
+		 *pWrDat: p->write data 写入数据指针
+返    回：
+--------------------------------------------------------------------*/
+
+void AT24C_wPage(uchar AT24C_wrDAdr,uchar wordAdr,uchar *pWrDat)
+{
+	uchar AT24C_n;
+	AT24C_wrDAdr=(((AT24C_wrDAdr<<1)&0x0E)|0xA0); //强制将器件地址转换为0b1010xxx0 写使能	
+	I2C_Start();
+	I2C_Send_DataAddr(AT24C_wrDAdr); //发送器件地址
+	I2C_Send_DataAddr(wordAdr); //发送字地址
+	for(AT24C_n=0;AT24C_n<=15;AT24C_n++) //发送16个数据
+		I2C_Send_DataAddr(*(pWrDat+AT24C_n));
+	I2C_Stop();
+}
+
+
+/*--------------------------------------------------------------------
+函数名称：读一个字节
+函数功能：
+注意事项：
+提示说明：
+输    入：AT24C_wrDAdr: write device-address 写器件地址
+		 wordAdr: word address 字地址
+返    回：
+--------------------------------------------------------------------*/
+
+uchar AT24C_rByte(uchar AT24C_wrDAdr,uchar wordAdr)
+{
+	AT24C_wrDAdr=(((AT24C_wrDAdr<<1)&0x0E)|0xA0); //强制将器件地址转换为0b1010xxx0 写使能
+	I2C_Start();
+	I2C_Send_DataAddr(AT24C_wrDAdr); //发送器件地址
+	I2C_Send_DataAddr(wordAdr); //发送字地址
+	AT24C_wrDAdr|=0x01; //强制将地址转换为0b1010xxx1 读使能
+	I2C_Start();
+	I2C_Send_DataAddr(AT24C_wrDAdr); //发送器件地址
+	AT24C_wrDAdr=I2C_Read_DataAddr(nACT);	
+	I2C_Stop();
+	return(AT24C_wrDAdr); //读取数据
+}
+
+
+/*--------------------------------------------------------------------
+函数名称：读N个字节
+函数功能：
+注意事项：
+提示说明：
+输    入：AT24C_wrDAdr: write device-address 写器件地址
+		 wordAdr: word address 字地址
+		 *pRdDat: p->read data 读取数据起始指针
+		 num: number 读取数据个数
+返    回： 
+--------------------------------------------------------------------*/
+
+void AT24C_rPage(uchar AT24C_wrDAdr,uchar wordAdr,uchar *pRdDat,uchar num)
+{
+	AT24C_wrDAdr=(((AT24C_wrDAdr<<1)&0x0E)|0xA0); //强制将器件地址转换为0b1010xxx0 写使能
+	I2C_Start();
+	I2C_Send_DataAddr(AT24C_wrDAdr); //发送器件地址
+	I2C_Send_DataAddr(wordAdr); //发送字地址
+	AT24C_wrDAdr|=0x01; //强制将器件地址转换为0b1010xxx1 读使能
+	I2C_Start();
+	I2C_Send_DataAddr(AT24C_wrDAdr); //发送器件地址
+	for(num--;num>0;num--) //有ACT的读取num-1个数据
+	{
+		*pRdDat=I2C_Read_DataAddr(ACT);
+		pRdDat++;
+	}
+	*pRdDat=I2C_Read_DataAddr(nACT); //无ACT的读取第num个数据
+	I2C_Stop();
+}
+
+#endif

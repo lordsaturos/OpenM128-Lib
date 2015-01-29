@@ -1,0 +1,272 @@
+
+USART.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000148  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  0000019c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 00000054  00000000  00000000  000001bc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   00000295  00000000  00000000  00000210  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 000001a2  00000000  00000000  000004a5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   000002cc  00000000  00000000  00000647  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000060  00000000  00000000  00000914  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    000000f7  00000000  00000000  00000974  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    00000094  00000000  00000000  00000a6b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000090  00000000  00000000  00000aff  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 46 00 	jmp	0x8c	; 0x8c <__ctors_end>
+   4:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+   8:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+   c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  10:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  14:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  18:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  1c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  20:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  24:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  28:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  2c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  30:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  34:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  38:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  3c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  40:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  44:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  48:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  4c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  50:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  54:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  58:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  5c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  60:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  64:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  68:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  6c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  70:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  74:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  78:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  7c:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  80:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  84:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+  88:	0c 94 50 00 	jmp	0xa0	; 0xa0 <__bad_interrupt>
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	0e 94 76 00 	call	0xec	; 0xec <main>
+  9c:	0c 94 a2 00 	jmp	0x144	; 0x144 <_exit>
+
+000000a0 <__bad_interrupt>:
+  a0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000a4 <usartInit>:
+// Communication Parameters: 8 Data, 1 Stop, No Parity
+// USART0 Receiver: On
+// USART0 Transmitter: On
+// USART0 Mode: Asynchronous
+// USART0 Baud Rate: 9600
+UCSR0A=0x00;
+  a4:	1b b8       	out	0x0b, r1	; 11
+UCSR0B=0x18;
+  a6:	88 e1       	ldi	r24, 0x18	; 24
+  a8:	8a b9       	out	0x0a, r24	; 10
+UCSR0C=0x06;
+  aa:	86 e0       	ldi	r24, 0x06	; 6
+  ac:	80 93 95 00 	sts	0x0095, r24
+UBRR0H=0x00;
+  b0:	10 92 90 00 	sts	0x0090, r1
+UBRR0L=0x2F;
+  b4:	8f e2       	ldi	r24, 0x2F	; 47
+  b6:	89 b9       	out	0x09, r24	; 9
+}
+  b8:	08 95       	ret
+
+000000ba <putUsart0>:
+
+
+//从RS232发送一个字节
+void putUsart0(uint8_t c)
+{ 
+    while(!(WS_UCSR0A & 0x20));
+  ba:	5d 9b       	sbis	0x0b, 5	; 11
+  bc:	fe cf       	rjmp	.-4      	; 0xba <putUsart0>
+    WS_UDR0 = c;
+  be:	8c b9       	out	0x0c, r24	; 12
+}
+  c0:	08 95       	ret
+
+000000c2 <getUsart0>:
+//从RS232接收一个字节
+uint16_t getUsart0(void)
+{
+    uint8_t status,res;
+    if(!(WS_UCSR0A & 0x80)) return 0xFFFF;        //no data to be received 
+  c2:	5f 9b       	sbis	0x0b, 7	; 11
+  c4:	07 c0       	rjmp	.+14     	; 0xd4 <getUsart0+0x12>
+    status = WS_UCSR0A;
+  c6:	8b b1       	in	r24, 0x0b	; 11
+    res = WS_UDR0;
+  c8:	9c b1       	in	r25, 0x0c	; 12
+    if (status & 0x1c) return 0xFFFF;        // If error, return 0xFFFF 
+  ca:	8c 71       	andi	r24, 0x1C	; 28
+  cc:	19 f4       	brne	.+6      	; 0xd4 <getUsart0+0x12>
+    return res;
+  ce:	29 2f       	mov	r18, r25
+  d0:	30 e0       	ldi	r19, 0x00	; 0
+  d2:	02 c0       	rjmp	.+4      	; 0xd8 <getUsart0+0x16>
+  d4:	2f ef       	ldi	r18, 0xFF	; 255
+  d6:	3f ef       	ldi	r19, 0xFF	; 255
+}
+  d8:	c9 01       	movw	r24, r18
+  da:	08 95       	ret
+
+000000dc <waitUsart0>:
+}
+//从RS232接收一个字节
+uint16_t getUsart0(void)
+{
+    uint8_t status,res;
+    if(!(WS_UCSR0A & 0x80)) return 0xFFFF;        //no data to be received 
+  dc:	5f 9b       	sbis	0x0b, 7	; 11
+  de:	fe cf       	rjmp	.-4      	; 0xdc <waitUsart0>
+    status = WS_UCSR0A;
+  e0:	8b b1       	in	r24, 0x0b	; 11
+    res = WS_UDR0;
+  e2:	9c b1       	in	r25, 0x0c	; 12
+    if (status & 0x1c) return 0xFFFF;        // If error, return 0xFFFF 
+  e4:	8c 71       	andi	r24, 0x1C	; 28
+  e6:	d1 f7       	brne	.-12     	; 0xdc <waitUsart0>
+uint8_t waitUsart0(void)
+{
+    uint16_t c;
+    while((c=getUsart0())==0xFFFF);
+    return (uint8_t)c;
+}
+  e8:	89 2f       	mov	r24, r25
+  ea:	08 95       	ret
+
+000000ec <main>:
+#include <ws_usart_port.h>
+
+int main(void)
+{
+	uint8_t tmp=0;
+	DDRA=0xFF;
+  ec:	8f ef       	ldi	r24, 0xFF	; 255
+  ee:	8a bb       	out	0x1a, r24	; 26
+	PORTA=0x00;
+  f0:	1b ba       	out	0x1b, r1	; 27
+// Communication Parameters: 8 Data, 1 Stop, No Parity
+// USART0 Receiver: On
+// USART0 Transmitter: On
+// USART0 Mode: Asynchronous
+// USART0 Baud Rate: 9600
+UCSR0A=0x00;
+  f2:	1b b8       	out	0x0b, r1	; 11
+UCSR0B=0x18;
+  f4:	88 e1       	ldi	r24, 0x18	; 24
+  f6:	8a b9       	out	0x0a, r24	; 10
+UCSR0C=0x06;
+  f8:	86 e0       	ldi	r24, 0x06	; 6
+  fa:	80 93 95 00 	sts	0x0095, r24
+UBRR0H=0x00;
+  fe:	10 92 90 00 	sts	0x0090, r1
+UBRR0L=0x2F;
+ 102:	8f e2       	ldi	r24, 0x2F	; 47
+ 104:	89 b9       	out	0x09, r24	; 9
+ 106:	20 e0       	ldi	r18, 0x00	; 0
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 108:	60 e0       	ldi	r22, 0x00	; 0
+ 10a:	78 e4       	ldi	r23, 0x48	; 72
+
+
+//从RS232发送一个字节
+void putUsart0(uint8_t c)
+{ 
+    while(!(WS_UCSR0A & 0x20));
+ 10c:	48 eb       	ldi	r20, 0xB8	; 184
+ 10e:	50 e0       	ldi	r21, 0x00	; 0
+ 110:	5d 9b       	sbis	0x0b, 5	; 11
+ 112:	fe cf       	rjmp	.-4      	; 0x110 <main+0x24>
+    WS_UDR0 = c;
+ 114:	2c b9       	out	0x0c, r18	; 12
+ 116:	cb 01       	movw	r24, r22
+ 118:	01 97       	sbiw	r24, 0x01	; 1
+ 11a:	f1 f7       	brne	.-4      	; 0x118 <main+0x2c>
+}
+//从RS232接收一个字节
+uint16_t getUsart0(void)
+{
+    uint8_t status,res;
+    if(!(WS_UCSR0A & 0x80)) return 0xFFFF;        //no data to be received 
+ 11c:	5f 9b       	sbis	0x0b, 7	; 11
+ 11e:	06 c0       	rjmp	.+12     	; 0x12c <main+0x40>
+    status = WS_UCSR0A;
+ 120:	8b b1       	in	r24, 0x0b	; 11
+    res = WS_UDR0;
+ 122:	9c b1       	in	r25, 0x0c	; 12
+    if (status & 0x1c) return 0xFFFF;        // If error, return 0xFFFF 
+ 124:	8c 71       	andi	r24, 0x1C	; 28
+ 126:	11 f4       	brne	.+4      	; 0x12c <main+0x40>
+    return res;
+ 128:	89 2f       	mov	r24, r25
+ 12a:	02 c0       	rjmp	.+4      	; 0x130 <main+0x44>
+ 12c:	8f ef       	ldi	r24, 0xFF	; 255
+ 12e:	9f ef       	ldi	r25, 0xFF	; 255
+	usartInit();
+	while(1)
+	{
+		putUsart0(tmp);
+		_delay_ms(10);
+		PORTA=(uint8_t)getUsart0();
+ 130:	8b bb       	out	0x1b, r24	; 27
+ 132:	88 e8       	ldi	r24, 0x88	; 136
+ 134:	93 e1       	ldi	r25, 0x13	; 19
+ 136:	fa 01       	movw	r30, r20
+ 138:	31 97       	sbiw	r30, 0x01	; 1
+ 13a:	f1 f7       	brne	.-4      	; 0x138 <main+0x4c>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 13c:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 13e:	d9 f7       	brne	.-10     	; 0x136 <main+0x4a>
+		tmp++;
+ 140:	2f 5f       	subi	r18, 0xFF	; 255
+ 142:	e6 cf       	rjmp	.-52     	; 0x110 <main+0x24>
+
+00000144 <_exit>:
+ 144:	f8 94       	cli
+
+00000146 <__stop_program>:
+ 146:	ff cf       	rjmp	.-2      	; 0x146 <__stop_program>
